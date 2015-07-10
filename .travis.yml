@@ -1,0 +1,13 @@
+language: node_js
+node_js:
+  - '0.12.5'
+before_install:
+  - 'sudo apt-get update -qq'
+  - 'sudo apt-get install -y libxml2-dev'
+install:
+  = npm install
+  - gulp install
+before_script:
+  - gulp
+services:
+  - mysql
