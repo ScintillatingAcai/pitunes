@@ -1,6 +1,6 @@
 # piTunes
 
-> Pithy project description
+> Social Sharing Tune
 
 ## Team
 
