@@ -1,4 +1,4 @@
-var knex = require('./config/knex-config');
+var knex = require('../config/knex-config');
 var bookshelf = require('bookshelf')(knex);
 
 bookshelf.knex.schema.hasTable('Users').then(function(exists) {
@@ -29,7 +29,7 @@ bookshelf.knex.schema.hasTable('Playlists').then(function(exists) {
       console.log('Created Table Playlists');
     });
   }
-}); 
+});
 
 bookshelf.knex.schema.hasTable('Media').then(function(exists) {
   if (!exists) {
@@ -58,7 +58,7 @@ bookshelf.knex.schema.hasTable('Media_Playlists').then(function(exists) {
       callback();
     });
   }
-}); 
+});
 bookshelf.knex.schema.hasTable('Rooms').then(function(exists) {
   if (!exists) {
     bookshelf.knex.schema.createTable('Rooms', function (room) {

@@ -16,18 +16,16 @@ module.exports = function (app, express) {
                 saveUninitialized: true
               };
   app.use(expressSession(session));
-  // var userRouter = express.Router();
-  // var incidentRouter = express.Router();
-  // var messageRouter = express.Router();
+  var userRouter = express.Router();
+  var roomRouter = express.Router();
 
   app.use(morgan('dev'));
   app.use(bodyParser.urlencoded({extended: true}));
   app.use(bodyParser.json());
   app.use(express.static(__dirname + '/../www'));
 
-  // app.use('/api/users', userRouter); // use user router for all user request
-  // app.use('/api/incidents', incidentRouter); // user link router for link request
-  // app.use('/api/messages', messageRouter);
+  app.use('/api/users', userRouter); // use user router for all user request
+  app.use('/api/rooms', roomRouter); // user link router for link request
 
   // authentication middleware used to decode token and made available on the request
   // app.use('/api/incidents', helpers.decode);
@@ -35,9 +33,7 @@ module.exports = function (app, express) {
   app.use(helpers.errorLogger);
   app.use(helpers.errorHandler);
 
-
   // inject our routers into their respective route files
-  // require('../users/userRoutes.js')(userRouter);
-  // require('../incidents/incidentRoutes.js')(incidentRouter);
-  // require('../messages/messageRoutes.js')(messageRouter);
+  require('./users/usersRoutes.js')(userRouter);
+  require('./rooms/roomsRoutes.js')(roomRouter);
 };
