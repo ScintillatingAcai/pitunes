@@ -18,6 +18,7 @@
   "homepage": "https://github.com/ScintillatingAcai/pitunes#readme",
   "dependencies": {
     "bcrypt-nodejs": "~0.0.3",
+    "bluebird": "^2.9.33",
     "body-parser": "^1.13.2",
     "bookshelf": "^0.8.1",
     "express": "^4.13.1",
