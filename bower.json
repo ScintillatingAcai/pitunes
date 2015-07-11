@@ -1,0 +1,10 @@
+{
+  "name": "pitunes",
+  "version": "0.1.0",
+  "private": "true",
+  "devDependencies": {},
+  "dependencies": {
+    "react": "~0.13.3",
+    "flux": "~2.0.2"
+  }
+}

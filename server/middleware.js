@@ -1,7 +1,7 @@
 var morgan      = require('morgan'), // used for logging incoming request
     bodyParser  = require('body-parser'),
     expressSession = require('express-session'),
-    helpers     = require('./config/helpers.js'); // our custom middleware
+    helpers     = require('./helpers.js'); // our custom middleware
 
 
 module.exports = function (app, express) {
@@ -9,7 +9,7 @@ module.exports = function (app, express) {
   var session = { path: '/',
                 httpOnly: true,
                 secure: false,
-                secret: 'town watch',
+                secret: 'share me!',
                 cookie: {maxAge: 1000 * 60 * 60 * 24, secure: false},
                 maxAge: 1000 * 60 * 60 * 24,
                 resave: false,

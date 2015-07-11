@@ -1,12 +1,12 @@
-# Project Name
+# piTunes
 
-> Pithy project description
+> Social Sharing Tune
 
 ## Team
 
-  - __Product Owner__: teamMember
-  - __Scrum Master__: teamMember
-  - __Development Team Members__: teamMember, teamMember
+  - __Product Owner__: Zachary Lester
+  - __Scrum Master__: John Mai
+  - __Development Team Members__: Kyle Rokita, Josh Tepei
 
 ## Table of Contents
 
@@ -24,11 +24,8 @@
 
 ## Requirements
 
-- Node 0.10.x
-- Redis 2.6.x
-- Postgresql 9.1.x
-- etc
-- etc
+- Node 0.12.x
+- Mysql 5.6.x
 
 ## Development
 
@@ -38,13 +35,44 @@ From within the root directory:
 
 ```sh
 sudo npm install -g bower
+sudo npm install -g gulp
 npm install
 bower install
 ```
 
+### Database Development Support
+![alt tag](https://github.com/ScintillatingAcai/pitunes/blob/master/SQLSchema.png)
+In the server/db/dev-support-assets directory, developers may access the following items:
+  1. Schema visualization image
+  1. schema.sql file which is unused in production but may be useful for creating schema during development
+  1. testdata.sql file which is unused in production but may be useful for inserting sample data during development
+
+### Setting up a development database environment
+1. Start mysql and sign in:
+```sh
+mysql.server start
+mysql -u [your username] -p
+Enter Password:  [your password]
+```
+1. In server/db/knex-config.js, set your mysql username and password in the configuration object
+1. Create and use database "pitunes"
+```sh
+create database pitunes;
+use pitunes;
+```
+When the app is started (node index.js), the schema will be created so long as this setup has been performed.
+
+### Emulating in the browser
+1. Start server
+From root directory:
+```sh
+node index.js
+```
+1. Open browser and navigate to http://localhost:3000
+
 ### Roadmap
 
-View the project roadmap [here](LINK_TO_PROJECT_ISSUES)
+View the project roadmap [here](https://github.com/ScintillatingAcai/pitunes/issues)
 
 
 ## Contributing
