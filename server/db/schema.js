@@ -50,20 +50,16 @@ bookshelf.knex.schema.hasTable('Media_Playlists').then(function(exists) {
   if (!exists) {
     bookshelf.knex.schema.createTable('Media_Playlists', function (playlist) {
       playlist.increments('id').primary().unsigned();
-      playlist.unsigned('playlist_id').references('id').inTable('Playlists');
-      playlist.unsigned('media_id').references('id').inTable('Media');
+      playlist.integer('playlist_id').unsigned().references('id').inTable('Playlists');
+      playlist.integer('media_id').unsigned().references('id').inTable('Media');
       playlist.integer('order', 8).unsigned();
-      playlist.unqiue(['media_id', 'order']);
+      playlist.unique(['media_id', 'order']);
     }).then(function (table) {
       console.log('Created Table Media Playlists');
     });
   }
-<<<<<<< HEAD
 });
-=======
-}); 
 
->>>>>>> (cleanup) add unique change
 bookshelf.knex.schema.hasTable('Rooms').then(function(exists) {
   if (!exists) {
     bookshelf.knex.schema.createTable('Rooms', function (room) {
@@ -82,8 +78,8 @@ bookshelf.knex.schema.hasTable('Users_Rooms').then(function(exists) {
   if (!exists) {
     bookshelf.knex.schema.createTable('Users_Rooms', function (room) {
       room.increments('id').primary().unsigned();
-      room.unsigned('user_id').references('id').inTable('Users');
-      room.unsigned('room_id').references('id').inTable('Rooms');
+      room.integer('user_id').unsigned().references('id').inTable('Users');
+      room.integer('room_id').unsigned().references('id').inTable('Rooms');
       room.timestamps();
     }).then(function (table) {
       console.log('Created Table Users_Rooms');
