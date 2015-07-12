@@ -50,15 +50,16 @@ bookshelf.knex.schema.hasTable('Media_Playlists').then(function(exists) {
   if (!exists) {
     bookshelf.knex.schema.createTable('Media_Playlists', function (playlist) {
       playlist.increments('id').primary().unsigned();
-      playlist.unsigned('playlist_id').references('id').inTable('Playlists');
-      playlist.unsigned('media_id').references('id').inTable('Media');
+      playlist.integer('playlist_id').unsigned().references('id').inTable('Playlists');
+      playlist.integer('media_id').unsigned().references('id').inTable('Media');
       playlist.integer('order', 8).unsigned();
+      playlist.unique(['media_id', 'order']);
     }).then(function (table) {
       console.log('Created Table Media Playlists');
-      callback();
     });
   }
 });
+
 bookshelf.knex.schema.hasTable('Rooms').then(function(exists) {
   if (!exists) {
     bookshelf.knex.schema.createTable('Rooms', function (room) {
@@ -69,12 +70,24 @@ bookshelf.knex.schema.hasTable('Rooms').then(function(exists) {
       room.timestamps();
     }).then(function (table) {
       console.log('Created Table Rooms');
-      callback();
     });
   }
 });
 
-console.log('config file run');
+bookshelf.knex.schema.hasTable('Users_Rooms').then(function(exists) {
+  if (!exists) {
+    bookshelf.knex.schema.createTable('Users_Rooms', function (room) {
+      room.increments('id').primary().unsigned();
+      room.integer('user_id').unsigned().references('id').inTable('Users');
+      room.integer('room_id').unsigned().references('id').inTable('Rooms');
+      room.timestamps();
+    }).then(function (table) {
+      console.log('Created Table Users_Rooms');
+    });
+  }
+});
+
+console.log('piTunes DB Tables created');
 
 
 module.exports = bookshelf;
