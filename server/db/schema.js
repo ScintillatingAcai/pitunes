@@ -31,9 +31,9 @@ bookshelf.knex.schema.hasTable('Playlists').then(function(exists) {
   }
 });
 
-bookshelf.knex.schema.hasTable('Media').then(function(exists) {
+bookshelf.knex.schema.hasTable('Medias').then(function(exists) {
   if (!exists) {
-    bookshelf.knex.schema.createTable('Media', function (media) {
+    bookshelf.knex.schema.createTable('Medias', function (media) {
       media.increments('id').primary().unsigned();
       media.string('youtube_id', 100);
       media.integer('Youtube_link', 100);
@@ -41,7 +41,7 @@ bookshelf.knex.schema.hasTable('Media').then(function(exists) {
       media.string('name', 255).defaultTo('');
       media.timestamps();
     }).then(function (table) {
-      console.log('Created Table Media');
+      console.log('Created Table Medias');
     });
   }
 });
@@ -51,7 +51,7 @@ bookshelf.knex.schema.hasTable('Media_Playlists').then(function(exists) {
     bookshelf.knex.schema.createTable('Media_Playlists', function (playlist) {
       playlist.increments('id').primary().unsigned();
       playlist.integer('playlist_id').unsigned().references('id').inTable('Playlists');
-      playlist.integer('media_id').unsigned().references('id').inTable('Media');
+      playlist.integer('media_id').unsigned().references('id').inTable('Medias');
       playlist.integer('order', 8).unsigned();
       playlist.unique(['media_id', 'order']);
     }).then(function (table) {
