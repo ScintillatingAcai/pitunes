@@ -1,4 +1,4 @@
-var knex = require('../config/knex-config');
+var knex = require('./knex-config');
 var bookshelf = require('bookshelf')(knex);
 
 bookshelf.knex.schema.hasTable('Users').then(function(exists) {
