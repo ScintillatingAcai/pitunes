@@ -1,6 +1,6 @@
 var db = require('../db/schema');
-// var Rooms = require('../collections/rooms');
-// var Room = require('../models/room');
+var Rooms = require('../db/collections/rooms');
+var Room = require('../db/models/room');
 
 module.exports = {
 

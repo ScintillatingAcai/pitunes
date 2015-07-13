@@ -1,6 +1,6 @@
 var db = require('../db/schema');
-// var Medias = require('../collections/medias');
-// var Media = require('../models/media');
+var Medias = require('../db/collections/medias');
+var Media = require('../db/models/media');
 
 module.exports = {
 
