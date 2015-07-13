@@ -87,7 +87,7 @@ bookshelf.knex.schema.hasTable('Users_Rooms').then(function(exists) {
   }
 });
 
-console.log('piTunes DB Tables created');
+// console.log('piTunes DB Tables created');
 
 
 module.exports = bookshelf;
