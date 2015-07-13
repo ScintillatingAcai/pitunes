@@ -18,6 +18,7 @@ module.exports = function (app, express) {
   app.use(expressSession(session));
   var userRouter = express.Router();
   var roomRouter = express.Router();
+  var playlistRouter = express.Router();
 
   app.use(morgan('dev'));
   app.use(bodyParser.urlencoded({extended: true}));
@@ -25,7 +26,8 @@ module.exports = function (app, express) {
   app.use(express.static(__dirname + '/../www'));
 
   app.use('/api/users', userRouter); // use user router for all user request
-  app.use('/api/rooms', roomRouter); // user link router for link request
+  app.use('/api/rooms', roomRouter); // use room router for room request
+  app.use('/api/playlists', roomRouter); // use playlist router for playlist request
 
   // authentication middleware used to decode token and made available on the request
   // app.use('/api/incidents', helpers.decode);
@@ -36,4 +38,6 @@ module.exports = function (app, express) {
   // inject our routers into their respective route files
   require('./users/usersRoutes.js')(userRouter);
   require('./rooms/roomsRoutes.js')(roomRouter);
+  require('./playlists/playlistsRoutes.js')(playlistRouter);
+
 };
