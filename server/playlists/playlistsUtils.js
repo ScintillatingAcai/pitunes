@@ -1,6 +1,6 @@
 var db = require('../db/schema');
-// var Playlists = require('../collections/playlists');
-// var Playlist = require('../models/playlist');
+var Playlists = require('../db/collections/playlists');
+var Playlist = require('../db/models/playlist');
 
 module.exports = {
 

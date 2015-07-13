@@ -1,6 +1,6 @@
 var db = require('../db/schema');
-// var Users = require('../collections/users');
-// var User = require('../models/user');
+var Users = require('../db/collections/users');
+var User = require('../db/models/user');
 
 //clean user data so we dont send passwords and attributes that start with underscore (private variables)
 function cleanAttributes (attributes) {
