@@ -27,7 +27,7 @@ module.exports = function (app, express) {
 
   app.use('/api/users', userRouter); // use user router for all user request
   app.use('/api/rooms', roomRouter); // use room router for room request
-  app.use('/api/playlists', roomRouter); // use playlist router for playlist request
+  app.use('/api/playlists', playlistRouter); // use playlist router for playlist request
 
   // authentication middleware used to decode token and made available on the request
   // app.use('/api/incidents', helpers.decode);

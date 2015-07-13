@@ -4,7 +4,7 @@ var roomsController = require('./roomsController.js');
 
 module.exports = function(app) {
 
-  app.post('/signup', roomsController.addRoom); //add a room
+  app.post('/', roomsController.addRoom); //add a room
 
   app.get('/:room', roomsController.getRoom); //get one room
   app.put('/:room', roomsController.updateRoom); //update a room
