@@ -19,6 +19,7 @@ module.exports = function (app, express) {
   var userRouter = express.Router();
   var roomRouter = express.Router();
   var playlistRouter = express.Router();
+  var mediaRouter = express.Router();
 
   app.use(morgan('dev'));
   app.use(bodyParser.urlencoded({extended: true}));
@@ -28,6 +29,7 @@ module.exports = function (app, express) {
   app.use('/api/users', userRouter); // use user router for all user request
   app.use('/api/rooms', roomRouter); // use room router for room request
   app.use('/api/playlists', playlistRouter); // use playlist router for playlist request
+  app.use('/api/medias', mediaRouter); // use playlist router for playlist request
 
   // authentication middleware used to decode token and made available on the request
   // app.use('/api/incidents', helpers.decode);
@@ -39,5 +41,6 @@ module.exports = function (app, express) {
   require('./users/usersRoutes.js')(userRouter);
   require('./rooms/roomsRoutes.js')(roomRouter);
   require('./playlists/playlistsRoutes.js')(playlistRouter);
+  require('./medias/mediasRoutes.js')(mediaRouter);
 
 };
