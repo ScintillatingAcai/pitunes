@@ -98,7 +98,7 @@ module.exports = {
         id: room_id
       }).fetch().then(function(found) {
         if (found) {
-          room.pushDJQueue(dj_id);
+          room.queueDJ(dj_id);
 
           callback(null, roomWithJoins);
         } else {

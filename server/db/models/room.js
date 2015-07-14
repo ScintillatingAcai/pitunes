@@ -6,7 +6,7 @@ var Room = db.Model.extend({
 
   djQueue: [],
 
-  pushDJQueue: function(dj_id) {
+  queueDJ: function(dj_id) {
     var User = require('./user');
     new User({id:dj_id}).fetch().then(function(dj) {
       djQueue.push(dj);
@@ -14,8 +14,8 @@ var Room = db.Model.extend({
 
   },
 
-  popDJQueue: function() {
-    return djQueue.pop();
+  dequeueDJ: function() {
+    return djQueue.shift();
   },
 
   removeDJFromQueue: function(dj_id) {
