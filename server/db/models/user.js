@@ -8,13 +8,10 @@ var User = db.Model.extend({
   initialize: function(){
     this.on('creating', this.hashPassword);
   },
-  
+
   comparePassword: function(attemptedPassword, callback) {
     bcrypt.compare(attemptedPassword, this.get('password'), function(err, isMatch) {
-      if (err) { 
-        callback(err);
-      }
-      
+      if (err) callback(err);
       callback(null, isMatch);
 
     });
@@ -27,7 +24,25 @@ var User = db.Model.extend({
           this.set('password', hash);
       });
     });
-  }
+  },
+
+  getCurrentPlaylist: function(callback){
+    var Playlist = require('./playlist');
+    return new Playlist().fetch({
+      id:this.get('current_playlist_id')
+    })
+    .then(function(found) {
+      callback(null,found.attributes);
+    })
+    .catch(function(error) {
+      callback(error);
+    });
+  },
+
+  playlists: function() {
+    var Playlist = require('./playlist');
+    return this.belongsToMany(Playlist,'Media_Playlists', 'media_id', 'playlist_id');
+  },
 });
 
 module.exports = User;
