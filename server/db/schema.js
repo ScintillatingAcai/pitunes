@@ -24,6 +24,7 @@ bookshelf.knex.schema.hasTable('Playlists').then(function(exists) {
       playlist.increments('id').primary().unsigned();
       playlist.integer('user_id').unsigned().references('id').inTable('Users');
       playlist.string('name', 50).notNullable();
+      playlist.integer('current_media_index').unsigned();
       playlist.timestamps();
     }).then(function (table) {
       console.log('Created Table Playlists');
@@ -36,7 +37,7 @@ bookshelf.knex.schema.hasTable('Medias').then(function(exists) {
     bookshelf.knex.schema.createTable('Medias', function (media) {
       media.increments('id').primary().unsigned();
       media.string('youtube_id', 100);
-      media.integer('Youtube_link', 100);
+      media.integer('youtube_link', 100);
       media.integer('play_count').unsigned().defaultTo(0);
       media.string('name', 255).defaultTo('');
       media.timestamps();
