@@ -14,6 +14,7 @@ var LeftContainer = React.createClass({
   render: function() {
     return (
       <div className="leftContainer" style={LeftContainerStyle}>
+        <PlaylistSaved />
       </div>
     );
   }
