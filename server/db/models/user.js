@@ -1,6 +1,6 @@
 var db = require('../schema');
 var Promise = require('bluebird');
-var bcrypt = Promise.promisifyAll(require('bcrypt'));
+var bcrypt = require('bcrypt');
 
 var User = db.Model.extend({
   tableName: 'Users',
@@ -17,12 +17,19 @@ var User = db.Model.extend({
     });
   },
 
-  hashPassword: function(){
-    bcrypt.genSalt(10, function(err, salt) {
-      bcrypt.hash(this.get('password'), salt, function(err, hash) {
+  hashPassword: function(callback){
+    var saltPromise = Promise.promisify(bcrypt.genSalt);
+    return saltPromise(10).bind(this)
+    .then(function(salt) {
+      var hashPromise = Promise.promisify(bcrypt.hash);
+      return hashPromise(this.get('password'), salt);
+    })
+    .then(function(hash) {
           // Store hash in your password DB.
-          this.set('password', hash);
-      });
+      return this.set('password', hash);
+    })
+    .catch(function(err) {
+      console.error('hashing error:', err);
     });
   },
 
