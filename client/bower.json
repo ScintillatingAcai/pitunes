@@ -1,0 +1,17 @@
+{
+  "name": "client",
+  "version": "0.0.1",
+  "homepage": "https://github.com/ScintillatingAcai/pitunes",
+  "authors": [
+    "Scintillating Acai, HR28"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components"
+  ],
+  "dependencies": {
+    "react-bootstrap": "~0.23.7"
+  }
+}
