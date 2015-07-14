@@ -1,33 +1,16 @@
 var knex = require('./knex-config');
 var bookshelf = require('bookshelf')(knex);
 
-bookshelf.knex.schema.hasTable('Users').then(function(exists) {
+bookshelf.knex.schema.hasTable('Rooms').then(function(exists) {
   if (!exists) {
-    bookshelf.knex.schema.createTable('Users', function (user) {
-      user.increments('id').primary().unsigned();
-      user.string('email', 50).unique().notNullable();
-      user.string('password', 100);
-      user.string('oauth', 30);
-      user.string('display_name', 50);
-      user.string('icon', 100);
-      user.string('location', 100);
-      user.timestamps();
+    bookshelf.knex.schema.createTable('Rooms', function (room) {
+      room.increments('id').primary();
+      room.string('name', 50).notNullable();
+      room.boolean('private').defaultTo(false);
+      room.string('password', 100).defaultTo('');
+      room.timestamps();
     }).then(function (table) {
-      console.log('Created Table Users');
-    });
-  }
-});
-
-bookshelf.knex.schema.hasTable('Playlists').then(function(exists) {
-  if (!exists) {
-    bookshelf.knex.schema.createTable('Playlists', function (playlist) {
-      playlist.increments('id').primary().unsigned();
-      playlist.integer('user_id').unsigned().references('id').inTable('Users');
-      playlist.string('name', 50).notNullable();
-      playlist.integer('current_media_index').unsigned();
-      playlist.timestamps();
-    }).then(function (table) {
-      console.log('Created Table Playlists');
+      console.log('Created Table Rooms');
     });
   }
 });
@@ -35,7 +18,7 @@ bookshelf.knex.schema.hasTable('Playlists').then(function(exists) {
 bookshelf.knex.schema.hasTable('Medias').then(function(exists) {
   if (!exists) {
     bookshelf.knex.schema.createTable('Medias', function (media) {
-      media.increments('id').primary().unsigned();
+      media.increments('id').primary();
       media.string('youtube_id', 100);
       media.integer('youtube_link', 100);
       media.integer('play_count').unsigned().defaultTo(0);
@@ -47,30 +30,48 @@ bookshelf.knex.schema.hasTable('Medias').then(function(exists) {
   }
 });
 
-bookshelf.knex.schema.hasTable('Media_Playlists').then(function(exists) {
+bookshelf.knex.schema.hasTable('Users').then(function(exists) {
   if (!exists) {
-    bookshelf.knex.schema.createTable('Media_Playlists', function (playlist) {
-      playlist.increments('id').primary().unsigned();
-      playlist.integer('playlist_id').unsigned().references('id').inTable('Playlists');
-      playlist.integer('media_id').unsigned().references('id').inTable('Medias');
-      playlist.integer('order', 8).unsigned();
-      playlist.unique(['media_id', 'order']);
+    bookshelf.knex.schema.createTable('Users', function (user) {
+      user.increments('id').primary();
+      user.string('email', 50).unique().notNullable();
+      user.string('password', 100);
+      user.string('oauth', 30);
+      user.string('display_name', 50).notNullable();
+      user.string('icon', 100);
+      user.string('location', 100);
+      user.integer('current_playlist_id').unsigned().defaultTo(0);//.references('id').inTable('Playlists');
+      user.timestamps();
     }).then(function (table) {
-      console.log('Created Table Media Playlists');
-    });
-  }
-});
-
-bookshelf.knex.schema.hasTable('Rooms').then(function(exists) {
-  if (!exists) {
-    bookshelf.knex.schema.createTable('Rooms', function (room) {
-      room.increments('id').primary().unsigned();
-      room.string('name', 50);
-      room.boolean('private').defaultTo(false);
-      room.string('password', 100);
-      room.timestamps();
-    }).then(function (table) {
-      console.log('Created Table Rooms');
+      console.log('Created Table Users');
+      bookshelf.knex.schema.hasTable('Playlists').then(function(exists) {
+        if (!exists) {
+          bookshelf.knex.schema.createTable('Playlists', function (playlist) {
+            playlist.increments('id').primary();
+            playlist.integer('user_id').unsigned().references('id').inTable('Users');
+            playlist.string('name', 50).notNullable();
+            playlist.integer('current_media_index').defaultTo(0);//.references('order').inTable('Media_Playlists');
+            // playlist.boolean('current');
+            // playlist.unique(['user_id', 'current']);
+            playlist.timestamps();
+          }).then(function (table) {
+            console.log('Created Table Playlists');
+            bookshelf.knex.schema.hasTable('Media_Playlists').then(function(exists) {
+              if (!exists) {
+                bookshelf.knex.schema.createTable('Media_Playlists', function (playlist) {
+                  playlist.increments('id').primary();
+                  playlist.integer('playlist_id').unsigned().references('id').inTable('Playlists');
+                  playlist.integer('media_id').unsigned().references('id').inTable('Medias');
+                  playlist.integer('order', 8).unsigned();
+                  playlist.unique(['media_id', 'order']);
+                }).then(function (table) {
+                  console.log('Created Table Media Playlists');
+                });
+              }
+            });
+          });
+        }
+      });
     });
   }
 });
@@ -78,7 +79,7 @@ bookshelf.knex.schema.hasTable('Rooms').then(function(exists) {
 bookshelf.knex.schema.hasTable('Users_Rooms').then(function(exists) {
   if (!exists) {
     bookshelf.knex.schema.createTable('Users_Rooms', function (room) {
-      room.increments('id').primary().unsigned();
+      room.increments('id').primary();
       room.integer('user_id').unsigned().references('id').inTable('Users');
       room.integer('room_id').unsigned().references('id').inTable('Rooms');
       room.timestamps();
@@ -87,8 +88,5 @@ bookshelf.knex.schema.hasTable('Users_Rooms').then(function(exists) {
     });
   }
 });
-
-// console.log('piTunes DB Tables created');
-
 
 module.exports = bookshelf;
