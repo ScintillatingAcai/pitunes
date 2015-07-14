@@ -4,7 +4,7 @@ var Promise = require('bluebird');
 
 module.exports = {
 
-  getUser: function(req, res) {
+  getUser: function(req, res, next) {
     var user_ID = (url.parse(req.url).pathname).slice(1);
     console.log('retrieving info for user_id:' + user_ID);
     var R = Promise.promisify(utils.retrieveUser);
@@ -12,15 +12,15 @@ module.exports = {
       if (user) {
         res.json(user);
       } else {
-        res.status(500).end();
+        return next(new Error('user does not exist'));
       }
     })
     .catch(function(error) {
-      console.log('controller error: ',error);
+      return next(new Error('controller error: ', error));
     });
   },
 
-  addUser: function(req, res) {
+  addUser: function(req, res, next) {
     console.log('adding user: ',req.body);
     var R = Promise.promisify(utils.storeUser);
     R(req.body).then(function(data) {
@@ -35,7 +35,7 @@ module.exports = {
     });
   },
 
-  updateUser: function(req, res) {
+  updateUser: function(req, res, next) {
     var user_ID = (url.parse(req.url).pathname).slice(1);
     var userInfo = req.body;
 
@@ -53,7 +53,7 @@ module.exports = {
     });
   },
 
-  loginUser: function(req, res) {
+  loginUser: function(req, res, next) {
     console.log('checking user: ',req.body);
     var R = Promise.promisify(utils.loginUser);
     R(req.body).then(function(data) {
@@ -70,7 +70,7 @@ module.exports = {
     });
   },
 
-  logoutUser: function(req, res) {
+  logoutUser: function(req, res, next) {
     req.session.destroy(function(){
       console.log('session destroyed');
         // res.redirect('/login');

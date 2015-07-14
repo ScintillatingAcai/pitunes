@@ -72,11 +72,12 @@ module.exports = {
 
   //store a new user in DB
   storeUser: function(user, callback) {
-    var username = user.username;
+    var display_name = user.displayName;
     var password = user.password;
+    var email = user.email;
 
     new User({
-        username: username
+        email: email
       }).fetch().then(function(found) {
 
         if (found) {
@@ -86,17 +87,17 @@ module.exports = {
         } else {
 
           var user = new User({
-            username: username,
-            password: password //update to use encryption
-          });
-
-          user.save().then(function(newUser) {
+            display_name: display_name,
+            email: email,
+            password: password
+          })
+          .save().then(function(newUser) {
               Users.add(newUser);
               callback(null, newUser);
-            })
-            .catch(function(error) {
-              console.log('error:', error);
-            });
+          })
+          .catch(function(error) {
+            console.log('error:', error);
+          });
         }
       })
       .catch(function(error) {
@@ -106,11 +107,11 @@ module.exports = {
 
   //check if user is in DB
   loginUser: function(user, callback) {
-    var username = user.username;
     var password = user.password;
+    var email = user.email;
 
     new User({
-        username: username
+        email: email
       }).fetch().then(function(found) {
 
         if (found) {
@@ -138,7 +139,7 @@ module.exports = {
 
   //start user session
   createSession: function(req, res, newUser) {
-    return req.session.regenerate(function() {
+    return req.session.regenerate(function() { //XXX check if this is async, currently programmed as sync
       req.session.user = newUser;
       // res.redirect('/');
     });
