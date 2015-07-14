@@ -87,6 +87,27 @@ module.exports = {
       .catch(function(error) {
         console.log('error:', error);
       });
-  }
+  },
+
+  //get a room from DB by ID
+  addDJToQueue: function(dj_id, room_id, callback) {
+    room_id = parseInt(room_id);
+    dj_id = parseInt(dj_id);
+
+    new Room({
+        id: room_id
+      }).fetch().then(function(found) {
+        if (found) {
+          room.queueDJ(dj_id);
+
+          callback(null, roomWithJoins);
+        } else {
+          console.log('room_id not found:' + room_id);
+        }
+      })
+      .catch(function(error) {
+        console.log('error:', error);
+      });
+  },
 
 };
