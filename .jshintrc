@@ -3,7 +3,7 @@
     "esnext": true,
     "bitwise": true,
     "camelcase": true,
-    "curly": true,
+    "curly": false,
     "eqeqeq": true,
     "immed": true,
     "indent": 2,
@@ -18,5 +18,8 @@
     "smarttabs": true,
     "white": true,
     "jquery": true,
-    "quotmark": false
+    "quotmark": false,
+    "camelcase": false,
+    "noempty": false,
+    "nonew": true
 }
