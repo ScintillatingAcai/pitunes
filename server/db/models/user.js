@@ -28,7 +28,7 @@ var User = db.Model.extend({
 
   getCurrentPlaylist: function(callback){
     var Playlist = require('./playlist');
-    if (this.get('current_playlist_id') === null) callback(new Error('media has no current playlist'));
+    if (this.get('current_playlist_id') === 0) callback(null, 0); //send back 0 which indicates no playlist
 
     return new Playlist().fetch({
       id:this.get('current_playlist_id')
