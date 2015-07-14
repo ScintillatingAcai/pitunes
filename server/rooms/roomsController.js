@@ -4,11 +4,24 @@ var Promise = require('bluebird');
 
 module.exports = {
 
-  getRoom: function(req, res) {
-    var room_ID = (url.parse(req.url).pathname).slice(1);
-    console.log('retrieving info for room_id:' + room_ID);
+  attachRoom: function(req, res, next, room_id) {
     var R = Promise.promisify(utils.retrieveRoom);
-    R(room_ID).then(function(room) {
+    R(room_id).then(function(room) {
+      if (!room) return next(new Error('no room found'));
+
+      req.room = room;
+      next();
+    })
+    .catch(function(err) {
+      next(err);
+    });
+  },
+
+  getRoom: function(req, res) {
+    var room_ID = req.room.id;
+    console.log('retrieving info for room_id:' + room_id);
+    var R = Promise.promisify(utils.retrieveRoom);
+    R(room_id).then(function(room) {
       if (room) {
         res.json(room);
       } else {
@@ -36,7 +49,7 @@ module.exports = {
   },
 
   updateRoom: function(req, res) {
-    var room_ID = (url.parse(req.url).pathname).slice(1);
+    var room_ID = req.room.id;
     var roomInfo = req.body;
 
     console.log('updating room_id:', room_ID, ' with info: ', roomInfo );
@@ -44,6 +57,26 @@ module.exports = {
     R(room_ID,roomInfo).then(function(room) {
       if (room) {
         res.json(room);
+      } else {
+        res.status(500).end();
+      }
+    })
+    .catch(function(error) {
+      console.log('controller error: ',error);
+    });
+  },
+
+  addDJToQueue: function(req, res) {
+    var room_id = req.room.id;
+    var room = req.room;
+
+    var dj_id = req.body.id;
+    var dj = req.body;
+
+    var R = Promise.promisify(utils.addDJToQueue);
+    R(dj_id,room_id).then(function(data) {
+      if (data) {
+        res.json(data);
       } else {
         res.status(500).end();
       }

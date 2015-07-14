@@ -4,9 +4,14 @@ var roomsController = require('./roomsController.js');
 
 module.exports = function(app) {
 
+  app.param('room_id', roomsController.attachRoom);
+
+  app.post('/:room_id/addDJ', roomsController.addDJToQueue); //add a DJ to room
+
+  app.get('/:room_id', roomsController.getRoom); //get one room
+  app.put('/:room_id', roomsController.updateRoom); //update a room
+
   app.post('/', roomsController.addRoom); //add a room
 
-  app.get('/:room', roomsController.getRoom); //get one room
-  app.put('/:room', roomsController.updateRoom); //update a room
 };
 

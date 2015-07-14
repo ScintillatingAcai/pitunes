@@ -28,17 +28,14 @@ var User = db.Model.extend({
 
   getCurrentPlaylist: function(callback){
     var Playlist = require('./playlist');
-    if (this.get('current_playlist_id') === 0) callback(null, 0); //send back 0 which indicates no playlist
+    if (this.get('current_playlist_id') === 0) callback(null, 0); //send back 0 which indicates no playlist but not an error
 
     return new Playlist().fetch({
       id:this.get('current_playlist_id')
     })
     .then(function(found) {
-      if (found) {
-        callback(null,found.attributes);
-      } else {
-        callback(new Error('media playlist not found'));
-      }
+      if (!found) return callback(new Error('media playlist not found'));
+      callback(null,found.attributes);
     })
     .catch(function(error) {
       callback(error);
@@ -47,7 +44,7 @@ var User = db.Model.extend({
 
   playlists: function() {
     var Playlist = require('./playlist');
-    return this.belongsToMany(Playlist,'Media_Playlists', 'media_id', 'playlist_id');
+    return this.hasMany(Playlist, 'user_id');
   }
 });
 

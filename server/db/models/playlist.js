@@ -7,7 +7,13 @@ var Playlist = db.Model.extend({
   medias: function() {
     var Media = require('./media');
     return this.belongsToMany(Media,'Media_Playlists', 'playlist_id', 'media_id');
-  }
+  },
+
+  user: function() {
+      //invoking require at runtime so we avoid circular dependency on User
+      var User = require('./user');
+      return this.belongsTo(User, 'user_id');
+    }
 });
 
 module.exports = Playlist;
