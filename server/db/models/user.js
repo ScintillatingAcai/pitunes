@@ -11,21 +11,14 @@ var User = db.Model.extend({
 
   comparePassword: function(attemptedPassword, callback) {
     bcrypt.compare(attemptedPassword, this.get('password'), function(err, isMatch) {
-      if (err) callback(err);
-      callback(null, isMatch);
-
+      callback(err, isMatch);
     });
   },
 
   hashPassword: function(callback){
-    var saltPromise = Promise.promisify(bcrypt.genSalt);
-    return saltPromise(10).bind(this)
-    .then(function(salt) {
-      var hashPromise = Promise.promisify(bcrypt.hash);
-      return hashPromise(this.get('password'), salt);
-    })
+    var hashPromise = Promise.promisify(bcrypt.hash);
+    return hashPromise(this.get('password'), 10).bind(this)
     .then(function(hash) {
-          // Store hash in your password DB.
       return this.set('password', hash);
     })
     .catch(function(err) {
