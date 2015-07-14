@@ -8,7 +8,7 @@ bookshelf.knex.schema.hasTable('Users').then(function(exists) {
       user.string('email', 50).unique().notNullable();
       user.string('password', 100);
       user.string('oauth', 30);
-      user.string('name', 50);
+      user.string('display_name', 50);
       user.string('icon', 100);
       user.string('location', 100);
       user.timestamps();

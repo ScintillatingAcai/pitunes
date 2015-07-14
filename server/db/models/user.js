@@ -9,9 +9,14 @@ var User = db.Model.extend({
     this.on('creating', this.hashPassword);
   },
   
-  comparePassword: function(attemptedPassword) {
+  comparePassword: function(attemptedPassword, callback) {
     bcrypt.compare(attemptedPassword, this.get('password'), function(err, isMatch) {
-      return isMatch;
+      if (err) { 
+        callback(err);
+      }
+      
+      callback(null, isMatch);
+
     });
   },
 
