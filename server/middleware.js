@@ -43,4 +43,16 @@ module.exports = function (app, express) {
   require('./playlists/playlistsRoutes.js')(playlistRouter);
   require('./medias/mediasRoutes.js')(mediaRouter);
 
+
+  // websocket instantiation requires http
+  var server = require('http').Server(app);
+  var io = require('socket.io')(server);
+
+  io.on('connection', function (socket) {
+    console.log("connection: " + socket);
+    socket.emit('news', { hello: 'world' });
+    socket.on('my other event', function (data) {
+      console.log(data);
+    });
+  });
 };
