@@ -1,8 +1,8 @@
 var CenterContainerStyle = {
   position: 'absolute',
   left: '25%',
-  minHeight: '85%',
-  minWidth: '50%',
+  height: '90%',
+  width: '50%',
   margin: '1px 0px 0px 0px',
   backgroundColor: '#222222',
   border: '2px solid #444444',
