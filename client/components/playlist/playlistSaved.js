@@ -77,7 +77,7 @@ var List = React.createClass({
 //list of dummy user data
 var dummyUser = {
   playlistSongs: {
-    0: 'I Am The Doctor - Murray Gold',
+    0: 'Sandstorm - Darude',
     1: 'Song Of Freedom - Murray Gold',
     2: 'SkyWorld - Two Steps From Hell',
     3: 'Dance of the Druids - Bear McCreary',
@@ -124,7 +124,7 @@ var PlaylistSaved = React.createClass({
       border: '2px solid #444444',
       position: 'absolute', 
       width: '100%',
-      height: '40%',
+      height: '50%',
       overflow: 'auto',
       resize: 'vertical'
     };
