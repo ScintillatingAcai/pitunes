@@ -1,14 +1,10 @@
 // videoPlayer.js
 
-// var VideoPlayerStyle = {
-//   width: "100%",
-//   height: "300px",
-// };
 var VideoPlayer = React.createClass({
   render: function() {
     var style = {
       width: "100%",
-      height: "305px",
+      height: "50%",
       // pointerEvents: 'none' 
     };
     return (
@@ -16,8 +12,6 @@ var VideoPlayer = React.createClass({
     );
   }
 });
-
-// <iframe style={VideoPlayerStyle} src="https://www.youtube.com/embed/YfY1lfFu8j8?autoplay=1&controls=0&showInfo=0&disablekb=1&enablejsapi=1&rel=0&modestbranding=1&loop=1" frameBorder="0" ></iframe>
 
 var ga = document.createElement('script');
   ga.type = 'text/javascript';
@@ -33,7 +27,7 @@ var ga = document.createElement('script');
       player = new YT.Player('videoContainer', {
           height: '390',
           width: '640',
-          videoId: 'PSYxT9GM0fQ',
+          videoId: '1Xhdy9zBEws',
       playerVars: {
           controls: 0,
           autoplay: 1,
