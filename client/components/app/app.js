@@ -3,7 +3,7 @@ var AppContainer = React.createClass({
     var style = {
       WebkitTouchCallout: 'none',
       WebkitUserSelect: 'none',
-      khtmlUserSelect: 'none',
+      KhtmlUserSelect: 'none',
       MozUserSelect: 'none',
       msUserSelect: 'none',
       userSelect: 'none'
