@@ -1,5 +1,7 @@
 var url = require('url');
 var utils = require('./usersUtils');
+var utility = require('../utility');
+
 var Promise = require('bluebird');
 
 module.exports = {
@@ -58,7 +60,7 @@ module.exports = {
     var R = Promise.promisify(utils.loginUser);
     R(req.body).then(function(data) {
       if (data) {
-        utils.createSession(req, res, data);
+        utility.createSession(req, res, data);
         res.json(data);
       } else {
         res.status(500).end();
