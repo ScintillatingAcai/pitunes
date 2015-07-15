@@ -1,10 +1,5 @@
-// app.js
-var ContainerStyle = {
-  'minHeight': '100%'
-};
-
 React.render(
-  <div style={ContainerStyle}>
+  <div>
     <NavBarTop />
     <LeftContainer />
     <CenterContainer />

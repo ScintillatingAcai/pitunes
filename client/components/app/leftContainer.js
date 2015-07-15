@@ -1,6 +1,6 @@
 var LeftContainerStyle = {
   position: 'absolute',
-  left: 0,
+  left: '0',
   minHeight: '85%',
   minWidth: '25%',
   margin: '1px 0px 0px 0px',
@@ -14,6 +14,7 @@ var LeftContainer = React.createClass({
   render: function() {
     return (
       <div className="leftContainer" style={LeftContainerStyle}>
+        <PlaylistSaved />
       </div>
     );
   }
