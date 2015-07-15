@@ -61,7 +61,7 @@ var OnlineUsers = React.createClass({
       bottom: '0'
     };
     return (
-      <div style={style} ondragstart="return false;" ondrop="return false;">
+      <div style={style}>
         <UsersTitle />
         <Users />
       </div>
