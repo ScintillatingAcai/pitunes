@@ -9,10 +9,19 @@ var RightContainerStyle = {
   borderRadius: '2px'
 };
 
+var UserBox = React.createClass({
+  render: function() {
+    return (
+      <OnlineUsers/>
+    );
+  }
+});
+
 var RightContainer = React.createClass({
   render: function() {
     return (
       <div className="rightContainer" style={RightContainerStyle}>
+        <UserBox />
       </div>
     );
   }
