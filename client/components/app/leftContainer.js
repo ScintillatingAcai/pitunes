@@ -1,9 +1,9 @@
 var LeftContainerStyle = {
   position: 'absolute',
   left: 0,
-  minHeight: '100%',
+  minHeight: '85%',
   minWidth: '25%',
-  margin: '0px 0px 0px 0px',
+  margin: '1px 0px 0px 0px',
   backgroundColor: '#222222',
   border: '2px solid #444444',
   borderRadius: '2px'
