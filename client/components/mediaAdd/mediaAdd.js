@@ -10,16 +10,20 @@ var SearchBarStyle = {
   width: '97%',
 };
 
+var SearchBarInputStyle = {
+  backgroundColor: '#AAAAAA',
+  borderColor: '#EEEEEE'
+};
+
 var MediaAdd = React.createClass({
   render: function() {
     return (
       <div style={SearchBarContainer}>
         <div style={SearchBarStyle} className="input-group">
-          <input type="text" className="form-control" placeholder="Search YouTube" />
+          <input style={SearchBarInputStyle} type="text" className="form-control" placeholder="Search YouTube" />
           <span className="input-group-addon"><span className="glyphicon glyphicon-search" aria-hidden="true"></span></span>
         </div>
       </div>
     );
   }
 });
-
