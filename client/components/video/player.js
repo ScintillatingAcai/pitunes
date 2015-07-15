@@ -23,11 +23,11 @@ var ga = document.createElement('script');
   var done = false;
   var player;
 
-  function onYouTubePlayerAPIReady() {
+  var onYouTubePlayerAPIReady = function() {
       player = new YT.Player('videoContainer', {
           height: '390',
           width: '640',
-          videoId: '1Xhdy9zBEws',
+          videoId: 'egcXvqiho4w',
       playerVars: {
           controls: 0,
           autoplay: 1,
@@ -43,17 +43,19 @@ var ga = document.createElement('script');
         }
       });
   }
-  function onPlayerReady(evt) {
-      console.log('onPlayerReady', evt);
-  }
-  function onPlayerStateChange(evt) {
-      console.log('onPlayerStateChange', evt);
-      if (evt.data == YT.PlayerState.PLAYING && !done) {
+
+  var onPlayerReady = function (evt) {
+      console.log('heard onPlayerReady', evt);
+  };
+
+  var onPlayerStateChange = function (evt) {
+      console.log('heard onPlayerStateChange', evt);
+      if (evt.data === YT.PlayerState.PLAYING && !done) {
           console.log('Heard state change')
       }
-  }
+  };
 
-  function stopVideo() {
-      console.log('stopVideo');
+  var stopVideo = function () {
+      console.log('stopVideo fired');
       player.stopVideo();
-  }
+  };

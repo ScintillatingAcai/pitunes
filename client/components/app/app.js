@@ -1,12 +1,12 @@
-var Styling = React.createClass({
+var AppContainer = React.createClass({
   render: function(){
     var style = {
-      '-webkit-touch-callout': 'none',
-      '-webkit-user-select': 'none',
-      '-khtml-user-select': 'none',
-      '-moz-user-select': 'none',
-      '-ms-user-select': 'none',
-      'user-select': 'none'
+      'WebkitTouchCallout': 'none',
+      'WebkitUserSelect': 'none',
+      'KhtmlUserSelect': 'none',
+      'MozUserSelect': 'none',
+      'msUserSelect': 'none',
+      'userSelect': 'none'
     };
     return (
       <div style={style}>
@@ -22,7 +22,7 @@ var Styling = React.createClass({
 
 React.render(
   <div>
-    <Styling />
+    <AppContainer />
   </div>,
   document.getElementsByClassName('appWrapper')[0]
 );
