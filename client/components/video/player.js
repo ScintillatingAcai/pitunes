@@ -4,17 +4,15 @@
 //   width: "100%",
 //   height: "300px",
 // };
-
-var VideoContainerStyle = {
-  width: "100%",
-  height: "305px",
-  pointerEvents: 'none'
-};
-
 var VideoPlayer = React.createClass({
   render: function() {
+    var style = {
+      width: "100%",
+      height: "305px",
+      // pointerEvents: 'none' 
+    };
     return (
-      <div id="videoContainer" style={VideoContainerStyle}></div>    
+      <div id="videoContainer" style={style}></div>    
     );
   }
 });
