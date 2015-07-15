@@ -51,7 +51,9 @@ var List = React.createClass({
       cursor: 'pointer',
       marginBottom: '5px',
       padding: '0',
-      margin: '0'
+      margin: '0',
+      color: 'grey',
+      listStyleType: 'none'
     }
     var listItems = this.state.data.map((function(item, i) {
       return (
@@ -82,7 +84,9 @@ var dummyUser = {
     4: 'A New Beginning - Alexandre Desplat',
     5: 'The Fields of The Pelenor - Lord of the Rings 3 Soundtrack', 
     6: 'Sol Invictus - Audiomachine',
-    7: 'El Dorado - Two Steps From Hell'
+    7: 'El Dorado - Two Steps From Hell',
+    8: 'Fortune Days - Glitch Mob',
+    9: 'I See Fire - Ed Sheeran'
   }
 }
 
@@ -96,7 +100,7 @@ for (var key in objSongs) {
 var Songs = React.createClass({
   render: function() {
     return (
-      <List data={arrSongs}/> 
+      <List data={arrSongs} /> 
     );
   }
 });
@@ -104,7 +108,8 @@ var Songs = React.createClass({
 var PlaylistTitle = React.createClass({
   render: function(){
     var style = {
-      textAlign: 'center'
+      textAlign: 'center',
+      color: 'grey'
     };
     return (
       <h3 style={style}>Movie Scores Playlist</h3>
@@ -115,12 +120,13 @@ var PlaylistTitle = React.createClass({
 var PlaylistSaved = React.createClass({
   render: function() {
     var style = {
-      background: '#eee',
+      background: '#222222',
+      border: '2px solid #444444',
       position: 'absolute', 
       width: '100%',
       height: '40%',
       overflow: 'auto',
-      resize: 'both'
+      resize: 'vertical'
     };
     return (
       <div style={style}>
