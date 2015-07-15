@@ -19,7 +19,6 @@ var Playlist = db.Model.extend({
     this.set('current_media_index', data);
     this.save();
   }
-
 });
 
 module.exports = Playlist;
