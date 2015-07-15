@@ -1,14 +1,13 @@
 // mediaAdd.js
 
 var SearchBarContainer = {
-  marginLeft: '5px'
+  height: '50%',
 };
 
 var SearchBarStyle = {
   margin: 'auto',
+  marginTop: '300px',
   width: '97%',
-  position: 'absolute',
-  top: '50%'
 };
 
 var MediaAdd = React.createClass({
