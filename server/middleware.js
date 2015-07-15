@@ -43,7 +43,10 @@ module.exports = function (app, express) {
   require('./playlists/playlistsRoutes.js')(playlistRouter);
   require('./medias/mediasRoutes.js')(mediaRouter);
 
-  var io = require('socket.io')(app);
+
+  // websocket instantiation requires http
+  var server = require('http').Server(app);
+  var io = require('socket.io')(server);
 
   io.on('connection', function (socket) {
     console.log("connection: " + socket);
@@ -52,5 +55,4 @@ module.exports = function (app, express) {
       console.log(data);
     });
   });
-
 };
