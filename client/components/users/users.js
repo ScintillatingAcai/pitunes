@@ -15,8 +15,23 @@ for (var key in dummyUsers) {
 
 var Users = React.createClass({
   render: function() {
+    var style = {
+      cursor: 'pointer',
+      marginBottom: '5px',
+      padding: '0',
+      margin: '0',
+      color: 'grey',
+      listStyleType: 'none'
+    }
+    var listItems = arrUsers.map((function(item, i) {
+      return (
+        <li style={style} data-id={i} key={i}>
+          {item}
+        </li>
+      );
+    }).bind(this));
     return (
-      <List data={arrUsers} />
+      <ul >{listItems}</ul>
     );
   }
 });
@@ -42,10 +57,11 @@ var OnlineUsers = React.createClass({
       width: '100%',
       height: '50%',
       overflow: 'auto',
-      resize: 'vertical'
+      resize: 'vertical',
+      bottom: '0'
     };
     return (
-      <div style={style}>
+      <div style={style} ondragstart="return false;" ondrop="return false;">
         <UsersTitle />
         <Users />
       </div>

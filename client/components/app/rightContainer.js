@@ -6,6 +6,13 @@ var UserBox = React.createClass({
   }
 });
 
+var QueueBox = React.createClass({
+  render: function() {
+    return (
+      <Queue />
+    );
+  }
+});
 var RightContainer = React.createClass({
   render: function() {
     var style = {
@@ -20,6 +27,7 @@ var RightContainer = React.createClass({
     };
     return (
       <div className="rightContainer" style={style}>
+        <QueueBox />
         <UserBox />
       </div>
     );
