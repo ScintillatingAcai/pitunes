@@ -1,3 +1,18 @@
+var VideoBox = React.createClass({
+  render: function() {
+    var style = {
+
+    };
+    return (
+      <VideoPlayer />
+    );
+  }
+});
+
+
+
+
+
 var CenterContainer = React.createClass({
   render: function() {
     var style = {
@@ -12,7 +27,7 @@ var CenterContainer = React.createClass({
     };
     return (
       <div className="centerContainer" style={style}>
-        <VideoPlayer />
+        <VideoBox />
       </div>
     );
   }
