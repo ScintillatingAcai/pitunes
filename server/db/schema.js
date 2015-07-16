@@ -11,6 +11,9 @@ bookshelf.knex.schema.hasTable('Rooms').then(function(exists) {
       room.timestamps();
     }).then(function (table) {
       console.log('Created Table Rooms');
+      return bookshelf.knex.insert({name: 'root'}).into('Rooms');
+    }).then( function ( results) {
+      console.log('Created Root Room');
     });
   }
 });
@@ -87,5 +90,7 @@ bookshelf.knex.schema.hasTable('Users_Rooms').then(function(exists) {
     });
   }
 });
+
+
 
 module.exports = bookshelf;
