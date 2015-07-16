@@ -1,12 +1,12 @@
 var AppContainer = React.createClass({
   render: function(){
     var style = {
-      'WebkitTouchCallout': 'none',
-      'WebkitUserSelect': 'none',
-      'KhtmlUserSelect': 'none',
-      'MozUserSelect': 'none',
-      'msUserSelect': 'none',
-      'userSelect': 'none'
+      WebkitTouchCallout: 'none',
+      WebkitUserSelect: 'none',
+      KhtmlUserSelect: 'none',
+      MozUserSelect: 'none',
+      msUserSelect: 'none',
+      userSelect: 'none'
     };
     return (
       <div style={style}>

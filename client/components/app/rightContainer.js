@@ -13,6 +13,7 @@ var QueueBox = React.createClass({
     );
   }
 });
+
 var RightContainer = React.createClass({
   render: function() {
     var style = {
