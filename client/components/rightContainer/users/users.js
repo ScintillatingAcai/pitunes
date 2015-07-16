@@ -57,7 +57,6 @@ var OnlineUsers = React.createClass({
       width: '100%',
       height: '50%',
       overflow: 'auto',
-      resize: 'vertical',
       bottom: '0'
     };
     return (

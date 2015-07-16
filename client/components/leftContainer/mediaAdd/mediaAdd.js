@@ -2,7 +2,7 @@ var SearchBar = React.createClass({
   render: function() {
     var style = {
       margin: 'auto',
-      marginTop: '300px',
+      marginTop: '1%',
       width: '97%'
     };
     var searchBarInputStyle = {
