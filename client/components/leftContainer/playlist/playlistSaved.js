@@ -1,4 +1,4 @@
-var placeholder = document.createElement("li");
+var placeholder = document.createElement("div");
 placeholder.className = "placeholder";
 
 var List = React.createClass({
@@ -49,27 +49,26 @@ var List = React.createClass({
   render: function() {
     var style = {
       cursor: 'pointer',
-      marginBottom: '5px',
       padding: '0',
       margin: '0',
       color: 'grey',
       listStyleType: 'none'
-    }
+    };
     var listItems = this.state.data.map((function(item, i) {
       return (
-        <li style={style} data-id={i}
+        <div style={style} data-id={i}
             key={i}
             draggable="true"
             onDragEnd={this.dragEnd}
             onDragStart={this.dragStart}
             onClick={this.onClick}>
           {item}
-        </li>
+        </div>
       );
     }).bind(this));
 
     return (
-      <ul onDragOver={this.dragOver}>{listItems}</ul>
+      <div onDragOver={this.dragOver}>{listItems}</div>
     );
   }
 });
@@ -86,7 +85,10 @@ var dummyUser = {
     6: 'Sol Invictus - Audiomachine',
     7: 'El Dorado - Two Steps From Hell',
     8: 'Fortune Days - Glitch Mob',
-    9: 'I See Fire - Ed Sheeran'
+    9: 'I See Fire - Ed Sheeran',
+    10: 'a',
+    11: 'b',
+    12: 'c'
   }
 }
 
@@ -109,7 +111,10 @@ var PlaylistTitle = React.createClass({
   render: function(){
     var style = {
       textAlign: 'center',
-      color: 'grey'
+      color: 'grey',
+      marginTop: '10px',
+      paddingBottom: '10px',
+      borderBottom: '2px solid #444444'
     };
     return (
       <h3 style={style}>Movie Scores Playlist</h3>
@@ -125,7 +130,11 @@ var PlaylistSaved = React.createClass({
       position: 'absolute', 
       width: '100%',
       height: '50%',
-      overflow: 'auto'
+      overflow: 'auto',
+      textAlign: 'center',
+    };
+    var songStyle = {
+      marginTop: '40px'
     };
     return (
       <div style={style}>
