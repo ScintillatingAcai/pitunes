@@ -7,7 +7,7 @@ var ChatList = React.createClass({
       listStyleType: 'none',
       bottom: '0',
       maxHeight: '100%',
-      marginTop: '5%'
+      marginBottom: '0px'
     };
     var createItem = function(itemText, index) {
       return <li key={index + itemText}>{itemText}</li>;
@@ -19,7 +19,6 @@ var ChatList = React.createClass({
 var Chat = React.createClass({
   getInitialState: function() {
     socket.on('user message', function(data){
-      console.log(data);
       var nextItems = this.state.items.concat([data.displayName + ': ' + data.message]);
       this.setState({items: nextItems});
     }.bind(this));
@@ -42,15 +41,17 @@ var Chat = React.createClass({
     var nextItems = this.state.items.concat([name + ': ' + this.state.text]);
     var nextText = '';
     this.setState({items: nextItems, text: nextText});
+  },
+  componentDidUpdate: function () {
     var container = this.refs.messageContainer.getDOMNode();
     if (container.scrollHeight - (container.scrollTop + container.offsetHeight) >= 50) {
       this.scrolled = true;
     } else {
       this.scrolled = false;
     }
-    if (this.scrolled === false) { 
+    if (this.scrolled === false) {
       var container = this.refs.messageContainer.getDOMNode();
-      container.scrollTop = container.scrollHeight; 
+      container.scrollTop = container.scrollHeight;
     }
   },
   render: function() {
@@ -75,7 +76,7 @@ var Chat = React.createClass({
     };
     var chatListStyle = {
       overflow: 'scroll',
-      maxHeight: '90%'
+      maxHeight: '88%'
     };
     return (
       <div style={divStyle}>
