@@ -1,5 +1,3 @@
-// navBarBot.js
-
 var Navbar = ReactBootstrap.Navbar;
 var Nav = ReactBootstrap.Nav;
 
@@ -13,7 +11,7 @@ var NavBarBotStyle = {
   border: '2px solid #444444',
   borderRadius: '2px',
   display: 'inline',
-  height: '28px',
+  height: '4%',
   color: '#888',
   textAlign: 'center'
 };

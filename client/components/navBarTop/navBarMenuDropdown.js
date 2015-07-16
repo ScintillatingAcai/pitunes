@@ -1,5 +1,3 @@
-// navBarTop.js
-
 var NavItem = ReactBootstrap.NavItem;
 var MenuItem = ReactBootstrap.MenuItem;
 var DropdownButton = ReactBootstrap.DropdownButton;

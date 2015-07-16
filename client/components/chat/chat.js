@@ -3,10 +3,11 @@ var socket = io('http://' + document.domain + ':3000');
 var ChatList = React.createClass({
   render: function() {
     var style = {
-      marginTop: '5%',
       color: 'grey',
       listStyleType: 'none',
-      maxHeight: '200px'
+      bottom: '0',
+      maxHeight: '100%',
+      marginBottom: '0px'
     };
     var createItem = function(itemText, index) {
       return <li key={index + itemText}>{itemText}</li>;
@@ -18,7 +19,6 @@ var ChatList = React.createClass({
 var Chat = React.createClass({
   getInitialState: function() {
     socket.on('user message', function(data){
-      console.log(data);
       var nextItems = this.state.items.concat([data.displayName + ': ' + data.message]);
       this.setState({items: nextItems});
     }.bind(this));
@@ -41,14 +41,18 @@ var Chat = React.createClass({
     var nextItems = this.state.items.concat([name + ': ' + this.state.text]);
     var nextText = '';
     this.setState({items: nextItems, text: nextText});
+  },
+  componentDidUpdate: function () {
     var container = this.refs.messageContainer.getDOMNode();
-
     if (container.scrollHeight - (container.scrollTop + container.offsetHeight) >= 50) {
       this.scrolled = true;
     } else {
       this.scrolled = false;
     }
-    if (!this.scrolled) { container.scrollTop = container.scrollHeight - 10; }
+    if (this.scrolled === false) {
+      var container = this.refs.messageContainer.getDOMNode();
+      container.scrollTop = container.scrollHeight;
+    }
   },
   render: function() {
     var style = {
@@ -66,13 +70,13 @@ var Chat = React.createClass({
     var searchBarInputStyle = {
       backgroundColor: '#AAAAAA',
       borderColor: '#EEEEEE',
-      position: 'fixed',
-      bottom: '5%',
-      width: '49%'
+      position: 'absolute',
+      bottom: '0',
+      width: '100%'
     };
     var chatListStyle = {
-      bottom: '12%',
-      overflow: 'scroll'
+      overflow: 'scroll',
+      maxHeight: '88%'
     };
     return (
       <div style={divStyle}>
