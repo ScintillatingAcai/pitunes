@@ -125,8 +125,7 @@ var PlaylistSaved = React.createClass({
       position: 'absolute', 
       width: '100%',
       height: '50%',
-      overflow: 'auto',
-      resize: 'vertical'
+      overflow: 'auto'
     };
     return (
       <div style={style}>
