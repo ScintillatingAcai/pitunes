@@ -5,13 +5,13 @@ var SearchBar = React.createClass({
       marginTop: '300px',
       width: '97%',
     };
-    var SearchBarInputStyle = {
+    var searchBarInputStyle = {
       backgroundColor: '#AAAAAA',
       borderColor: '#EEEEEE'
     };
     return (
       <div style={style} className="input-group">
-        <input style={SearchBarInputStyle} type="text" className="form-control" placeholder="Search YouTube" />
+        <input style={searchBarInputStyle} type="text" className="form-control" placeholder="Search YouTube" />
         <span className="input-group-addon"><span className="glyphicon glyphicon-search" aria-hidden="true"></span></span>
       </div>
     );
