@@ -16,7 +16,7 @@ var DebuggerButtonRemVid = React.createClass({
   render: function () {
     return (
       <button onClick={this.handleClick}>DEBUG RemVid</button>
-    )
+    );
   }
 });
 
@@ -26,21 +26,26 @@ var DebuggerButtonLoadVid = React.createClass({
    },
   render: function() {
     return (
-    <button onClick={this.handleClick}>LoadTestVid at 0:10</button>
-    )
+      <button onClick={this.handleClick}>LoadTestVid at 0:10</button>
+    );
   }
 });
 
 var NavBarTop = React.createClass({
   render: function() {
+    var style = {
+      right: '0'
+    };
     return (
-      <Navbar style={NavBarTopStyle} brand='πTunes'>
-        <Nav className="navbar-right">
-          <NavBarMenuDropdown />
-          <DebuggerButtonRemVid />
-          <DebuggerButtonLoadVid />
-       </Nav>  
-      </Navbar>
+      <div style={style}>
+        <Navbar style={NavBarTopStyle} brand='πTunes'>
+          <Nav className="navbar-right">
+            <NavBarMenuDropdown />
+         </Nav>  
+        </Navbar>
+      </div>
     );
+    // <DebuggerButtonRemVid />
+    // <DebuggerButtonLoadVid />
   }
 });

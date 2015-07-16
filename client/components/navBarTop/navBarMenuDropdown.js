@@ -1,6 +1,9 @@
 var NavItem = ReactBootstrap.NavItem;
 var MenuItem = ReactBootstrap.MenuItem;
 var DropdownButton = ReactBootstrap.DropdownButton;
+var ButtonToolbar = ReactBootstrap.ButtonToolbar;
+var Button = ReactBootstrap.Button;
+var Modal = ReactBootstrap.Modal;
 
 var DropdownStyle = {
   backgroundColor: '#888888',
@@ -8,17 +11,50 @@ var DropdownStyle = {
   margin: '8px 0px 0px 0px',
 };
 
-var MenuItemStyle = {
+var SignOut = React.createClass({
+  getInitialState: function() {
+    return {showModal:false};
+  },
+  close: function() {
+    this.setState({showModal: false});
+  },
+  open: function() {
+    this.setState({showModal: true});
+  },
+  render: function() {
+    var buttonStyle = {
+      backgroundColor: 'grey',
+      marginTop: '4%'
+    };
+    console.log('heasdf')
+    return (
+      <div>
+        <ButtonToolbar>
+          <Button style={buttonStyle}>Profile</Button>
+          <Button onClick={this.open} style={buttonStyle}>Sign Out</Button>
+        </ButtonToolbar>
 
-};
+        <Modal show={this.state.showModal} onHide={this.close}>
+          <Modal.Header closeButton>
+            <Modal.Title>Signing Out</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <h4>Are you sure you want to sign out?</h4>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button onClick={this.close}>Cancel</Button>
+            <Button onClick={this.close}>Continue</Button>
+          </Modal.Footer>
+        </Modal>
+      </div>
+    );
+  }
+});
 
 var NavBarMenuDropdown = React.createClass({
   render: function() {
     return (
-     <DropdownButton style={DropdownStyle} title={<span className="glyphicon glyphicon-th-list" aria-hidden="true"></span>}>
-       <MenuItem style={MenuItemStyle} eventKey='1'>Sign Out</MenuItem>
-       <MenuItem style={MenuItemStyle} eventKey='2'>Profile</MenuItem>
-     </DropdownButton>
+      <SignOut />
     );
   }
 });
