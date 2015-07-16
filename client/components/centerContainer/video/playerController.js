@@ -42,7 +42,7 @@ var createPlayer = function (currentVideoId) {
     videoId: currentVideoId,
     playerVars: {
       controls: 0,
-      autoplay: 1,
+      autoplay: 0,
       disablekb: 1,
       showInfo: 0,
       enablejsapi: 1,
