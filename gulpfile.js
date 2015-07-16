@@ -12,8 +12,7 @@ var install = require("gulp-install");
 
 var paths = {
   sass: ['./scss/**/*.scss'],
-  js: ['./client/components/*.js',
-      './client/components/**/*.js',
+  js: ['./client/components/**/*.js',
       './client/components/**/**/*.js',
       '*.js',
       './server/*.js',
