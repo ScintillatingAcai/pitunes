@@ -1,18 +1,4 @@
-var VideoBox = React.createClass({
-  render: function() {
-    return (
-      <VideoPlayer />
-    );
-  }
-});
-
-var ChatBox = React.createClass({
-  render: function() {
-    return (
-      <Chat />
-    );
-  }
-});
+// centerContainer.js
 
 var CenterContainer = React.createClass({
   render: function() {
@@ -28,8 +14,8 @@ var CenterContainer = React.createClass({
     };
     return (
       <div style={style}>
-        <VideoBox />
-        <ChatBox />
+        <VideoContainer />
+        <ChatContainer />
       </div>
     );
   }

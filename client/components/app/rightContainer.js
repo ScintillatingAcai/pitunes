@@ -1,18 +1,4 @@
-var UserBox = React.createClass({
-  render: function() {
-    return (
-      <OnlineUsers/>
-    );
-  }
-});
-
-var QueueBox = React.createClass({
-  render: function() {
-    return (
-      <Queue />
-    );
-  }
-});
+// rightContainer.js
 
 var RightContainer = React.createClass({
   render: function() {
@@ -28,8 +14,8 @@ var RightContainer = React.createClass({
     };
     return (
       <div className="rightContainer" style={style}>
-        <QueueBox />
-        <UserBox />
+        <QueueContainer />
+        <UserContainer />
       </div>
     );
   }
