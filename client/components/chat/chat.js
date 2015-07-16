@@ -1,3 +1,4 @@
+var socket = io('http://' + document.domain + ':3000');
 
 var ChatList = React.createClass({
   render: function() {
@@ -16,6 +17,12 @@ var ChatList = React.createClass({
 
 var Chat = React.createClass({
   getInitialState: function() {
+    socket.on('user message', function(data){
+      console.log(data);
+      var nextItems = this.state.items.concat([data.displayName + ': ' + data.message]);
+      this.setState({items: nextItems});
+    }.bind(this));
+
     return {items: [], text: ''};
   },
   onChange: function(e) {
@@ -30,6 +37,7 @@ var Chat = React.createClass({
     */
     var name = "Josh";
     if (this.state.text === '') { return; }
+    socket.emit('user message', {displayName: name, message: this.state.text});
     var nextItems = this.state.items.concat([name + ': ' + this.state.text]);
     var nextText = '';
     this.setState({items: nextItems, text: nextText});
