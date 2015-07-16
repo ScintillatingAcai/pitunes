@@ -5,6 +5,7 @@ var Promise = require('bluebird');
 module.exports = {
 
   attachRoom: function(req, res, next, room_id) {
+    console.log('room_id: ', room_id);
     var R = Promise.promisify(utils.retrieveRoom);
     R(room_id).then(function(room) {
       if (!room) return next(new Error('no room found'));
@@ -18,12 +19,28 @@ module.exports = {
   },
 
   getRoom: function(req, res) {
-    var room_ID = req.room.id;
+    console.log('req.room: ',req.room);
+    var room_id = req.room.id;
     console.log('retrieving info for room_id:' + room_id);
     var R = Promise.promisify(utils.retrieveRoom);
     R(room_id).then(function(room) {
       if (room) {
         res.json(room);
+      } else {
+        res.status(500).end();
+      }
+    })
+    .catch(function(error) {
+      console.log('controller error: ',error);
+    });
+  },
+
+  getAllRooms: function(req, res) {
+    console.log('retrieving all rooms');
+    var R = Promise.promisify(utils.retrieveAllRooms);
+    R().then(function(rooms) {
+      if (rooms) {
+        res.json(rooms);
       } else {
         res.status(500).end();
       }

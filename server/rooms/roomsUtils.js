@@ -34,6 +34,29 @@ module.exports = {
       });
   },
 
+  retrieveAllRooms: function(callback) {
+
+    Rooms.reset().fetch().then(function(found) {
+        if (found) {
+          console.log('found:', found);
+          var roomsWithJoins = found.models;
+
+          // this is an example of how to add related data to the response object
+          // roomWithJoins.events = [];
+          // found.relations.events.forEach(function(item) {
+          //    roomWithJoins.events.push(cleanAttributes(item.attributes));
+          // });
+
+          callback(null, roomsWithJoins);
+        } else {
+          console.log('rooms not found');
+        }
+      })
+      .catch(function(error) {
+        console.log('error:', error);
+      });
+  },
+
   //update a room in DB by ID
   updateRoom: function(room_id, roomInfo, callback) {
     room_id = parseInt(room_id);
