@@ -7,7 +7,7 @@ s.parentNode.insertBefore(ga, s);
 
 // Stub for JSON object from server
 var currentVideoStub = {
-  videoId: 'dY9PY4r83p8',
+  videoId: 'PsO6ZnUZI0g',
   // videoId: null,
   videoPosition: 0
 };
