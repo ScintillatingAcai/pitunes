@@ -12,6 +12,8 @@ module.exports = function(app) {
   app.put('/:room_id', roomsController.updateRoom); //update a room
 
   app.post('/', roomsController.addRoom); //add a room
+  app.get('/', roomsController.getAllRooms); //get all rooms
+
 
 };
 

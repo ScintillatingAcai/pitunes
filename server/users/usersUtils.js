@@ -135,28 +135,5 @@ module.exports = {
       .catch(function(error) {
         console.log('error:', error);
       });
-  },
-
-  //start user session
-  createSession: function(req, res, newUser) {
-    return req.session.regenerate(function() { //XXX check if this is async, currently programmed as sync
-      req.session.user = newUser;
-      // res.redirect('/');
-    });
-  },
-
-  //check if user is logged in, this doesn't do anything server side because we dont redirect from the backend
-  isLoggedIn: function(req, res) {
-    return req.session ? !!req.session.user : false;
-  },
-
-
-  checkUserSession: function(req, res, next) {
-    if (!exports.isLoggedIn(req)) {
-      // res.redirect('/login');
-      console.error("Error: User not logged in");
-    } else {
-      next();
-    }
   }
 };

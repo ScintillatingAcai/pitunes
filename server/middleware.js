@@ -1,7 +1,8 @@
 var morgan      = require('morgan'), // used for logging incoming request
     bodyParser  = require('body-parser'),
     expressSession = require('express-session'),
-    helpers     = require('./helpers.js'); // our custom middleware
+    // helpers     = require('./helpers.js'); // our custom middleware
+    utility     = require('./utility'); // our custom middleware
 
 
 module.exports = function (app, express) {
@@ -34,8 +35,8 @@ module.exports = function (app, express) {
   // authentication middleware used to decode token and made available on the request
   // app.use('/api/incidents', helpers.decode);
 
-  app.use(helpers.errorLogger);
-  app.use(helpers.errorHandler);
+  app.use(utility.errorLogger);
+  app.use(utility.errorHandler);
 
   // inject our routers into their respective route files
   require('./users/usersRoutes.js')(userRouter);
