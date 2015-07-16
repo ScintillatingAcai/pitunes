@@ -7,12 +7,14 @@ s.parentNode.insertBefore(ga, s);
 
 var done = false;
 var player;
+var playerInstaniated = false;
 
 var onYouTubePlayerAPIReady = function () {
+  playerInstaniated = true;
   player = new YT.Player('videoContainer', {
       height: '390',
       width: '640',
-      videoId: 'pt9wnawn7xQ',
+      videoId: 'ETfiUYij5UE',
       playerVars: {
         controls: 0,
         autoplay: 1,
@@ -53,9 +55,11 @@ var stopVideo = function () {
 // Expects 11 character string (YouTube Video ID)
 var loadVideo = function (videoId) {
   // console.log('loadVideo (id#' + videoId + ') fired');
-  // // player.loadVideoById(videoId);
-  // player.destroy();
-  player = new YT.Player('videoContainer', {
+  console.log(playerInstaniated);
+  if (playerInstaniated) {
+    player.loadVideoById(videoId);
+  } else {
+    player = new YT.Player('videoContainer', {
       height: '390',
       width: '640',
       videoId: videoId,
@@ -73,11 +77,17 @@ var loadVideo = function (videoId) {
         'onStateChange': onPlayerStateChange
       }
     });
+  }
 };
 
 var removeVideo = function () {
   console.log('fired removeVideo');
   player.destroy();
-  $('#noVideoImg').remove();
-  $('#videoContainer').prepend('<img style="width:100%; height:100%;" id="noVideoImg" src="/assets/img/placeholder.jpeg" />');
+  playerInstaniated = false;
+  if ($('#noVideoImg')) {
+    $('#noVideoImg').remove();
+  }
+  if ($('#videoContainer')) {
+    $('#videoContainer').append('<img style="width:100%; height:100%;" id="noVideoImg" src="/assets/img/placeholder.jpeg" />');
+  }
 };
