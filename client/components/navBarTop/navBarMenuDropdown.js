@@ -5,12 +5,6 @@ var ButtonToolbar = ReactBootstrap.ButtonToolbar;
 var Button = ReactBootstrap.Button;
 var Modal = ReactBootstrap.Modal;
 
-var DropdownStyle = {
-  backgroundColor: '#888888',
-  borderColor: '#444444',
-  margin: '8px 0px 0px 0px',
-};
-
 var SignOut = React.createClass({
   getInitialState: function() {
     return {showModal:false};
@@ -24,9 +18,8 @@ var SignOut = React.createClass({
   render: function() {
     var buttonStyle = {
       backgroundColor: 'grey',
-      marginTop: '4%'
+      marginTop: '8px'
     };
-    console.log('heasdf')
     return (
       <div>
         <ButtonToolbar>
