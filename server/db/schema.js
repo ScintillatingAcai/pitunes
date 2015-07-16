@@ -11,7 +11,7 @@ bookshelf.knex.schema.hasTable('Rooms').then(function(exists) {
       room.timestamps();
     }).then(function (table) {
       console.log('Created Table Rooms');
-      return bookshelf.knex.insert({name: 'root'}).into('Rooms');
+      return bookshelf.knex.insert({name: 'root', created_at: "2015-07-15 00:00:00", updated_at: "2015-07-15 00:00:00"}).into('Rooms');
     }).then( function ( results) {
       console.log('Created Root Room');
     });
