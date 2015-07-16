@@ -44,26 +44,5 @@ module.exports = function (app, express) {
   require('./medias/mediasRoutes.js')(mediaRouter);
 
 
-  // websocket instantiation requires http
-  var server = require('http').Server(app);
-  var io = require('socket.io')(server);
-
-  io.on('connection', function (socket) {
-    console.log("connection: " + socket);
-
-    socket.on('user message', function (data) {
-      console.log(data);
-      socket.broadcast.emit('user message', data);
-    });
-
-    socket.on('user room join', function(data){
-      socket.join(data.room);
-      socket.broadcast.emit("user room join", data.user);
-    });
-
-    socket.on('user room leave', function(data){
-      socket.broadcast.emit("user room leave", data.user);
-      socket.leave(data.room);
-    });    
-  });
+  
 };
