@@ -3,7 +3,7 @@ var SearchBar = React.createClass({
     var style = {
       margin: 'auto',
       marginTop: '300px',
-      width: '97%',
+      width: '97%'
     };
     var searchBarInputStyle = {
       backgroundColor: '#AAAAAA',
@@ -21,7 +21,13 @@ var SearchBar = React.createClass({
 var MediaAdd = React.createClass({
   render: function() {
     var style ={
-      minHeight: '50%'
+      background: '#222222',
+      border: '2px solid #444444',
+      position: 'absolute', 
+      width: '100%',
+      height: '50%',
+      overflow: 'auto',
+      bottom: '0'
     };
     return (
       <div style={style}>
