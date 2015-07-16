@@ -21,7 +21,7 @@ var SearchBar = React.createClass({
 var MediaAdd = React.createClass({
   render: function() {
     var style ={
-      height: '50%'
+      minHeight: '50%'
     };
     return (
       <div style={style}>
