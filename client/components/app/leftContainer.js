@@ -1,18 +1,4 @@
-var PlaylistSavedBox = React.createClass({
-  render: function() {
-    return (
-      <PlaylistSaved />
-    );
-  }
-});
-
-var MediaAddBox = React.createClass({
-  render: function() {
-    return (
-      <MediaAdd />
-    );
-  }
-});
+// leftContainer.js
 
 var LeftContainer = React.createClass({
   render: function() {
@@ -28,8 +14,8 @@ var LeftContainer = React.createClass({
     };
     return (
       <div style={style}>
-        <PlaylistSavedBox />
-        <MediaAddBox />
+        <PlaylistSavedContainer />
+        <MediaAddContainer />
       </div>
     );
   }
