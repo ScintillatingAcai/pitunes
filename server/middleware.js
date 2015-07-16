@@ -50,9 +50,20 @@ module.exports = function (app, express) {
 
   io.on('connection', function (socket) {
     console.log("connection: " + socket);
-    socket.emit('news', { hello: 'world' });
-    socket.on('my other event', function (data) {
+
+    socket.on('user message', function (data) {
       console.log(data);
+      socket.broadcast.emit('user message', data);
     });
+
+    socket.on('user room join', function(data){
+      socket.join(data.room);
+      socket.broadcast.emit("user room join", data.user);
+    });
+
+    socket.on('user room leave', function(data){
+      socket.broadcast.emit("user room leave", data.user);
+      socket.leave(data.room);
+    });    
   });
 };
