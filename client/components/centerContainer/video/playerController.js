@@ -16,7 +16,6 @@ var done = false;
 var player;
 var playerInstaniated = false;
 
-
 var setVideoTime = function (time) {
   player.seekTo(time, true);
 };
@@ -44,7 +43,7 @@ var createPlayer = function (currentVideoId) {
       videoId: currentVideoId,
       playerVars: {
         controls: 0,
-        autoplay: 1,
+        autoplay: 0,
         disablekb: 1,
         showInfo: 0,
         enablejsapi: 1,
@@ -55,7 +54,7 @@ var createPlayer = function (currentVideoId) {
         'onReady': onPlayerReady,
         'onStateChange': onPlayerStateChange
       }
-  });
+    });
 };
 
 var onYouTubePlayerAPIReady = function () {
@@ -68,7 +67,15 @@ var onYouTubePlayerAPIReady = function () {
 
 var onPlayerReady = function (evt) {
   console.log('heard onPlayerReady', evt);
+  $(document).on('newCVO', function () {
+    heardNewCVO();
+  });
   setVideoTime(currentVideoStub.videoPosition);
+};
+
+var heardNewCVO = function() {
+  console.log('heardNewCVO fired');
+  loadVideo(currentVideoStub.videoId, currentVideoStub.videoPosition);
 };
 
 var onPlayerStateChange = function (evt) {
@@ -88,8 +95,19 @@ var stopVideo = function () {
 
 // Expects 11 character string (YouTube Video ID)
 var loadVideo = function (videoId, startTime) {
+  console.log('loadvideo fired');
   if (playerInstaniated) {
-    player.loadVideoById(videoId, startTime);
+    console.log(videoId);
+
+    if (player.getVideoData().video_id !== videoId) {
+      console.log('instaniated and dif video id');
+      player.loadVideoById(videoId, startTime);
+    } else {
+      if (currentVideoStub.videoTime - player.getCurrentTime() > 10) {
+        console.log('Client player too desynced, syncing');
+        setVideoTime(currentVideoStub.videoTime);
+      }
+    }
   } else {
     player = new YT.Player('videoContainer', {
       height: '390',
