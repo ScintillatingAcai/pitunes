@@ -22,11 +22,11 @@ var DebuggerButtonRemVid = React.createClass({
 
 var DebuggerButtonLoadVid = React.createClass({
   handleClick: function() {
-     loadVideo('f2bb_0P4rCM');
+     loadVideo('0_Pq0xYr3L4',10);
    },
   render: function() {
     return (
-    <button onClick={this.handleClick}>DEBUG LoadTestVid</button>
+    <button onClick={this.handleClick}>LoadTestVid at 0:10</button>
     )
   }
 });

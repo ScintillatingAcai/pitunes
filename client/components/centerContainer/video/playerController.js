@@ -73,13 +73,13 @@ var loadVideo = function (videoId, startTime) {
   // console.log('loadVideo (id#' + videoId + ') fired');
   console.log(playerInstaniated);
   if (playerInstaniated) {
-    player.loadVideoById(videoId);
+    player.loadVideoById(videoId, startTime);
   } else {
     player = new YT.Player('videoContainer', {
       height: '390',
       width: '640',
       videoId: videoId,
-      startSeconds: '30',
+      startSeconds: startTime,
       playerVars: {
         controls: 0,
         autoplay: 1,
