@@ -100,12 +100,11 @@ var loadVideo = function (videoId, startTime) {
   console.log('loadvideo fired');
   if (playerInstaniated) {
     console.log(videoId);
-
     if (player.getVideoData().video_id !== videoId) {
       console.log('instaniated and dif video id');
       player.loadVideoById(videoId, startTime);
     } else {
-      if (currentVideoStub.videoTime - player.getCurrentTime() > 10) {
+      if (player.getCurrentTime() - currentVideoStub.videoPosition > 10) {
         console.log('Client player too desynced, syncing');
         setVideoTime(currentVideoStub.videoTime);
       }

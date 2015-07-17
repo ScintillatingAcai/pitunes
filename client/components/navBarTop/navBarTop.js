@@ -9,6 +9,17 @@ var NavBarTopStyle = {
   margin: '0px 0px 0px 0px'
 };
 
+var DebuggerButtonTriggerNewCVO = React.createClass({
+  handleClick: function () {
+    $(document).trigger('newCVO');
+  },
+  render: function () {
+    return (
+      <button onClick={this.handleClick}>DEBUG TriggerNewCVO</button>
+    );
+  }
+});
+
 var DebuggerButtonRemVid = React.createClass({
   handleClick: function () {
     removeVideo();
@@ -39,13 +50,15 @@ var NavBarTop = React.createClass({
     return (
       <div style={style}>
         <Navbar style={NavBarTopStyle} brand='πTunes'>
+        <DebuggerButtonTriggerNewCVO />
+        <DebuggerButtonRemVid />
+        <DebuggerButtonLoadVid />
           <Nav className="navbar-right">
             <NavBarMenuDropdown />
          </Nav>  
         </Navbar>
       </div>
     );
-    // <DebuggerButtonRemVid />
-    // <DebuggerButtonLoadVid />
+
   }
 });
