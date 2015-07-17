@@ -3,7 +3,6 @@ var roomUtils = require('./rooms/roomsUtils');
 var playlistUtils = require('./playlists/playlistsUtils');
 var mediasUtils = require('./medias/mediasUtils');
 
-
 module.exports = function(io) {
 
   io.on('connection', function (socket) {
@@ -14,6 +13,9 @@ module.exports = function(io) {
     });
 
     socket.on('user room join', function(data){
+      // var room_id = data.room;
+      // var room = roomUtils.getRoom(room_id);
+      // room.addUser(user);
       socket.join(data.room);
       socket.broadcast.emit("user room join", data.user);
     });

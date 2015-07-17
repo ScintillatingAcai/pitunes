@@ -2,7 +2,53 @@ var db = require('../db/schema');
 var Rooms = require('../db/collections/rooms');
 var Room = require('../db/models/room');
 
+var singleton;
+
 module.exports = {
+
+  getRoom: function(room_id) {
+    console.log('retrieving info for room_id:' + room_id);
+    var room = singleton.rooms.get(room_id);
+    return room;
+  },
+
+  getAllRooms: function() {
+    console.log('retrieving all rooms');
+    var allRooms = singleton.rooms;
+    return allRooms;
+  },
+
+  addRoom: function(room, callback) {
+    var roomname = room.name;
+    console.log('roomname: ', roomname);
+    new Room({
+        name: roomname
+      }).fetch().then(function(found) {
+
+        if (found) {
+          callback(null, found.attributes);
+          console.log('room already found:', name);
+
+        } else {
+
+          var room = new Room({
+            name: roomname,
+          });
+
+          room.save().then(function(newRoom) {
+            var allRooms = singleton.rooms;
+            allRooms.add(newRoom);
+            callback(null, newRoom);
+          })
+          .catch(function(error) {
+            console.log('error:', error);
+          });
+        }
+      })
+      .catch(function(error) {
+        console.log('error:', error);
+      });
+  },
 
   //get a room from DB by ID
   retrieveRoom: function(room_id, callback) {
@@ -38,8 +84,8 @@ module.exports = {
 
     new Rooms().reset().fetch().then(function(found) {
         if (found) {
-          console.log('found:', found);
-          var roomsWithJoins = found.models;
+          console.log('found all rooms');
+          var roomsWithJoins = found;
 
           // this is an example of how to add related data to the response object
           // roomWithJoins.events = [];
@@ -134,3 +180,5 @@ module.exports = {
   },
 
 };
+
+singleton = require('../singleton.js');
