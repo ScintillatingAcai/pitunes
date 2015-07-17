@@ -1,5 +1,3 @@
-var socket = io('http://' + document.domain + ':3000');
-
 var ChatList = React.createClass({
   render: function() {
     var style = {

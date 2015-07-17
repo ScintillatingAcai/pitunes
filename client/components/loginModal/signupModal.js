@@ -1,8 +1,8 @@
 var Input = ReactBootstrap.Input;
 
-var Login = React.createClass({
+var SignUp = React.createClass({
   getInitialState: function() {
-    return {showModal:true, errorMessage: 'testing'};
+    return {showModal: false, errorMessage: ''};
   },
   close: function() {
     this.setState({showModal: false});
@@ -23,10 +23,12 @@ var Login = React.createClass({
           </Modal.Header>
           <Modal.Body>
             <form>
+              <Input type='text' label='Display Name' placeholder='Enter name' />
               <Input type='email' label='Email Address' placeholder='Enter email' />
               <Input type='password' label='Password' />
+              <Input type='password' label='Re-enter Password' />
             </form>
-            <Button onClick={this.close}>Log In</Button>
+            <Button onClick={this.close}>Sign Up</Button>
             <Button onClick={this.close}>Cancel</Button>
           </Modal.Body>
           <Modal.Footer>
@@ -38,10 +40,10 @@ var Login = React.createClass({
   }
 });
 
-var LoginModal = React.createClass({
+var SignUpModal = React.createClass({
   render: function() {
     return (
-      <Login />
+      <SignUp />
     );
   }
 });
