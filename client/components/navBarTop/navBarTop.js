@@ -45,18 +45,40 @@ var DebuggerButtonLoadVid = React.createClass({
 var NavBarTop = React.createClass({
   render: function() {
     var style = {
-      right: '0'
+      background: '#222222',
+      border: '2px solid #444444',
+      position: 'absolute', 
+      width: '100%',
+      height: '8%'
+    };
+    var titleStyle = {
+      height:'100%',
+      color: 'grey',
+      fontSize: '200%',
+      marginLeft: '7%'
+    };
+    var debuggerButtonsStyle = {
+      right: '30%',
+      top: '10%',
+      height: '100%',
+      position: 'absolute'
+    };
+    var NavBarMenuDropdownStyle = {
+      right: '6%',
+      top: '0',
+      position: 'absolute',
     };
     return (
-      <div style={style}>
-        <Navbar style={NavBarTopStyle} brand='πTunes'>
-        <DebuggerButtonTriggerNewCVO />
-        <DebuggerButtonRemVid />
-        <DebuggerButtonLoadVid />
-          <Nav className="navbar-right">
-            <NavBarMenuDropdown />
-         </Nav>  
-        </Navbar>
+      <div style={style} class="hello">
+        <div style={titleStyle}>piTunes</div>
+        <div style = {NavBarMenuDropdownStyle}>
+          <NavBarMenuDropdown />
+        </div>
+        <div style={debuggerButtonsStyle}>
+          <DebuggerButtonTriggerNewCVO />
+          <DebuggerButtonRemVid />
+          <DebuggerButtonLoadVid />
+        </div>
       </div>
     );
 
