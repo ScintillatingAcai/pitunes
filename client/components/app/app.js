@@ -1,6 +1,7 @@
 var user = null, 
     room = 'root', 
-    socket = io('http://' + document.domain + ':3000');
+    server_uri = 'http://' + document.domain + ':3000'; 
+    socket = io(server_uri);
 
 var AppContainer = React.createClass({
   render: function(){

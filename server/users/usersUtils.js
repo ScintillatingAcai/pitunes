@@ -130,6 +130,7 @@ module.exports = {
         } else {
 
           console.log('user not found');
+          callback(null,null);
         }
       })
       .catch(function(error) {
