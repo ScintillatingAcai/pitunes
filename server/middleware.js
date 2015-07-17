@@ -5,7 +5,7 @@ var morgan      = require('morgan'), // used for logging incoming request
     utility     = require('./utility'); // our custom middleware
 
 
-module.exports = function (app, express) {
+module.exports = function (app, express, io) {
   // Express 4 allows us to use multiple routers with their own configurations
   var session = { path: '/',
                 httpOnly: true,
@@ -44,6 +44,10 @@ module.exports = function (app, express) {
   require('./playlists/playlistsRoutes.js')(playlistRouter);
   require('./medias/mediasRoutes.js')(mediaRouter);
 
+  var mediaTimer = setInterval(function(){
 
-  
+  },3000);
+
+  require('./socket.js')(io);
+
 };

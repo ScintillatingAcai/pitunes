@@ -79,7 +79,7 @@ module.exports = {
           });
 
           playlist.save().then(function(newPlaylist) {
-              Playlists.add(newPlaylist);
+              new Playlists().add(newPlaylist);
               callback(null, newPlaylist);
             })
             .catch(function(error) {

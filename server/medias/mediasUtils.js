@@ -76,7 +76,7 @@ module.exports = {
           });
 
           media.save().then(function(newMedia) {
-              Medias.add(newMedia);
+              new Medias().add(newMedia);
               callback(null, newMedia);
             })
             .catch(function(error) {

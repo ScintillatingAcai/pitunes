@@ -2,7 +2,8 @@ var db = require('../schema');
 var Media = require('../models/media');
 
 
-var Medias = new db.Collection();
-Medias.model = Media;
+var Medias = db.Collection.extend({
+  model: Media
+});
 
 module.exports = Medias;

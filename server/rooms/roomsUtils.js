@@ -36,7 +36,7 @@ module.exports = {
 
   retrieveAllRooms: function(callback) {
 
-    Rooms.reset().fetch().then(function(found) {
+    new Rooms().reset().fetch().then(function(found) {
         if (found) {
           console.log('found:', found);
           var roomsWithJoins = found.models;
@@ -99,7 +99,7 @@ module.exports = {
           });
 
           room.save().then(function(newRoom) {
-              Rooms.add(newRoom);
+              new Rooms().add(newRoom);
               callback(null, newRoom);
             })
             .catch(function(error) {
