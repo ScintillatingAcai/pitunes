@@ -69,7 +69,7 @@ var NavBarTop = React.createClass({
       position: 'absolute',
     };
     return (
-      <div style={style} class="hello">
+      <div style={style}>
         <div style={titleStyle}>piTunes</div>
         <div style = {NavBarMenuDropdownStyle}>
           <NavBarMenuDropdown />

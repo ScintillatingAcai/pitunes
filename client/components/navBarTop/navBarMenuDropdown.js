@@ -18,7 +18,8 @@ var SignOut = React.createClass({
   render: function() {
     var buttonStyle = {
       backgroundColor: 'grey',
-      marginTop: '8px'
+      marginTop: '8px',
+      marginLeft: '5px'
     };
     return (
       <div>
