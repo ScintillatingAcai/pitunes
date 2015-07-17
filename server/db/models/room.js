@@ -6,6 +6,8 @@ var Room = db.Model.extend({
 
   djQueue: [],
 
+  currentVideoID: 'dasfa',
+
   queueDJ: function(dj_id) {
     var User = require('./user');
     new User({id:dj_id}).fetch().then(function(dj) {

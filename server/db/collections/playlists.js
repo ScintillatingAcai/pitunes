@@ -2,7 +2,8 @@ var db = require('../schema');
 var Playlist = require('../models/playlist');
 
 
-var Playlists = new db.Collection();
-Playlists.model = Playlist;
+var Playlists = db.Collection.extend({
+  model: Playlist
+});
 
 module.exports = Playlists;
