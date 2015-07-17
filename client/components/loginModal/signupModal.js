@@ -10,6 +10,23 @@ var SignUp = React.createClass({
   open: function() {
     this.setState({showModal: true});
   },
+  signupUser: function() {
+    var form = document.getElementById('signupForm');
+    var data = {displayName: form[0].value, email: form[1].value, password: form[2].value};
+    var that = this;
+    $.ajax({url: server_uri + '/api/users/signup', 
+            type: 'POST',
+            dataType: 'json',
+            data: data,
+            success: function(res) {
+              user = res.data;
+              that.setState({showModal: false});
+            } ,
+            error: function(res) {
+              that.setState({errorMessage: res.statusText});
+            }
+    });
+  },
   render: function() {
     var buttonStyle = {
       backgroundColor: 'grey',
@@ -22,13 +39,13 @@ var SignUp = React.createClass({
             <Modal.Title>Welcome to piTunes</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <form>
+            <form id='signupForm'>
               <Input type='text' label='Display Name' placeholder='Enter name' />
               <Input type='email' label='Email Address' placeholder='Enter email' />
               <Input type='password' label='Password' />
               <Input type='password' label='Re-enter Password' />
             </form>
-            <Button onClick={this.close}>Sign Up</Button>
+            <Button onClick={this.signupUser}>Sign Up</Button>
             <Button onClick={this.close}>Cancel</Button>
           </Modal.Body>
           <Modal.Footer>

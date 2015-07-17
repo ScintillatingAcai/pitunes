@@ -20,7 +20,7 @@ var Login = React.createClass({
             data: data,
             success: function(res) {
               user = res.data;
-              that.state.showModal = false;
+              that.setState({showModal: false});
             } ,
             error: function(res) {
               that.setState({errorMessage: res.statusText});
