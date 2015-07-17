@@ -9,13 +9,25 @@ var NavBarTopStyle = {
   margin: '0px 0px 0px 0px'
 };
 
-var DebuggerButtonTriggerNewCVO = React.createClass({
+var DebuggerSimNewMedia = React.createClass({
   handleClick: function () {
-    $(document).trigger('newCVO');
+    mediaStatus = {videoId: 'cpGbzYlnz7c', startSeconds: 0};
+    heardNewMediaStatus();
   },
   render: function () {
     return (
-      <button onClick={this.handleClick}>DEBUG TriggerNewCVO</button>
+      <button onClick={this.handleClick}>DEBUG SimNewMediaStatusEvent</button>
+    );
+  }
+});
+
+var DebuggerButtonRemVid = React.createClass({
+  handleClick: function () {
+    removeVideo();
+  },
+  render: function () {
+    return (
+      <button onClick={this.handleClick}>DEBUG RemVid</button>
     );
   }
 });
@@ -33,7 +45,7 @@ var DebuggerButtonRemVid = React.createClass({
 
 var DebuggerButtonLoadVid = React.createClass({
   handleClick: function() {
-     loadVideo('0_Pq0xYr3L4',10);
+     loadVideo('0_Pq0xYr3L4', 10);
    },
   render: function() {
     return (
@@ -75,7 +87,7 @@ var NavBarTop = React.createClass({
           <NavBarMenuDropdown />
         </div>
         <div style={debuggerButtonsStyle}>
-          <DebuggerButtonTriggerNewCVO />
+          <DebuggerSimNewMedia />
           <DebuggerButtonRemVid />
           <DebuggerButtonLoadVid />
         </div>

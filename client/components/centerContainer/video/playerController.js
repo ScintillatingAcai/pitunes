@@ -6,11 +6,11 @@ var s = document.getElementsByTagName('script')[0];
 s.parentNode.insertBefore(ga, s);
 
 // Stub for JSON object from server
-var currentVideoStub = {
-  videoId: 'PsO6ZnUZI0g',
-  // videoId: null,
-  videoPosition: 0
+var mediaStatus = {
+  videoId: 'N9qYF9DZPdw',
+  startSeconds: 0
 };
+
 var done = false;
 var player;
 var playerInstaniated = false;
@@ -24,7 +24,9 @@ var serveStaticImg = function () {
     $('#noVideoImg').remove();
   }
   if ($('#videoContainer')) {
-    $('#videoContainer').append('<img style="width:100%; height:100%;" id="noVideoImg" src="/assets/img/placeholder.jpeg" />');
+    // $('#videoContainer').append('<img style="width:100%; height:100%;" id="noVideoImg" src="/assets/img/placeholder.jpeg" />');
+    $('#videoContainer').append('<div style="width:100%; height:100%; background-color:#000; text-align:center;" id="noVideoImg"><h1 style="color:#DDD">No current DJ</h1><h4 style="color:#DDD">Grab some friends and start a playlist!</h4></div>');
+    
   }
 };
 
@@ -57,28 +59,33 @@ var createPlayer = function (currentVideoId) {
 };
 
 var onYouTubePlayerAPIReady = function () {
-  if (currentVideoStub.videoId === null) {
+  if (mediaStatus.videoId === null) {
     serveStaticImg();
   } else {
-    createPlayer(currentVideoStub.videoId);
+    createPlayer(mediaStatus.videoId);
   }
 };
 
 var onPlayerReady = function (evt) {
   console.log('heard onPlayerReady', evt);
-  $(document).on('newCVO', function () {
-    heardNewCVO();
-  });
-  if (currentVideoStub.videoPosition > 0) {
-    setVideoTime(currentVideoStub.videoPosition);
+  if (mediaStatus.startSeconds > 0) {
+    setVideoTime(mediaStatus.startSeconds);
   }
 };
 
-var heardNewCVO = function() {
+// Socket Event Listener
+socket.on('media status', function (data) {
+  mediaStatus = data;
+  heardNewMediaStatus();
+});
+
+var heardNewMediaStatus = function() {
   console.log('heardNewCVO fired');
-  loadVideo(currentVideoStub.videoId, currentVideoStub.videoPosition);
+  loadVideo(mediaStatus.videoId, mediaStatus.startSeconds);
 };
 
+// DEBUGGER FUNCTIONS
+// * * *
 var onPlayerStateChange = function (evt) {
   console.log('heard onPlayerStateChange', evt);
   if (evt.data === YT.PlayerState.PLAYING && !done) {
@@ -93,27 +100,27 @@ var playVideo = function () {
 var stopVideo = function () {
   player.stopVideo();
 };
+// * * *
+// END DEBUGGER FUNCTIONS
 
-// Expects 11 character string (YouTube Video ID)
-var loadVideo = function (videoId, startTime) {
-  console.log('loadvideo fired');
+// Expects 11 character string (YouTube Video ID) and the starttime of video (0 if new)
+var loadVideo = function (videoId, startSeconds) {
   if (playerInstaniated) {
-    console.log(videoId);
     if (player.getVideoData().video_id !== videoId) {
-      console.log('instaniated and dif video id');
-      player.loadVideoById(videoId, startTime);
+      player.loadVideoById(videoId, startSeconds);
     } else {
-      if (player.getCurrentTime() - currentVideoStub.videoPosition > 10) {
-        console.log('Client player too desynced, syncing');
-        setVideoTime(currentVideoStub.videoTime);
+      if (player.getCurrentTime() - mediaStatus.startSeconds > 10) {
+        console.log('Syncing client video to master server time...');
+        setVideoTime(mediaStatus.videoTime);
       }
     }
   } else {
+    playerInstaniated = true;
     player = new YT.Player('videoContainer', {
       height: '390',
       width: '640',
       videoId: videoId,
-      startSeconds: startTime,
+      startSeconds: startSeconds,
       playerVars: {
         controls: 0,
         autoplay: 1,
