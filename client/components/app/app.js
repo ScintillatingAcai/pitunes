@@ -1,3 +1,7 @@
+var user = null, 
+    room = 'root', 
+    socket = io('http://' + document.domain + ':3000');
+
 var AppContainer = React.createClass({
   render: function(){
     var style = {
@@ -19,7 +23,7 @@ var AppContainer = React.createClass({
       </div>
     );
   }
-})
+});
 
 React.render(
   <div>
