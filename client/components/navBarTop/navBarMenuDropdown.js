@@ -22,10 +22,8 @@ var SignOut = React.createClass({
     };
     return (
       <div>
-        <ButtonToolbar>
-          <Button style={buttonStyle}>Profile</Button>
-          <Button onClick={this.open} style={buttonStyle}>Sign Out</Button>
-        </ButtonToolbar>
+        <Button style={buttonStyle}>Profile</Button>
+        <Button onClick={this.open} style={buttonStyle}>Sign Out</Button>
 
         <Modal show={this.state.showModal} onHide={this.close}>
           <Modal.Header closeButton>
