@@ -10,6 +10,7 @@ var AppContainer = React.createClass({
     };
     return (
       <div style={style}>
+        <LoginModal />
         <NavBarTop />
         <LeftContainer />
         <CenterContainer />

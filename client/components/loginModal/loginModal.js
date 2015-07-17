@@ -1,13 +1,8 @@
-var NavItem = ReactBootstrap.NavItem;
-var MenuItem = ReactBootstrap.MenuItem;
-var DropdownButton = ReactBootstrap.DropdownButton;
-var ButtonToolbar = ReactBootstrap.ButtonToolbar;
-var Button = ReactBootstrap.Button;
-var Modal = ReactBootstrap.Modal;
+var Input = ReactBootstrap.Input;
 
-var SignOut = React.createClass({
+var Login = React.createClass({
   getInitialState: function() {
-    return {showModal:false};
+    return {showModal:true};
   },
   close: function() {
     this.setState({showModal: false});
@@ -22,17 +17,16 @@ var SignOut = React.createClass({
     };
     return (
       <div>
-        <ButtonToolbar>
-          <Button style={buttonStyle}>Profile</Button>
-          <Button onClick={this.open} style={buttonStyle}>Sign Out</Button>
-        </ButtonToolbar>
-
         <Modal show={this.state.showModal} onHide={this.close}>
           <Modal.Header closeButton>
-            <Modal.Title>Signing Out</Modal.Title>
+            <Modal.Title>Welcome to piTunes</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <h4>Are you sure you want to sign out?</h4>
+            <form>
+              <Input type='text' label='Text' placeholder='Enter name' />
+              <Input type='email' label='Email Address' placeholder='Enter email' />
+              <Input type='password' label='Password' />
+            </form>
           </Modal.Body>
           <Modal.Footer>
             <Button onClick={this.close}>Cancel</Button>
@@ -44,10 +38,10 @@ var SignOut = React.createClass({
   }
 });
 
-var NavBarMenuDropdown = React.createClass({
+var LoginModal = React.createClass({
   render: function() {
     return (
-      <SignOut />
+      <Login />
     );
   }
 });

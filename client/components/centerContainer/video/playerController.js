@@ -11,7 +11,6 @@ var currentVideoStub = {
   // videoId: null,
   videoPosition: 0
 };
-
 var done = false;
 var player;
 var playerInstaniated = false;
@@ -38,23 +37,23 @@ var removeVideo = function () {
 var createPlayer = function (currentVideoId) {
   playerInstaniated = true;
   player = new YT.Player('videoContainer', {
-      height: '390',
-      width: '640',
-      videoId: currentVideoId,
-      playerVars: {
-        controls: 0,
-        autoplay: 0,
-        disablekb: 1,
-        showInfo: 0,
-        enablejsapi: 1,
-        rel: 1,
-        modestbranding: 1
-      },
-      events: {
-        'onReady': onPlayerReady,
-        'onStateChange': onPlayerStateChange
-      }
-    });
+    height: '390',
+    width: '640',
+    videoId: currentVideoId,
+    playerVars: {
+      controls: 0,
+      autoplay: 0,
+      disablekb: 1,
+      showInfo: 0,
+      enablejsapi: 1,
+      rel: 1,
+      modestbranding: 1
+    },
+    events: {
+      'onReady': onPlayerReady,
+      'onStateChange': onPlayerStateChange
+    }
+  });
 };
 
 var onYouTubePlayerAPIReady = function () {
