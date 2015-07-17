@@ -98,12 +98,11 @@ var stopVideo = function () {
 var loadVideo = function (videoId, startTime) {
   console.log('loadvideo fired');
   if (playerInstaniated) {
-    console.log(videoId);
     if (player.getVideoData().video_id !== videoId) {
       console.log('instaniated and dif video id');
       player.loadVideoById(videoId, startTime);
     } else {
-      if (player.getCurrentTime() - currentVideoStub.videoPosition > 10) {
+      if (player.getCurrentTime() - currentVideoStub.videoPosition > 5) {
         console.log('Client player too desynced, syncing');
         setVideoTime(currentVideoStub.videoTime);
       }
@@ -128,5 +127,6 @@ var loadVideo = function (videoId, startTime) {
         'onStateChange': onPlayerStateChange
       }
     });
+    playerInstaniated = true;
   }
 };

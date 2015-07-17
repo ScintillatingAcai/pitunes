@@ -1,6 +1,8 @@
+// mediaAddController.js
+
 var searchYouTube = function (query) {
   var encodedQuery = encodeURIComponent(query);
-  var searchUrl = 'https://www.googleapis.com/youtube/v3/search?part=snippet&q=' + encodedQuery + '&key=AIzaSyA_ZnEUUw8uGbEdGfBXH296QX-1nnyeJnQ';
+  var searchUrl = 'https://www.googleapis.com/youtube/v3/search?part=snippet&q=' + encodedQuery + YOUTUBE_API_KEY;
   $.ajax({
     type: "GET",
     url: searchUrl,
