@@ -11,9 +11,9 @@ bookshelf.knex.schema.hasTable('Rooms').then(function(exists) {
       room.timestamps();
     }).then(function (table) {
       console.log('Created Table Rooms');
-      return bookshelf.knex.insert({name: 'root', created_at: "2015-07-15 00:00:00", updated_at: "2015-07-15 00:00:00"}).into('Rooms');
-    }).then( function ( results) {
-      console.log('Created Root Room');
+      // return bookshelf.knex.insert({name: 'root', created_at: "2015-07-15 00:00:00", updated_at: "2015-07-15 00:00:00"}).into('Rooms');
+    // }).then( function ( results) {
+    //   console.log('Created Root Room');
     });
   }
 });
@@ -24,7 +24,7 @@ bookshelf.knex.schema.hasTable('Medias').then(function(exists) {
       media.increments('id').primary();
       media.string('youtube_id', 100).notNullable();
       media.integer('play_count').unsigned().defaultTo(0);
-      media.string('name', 255).defaultTo('');
+//      media.string('name', 255).defaultTo('');
       media.timestamps();
     }).then(function (table) {
       console.log('Created Table Medias');
@@ -64,8 +64,8 @@ bookshelf.knex.schema.hasTable('Users').then(function(exists) {
                   playlist.increments('id').primary();
                   playlist.integer('playlist_id').unsigned().references('id').inTable('Playlists');
                   playlist.integer('media_id').unsigned().references('id').inTable('Medias');
-                  playlist.integer('order', 8).unsigned().notNullable();
-                  playlist.unique(['media_id', 'order']);
+                  playlist.integer('media_order').unsigned().notNullable();
+                  playlist.unique(['playlist_id', 'media_order']);
                 }).then(function (table) {
                   console.log('Created Table Media Playlists');
                 });
