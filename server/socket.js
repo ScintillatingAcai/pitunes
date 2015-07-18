@@ -50,7 +50,7 @@ module.exports = function(io) {
       var room_id = data.room;
 
       var room = roomUtils.getRoom(room_id);
-      room.enqueueDJ(user_id);
+      room.enqueueDJ(user_id, io.sockets);
 
       socket.broadcast.emit("user queue change", JSON.stringify(room.djQueue));
     });

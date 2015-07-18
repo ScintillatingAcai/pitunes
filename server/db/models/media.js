@@ -9,7 +9,12 @@ var Media = db.Model.extend({
       media.set('play_count',media.get('play_count') + 1);
       media.save();
     });
-  }
+  },
+
+  playlists: function() {
+    var Playlist = require('./playlist');
+    return this.belongsToMany(Playlist,'Media_Playlists', 'media_id', 'playlist_id');
+  },
 });
 
 module.exports = Media;
