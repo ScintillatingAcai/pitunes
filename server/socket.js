@@ -70,9 +70,15 @@ module.exports = function(io) {
       var room = roomUtils.getRoom(room_id);
       room.removeDJFromQueue(user_id);
 
-      socket.broadcast.emit("user queue change", room.djQueue);
+      var djQueueJSON = room.djQueue.map(function(user) {
+        return user.toJSON();
+      });
+
+      socket.broadcast.emit("user queue change", djQueueJSON);
+
       console.log('should have emitted: ', "user queue change");
       console.log('dj queue length:  ', room.djQueue.length);
+
     });
   });
 };

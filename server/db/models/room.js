@@ -20,11 +20,16 @@ var Room = db.Model.extend({
   },
 
   playMedia: function() {
+    if (this.mediaTimer) {
+      this.mediaTimer.stop();
+      this.mediaTimer = null;
+    }
+
     if (this.djQueue[0] /*&& this.djQueue[0].getCurrentPlaylist()*/) {
       console.log('play media for DJ: ',this.djQueue[0].get('id'));
       this.currentMedia = this.djQueue[0].getCurrentPlaylist(); //XXX fix this
       var onFire = function(elapsedTime){
-        this.sockets.emit("media status", {
+        this.sockets.in(this.get('id')).emit("media status", {
           videoId: '2HQaBWziYvY',
           startSeconds:elapsedTime
         });
@@ -32,7 +37,6 @@ var Room = db.Model.extend({
       var onComplete = function(){
         this.dequeueDJ();
         this.playMedia();
-        this.sockets.in(this.get('id')).emit("media status ended", null);
       };
       var timerIncrement = 3000;
       var mediaDuration = 3 * 60; //seconds XXX replace this with media duration (YOUTUBE?)
@@ -41,8 +45,6 @@ var Room = db.Model.extend({
     } else {
       console.log('stop media for no DJ');
 
-      this.mediaTimer.stop();
-      this.mediaTimer = null;
       this.sockets.in(this.get('id')).emit("media status", {
         videoId: '',
         startSeconds:0
@@ -63,12 +65,10 @@ var Room = db.Model.extend({
     this.sockets = sockets;
     var user = this.users.get(user_id);
 
-    if (this.djQueue.indexOf(user) === -1) {
-      this.djQueue.push(user);
-      if (this.djQueue.length === 1) {
-        console.log('asdfa')
-        this.playMedia();
-      }
+    this.djQueue.push(user);
+    if (this.djQueue.length === 1) {
+      console.log('asdfa')
+      this.playMedia();
     }
   },
 
@@ -80,20 +80,24 @@ var Room = db.Model.extend({
     var popDJ;
     var queueIndex;
 
-    this.djQueue.forEach(function(dj,index) {
+    for (var i = 0; i < this.djQueue.length; i++) {
+      var dj = this.djQueue[i];
       if (user_id === dj.get('id')) {
         popDJ = dj;
-        queueIndex = index;
+        queueIndex = i;
+        break;
       }
-    });
+    }
 
     if (queueIndex !== undefined) {
       this.djQueue.splice(queueIndex,1);
     }
+    console.log('removed DJ index: ', queueIndex);
 
     if (queueIndex === 0) {
-        this.playMedia();
+      this.playMedia();
     }
+
     return popDJ;
   },
 
