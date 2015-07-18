@@ -21,8 +21,7 @@ var paths = {
   sass: ['./scss/**/*.scss'],
   clientjs: ['./client/components/**/*.js',
       './client/components/**/**/*.js'],
-  serverjs: ['*.js',
-      './server/*.js',
+  serverjs: ['./server/*.js',
       './server/**/*.js',
       './server/**/**/*.js'
     ],
@@ -56,22 +55,25 @@ gulp.task('browserify-client', function (cb) {
   });
 
   return b.transform(babelify).bundle()
-   .pipe(source('bundle.js'))
+   .pipe(source('bundle-client.min.js'))
    .pipe(buffer())
    .pipe(uglify())
    .pipe(gulp.dest(paths.dist + '/client'));
 });
 
 gulp.task('browserify-server', function () {
-  var browserified = transform(function(filename) {
-    var b = browserify(filename);
-    return b.bundle();
+  var files = glob.sync(paths.serverjs);
+  var b = browserify();
+  console.log(files.length);
+  files.forEach(function (file) {
+    b.add(file);
   });
-  
-  return gulp.src(paths.serverjs)
-    .pipe(browserified)
-    .pipe(uglify())
-    .pipe(gulp.dest(paths.dist));
+
+  return b.transform(babelify).bundle()
+   .pipe(source('bundle-server.min.js'))
+   .pipe(buffer())
+   .pipe(uglify())
+   .pipe(gulp.dest(paths.dist + '/server'));
 });
 
 // gulp.task('babel', function(){
@@ -118,4 +120,4 @@ gulp.task('install_lib', function() {
 });
 
 //gulp.task('default', ['install_lib', 'babel', 'lint', 'browserify-client']);
-gulp.task('default', ['install_lib', 'browserify-client']);
+gulp.task('default', ['install_lib', 'browserify-server', 'browserify-client']);
