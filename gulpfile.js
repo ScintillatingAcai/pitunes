@@ -7,18 +7,26 @@ var rename = require('gulp-rename');
 var sh = require('shelljs');
 var del = require('del');
 var jshint = require('gulp-jshint');
-var install = require("gulp-install");
+var buffer = require('vinyl-buffer');
+var uglify = require('gulp-uglify');
+var sourcemaps = require('gulp-sourcemaps');
+var install = require('gulp-install');
+var browserify = require('browserify');
+var source = require('vinyl-source-stream');
+var babelify = require('babelify');
+var glob = require('glob-array');
 
 
 var paths = {
   sass: ['./scss/**/*.scss'],
-  js: ['./client/components/**/*.js',
-      './client/components/**/**/*.js',
-      '*.js',
+  clientjs: ['./client/components/**/*.js',
+      './client/components/**/**/*.js'],
+  serverjs: ['*.js',
       './server/*.js',
       './server/**/*.js',
       './server/**/**/*.js'
-    ]
+    ],
+  dist: './dist'
 };
 
 // var libFilesToMove = [];
@@ -37,9 +45,43 @@ var paths = {
 //     .pipe(gulp.dest('./www/css/'))
 //     .on('end', done);
 // });
+// 
+gulp.task('browserify-client', function (cb) {
+
+  var files = glob.sync(paths.clientjs);
+  var b = browserify();
+  console.log(files.length);
+  files.forEach(function (file) {
+    b.add(file);
+  });
+
+  return b.transform(babelify).bundle()
+   .pipe(source('bundle.js'))
+   .pipe(buffer())
+   .pipe(uglify())
+   .pipe(gulp.dest(paths.dist + '/client'));
+});
+
+gulp.task('browserify-server', function () {
+  var browserified = transform(function(filename) {
+    var b = browserify(filename);
+    return b.bundle();
+  });
+  
+  return gulp.src(paths.serverjs)
+    .pipe(browserified)
+    .pipe(uglify())
+    .pipe(gulp.dest(paths.dist));
+});
+
+// gulp.task('babel', function(){
+//   return gulp.src(paths.clientjs)
+//     .pipe(babel())
+//     .pipe(gulp.dest(paths.dist));
+// });
 
 gulp.task('clean', function(){
-  del(['./node_modules','./client/bower_components']);
+  del(['./node_modules','./client/bower_components', paths.dist]);
 });
 
 // gulp.task('move_lib',['clean'], function(){
@@ -48,13 +90,13 @@ gulp.task('clean', function(){
 // });
 
 gulp.task('lint', function() {
-  return gulp.src(paths.js)
+  return gulp.src(paths.clientjs, paths.serverjs)
     .pipe(jshint())
     .pipe(jshint.reporter('default'));
 });
 
 gulp.task('watch', function() {
-  gulp.watch(paths.js);
+  gulp.watch(paths.clientjs,paths.serverjs);
 });
 
 gulp.task('git-check', function(done) {
@@ -75,4 +117,5 @@ gulp.task('install_lib', function() {
   .pipe(install());
 });
 
-gulp.task('default', ['install_lib', 'lint']);
+//gulp.task('default', ['install_lib', 'babel', 'lint', 'browserify-client']);
+gulp.task('default', ['install_lib', 'browserify-client']);
