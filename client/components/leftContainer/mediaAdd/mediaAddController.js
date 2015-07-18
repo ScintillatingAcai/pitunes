@@ -21,7 +21,6 @@ var searchYouTube = function (query) {
       });
       // var durationSearchUrl = 'https://www.googleapis.com/youtube/v3/videos?id=' + videoIds + '&part=contentDetails' + YOUTUBE_API_KEY;
       results.forEach(function (e) {
-        console.log($('.searchResults'));
         $('#searchResults').append('<li class="searchResultItem"><img className="searchResultImg" data-id="' + e.id + '"style="height:50px; width:50px" src="' + e.img + '" /><p className="searchResultTitle">' + e.title + '</p></li>');
       });
       $(".searchResultItem").on('click', function (e) {
