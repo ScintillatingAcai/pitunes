@@ -110,7 +110,8 @@ var loadVideo = function (videoId, startSeconds) {
     if (player.getVideoData().video_id !== videoId) {
       player.loadVideoById(videoId, startSeconds);
     } else {
-      if (player.getCurrentTime() - mediaStatus.startSeconds > 10) {
+      console.log('media time difference: ',mediaStatus.startSeconds - player.getCurrentTime());
+      if (mediaStatus.startSeconds - player.getCurrentTime() > 10) {
         console.log('Syncing client video to master server time...');
         setVideoTime(mediaStatus.videoTime);
       }

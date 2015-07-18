@@ -20,22 +20,34 @@ var Room = db.Model.extend({
   },
 
   playMedia: function() {
-    this.currentMedia = this.djQueue[0].getCurrentPlaylist(); //XXX fix this
-    var onFire = function(elapsedTime){
-      this.sockets.emit("media status", {
-        videoId: '2HQaBWziYvY',
-        startSeconds:elapsedTime
+    if (this.djQueue[0] /*&& this.djQueue[0].getCurrentPlaylist()*/) {
+      console.log('play media for DJ: ',this.djQueue[0].get('id'));
+      this.currentMedia = this.djQueue[0].getCurrentPlaylist(); //XXX fix this
+      var onFire = function(elapsedTime){
+        this.sockets.emit("media status", {
+          videoId: '2HQaBWziYvY',
+          startSeconds:elapsedTime
+        });
+      };
+      var onComplete = function(){
+        this.dequeueDJ();
+        this.playMedia();
+        this.sockets.in(this.get('id')).emit("media status ended", null);
+      };
+      var timerIncrement = 3000;
+      var mediaDuration = 3 * 60; //seconds XXX replace this with media duration (YOUTUBE?)
+      this.mediaTimer = new Timer(onFire.bind(this),onComplete.bind(this),timerIncrement, mediaDuration);
+      this.mediaTimer.start();
+    } else {
+      console.log('stop media for no DJ');
+
+      this.mediaTimer.stop();
+      this.mediaTimer = null;
+      this.sockets.in(this.get('id')).emit("media status", {
+        videoId: '',
+        startSeconds:0
       });
-    };
-    var onComplete = function(){
-      this.dequeueDJ();
-      this.playMedia();
-      this.sockets.emit("media status ended", null);
-    };
-    var timerIncrement = 3000;
-    var mediaDuration = 3 * 60; //seconds XXX replace this with media duration (YOUTUBE?)
-    this.mediaTimer = new Timer(onFire.bind(this),onComplete.bind(this),timerIncrement, mediaDuration);
-    this.mediaTimer.start();
+    }
   },
 
   toJSON: function() {
@@ -50,9 +62,13 @@ var Room = db.Model.extend({
   enqueueDJ: function(user_id, sockets) {
     this.sockets = sockets;
     var user = this.users.get(user_id);
-    this.djQueue.push(user);
-    if (this.djQueue.length === 1) {
-      this.playMedia();
+
+    if (this.djQueue.indexOf(user) === -1) {
+      this.djQueue.push(user);
+      if (this.djQueue.length === 1) {
+        console.log('asdfa')
+        this.playMedia();
+      }
     }
   },
 
@@ -71,7 +87,13 @@ var Room = db.Model.extend({
       }
     });
 
-    this.djQueue.splice(queueIndex,1);
+    if (queueIndex !== undefined) {
+      this.djQueue.splice(queueIndex,1);
+    }
+
+    if (queueIndex === 0) {
+        this.playMedia();
+    }
     return popDJ;
   },
 

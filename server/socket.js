@@ -37,6 +37,11 @@ module.exports = function(io) {
       var room_id = data.room;
 
       var room = roomUtils.getRoom(room_id);
+      if(room.removeDJFromQueue(user_id)) {
+        //just in case they are in queue we will update and broadcast
+        socket.broadcast.emit("user queue change", room.djQueue);
+      }
+
       room.removeUser(user_id);
       socket.broadcast.emit("user room leave", data.user);
       console.log('should have emitted: ', "user room leave");
@@ -53,6 +58,8 @@ module.exports = function(io) {
       room.enqueueDJ(user_id, io.sockets);
 
       socket.broadcast.emit("user queue change", JSON.stringify(room.djQueue));
+      console.log('should have emitted: ', "user queue change");
+      console.log('dj queue length:  ', room.djQueue.length);
     });
 
     socket.on('user queue leave', function(data){
@@ -61,9 +68,11 @@ module.exports = function(io) {
       var room_id = data.room;
 
       var room = roomUtils.getRoom(room_id);
-      room.dequeueDJ(user_id);
+      room.removeDJFromQueue(user_id);
 
       socket.broadcast.emit("user queue change", room.djQueue);
+      console.log('should have emitted: ', "user queue change");
+      console.log('dj queue length:  ', room.djQueue.length);
     });
   });
 };
