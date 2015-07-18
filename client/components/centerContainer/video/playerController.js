@@ -26,7 +26,7 @@ var serveStaticImg = function () {
   if ($('#videoContainer')) {
     // $('#videoContainer').append('<img style="width:100%; height:100%;" id="noVideoImg" src="/assets/img/placeholder.jpeg" />');
     $('#videoContainer').append('<div style="width:100%; height:100%; background-color:#000; text-align:center;" id="noVideoImg"><h1 style="color:#DDD">No current DJ</h1><h4 style="color:#DDD">Grab some friends and start a playlist!</h4></div>');
-    
+
   }
 };
 
@@ -75,6 +75,7 @@ var onPlayerReady = function (evt) {
 
 // Socket Event Listener
 socket.on('media status', function (data) {
+  console.log(data);
   mediaStatus = data;
   heardNewMediaStatus();
 });

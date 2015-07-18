@@ -16,9 +16,6 @@ var ChatList = React.createClass({
 
 var Chat = React.createClass({
   getInitialState: function() {
-    socket.on('user room join', function(data){
-      console.log('user room join');
-    }.bind(this));
 
     socket.on('user message', function(data){
       var nextItems = this.state.items.concat([data.displayName + ': ' + data.message]);

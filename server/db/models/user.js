@@ -10,7 +10,11 @@ var User = db.Model.extend({
 
   initialize: function(){
     this.on('creating', this.hashPassword);
-    this.on('creating', this.retrieveCurrentPlaylist);
+    this.on('creating', function() {
+      this.retrieveCurrentPlaylist(function(err, playlist) {
+        this.currentPlaylist = playlist;
+      }.bind(this));
+    }.bind(this));
   },
 
   comparePassword: function(attemptedPassword, callback) {
@@ -27,6 +31,21 @@ var User = db.Model.extend({
     })
     .catch(function(err) {
       console.error('hashing error:', err);
+    });
+  },
+
+  getCurrentPlaylist:function() {
+    return this.currentPlaylist;
+  },
+
+  setCurrentPlaylist:function(playlist_ID) {
+    this.set('current_playlist_id', playlist_ID);
+
+    this.save().then(function(playlist) {
+      this.retrieveCurrentPlaylist(function(err, playlist) {
+        this.currentPlaylist = playlist;
+
+      }.bind(this));
     });
   },
 

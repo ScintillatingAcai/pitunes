@@ -20,9 +20,12 @@ var Room = db.Model.extend({
   },
 
   playMedia: function() {
-    this.currentMedia = 'temp'; //XXX fix this
-    var onFire = function(){
-      this.sockets.emit("media status", null);
+    this.currentMedia = this.djQueue[0].getCurrentPlaylist(); //XXX fix this
+    var onFire = function(elapsedTime){
+      this.sockets.emit("media status", {
+        videoId: '2HQaBWziYvY',
+        startSeconds:elapsedTime
+      });
     };
     var onComplete = function(){
       this.dequeueDJ();
@@ -44,7 +47,8 @@ var Room = db.Model.extend({
     },this);
   },
 
-  enqueueDJ: function(user_id) {
+  enqueueDJ: function(user_id, sockets) {
+    this.sockets = sockets;
     var user = this.users.get(user_id);
     this.djQueue.push(user);
     if (this.djQueue.length === 1) {

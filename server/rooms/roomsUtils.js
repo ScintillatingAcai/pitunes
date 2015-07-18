@@ -162,10 +162,14 @@ module.exports = {
     room_id = parseInt(room_id);
     dj_id = parseInt(dj_id);
 
+    console.log('adding DJ to queue ');
+
+
     new Room({
         id: room_id
       }).fetch().then(function(newRoom) {
         if (newRoom) {
+          console.log('open sockets: ', openSockets);
           newRoom.setSocket(openSockets); //testing adding a socket this way
           newRoom.enqueueDJ(dj_id);
 
@@ -180,6 +184,7 @@ module.exports = {
   },
 
   socketsForTimer: function(sockets) {
+    console.log('setting sockets for timer');
     openSockets = sockets;
   }
 };
