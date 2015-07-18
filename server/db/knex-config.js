@@ -5,7 +5,8 @@ var knex = require('knex')({
     user: process.env.RDS_USERNAME || 'root',
     password: process.env.RDS_PASSWORD || null,
     port: process.env.RDS_PORT || null,
-    database: process.env.RDS_DB_NAME || 'piTunes'
+    database: process.env.RDS_DB_NAME || 'piTunes',
+    charset: 'utf8'
   }
 });
 
