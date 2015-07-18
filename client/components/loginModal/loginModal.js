@@ -19,7 +19,7 @@ var Login = React.createClass({
             dataType: 'json',
             data: data,
             success: function(res) {
-              user = res.data;
+              user = res;
               that.setState({showModal: false});
             } ,
             error: function(res) {
@@ -36,7 +36,7 @@ var Login = React.createClass({
             dataType: 'json',
             data: data,
             success: function(res) {
-              user = res.data;
+              user = res;
               that.setState({showModal: false});
             } ,
             error: function(res) {
