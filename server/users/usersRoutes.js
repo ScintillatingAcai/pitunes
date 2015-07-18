@@ -4,12 +4,14 @@ var utility = require('../utility');
 
 module.exports = function(app) {
 
+  app.param('user_id', usersController.attachUser);
+
   app.post('/signup', usersController.addUser); //add a user
 
   app.post('/login', usersController.loginUser); //login a user
   app.get('/logout', usersController.logoutUser); //logout a user
 
-  app.get('/:user', utility.checkUserSession, usersController.getUser); //get one user
-  app.put('/:user', utility.checkUserSession, usersController.updateUser); //update a user
+  app.get('/:user_id', utility.checkUserSession, usersController.getUser); //get one user
+  app.put('/:user_id', utility.checkUserSession, usersController.updateUser); //update a user
 };
 

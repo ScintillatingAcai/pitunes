@@ -16,6 +16,10 @@ var ChatList = React.createClass({
 
 var Chat = React.createClass({
   getInitialState: function() {
+    socket.on('user room join', function(data){
+      console.log('user room join');
+    }.bind(this));
+
     socket.on('user message', function(data){
       var nextItems = this.state.items.concat([data.displayName + ': ' + data.message]);
       this.setState({items: nextItems});
@@ -28,7 +32,7 @@ var Chat = React.createClass({
   },
   handleSubmit: function(e) {
     e.preventDefault();
-    /** 
+    /**
     ************************************************
     MAKE THE VARIABLE NAME EQUAL TO THE CURRENT USER
     ************************************************
@@ -60,7 +64,7 @@ var Chat = React.createClass({
     var divStyle = {
       background: '#222222',
       border: '2px solid #444444',
-      position: 'absolute', 
+      position: 'absolute',
       width: '100%',
       height: '50%',
       bottom: '0'

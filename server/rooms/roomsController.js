@@ -5,54 +5,35 @@ var Promise = require('bluebird');
 module.exports = {
 
   attachRoom: function(req, res, next, room_id) {
-    console.log('room_id: ', room_id);
-    var R = Promise.promisify(utils.retrieveRoom);
-    R(room_id).then(function(room) {
-      if (!room) return next(new Error('no room found'));
-
-      req.room = room;
-      next();
-    })
-    .catch(function(err) {
-      next(err);
-    });
+    console.log('attaching room_id: ', room_id);
+    req.room_id = room_id;
+    next();
   },
 
   getRoom: function(req, res) {
-    console.log('req.room: ',req.room);
-    var room_id = req.room.id;
-    console.log('retrieving info for room_id:' + room_id);
-    var R = Promise.promisify(utils.retrieveRoom);
-    R(room_id).then(function(room) {
-      if (room) {
-        res.json(room);
-      } else {
-        res.status(500).end();
-      }
-    })
-    .catch(function(error) {
-      console.log('controller error: ',error);
-    });
+    var room_id = req.room_id;
+    var room = utils.getRoom(room_id);
+
+    if (room) {
+      res.json(room);
+    } else {
+      res.status(500).end();
+    }
   },
 
   getAllRooms: function(req, res) {
-    console.log('retrieving all rooms');
-    var R = Promise.promisify(utils.retrieveAllRooms);
-    R().then(function(rooms) {
-      if (rooms) {
-        res.json(rooms);
-      } else {
-        res.status(500).end();
-      }
-    })
-    .catch(function(error) {
-      console.log('controller error: ',error);
-    });
+    var allRooms = utils.getAllRooms();
+
+    if (allRooms) {
+      res.json(allRooms);
+    } else {
+      res.status(500).end();
+    }
   },
 
   addRoom: function(req, res) {
     console.log('adding room: ',req.body);
-    var R = Promise.promisify(utils.storeRoom);
+    var R = Promise.promisify(utils.addRoom);
     R(req.body).then(function(data) {
       if (data) {
         res.json(data);
@@ -66,7 +47,7 @@ module.exports = {
   },
 
   updateRoom: function(req, res) {
-    var room_ID = req.room.id;
+    var room_ID = req.room_id;
     var roomInfo = req.body;
 
     console.log('updating room_id:', room_ID, ' with info: ', roomInfo );

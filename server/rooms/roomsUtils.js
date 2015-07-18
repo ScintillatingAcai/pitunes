@@ -2,12 +2,57 @@ var db = require('../db/schema');
 var Rooms = require('../db/collections/rooms');
 var Room = require('../db/models/room');
 
+var singleton;
+var openSockets;
+
 module.exports = {
+
+  getRoom: function(room_id) {
+    console.log('retrieving info for room_id:' + room_id);
+    var room = singleton.rooms.get(room_id);
+    return room;
+  },
+
+  getAllRooms: function() {
+    console.log('retrieving all rooms');
+    var allRooms = singleton.rooms;
+    return allRooms;
+  },
+
+  addRoom: function(room, callback) {
+    var roomname = room.name;
+    console.log('roomname: ', roomname);
+    new Room({
+        name: roomname
+      }).fetch().then(function(found) {
+
+        if (found) {
+          callback(null, found);
+          console.log('room already found:', name);
+
+        } else {
+
+          var room = new Room({
+            name: roomname,
+          })
+          .save().then(function(newRoom) {
+            var allRooms = singleton.rooms;
+            allRooms.add(newRoom);
+            callback(null, newRoom);
+          })
+          .catch(function(error) {
+            console.log('error:', error);
+          });
+        }
+      })
+      .catch(function(error) {
+        console.log('error:', error);
+      });
+  },
 
   //get a room from DB by ID
   retrieveRoom: function(room_id, callback) {
     room_id = parseInt(room_id);
-
     new Room({
         id: room_id
       }).fetch({
@@ -38,8 +83,8 @@ module.exports = {
 
     new Rooms().reset().fetch().then(function(found) {
         if (found) {
-          console.log('found:', found);
-          var roomsWithJoins = found.models;
+          console.log('found all rooms');
+          var roomsWithJoins = found;
 
           // this is an example of how to add related data to the response object
           // roomWithJoins.events = [];
@@ -119,11 +164,12 @@ module.exports = {
 
     new Room({
         id: room_id
-      }).fetch().then(function(found) {
-        if (found) {
-          room.queueDJ(dj_id);
+      }).fetch().then(function(newRoom) {
+        if (newRoom) {
+          newRoom.setSocket(openSockets); //testing adding a socket this way
+          newRoom.enqueueDJ(dj_id);
 
-          callback(null, roomWithJoins);
+          callback(null, newRoom);
         } else {
           console.log('room_id not found:' + room_id);
         }
@@ -133,4 +179,9 @@ module.exports = {
       });
   },
 
+  socketsForTimer: function(sockets) {
+    openSockets = sockets;
+  }
 };
+
+singleton = require('../singleton.js');

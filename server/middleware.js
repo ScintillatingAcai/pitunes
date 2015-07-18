@@ -44,10 +44,6 @@ module.exports = function (app, express, io) {
   require('./playlists/playlistsRoutes.js')(playlistRouter);
   require('./medias/mediasRoutes.js')(mediaRouter);
 
-  var mediaTimer = setInterval(function(){
-
-  },3000);
-
   require('./socket.js')(io);
 
 };

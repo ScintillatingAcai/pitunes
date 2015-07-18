@@ -5,8 +5,10 @@ var Media = db.Model.extend({
   hasTimestamps: true,
 
   incrementPlayCount: function() {
-    this.set('play_count',this.get('play_count') + 1);
-    this.save();
+    this.fetch().then(function(media) {
+      media.set('play_count',media.get('play_count') + 1);
+      media.save();
+    });
   }
 });
 
