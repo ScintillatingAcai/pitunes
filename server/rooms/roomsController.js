@@ -6,19 +6,12 @@ module.exports = {
 
   attachRoom: function(req, res, next, room_id) {
     console.log('attaching room_id: ', room_id);
-    var R = Promise.promisify(utils.retrieveRoom);
-    R(room_id).then(function(room) {
-      if (!room) return next(new Error('no room found'));
-      req.room = room;
-      next();
-    })
-    .catch(function(err) {
-      next(err);
-    });
+    req.room_id = room_id;
+    next();
   },
 
   getRoom: function(req, res) {
-    var room_id = req.room.id;
+    var room_id = req.room_id;
     var room = utils.getRoom(room_id);
 
     if (room) {
@@ -54,7 +47,7 @@ module.exports = {
   },
 
   updateRoom: function(req, res) {
-    var room_ID = req.room.id;
+    var room_ID = req.room_id;
     var roomInfo = req.body;
 
     console.log('updating room_id:', room_ID, ' with info: ', roomInfo );

@@ -1,5 +1,5 @@
 
-var Timer = function(callback, timeIncrement, totalTime) {
+var Timer = function(onFireCB, onCompleteCB, timeIncrement, totalTime) {
   this.startDate = null; //will be a Date object set by this.start()
   this.stopDate = null; //will be a Date object set by this.start()
 
@@ -8,20 +8,39 @@ var Timer = function(callback, timeIncrement, totalTime) {
   this.okayToFire = true;
 
   this.start = function() {
-    this.okayToFire = true;
     if (this.timer) this.stop();
+    this.okayToFire = true;
     this.startDate = new Date();
-    this.stopDate = this.startDate + totalTime * 1000; //convert from seconds to milliseconds
+    this.stopDate = this.startDate.getTime() + totalTime * 1000; //convert from seconds to milliseconds
 
-    this.fire();
+    this.fire(onFireCB);
   };
 
-  this.fire = function() {
+  this.fire = function(callback) {
     if (this.okayToFire) {
+      var dateNow = new Date();
+      console.log('timer fired with duration (sec): ', (dateNow - this.startDate) / 1000);
+
       if (callback === 'function') callback();
-      console.log('timer fired with duration (sec): ', (new Date() - this.startDate) / 1000);
-      var increment = Math.min(this.timeIncrement, this.stopDate - new Date(), 0);
-      this.timer = setTimeout(this.fire.bind(this), increment);
+
+      var increment;
+      var nextCallback;
+
+      if ( this.stopDate - dateNow > this.timeIncrement / 1000) {
+        increment = this.timeIncrement;
+        nextCallback = onFireCB;
+        console.log('fire normal increment: ',increment);
+      }
+      else {
+        increment = Math.min(this.stopDate - dateNow, 0);
+        nextCallback = onCompleteCB;
+        console.log('fire short increment: ',increment);
+      }
+      if (this.stopDate > dateNow) {
+        this.timer = setTimeout(this.fire.bind(this, nextCallback), increment);
+      } else {
+        this.stop();
+      }
     }
   };
 

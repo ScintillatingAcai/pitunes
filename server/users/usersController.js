@@ -6,11 +6,17 @@ var Promise = require('bluebird');
 
 module.exports = {
 
+  attachUser: function(req, res, next, user_id) {
+    console.log('attaching user_id: ', user_id);
+    req.user_id = user_id;
+    next();
+  },
+
   getUser: function(req, res, next) {
-    var user_ID = (url.parse(req.url).pathname).slice(1);
-    console.log('retrieving info for user_id:' + user_ID);
+    var user_id = req.room_id;
+    console.log('retrieving info for user_id:' + user_id);
     var R = Promise.promisify(utils.retrieveUser);
-    R(user_ID).then(function(user) {
+    R(user_id).then(function(user) {
       if (user) {
         res.json(user);
       } else {
@@ -38,12 +44,12 @@ module.exports = {
   },
 
   updateUser: function(req, res, next) {
-    var user_ID = (url.parse(req.url).pathname).slice(1);
+    var user_id = req.room_id;
     var userInfo = req.body;
 
-    console.log('updating user_id:', user_ID, ' with info: ', userInfo );
+    console.log('updating user_id:', user_id, ' with info: ', userInfo );
     var R = Promise.promisify(utils.updateUser);
-    R(user_ID,userInfo).then(function(user) {
+    R(user_id,userInfo).then(function(user) {
       if (user) {
         res.json(user);
       } else {

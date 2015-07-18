@@ -20,6 +20,7 @@ module.exports = {
   //get a user from DB by ID
   retrieveUser: function(user_id, callback) {
     user_id = parseInt(user_id);
+    console.log('retrieving user: ', user_id);
 
     new User({
         id: user_id
@@ -29,7 +30,7 @@ module.exports = {
         require: true
       }).then(function(found) {
         if (found) {
-          var userWithJoins = cleanAttributes(found.attributes);
+          var userWithJoins = cleanAttributes(found);
 
           // this is an example of how to add related data to the response object
           // userWithJoins.events = [];
@@ -43,6 +44,8 @@ module.exports = {
         }
       })
       .catch(function(error) {
+        console.log('retrieving user: ');
+
         console.log('error:', error);
       });
   },

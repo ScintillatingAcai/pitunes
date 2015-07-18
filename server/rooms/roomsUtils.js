@@ -3,6 +3,7 @@ var Rooms = require('../db/collections/rooms');
 var Room = require('../db/models/room');
 
 var singleton;
+var openSockets;
 
 module.exports = {
 
@@ -26,16 +27,15 @@ module.exports = {
       }).fetch().then(function(found) {
 
         if (found) {
-          callback(null, found.attributes);
+          callback(null, found);
           console.log('room already found:', name);
 
         } else {
 
           var room = new Room({
             name: roomname,
-          });
-
-          room.save().then(function(newRoom) {
+          })
+          .save().then(function(newRoom) {
             var allRooms = singleton.rooms;
             allRooms.add(newRoom);
             callback(null, newRoom);
@@ -53,7 +53,6 @@ module.exports = {
   //get a room from DB by ID
   retrieveRoom: function(room_id, callback) {
     room_id = parseInt(room_id);
-
     new Room({
         id: room_id
       }).fetch({
@@ -165,11 +164,12 @@ module.exports = {
 
     new Room({
         id: room_id
-      }).fetch().then(function(found) {
-        if (found) {
-          room.queueDJ(dj_id);
+      }).fetch().then(function(newRoom) {
+        if (newRoom) {
+          newRoom.setSocket(openSockets); //testing adding a socket this way
+          newRoom.enqueueDJ(dj_id);
 
-          callback(null, roomWithJoins);
+          callback(null, newRoom);
         } else {
           console.log('room_id not found:' + room_id);
         }
@@ -179,6 +179,9 @@ module.exports = {
       });
   },
 
+  socketsForTimer: function(sockets) {
+    openSockets = sockets;
+  }
 };
 
 singleton = require('../singleton.js');

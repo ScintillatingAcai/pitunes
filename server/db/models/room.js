@@ -2,21 +2,36 @@ var db = require('../schema');
 var Timer = require('./timer');
 var _ = require('lodash');
 
+var Users = require('../collections/users');
+
 var Room = db.Model.extend({
   tableName: 'Rooms',
   hasTimestamps: true,
 
-  users: null, //bookshelf Users collection
+  users: new Users(), //bookshelf Users collection
   djQueue: [], //array of bookshelf User models
   currentMedia: null, //bookshelf Media model
   mediaTimeElapsed:0,  //seconds elapsed on currentMedia
   mediaTimer: null,  //Timer object
+  sockets: null,
 
-  playMedia: function(media) {
-    var timerFunction = function(){};
+  setSocket: function(socket) {
+    this.sockets = socket;
+  },
+
+  playMedia: function() {
+    this.currentMedia = 'temp'; //XXX fix this
+    var onFire = function(){
+      this.sockets.emit("media status", null);
+    };
+    var onComplete = function(){
+      this.dequeueDJ();
+      this.playMedia();
+      this.sockets.emit("media status ended", null);
+    };
     var timerIncrement = 3000;
     var mediaDuration = 3 * 60; //seconds XXX replace this with media duration (YOUTUBE?)
-    this.mediaTimer = new Timer(timerFunction,timerIncrement, mediaDuration);
+    this.mediaTimer = new Timer(onFire.bind(this),onComplete.bind(this),timerIncrement, mediaDuration);
     this.mediaTimer.start();
   },
 
@@ -29,38 +44,45 @@ var Room = db.Model.extend({
     },this);
   },
 
-  queueDJ: function(user_id) {
-    var user = users.get(user_id);
-    djQueue.push(user);
+  enqueueDJ: function(user_id) {
+    var user = this.users.get(user_id);
+    this.djQueue.push(user);
+    if (this.djQueue.length === 1) {
+      this.playMedia();
+    }
   },
 
   dequeueDJ: function() {
-    return djQueue.shift();
+    return this.djQueue.shift();
   },
 
   removeDJFromQueue: function(user_id) {
     var popDJ;
     var queueIndex;
 
-    djQueue.forEach(function(dj,index) {
+    this.djQueue.forEach(function(dj,index) {
       if (user_id === dj.get('id')) {
         popDJ = dj;
         queueIndex = index;
       }
     });
 
-    djQueue.splice(queueIndex,1);
+    this.djQueue.splice(queueIndex,1);
     return popDJ;
   },
 
   addUser: function(user) {
-    Users.add(user);
+    this.users.add(user);
   },
 
   removeUser: function(user_id) {
-    var popUser = users.get(user_id);
-    Users.remove(popUser);
+    var popUser = this.users.get(user_id);
+    this.users.remove(popUser);
     return popUser;
+  },
+
+  getUser: function(user_id) {
+    return this.users.get(user_id);
   }
 });
 

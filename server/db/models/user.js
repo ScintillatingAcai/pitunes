@@ -5,8 +5,12 @@ var bcrypt = require('bcrypt');
 var User = db.Model.extend({
   tableName: 'Users',
   hasTimestamps: true,
+
+  currentPlaylist: null,
+
   initialize: function(){
     this.on('creating', this.hashPassword);
+    this.on('creating', this.retrieveCurrentPlaylist);
   },
 
   comparePassword: function(attemptedPassword, callback) {
@@ -26,9 +30,9 @@ var User = db.Model.extend({
     });
   },
 
-  getCurrentPlaylist: function(callback){
+  retrieveCurrentPlaylist: function(callback){
     var Playlist = require('./playlist');
-    if (this.get('current_playlist_id') === 0) callback(null, 0); //send back 0 which indicates no playlist but not an error
+    if (this.get('current_playlist_id') === 0) callback(null, null); //send back 0 which indicates no playlist but not an error
 
     return new Playlist().fetch({
       id:this.get('current_playlist_id')
@@ -42,6 +46,7 @@ var User = db.Model.extend({
     });
   },
 
+  //relationship
   playlists: function() {
     var Playlist = require('./playlist');
     return this.hasMany(Playlist, 'user_id');
