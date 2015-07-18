@@ -1,18 +1,37 @@
 var SearchBar = React.createClass({
-  render: function() {
+
+  getInitialState: function () {
+    return {text: ''};
+  },
+
+  handleSubmit: function (e) {
+    e.preventDefault();
+    searchYouTube(this.state.text);
+    this.setState({text: ''});
+  },
+
+  onChange: function (e) {
+    e.preventDefault();
+    this.setState({text: e.target.value});
+  },
+  render: function () {
     var style = {
-      margin: 'auto',
-      marginTop: '1%',
-      width: '97%'
+      borderColor: '#EEEEEE',
+      position: 'absolute',
+      bottom: '0',
+      width: '100%'
     };
     var searchBarInputStyle = {
       backgroundColor: '#AAAAAA',
       borderColor: '#EEEEEE'
     };
+
     return (
-      <div style={style} className="input-group">
-        <input style={searchBarInputStyle} type="text" className="form-control" placeholder="Search YouTube" />
-        <span className="input-group-addon"><span className="glyphicon glyphicon-search" aria-hidden="true"></span></span>
+      <div>
+        <ul id="searchResults"></ul>
+        <form style={style} onSubmit={this.handleSubmit}>
+          <input style={searchBarInputStyle} onChange={this.onChange} value={this.state.text} className="form-control" placeholder="Search YouTube"/>
+        </form>
       </div>
     );
   }

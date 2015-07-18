@@ -8,6 +8,7 @@ var searchYouTube = function (query) {
     url: searchUrl,
     success: function (response) {
       var results = [];
+      var resultsIds = [];
       response.items.forEach(function (e) {
         if (e.id.videoId) {
           results.push({
@@ -15,9 +16,17 @@ var searchYouTube = function (query) {
             title: e.snippet.title,
             id: e.id.videoId
           });
+          resultsIds.push(e.id.videoId);
         }
       });
-      console.log(results);
+      // var durationSearchUrl = 'https://www.googleapis.com/youtube/v3/videos?id=' + videoIds + '&part=contentDetails' + YOUTUBE_API_KEY;
+      results.forEach(function (e) {
+        console.log($('.searchResults'));
+        $('#searchResults').append('<li class="searchResultItem"><img className="searchResultImg" data-id="' + e.id + '"style="height:50px; width:50px" src="' + e.img + '" /><p className="searchResultTitle">' + e.title + '</p></li>');
+      });
+      $(".searchResultItem").on('click', function (e) {
+        loadVideo($(e.target).attr('data-id'), 0);
+      });
     }
   });
 };
