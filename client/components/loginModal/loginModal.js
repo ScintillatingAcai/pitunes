@@ -48,12 +48,16 @@ var Login = React.createClass({
     this.setState({showLogin: false});
     this.setState({showSignUp: true});
   },
+  loginClick: function() {
+    this.setState({showLogin: true});
+    this.setState({showSignUp: false});
+  },
   showLoginForm: function(){
     return (
       <div>
         <form id='loginForm'>
-          <Input type='email' label='Email Address' placeholder='Enter email' />
-          <Input type='password' label='Password' />
+          <Input type='email' label='Email Address' placeholder='Enter email' required />
+          <Input type='password' label='Password' placeholder='Enter password' required />
         </form>
         <Button onClick={this.loginUser}>Log In</Button>
         <Button onClick={this.close}>Cancel</Button>
@@ -65,13 +69,14 @@ var Login = React.createClass({
     return (
       <div>
         <form id='signupForm'>
-          <Input type='text' label='Display Name' placeholder='Enter name' />
-          <Input type='email' label='Email Address' placeholder='Enter email' />
-          <Input type='password' label='Password' />
-          <Input type='password' label='Re-enter Password' />
+          <Input type='text' label='Display Name' placeholder='Enter name' required />
+          <Input type='email' label='Email Address' placeholder='Enter email' required />
+          <Input type='password' label='Password' placeholder='Enter password' required />
+          <Input type='password' label='Re-enter Password' placeholder='Re-enter password' required />
         </form>
-        <Button onClick={this.close}>Sign Up</Button>
+        <Button onClick={this.signupUser}>Sign Up</Button>
         <Button onClick={this.close}>Cancel</Button>
+        <Button onClick={this.loginClick}>Log In</Button>
       </div>
     );
   },
