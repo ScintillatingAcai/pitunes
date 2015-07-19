@@ -15,20 +15,27 @@ var SearchBar = React.createClass({
     this.setState({text: e.target.value});
   },
   render: function () {
+    
     var style = {
       borderColor: '#EEEEEE',
       position: 'absolute',
-      bottom: '0',
+      top: 0,
       width: '100%'
+
     };
+
     var searchBarInputStyle = {
       backgroundColor: '#AAAAAA',
       borderColor: '#EEEEEE'
     };
 
+    var searchResultsStyle = {
+      marginTop: '50px'
+    };
+
     return (
       <div>
-        <ul id="searchResults"></ul>
+        <ul id="searchResults" style={searchResultsStyle}></ul>
         <form style={style} onSubmit={this.handleSubmit}>
           <input style={searchBarInputStyle} onChange={this.onChange} value={this.state.text} className="form-control" placeholder="Search YouTube"/>
         </form>
@@ -46,7 +53,7 @@ var MediaAdd = React.createClass({
       width: '100%',
       height: '50%',
       overflow: 'auto',
-      bottom: '0'
+      top: '0'
     };
     return (
       <div style={style}>

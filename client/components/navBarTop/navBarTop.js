@@ -3,12 +3,6 @@
 var Navbar = ReactBootstrap.Navbar;
 var Nav = ReactBootstrap.Nav;
 
-var NavBarTopStyle = {
-  backgroundColor: '#222222',
-  borderColor: '#444444',
-  margin: '0px 0px 0px 0px'
-};
-
 var DebuggerSimNewMedia = React.createClass({
   handleClick: function () {
     mediaStatus = {videoId: 'cpGbzYlnz7c', startSeconds: 0};
@@ -80,9 +74,15 @@ var NavBarTop = React.createClass({
       top: '0',
       position: 'absolute',
     };
+    var piStyle = {
+      color: '#FFF'
+    };
+    var tunesStyle = {
+      color: '#CC0000'
+    };
     return (
       <div style={style}>
-        <div style={titleStyle}>piTunes</div>
+        <div style={titleStyle}><span style={piStyle}>pi</span><span style={tunesStyle}>TUNES</span></div>
         <div style = {NavBarMenuDropdownStyle}>
           <NavBarMenuDropdown />
         </div>
