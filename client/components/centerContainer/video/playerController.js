@@ -7,13 +7,21 @@ s.parentNode.insertBefore(ga, s);
 
 // Stub for JSON object from server
 var mediaStatus = {
-  videoId: 'N9qYF9DZPdw',
+  videoId: null,
   startSeconds: 0
 };
 
 var done = false;
 var player;
 var playerInstaniated = false;
+
+var onYouTubePlayerAPIReady = function () {
+  if (mediaStatus.videoId === null) {
+    serveStaticImg();
+  } else {
+    createPlayer(mediaStatus.videoId);
+  }
+};
 
 var setVideoTime = function (time) {
   player.seekTo(time, true);
@@ -54,14 +62,6 @@ var createPlayer = function (currentVideoId) {
       'onStateChange': onPlayerStateChange
     }
   });
-};
-
-var onYouTubePlayerAPIReady = function () {
-  if (mediaStatus.videoId === null) {
-    serveStaticImg();
-  } else {
-    createPlayer(mediaStatus.videoId);
-  }
 };
 
 var onPlayerReady = function (evt) {

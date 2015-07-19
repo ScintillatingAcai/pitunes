@@ -2,20 +2,20 @@ var placeholder = document.createElement("div");
 placeholder.className = "placeholder";
 
 var List = React.createClass({
-  getInitialState: function() {
+  getInitialState: function () {
     return { data: this.props.data };
   },
-  onClick: function(e) {
-    console.log(e.currentTarget.lastChild)
+  onClick: function (e) {
+    console.log(e.currentTarget.lastChild);
   },
-  dragStart: function(e) {
+  dragStart: function (e) {
     this.dragged = e.currentTarget;
     e.dataTransfer.effectAllowed = 'move';
     
     // Firefox requires dataTransfer data to be set
     e.dataTransfer.setData("text/html", e.currentTarget);
   },
-  dragEnd: function() {
+  dragEnd: function () {
     this.dragged.style.display = "block";
     this.dragged.parentNode.removeChild(placeholder);
 
@@ -28,7 +28,8 @@ var List = React.createClass({
     data.splice(to, 0, data.splice(from, 1)[0]);
     this.setState({data: data});
   },
-  dragOver: function(e) {
+
+  dragOver: function (e) {
     e.preventDefault();
     this.dragged.style.display = "none";
     if (e.target.className === "placeholder") return;
@@ -42,19 +43,19 @@ var List = React.createClass({
       this.nodePlacement = "after";
       parent.insertBefore(placeholder, e.target.nextElementSibling);
     } else if (relY < height) {
-      this.nodePlacement = "before"
+      this.nodePlacement = "before";
       parent.insertBefore(placeholder, e.target);
     }
   },
-  render: function() {
+  render: function () {
     var style = {
       cursor: 'pointer',
       padding: '0',
-      margin: '0',
-      color: 'grey',
+      margin: '0 0 2px 10px',
+      color: '#FFFFFF',
       listStyleType: 'none'
     };
-    var listItems = this.state.data.map((function(item, i) {
+    var listItems = this.state.data.map((function (item, i) {
       return (
         <div style={style} data-id={i}
             key={i}
@@ -74,29 +75,65 @@ var List = React.createClass({
 });
 
 //list of dummy user data
-var dummyUser = {
-  playlistSongs: {
-    0: 'Sandstorm - Darude',
-    1: 'Song Of Freedom - Murray Gold',
-    2: 'SkyWorld - Two Steps From Hell',
-    3: 'Dance of the Druids - Bear McCreary',
-    4: 'A New Beginning - Alexandre Desplat',
-    5: 'The Fields of The Pelenor - Lord of the Rings 3 Soundtrack', 
-    6: 'Sol Invictus - Audiomachine',
-    7: 'El Dorado - Two Steps From Hell',
-    8: 'Fortune Days - Glitch Mob',
-    9: 'I See Fire - Ed Sheeran',
-    10: 'a',
-    11: 'b',
-    12: 'c'
+var currentUser = {
+  currentPlaylist: {
+    title: 'Test Playlist',
+    songs: [
+      {
+        title: 'Darude - Sandstorm',
+        id: '2HQaBWziYvY',
+        duration: 224,
+        durationDisplay: '03:44'
+      },
+      {
+        title: 'The Growlers - One Million Lovers',
+        id: '59CZt1xsh5s',
+        duration: 278,
+        durationDisplay: '04:38'
+      },
+      {
+        title: 'FIDLAR - No Waves (Music Video)',
+        id: 'BYbJmQj5VkE',
+        duration: 190,
+        durationDisplay: '03:10'
+      },
+      {
+        title: 'Darude - Sandstorm',
+        id: '2HQaBWziYvY',
+        duration: 224,
+        durationDisplay: '03:44'
+      },
+      {
+        title: 'The Growlers - One Million Lovers',
+        id: '59CZt1xsh5s',
+        duration: 278,
+        durationDisplay: '04:38'
+      },
+      {
+        title: 'FIDLAR - No Waves (Music Video)',
+        id: 'BYbJmQj5VkE',
+        duration: 190,
+        durationDisplay: '03:10'
+      }
+    ]
   }
-}
+};
 
-//take the songs from the data user
-var objSongs = dummyUser.playlistSongs;
+//take the songs from the user data
 var arrSongs = [];
-for (var key in objSongs) {
-  arrSongs.push(objSongs[key]);
+var populatePlaylist = function() {
+  for (var song in currentUser.currentPlaylist.songs) {
+    arrSongs.push([currentUser.currentPlaylist.songs[song].title + ' | ' + currentUser.currentPlaylist.songs[song].durationDisplay]);
+  }
+};
+
+populatePlaylist();
+
+var addSongToPlaylist = function (songNode) {
+  currentUser.currentPlaylist.songs.push(songNode);
+  console.log("Added ", songNode, " to playlist");
+  populatePlaylist();
+  // React.addons.update(arrSongs, {$push: [songNode.title + ' | ' + songNode.durationDisplay]})
 }
 
 var Songs = React.createClass({
@@ -111,13 +148,13 @@ var PlaylistTitle = React.createClass({
   render: function(){
     var style = {
       textAlign: 'center',
-      color: 'grey',
+      color: 'white',
       marginTop: '10px',
       paddingBottom: '10px',
       borderBottom: '2px solid #444444'
     };
     return (
-      <h3 style={style}>Movie Scores Playlist</h3>
+      <h4 style={style}>Current Playlist</h4>
     );
   }
 });
@@ -131,10 +168,8 @@ var PlaylistSaved = React.createClass({
       width: '100%',
       height: '50%',
       overflow: 'auto',
-      textAlign: 'center',
-    };
-    var songStyle = {
-      marginTop: '40px'
+      textAlign: 'left',
+      bottom: '0'
     };
     return (
       <div style={style}>
