@@ -96,24 +96,6 @@ var currentUser = {
         id: 'BYbJmQj5VkE',
         duration: 190,
         durationDisplay: '03:10'
-      },
-      {
-        title: 'Darude - Sandstorm',
-        id: '2HQaBWziYvY',
-        duration: 224,
-        durationDisplay: '03:44'
-      },
-      {
-        title: 'The Growlers - One Million Lovers',
-        id: '59CZt1xsh5s',
-        duration: 278,
-        durationDisplay: '04:38'
-      },
-      {
-        title: 'FIDLAR - No Waves (Music Video)',
-        id: 'BYbJmQj5VkE',
-        duration: 190,
-        durationDisplay: '03:10'
       }
     ]
   }
@@ -122,9 +104,11 @@ var currentUser = {
 //take the songs from the user data
 var arrSongs = [];
 var populatePlaylist = function() {
+  arrSongs = [];
   for (var song in currentUser.currentPlaylist.songs) {
     arrSongs.push([currentUser.currentPlaylist.songs[song].title + ' | ' + currentUser.currentPlaylist.songs[song].durationDisplay]);
   }
+  console.log(arrSongs)
 };
 
 populatePlaylist();
@@ -133,7 +117,6 @@ var addSongToPlaylist = function (songNode) {
   currentUser.currentPlaylist.songs.push(songNode);
   console.log("Added ", songNode, " to playlist");
   populatePlaylist();
-  // React.addons.update(arrSongs, {$push: [songNode.title + ' | ' + songNode.durationDisplay]})
 }
 
 var Songs = React.createClass({
@@ -154,7 +137,7 @@ var PlaylistTitle = React.createClass({
       borderBottom: '2px solid #444444'
     };
     return (
-      <h4 style={style}>Current Playlist</h4>
+      <h4 style={style}>{currentUser.currentPlaylist.title}</h4>
     );
   }
 });
