@@ -4,6 +4,17 @@ var Playlist = db.Model.extend({
   tableName: 'Playlists',
   hasTimestamps: true,
 
+  initialize: function(){
+    this.on('fetched', function() {
+      // console.log('FETCH!!');
+      this.retrieveCurrentMedia(function(err, media) {
+        this.currentMedia = media;
+        console.log('retrieved media (id): ', this.currentMedia.get('id'));
+
+      }.bind(this));
+    }.bind(this));
+  },
+
   currentMedia: null,
 
   medias: function() {
@@ -21,25 +32,29 @@ var Playlist = db.Model.extend({
     return this.currentMedia;
   },
 
+  incrementCurrentMediaIndex:function() {
+    var mediaCount = this.get('current_media_index');
+  },
+
   setCurrentMedia: function( currentMedia_ID ){
     this.set('current_media_index', currentMedia_ID);
     this.save().then(function(currentMedia) {
       this.retrieveCurrentPlaylist(function(err, currentMedia) {
         this.currentMedia = currentMedia;
       }.bind(this));
-    });
+    }.bind(this));
   },
 
   retrieveCurrentMedia: function(callback){
-    var Media = require('./media');
-    if (this.get('current_media_index') === 0) callback(null, null); //send back 0 which indicates no playlist but not an error
+    var mediaIndex = this.get('current_media_index');
+    if (mediaIndex === 0) return callback(null, null); //send back 0 which indicates no playlist but not an error
 
-    new Media().fetch({
-      id:this.get('current_playlist_id')
-    })
+    console.log('retrieving current media index: ', mediaIndex);
+    this.medias().query({where: {media_order: mediaIndex}}).fetchOne()
     .then(function(found) {
       if (!found) return callback(new Error('media not found'));
-      callback(null,found.attributes);
+      console.log('retrieved current media');
+      callback(null,found);
     })
     .catch(function(error) {
       callback(error);

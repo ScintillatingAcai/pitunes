@@ -7,6 +7,8 @@ module.exports = {
   rooms: null
 };
 
-roomUtils.retrieveAllRooms(function(err, rooms) {
-  module.exports.rooms = rooms;
-});
+setTimeout(function() {
+  roomUtils.retrieveAllRooms(function(err, rooms) {
+    module.exports.rooms = rooms;
+  });
+}, 1000);

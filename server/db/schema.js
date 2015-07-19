@@ -64,8 +64,8 @@ bookshelf.knex.schema.hasTable('Users').then(function(exists) {
                   playlist.increments('id').primary();
                   playlist.integer('playlist_id').unsigned().references('id').inTable('Playlists');
                   playlist.integer('media_id').unsigned().references('id').inTable('Medias');
-                  playlist.integer('media_order').unsigned().notNullable();
-                  playlist.unique(['playlist_id', 'media_order']);
+                  playlist.integer('media_order', 8).unsigned().notNullable();
+                  playlist.unique(['media_id', 'media_order']);
                 }).then(function (table) {
                   console.log('Created Table Media Playlists');
                 });

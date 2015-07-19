@@ -13,7 +13,7 @@ var Timer = function(onFireCB, onCompleteCB, timeIncrement, totalTime) {
     this.startDate = new Date();
     this.stopDate = this.startDate.getTime() + totalTime * 1000; //convert from seconds to milliseconds
 
-    this.fire(onFireCB);
+    setTimeout(this.fire.bind(this,onFireCB), timeIncrement);
   };
 
   this.fire = function(callback) {
