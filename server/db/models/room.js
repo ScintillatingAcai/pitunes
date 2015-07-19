@@ -26,15 +26,26 @@ var Room = db.Model.extend({
     }
 
     if (this.djQueue[0] /*&& this.djQueue[0].getCurrentPlaylist()*/) {
-      console.log('play media for DJ: ',this.djQueue[0].get('id'));
-      this.currentMedia = this.djQueue[0].getCurrentPlaylist(); //XXX fix this
+      console.log('play from current media: ',this.djQueue[0]);
+      this.currentMedia = this.djQueue[0].getCurrentPlaylist().getCurrentMedia(); //XXX fix this
+      this.sockets.in(this.get('id')).emit("media status", {
+        videoId: this.currentMedia.youtube_id,
+        startSeconds:0,
+        status:'start'
+      });
       var onFire = function(elapsedTime){
         this.sockets.in(this.get('id')).emit("media status", {
-          videoId: '2HQaBWziYvY',
-          startSeconds:elapsedTime
+          videoId: this.currentMedia.youtube_id,
+          startSeconds:elapsedTime,
+          status:'update'
         });
       };
       var onComplete = function(){
+        this.sockets.in(this.get('id')).emit("media status", {
+          videoId: '',
+          startSeconds:0,
+          status:'stop'
+        });
         this.dequeueDJ();
         this.playMedia();
       };
@@ -64,10 +75,9 @@ var Room = db.Model.extend({
   enqueueDJ: function(user_id, sockets) {
     this.sockets = sockets;
     var user = this.users.get(user_id);
-
+    console.log('user to play: ', user);
     this.djQueue.push(user);
     if (this.djQueue.length === 1) {
-      console.log('asdfa')
       this.playMedia();
     }
   },

@@ -10,9 +10,11 @@ var User = db.Model.extend({
 
   initialize: function(){
     this.on('creating', this.hashPassword);
-    this.on('creating', function() {
+
+    this.on('fetched', function() {
       this.retrieveCurrentPlaylist(function(err, playlist) {
         this.currentPlaylist = playlist;
+        console.log('User (' + this.get('id') + ') FETCHED playlist: ', this.currentPlaylist.attributes);
       }.bind(this));
     }.bind(this));
   },
@@ -46,19 +48,21 @@ var User = db.Model.extend({
         this.currentPlaylist = playlist;
 
       }.bind(this));
-    });
+    }.bind(this));
   },
 
   retrieveCurrentPlaylist: function(callback){
     var Playlist = require('./playlist');
     if (this.get('current_playlist_id') === 0) callback(null, null); //send back 0 which indicates no playlist but not an error
-
+    // console.log('user attributes: ', this.attributes);
+    console.log('retrieving current playlist for id: ', this.get('current_playlist_id'));
     return new Playlist().fetch({
       id:this.get('current_playlist_id')
     })
     .then(function(found) {
       if (!found) return callback(new Error('media playlist not found'));
-      callback(null,found.attributes);
+      console.log('retrieved current playlist');
+      callback(null,found);
     })
     .catch(function(error) {
       callback(error);

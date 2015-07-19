@@ -22,7 +22,7 @@ module.exports = function (app, express, io) {
   var playlistRouter = express.Router();
   var mediaRouter = express.Router();
 
-  app.use(morgan('dev'));
+  //app.use(morgan('dev'));
   app.use(bodyParser.urlencoded({extended: true}));
   app.use(bodyParser.json());
   app.use(express.static(__dirname + '/../client'));
