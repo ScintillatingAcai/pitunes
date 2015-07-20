@@ -170,11 +170,15 @@ p.copyright {
 }
 
 .j-font-uppercase {
-  text-transform: uppercase;
+    text-transform: uppercase;
 }
 
 .j-color-blue {
-  color: #00F !important;
+    color: #00F !important;
+}
+
+.j-color-red {
+    color: #FF0000 !important;
 }
 
 .j-center-text {
@@ -195,6 +199,10 @@ p.copyright {
 
 .j-padding-left-10 {
     padding-left: 10px;
+}
+
+.j-padding-top-10 {
+    margin-top: 10px;
 }
 
 

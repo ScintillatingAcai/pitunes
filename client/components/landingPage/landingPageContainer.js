@@ -1,52 +1,73 @@
+var user = null, 
+    room = 'root', 
+    server_uri = 'http://' + document.domain + ':3000'; 
+    socket = io(server_uri);
+
 var Modal = ReactBootstrap.Modal;
 var Input = ReactBootstrap.Input;
 var Button = ReactBootstrap.Button;
 
 var LandingPageContainer = React.createClass({
     getInitialState: function() {
+      this.getRooms();
       return {showModal: false, errorMessage: '', showLogin: false, showSignUp: false};
     },
     close: function() {
-      this.setState({showModal: false});
+      this.setState({showModal: false, errorMessage: ''});
     },
     open: function() {
       this.setState({showModal: true});
     },
+    getRooms: function(){
+      var that = this;
+      $.ajax({
+              url: server_uri + '/api/rooms',
+              type: 'GET',
+              dataType: 'json',
+              success: function(res) {
+                that.setState({rooms: res});
+              }, error: function(res) {
+                console.err(res);
+              }
+            });
+    },
     signInUser: function() {
-      var form = document.getElementById('loginForm');
+      var form = document.getElementById('login-form');
       var data = {email: form[0].value, password: form[1].value};
       var that = this;
-      $.ajax({url: server_uri + '/api/users/login', 
+      $.ajax({
+              url: server_uri + '/api/users/login', 
               type: 'POST',
               dataType: 'json',
               data: data,
               success: function(res) {
                 user = res;
                 that.setState({showModal: false});
-              } ,
-              error: function(res) {
-                that.setState({errorMessage: res.statusText});
-              }
-      });
-    },
-    signupUser: function() {
-      var form = document.getElementById('signupForm');
-      var data = {displayName: form[0].value, email: form[1].value, password: form[2].value};
-      var that = this;
-      $.ajax({url: server_uri + '/api/users/signup', 
-              type: 'POST',
-              dataType: 'json',
-              data: data,
-              success: function(res) {
-                user = res;
-                that.setState({showModal: false});
-              } ,
+              },
               error: function(res) {
                 that.setState({errorMessage: res.statusText});
               }
             });
     },
-    signUpClick: function() {
+    signupUser: function() {
+      var form = document.getElementById('signup-form');
+      var data = {email: form[0].value, email: form[1].value, password: form[2].value}
+      var that = this;
+      if (form[2].value !== form[3].value) { that.setState({errorMessage: 'Your passwords did not match.'}); return; }
+      $.ajax({url: server_uri + '/api/users/signup',
+              type: 'POST',
+              dataType: 'json',
+              data: data,
+              success: function(res) {
+                user = res;
+                that.setState({showModal: false});
+              },
+              error: function(res) {
+                that.setState({errorMessage: res.statusText});
+              }
+            });
+    },
+    signupClick: function() {
       this.setState({showModal: true});
       this.setState({showLogin: false});
       this.setState({showSignUp: true});
@@ -62,21 +83,21 @@ var LandingPageContainer = React.createClass({
         <form id="login-form">
           <div className="form-group">
             <label htmlFor="login-email" className="hide">Email</label>
-            <input type="email" className="form-control input-lg" id="login-email" placeholder="Email" require></input>
+            <input type="email" className="form-control input-lg" id="login-email" placeholder="Email" required />
           </div>
           <div className="form-group">
             <label htmlFor="login-password" className="hide">Password</label>
-            <input type="password" className="form-control input-lg " id="login-password" placeholder="Password" require></input>
+            <input type="password" className="form-control input-lg " id="login-password" placeholder="Password" required />
           </div>
           <div className="form-group j-center-text">
-            <a className="btn btn-default btn-md" onClick={this.signInUser} data-target="#login-form"><i className="fa fa-sign-in fa-fw"></i><span className="network-name">Sign In</span></a>
+            <a type="submit" className="btn btn-default btn-md" onClick={this.signInUser}><i className="fa fa-sign-in fa-fw"></i><span className="network-name">Sign In</span></a>
             <br />
-            <a href="javascript:;" data-toggle="modal" data-target="#forget-password-form" data-dismiss="modal">Forgot Your Password?</a>
+            <a href="javascript:;" data-dismiss="modal">Forgot Your Password?</a>
           </div>
         </form>
         <div className="modal-footer j-center-text">
           <span>Dont Have An Account Yet ?</span>
-          <a className="j-padding-left-10 j-pointer" onClick={this.signUpClick}>Sign Up</a>
+          <a className="j-padding-left-10 j-pointer" onClick={this.signupClick}>Sign Up</a>
         </div>
         </div>
       );
@@ -84,23 +105,33 @@ var LandingPageContainer = React.createClass({
     showSignUpForm: function() {
       return (
         <div>
-          <form id='signupForm'>
-            <Input type='text' label='Display Name' placeholder='Enter name' required />
-            <Input type='email' label='Email Address' placeholder='Enter email' required />
-            <Input type='password' label='Password' placeholder='Enter password' required />
-            <Input type='password' label='Re-enter Password' placeholder='Re-enter password' required />
-          </form>
-          <ul className="list-inline j-center-text">
-            <li>
-              <a onClick={this.signUpClick} className="btn btn-default btn-md"><i className="fa fa-music fa-fw"></i> <span className="network-name">Sign Up</span></a>
-            </li>
-            <li>
-              <a onClick={this.loginClick} className="btn btn-default btn-md"><i className="fa fa-sign-in fa-fw"></i><span className="network-name">Sign In</span></a>
-            </li>
-            <li>
-              <a onClick={this.close} className="btn btn-default btn-md"><i className="fa fa-sign-in fa-fw"></i><span className="network-name">Cancel</span></a>
-            </li>
-          </ul>
+        <h3>Create An Account</h3>
+        <p>
+          Fill in the form below to create an account.
+        </p>
+        <form id="signupForm">
+          <div className="form-group">
+            <label htmlFor="signup-email" className="hide">Email</label>
+            <input type="email" className="form-control input-lg" id="signup-email" placeholder="Email" required></input>
+          </div>
+          <div className="form-group">
+            <label htmlFor="login-password" className="hide">Password</label>
+            <input type="password" className="form-control input-lg" id="login-password" placeholder="Password" required></input>
+          </div>
+          <div className="form-group">
+            <label htmlFor="login-password2" className="hide">Password</label>
+            <input type="password" className="form-control input-lg" id="login-password2" placeholder="Re-enter Password" required></input>
+          </div>
+          <div className="form-group">
+            <label htmlFor="signup-displayName" className="hide">Fullname</label>
+            <input type="text" className="form-control input-lg" id="signup-displayName" placeholder="Display Name" required></input>
+          </div>
+          <div className="form-group j-center-text">
+            <a type="submit" className="btn btn-default btn-md" onClick={this.signupUser}><i className="fa fa-music fa-fw"></i><span className="network-name">Create Account</span></a>
+            <br />
+            <a onClick={this.loginClick} data-toggle="modal" data-target="#login-form" data-dismiss="modal">Back To Login</a>
+          </div>
+        </form>
         </div>
       );
     },
@@ -124,7 +155,7 @@ var LandingPageContainer = React.createClass({
                                 <a href="#home">Home</a>
                             </li>
                             <li>
-                                <a href="#services">Rooms</a>
+                                <a href="rooms.html">Rooms</a>
                             </li>
                             <li>
                                 <a className="j-pointer" onClick={this.loginClick}>Sign In</a>
@@ -145,10 +176,10 @@ var LandingPageContainer = React.createClass({
                                 <hr className="intro-divider"></hr>
                                 <ul className="list-inline intro-social-buttons">
                                     <li>
-                                        <a onClick={this.signUpClick} className="btn btn-default btn-lg"><i className="fa fa-music fa-fw"></i> <span className="network-name">Sign Up</span></a>
+                                        <a onClick={this.signupClick} className="btn btn-default btn-lg"><i className="fa fa-music fa-fw"></i> <span className="network-name">Sign Up</span></a>
                                     </li>
                                     <li>
-                                        <a href="#home" className="btn btn-default btn-lg"><i className="fa fa-users fa-fw"></i> <span className="network-name">Join Room</span></a>
+                                        <a href="rooms.html" className="btn btn-default btn-lg"><i className="fa fa-users fa-fw"></i> <span className="network-name">Join Room</span></a>
                                     </li>
                                     <li>
                                         <a onClick={this.loginClick} className="btn btn-default btn-lg"><i className="fa fa-sign-in fa-fw"></i><span className="network-name">Sign In</span></a>
@@ -167,14 +198,14 @@ var LandingPageContainer = React.createClass({
                     <div className="row">
                         <div className="col-lg-4 col-sm-4">
                             <div className="clearfix"></div>
-                            <h2 className="section-heading j-center-text">Random Room 1<br />DJ's:</h2>
+                            <h2 className="section-heading j-center-text">Random Room 1 <br />DJs:</h2>
                             <div className="j-left-25">
                                 <img className="img-responsive" src="assets/img/headphones.jpg" alt="" />
                             </div>
                         </div>
                         <div className="col-lg-4 col-sm-4">
                             <div className="clearfix"></div>
-                            <h2 className="section-heading j-center-text">Random Room 2<br />DJ's:</h2>
+                            <h2 className="section-heading j-center-text">Random Room 2<br />DJs:</h2>
                             <div className="j-left-25">
                                 <img className="img-responsive" src="assets/img/ipad.png" alt="" />
                             </div>
@@ -220,14 +251,14 @@ var LandingPageContainer = React.createClass({
             <div>
                 <Modal show={this.state.showModal} onHide={this.close}>
                     <Modal.Header closeButton>
-                        <Modal.Title>Welcome to <span className="j-color-blue">pi</span>Tunes</Modal.Title>
+                        <Modal.Title className="j-center-text">Welcome to <span className="j-color-blue">pi</span>Tunes</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
                         {this.state.showLogin ? this.showLoginForm() : null}
                         {this.state.showSignUp ? this.showSignUpForm() : null}
                     </Modal.Body>
                     <Modal.Footer>
-                        <span>{this.state.errorMessage}</span>
+                        <span className="j-color-red">{this.state.errorMessage}</span>
                     </Modal.Footer>
                 </Modal>
             </div>
