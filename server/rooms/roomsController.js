@@ -23,11 +23,15 @@ module.exports = {
 
   getAllRooms: function(req, res) {
     var allRooms = utils.getAllRooms().toJSON().map(function(room) {
+
+      var media = room.currentMedia ? 
+          {id: room.currentMedia.id, youtube_id: room.currentMedia.youtube_id} :
+          null;
       return {id: room.id, 
         name: room.name, 
         private: room.private, 
-        users: room.users.length, 
-        currentMedia: room.currentMedia};
+        usersCount: room.users.length, 
+        currentMedia: media };
     });
     console.log(allRooms);
     if (allRooms) {
