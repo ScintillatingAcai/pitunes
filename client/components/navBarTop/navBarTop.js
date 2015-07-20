@@ -3,14 +3,24 @@
 var Navbar = ReactBootstrap.Navbar;
 var Nav = ReactBootstrap.Nav;
 
-var DebuggerSimNewMedia = React.createClass({
+var DebuggerButtonJoinQueue = React.createClass({
   handleClick: function () {
-    mediaStatus = {videoId: 'cpGbzYlnz7c', startSeconds: 0};
-    heardNewMediaStatus();
+    socket.emit('user queue join', {user: 1, room: 1});
   },
   render: function () {
     return (
-      <button onClick={this.handleClick}>DEBUG SimNewMediaStatusEvent</button>
+      <button onClick={this.handleClick}>DEBUG Join Queue U1R1</button>
+    );
+  }
+});
+
+var DebuggerButtonJoinRoom = React.createClass({
+  handleClick: function () {
+    socket.emit('user room join', {user:1,room:1})
+  },
+  render: function () {
+    return (
+      <button onClick={this.handleClick}>DEBUG Join Room U1R1</button>
     );
   }
 });
@@ -87,7 +97,8 @@ var NavBarTop = React.createClass({
           <NavBarMenuDropdown />
         </div>
         <div style={debuggerButtonsStyle}>
-          <DebuggerSimNewMedia />
+          <DebuggerButtonJoinQueue />
+          <DebuggerButtonJoinRoom />
           <DebuggerButtonRemVid />
           <DebuggerButtonLoadVid />
         </div>

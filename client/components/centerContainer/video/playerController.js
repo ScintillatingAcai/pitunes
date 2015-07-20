@@ -78,7 +78,8 @@ var onPlayerReady = function (evt) {
 
 // TODO - Discuss w/Kyle the format of what client should expect to recieve/message codes and refactor accordingly
 // Socket Event Listener for Media Status Object for
-socket.on('media status' || 'media start' || 'media end', function (data) {
+socket.on('media status', function (data) {
+  console.log("HEARD MEDIA STATUS!!!")
   data.startSeconds = data.startSeconds || 0;
   mediaStatus = data;
   heardNewMediaStatus();

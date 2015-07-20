@@ -53,7 +53,7 @@ var convertYTDurationDisplay = function (duration) {
 // TODO Refactor to not store info on title object as data-property for loading/queuing
 var searchYouTube = function (query) {
   var encodedQuery = encodeURIComponent(query);
-  var searchUrl = 'https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=20&order=viewCount&q=' + encodedQuery + YOUTUBE_API_KEY;
+  var searchUrl = 'https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=20&order=viewCount&q=' + encodedQuery + '&key=' + YOUTUBE_API_KEY;
   $.ajax({
     type: "GET",
     url: searchUrl,
@@ -62,6 +62,7 @@ var searchYouTube = function (query) {
       var resultsIds = [];
       response.items.forEach(function (e) {
         if (e.id.videoId) {
+          console.log(e.snippet.thumbnails.default.url);
           results.push({
             img: e.snippet.thumbnails.default.url,
             title: e.snippet.title,
@@ -75,7 +76,7 @@ var searchYouTube = function (query) {
         videoIds += results[i].id + ',';
       }
       var videoMap = {};
-      var durationSearchUrl = 'https://www.googleapis.com/youtube/v3/videos?id=' + videoIds + '&part=contentDetails' + YOUTUBE_API_KEY;
+      var durationSearchUrl = 'https://www.googleapis.com/youtube/v3/videos?id=' + videoIds + '&part=contentDetails&key=' + YOUTUBE_API_KEY;
       $.ajax({
         type: "GET",
         url: durationSearchUrl,
