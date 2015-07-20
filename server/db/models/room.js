@@ -81,7 +81,7 @@ var Room = db.Model.extend({
     return _.extend((new db.Model()).toJSON.call(this), {
       users: this.users && this.users.toJSON(),
       djQueue: this.djQueue.length && this.djQueue.map(function(user) {user.toJSON();}),
-      currentMedia: this.currentMedia && this.currentMedia.makeJSON(),
+      currentMedia: this.currentMedia && this.currentMedia.toJSON(),
       mediaTimeElapsed: this.mediaTimeElapsed
     },this);
   },
