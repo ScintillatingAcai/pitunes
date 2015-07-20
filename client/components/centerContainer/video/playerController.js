@@ -119,6 +119,8 @@ var loadVideo = function (videoId, startSeconds) {
   // If player already exists...
   if (playerInstaniated) {
     // Load new player if current video is different from new video or same video is being played again
+    console.log('media status: ', mediaStatus);
+
     if ((player.getVideoData().video_id !== videoId) || mediaStatus.status === 'start') {
       player.loadVideoById(videoId, startSeconds);
     } else {

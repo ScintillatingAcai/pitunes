@@ -41,7 +41,7 @@ var Playlist = db.Model.extend({
     .then(function(found) {
       if (!found) return callback(new Error('medias not found'));
       var mediaCount = found.length;
-      return (( this.get('current_media_index') + 1 ) % mediaCount) + 1; //order starts at 1 insead of 0
+      return ( this.get('current_media_index') % mediaCount) + 1; //order starts at 1 insead of 0
     }).bind(this)
     .then(function(mediaIndex) {
       console.log('incremented media index: ', mediaIndex);
