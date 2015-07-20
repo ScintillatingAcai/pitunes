@@ -51,7 +51,7 @@ var List = React.createClass({
     var style = {
       cursor: 'pointer',
       padding: '0',
-      margin: '0 0 2px 10px',
+      margin: '0 0 0 10px',
       color: '#FFFFFF',
       listStyleType: 'none'
     };
@@ -100,6 +100,7 @@ var currentUser = {
     ]
   }
 };
+
 
 //take the songs from the user data
 var arrSongs = [];

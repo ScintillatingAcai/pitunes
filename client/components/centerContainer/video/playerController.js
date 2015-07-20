@@ -15,6 +15,7 @@ var done = false;
 var player;
 var playerInstaniated = false;
 
+// Initialize player if user joins room and video is currently playing or serve static message if not
 var onYouTubePlayerAPIReady = function () {
   if (mediaStatus.videoId === null) {
     serveStaticImg();
@@ -27,6 +28,7 @@ var setVideoTime = function (time) {
   player.seekTo(time, true);
 };
 
+// Serve "No current DJ" Message
 var serveStaticImg = function () {
   if ($('#noVideoImg')) {
     $('#noVideoImg').remove();
@@ -36,15 +38,18 @@ var serveStaticImg = function () {
   }
 };
 
+// Destroy the player and serve "No current DJ" Message
 var removeVideo = function () {
   player.destroy();
   playerInstaniated = false;
   serveStaticImg();
 };
 
+// Instantiate player and load mediastatus videoID/start playing video
 var createPlayer = function (currentVideoId) {
   playerInstaniated = true;
   player = new YT.Player('videoContainer', {
+    // TODO Tweak these or dynamically generate based on page size
     height: '390',
     width: '640',
     videoId: currentVideoId,
@@ -59,31 +64,37 @@ var createPlayer = function (currentVideoId) {
     },
     events: {
       'onReady': onPlayerReady,
+      // TODO Temp for testing
       'onStateChange': onPlayerStateChange
     }
   });
 };
 
+// Start playing video at MSO's startSeconds time after play loads
 var onPlayerReady = function (evt) {
   console.log('heard onPlayerReady', evt);
-  if (mediaStatus.startSeconds > 0) {
     setVideoTime(mediaStatus.startSeconds);
-  }
 };
 
-// Socket Event Listener
-socket.on('media status', function (data) {
-  console.log(data);
+// TODO - Discuss w/Kyle the format of what client should expect to recieve/message codes and refactor accordingly
+// Socket Event Listener for Media Status Object for
+socket.on('media status' || 'media start' || 'media end', function (data) {
+  data.startSeconds = data.startSeconds || 0;
   mediaStatus = data;
   heardNewMediaStatus();
 });
 
-var heardNewMediaStatus = function() {
-  console.log('heardNewCVO fired');
-  loadVideo(mediaStatus.videoId, mediaStatus.startSeconds);
+// Wrapper for loadVideo/serveStaticImg
+var heardNewMediaStatus = function () {
+  if (mediaStatus.videoId === null) {
+    serveStaticImg();
+  } else {
+    loadVideo(mediaStatus.videoId, mediaStatus.startSeconds);
+  }
 };
 
 // DEBUGGER FUNCTIONS
+// TODO Remove before production
 // * * *
 var onPlayerStateChange = function (evt) {
   console.log('heard onPlayerStateChange', evt);
@@ -102,21 +113,25 @@ var stopVideo = function () {
 // * * *
 // END DEBUGGER FUNCTIONS
 
-// Expects 11 character string (YouTube Video ID) and the starttime of video (0 if new)
+// Main Load Video
+// Expects 11 character string (YouTube Video ID) and the starttime of video
 var loadVideo = function (videoId, startSeconds) {
+  // If player already exists...
   if (playerInstaniated) {
-    if (player.getVideoData().video_id !== videoId) {
+    // Load new player if current video is different from new video or same video is being played again
+    if ((player.getVideoData().video_id !== videoId) || startSeconds === 0) {
       player.loadVideoById(videoId, startSeconds);
     } else {
-      console.log('media time difference: ',mediaStatus.startSeconds - player.getCurrentTime());
+      // If same video, check if desync is greater than 10 seconds
       if (mediaStatus.startSeconds - player.getCurrentTime() > 10) {
-        console.log('Syncing client video to master server time...');
         setVideoTime(mediaStatus.videoTime);
       }
     }
+  // If no player in room, reinstaniate it
   } else {
     playerInstaniated = true;
     player = new YT.Player('videoContainer', {
+      // TODO Tweak these or dynamically generate based on page size
       height: '390',
       width: '640',
       videoId: videoId,
@@ -132,6 +147,7 @@ var loadVideo = function (videoId, startSeconds) {
       },
       events: {
         'onReady': onPlayerReady,
+        // TODO Temp for testing
         'onStateChange': onPlayerStateChange
       }
     });
