@@ -6,17 +6,20 @@ var User = db.Model.extend({
   tableName: 'Users',
   hasTimestamps: true,
 
-  currentPlaylist: null,
-
   initialize: function(){
+    this.currentPlaylist = null;
+
+    var that = this;
     this.on('creating', this.hashPassword);
 
-    this.on('fetched', function() {
+    this.on('fetched', Promise.promisify(function(a, b, c, callback) {
       this.retrieveCurrentPlaylist(function(err, playlist) {
-        this.currentPlaylist = playlist;
-        console.log('User (' + this.get('id') + ') FETCHED playlist: ', this.currentPlaylist.attributes);
-      }.bind(this));
-    }.bind(this));
+        that.currentPlaylist = playlist;
+        // console.log('User (' + that.get('id') + ') FETCHED playlist: ', that.currentPlaylist);
+        console.log(that.cid);
+        callback();
+      });
+    }), this);
   },
 
   comparePassword: function(attemptedPassword, callback) {
@@ -49,6 +52,10 @@ var User = db.Model.extend({
 
       }.bind(this));
     }.bind(this));
+  },
+
+  updateCurrentPlaylist: function(callback) {
+    var hashPromise = Promise.promisify(this.retrieveCurrentPlaylist);
   },
 
   retrieveCurrentPlaylist: function(callback){

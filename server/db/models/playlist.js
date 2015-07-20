@@ -1,21 +1,24 @@
 var db = require('../schema');
+var Promise = require('bluebird');
+
 
 var Playlist = db.Model.extend({
   tableName: 'Playlists',
   hasTimestamps: true,
 
   initialize: function(){
-    this.on('fetched', function() {
+    this.currentMedia = null;
+
+    var that = this;
+    this.on('fetched', Promise.promisify(function(a, b, c, callback) {
       // console.log('FETCH!!');
       this.retrieveCurrentMedia(function(err, media) {
-        this.currentMedia = media;
-        console.log('retrieved media (id): ', this.currentMedia.get('id'));
-
-      }.bind(this));
-    }.bind(this));
+        that.currentMedia = media;
+        console.log('retrieved media (id): ', that.currentMedia.get('id'));
+        callback();
+      });
+    }), this);
   },
-
-  currentMedia: null,
 
   medias: function() {
     var Media = require('./media');
@@ -32,18 +35,33 @@ var Playlist = db.Model.extend({
     return this.currentMedia;
   },
 
-  incrementCurrentMediaIndex:function() {
-    var mediaCount = this.get('current_media_index');
-  },
+  incrementCurrentMediaIndex:Promise.promisify(function(callback) {
+    // get medias in playlist to find length
+    var that = this;
+    this.medias().fetch().bind(this)
+    .then(function(found) {
+      if (!found) return callback(new Error('medias not found'));
+      var mediaCount = found.length;
+      return (( this.get('current_media_index') + 1 ) % mediaCount) + 1; //order starts at 1 insead of 0
+    }).bind(this)
+    .then(function(mediaIndex) {
+      console.log('incremented media index: ', mediaIndex);
+      this.setCurrentMedia(mediaIndex);
+    });
+  }),
 
-  setCurrentMedia: function( currentMedia_ID ){
+  setCurrentMedia: Promise.promisify(function( currentMedia_ID , callback){
     this.set('current_media_index', currentMedia_ID);
-    this.save().then(function(currentMedia) {
-      this.retrieveCurrentPlaylist(function(err, currentMedia) {
+
+    this.save().bind(this).then(function(playlist) {
+      console.log('test:');
+      this.retrieveCurrentMedia(function(err, currentMedia) {
+        console.log('current media index updated: ', this.get('current_media_index'));
         this.currentMedia = currentMedia;
+        callback(null, currentMedia);
       }.bind(this));
-    }.bind(this));
-  },
+    });
+  }),
 
   retrieveCurrentMedia: function(callback){
     var mediaIndex = this.get('current_media_index');

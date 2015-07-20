@@ -52,7 +52,7 @@ bookshelf.knex.schema.hasTable('Users').then(function(exists) {
             playlist.increments('id').primary();
             playlist.integer('user_id').unsigned().references('id').inTable('Users');
             playlist.string('name', 50).notNullable();
-            playlist.integer('current_media_index').defaultTo(0);//.references('order').inTable('Media_Playlists');
+            playlist.integer('current_media_index').defaultTo(1);//.references('order').inTable('Media_Playlists');
             // playlist.boolean('current');
             // playlist.unique(['user_id', 'current']);
             playlist.timestamps();
