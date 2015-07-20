@@ -10,11 +10,14 @@ module.exports = {
 
     new Playlist({
         id: playlist_id,
-      }).fetch({
-        //add related data we would like to return in the withRelated array
-        withRelated: [],
-        require: true
-      }).then(function(found) {
+      })
+      .retrievePlaylist()
+      // .fetch({
+      //   //add related data we would like to return in the withRelated array
+      //   withRelated: ['medias'],
+      //   require: true
+      // })
+      .then(function(found) {
         if (found) {
           // var playlistWithJoins = cleanAttributes(found.attributes);
 

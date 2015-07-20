@@ -77,6 +77,21 @@ var Playlist = db.Model.extend({
       callback(error);
     });
   },
+
+  retrievePlaylist: Promise.promisify(function( callback ) {
+
+    this.medias().query(function(qb){
+      qb.orderBy('media_order','ASC'); 
+    }).fetch()
+    .then(function(found) {
+      if (!found) return callback(new Error('media not found'));
+      console.log('retrieved current media');
+      callback(null,found);
+    })
+    .catch(function(error) {
+      callback(error);
+    });
+  })
 });
 
 module.exports = Playlist;
