@@ -37,44 +37,46 @@ var Room = db.Model.extend({
     if (this.djQueue[0] && this.djQueue[0].getCurrentPlaylist()) {
       var dj = this.djQueue[0];
       var playlist = dj.getCurrentPlaylist();
-      this.currentMedia = playlist.getCurrentMedia();
-      this.currentMedia.incrementPlayCount().bind(this)
-      .then(function(data) {
-        console.log('incrementing media index');
-        playlist.incrementCurrentMediaIndex();
+      playlist.getCurrentMedia().bind(this).then(function(media) {
+        this.currentMedia = media;
+        this.currentMedia.incrementPlayCount().bind(this)
+        .then(function(data) {
+          console.log('incrementing media index');
+          playlist.incrementCurrentMediaIndex();
 
-        var videoId = this.currentMedia.get('youtube_id');
-        var durationSearchUrl = 'https://www.googleapis.com/youtube/v3/videos?id=' + videoId + '&part=contentDetails' + YOUTUBE_API_KEY;
-        var link = url.parse(durationSearchUrl);
-        var options = {
-            host: link.hostname,
-            port: link.port,
-            path: link.path
-        };
-        var that = this;
-        https.get(options, function(res) {
-          var response = '';
-          res.on('data', function(data) {
-              // collect the data chunks to the variable named "html"
-              response += data;
-          }).on('end', function() {
-              // the whole of webpage data has been collected. parsing time!
-              var duration = JSON.parse(response).items[0].contentDetails.duration;
-              console.log('duration received from youtube: ', duration);
-
-              console.log('play from current media: ',that.currentMedia.get('youtube_id'));
-
-              that.sockets.in(that.get('id')).emit("media status", {
-                videoId: that.currentMedia.get('youtube_id'),
-                startSeconds:0,
-                status:'start'
-              });
-
-              that.mediaTimer = that.makeMediaTimer(3000, that.convertYTDuration(duration));
-              that.mediaTimer.start();
+          var videoId = this.currentMedia.get('youtube_id');
+          var durationSearchUrl = 'https://www.googleapis.com/youtube/v3/videos?id=' + videoId + '&part=contentDetails' + YOUTUBE_API_KEY;
+          var link = url.parse(durationSearchUrl);
+          var options = {
+              host: link.hostname,
+              port: link.port,
+              path: link.path
+          };
+          var that = this;
+          https.get(options, function(res) {
+            var response = '';
+            res.on('data', function(data) {
+                // collect the data chunks to the variable named "html"
+                response += data;
+            }).on('end', function() {
+                // the whole of webpage data has been collected. parsing time!
+                var duration = JSON.parse(response).items[0].contentDetails.duration;
+                console.log('duration received from youtube: ', duration);
+                that.sockets.in(that.get('id')).emit("media status", {
+                  videoId: that.currentMedia.get('youtube_id'),
+                  startSeconds:0,
+                  status:'start'
+                });
+                that.mediaTimer = that.makeMediaTimer(3000, that.convertYTDuration(duration));
+                that.mediaTimer.start();
+            }).on('error', function(err) {
+              console.error(err);
+              this.playMedia();
+            });
           });
         });
       });
+
     } else {
       console.log('stop media for no DJ');
       this.sockets.in(this.get('id')).emit("media status", {
@@ -121,11 +123,11 @@ var Room = db.Model.extend({
       });
     };
     var onComplete = function(){
-      this.sockets.in(this.get('id')).emit("media status", {
-        videoId: '',
-        startSeconds:0,
-        status:'stop'
-      });
+      // this.sockets.in(this.get('id')).emit("media status", {
+      //   videoId: '',
+      //   startSeconds:0,
+      //   status:'stop'
+      // });
       this.dequeueDJ();
       this.playMedia();
     };
@@ -145,9 +147,11 @@ var Room = db.Model.extend({
   enqueueDJ: function(user_id, sockets) {
     this.sockets = sockets;
     var user = this.users.get(user_id);
-    this.djQueue.push(user);
-    if (this.djQueue.length === 1) {
-      this.playMedia();
+    if (user) {
+      this.djQueue.push(user);
+      if (this.djQueue.length === 1) {
+        this.playMedia();
+      }
     }
   },
 
@@ -182,12 +186,15 @@ var Room = db.Model.extend({
 
   addUser: function(user) {
     console.log('user to add: ', user.cid);
-    this.users.add(user);
+    if (this.users.indexOf(user) === -1) {
+      this.users.add(user);
+    }
   },
 
   removeUser: function(user_id) {
     var popUser = this.users.get(user_id);
     this.users.remove(popUser);
+
     return popUser;
   },
 

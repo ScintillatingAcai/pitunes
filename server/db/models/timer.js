@@ -39,6 +39,7 @@ var Timer = function(onFireCB, onCompleteCB, timeIncrement, totalTime) {
       if (this.stopDate > dateNow) {
         this.timer = setTimeout(this.fire.bind(this, nextCallback), increment);
       } else {
+        onCompleteCB();
         this.stop();
       }
     }
