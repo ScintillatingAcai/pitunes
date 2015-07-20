@@ -22,8 +22,14 @@ module.exports = {
   },
 
   getAllRooms: function(req, res) {
-    var allRooms = utils.getAllRooms();
-
+    var allRooms = utils.getAllRooms().toJSON().map(function(room) {
+      return {id: room.id, 
+        name: room.name, 
+        private: room.private, 
+        users: room.users.length, 
+        currentMedia: room.currentMedia};
+    });
+    console.log(allRooms);
     if (allRooms) {
       res.json(allRooms);
     } else {
