@@ -1,7 +1,24 @@
 // navBarTop.js
 
+
+
 var Navbar = ReactBootstrap.Navbar;
 var Nav = ReactBootstrap.Nav;
+
+var currentlyPlaying;
+var updateCurrentlyPlaying = function () {
+  if (mediaStatus.videoId === "") {
+    currentlyPlaying = "Nothing...join queue to start the music!";
+  } else {
+    currentlyPlaying = mediaStatus.videoId;
+  }
+};
+updateCurrentlyPlaying();
+
+socket.on('media status', function () {
+  console.log('media status heard from navBar')
+  updateCurrentlyPlaying();
+});
 
 var DebuggerButtonJoinQueue = React.createClass({
   handleClick: function () {
@@ -9,7 +26,7 @@ var DebuggerButtonJoinQueue = React.createClass({
   },
   render: function () {
     return (
-      <button onClick={this.handleClick}>DEBUG Join Queue U1R1</button>
+      <button onClick={this.handleClick}>Join Queue U1R1</button>
     );
   }
 });
@@ -20,7 +37,7 @@ var DebuggerButtonJoinRoom = React.createClass({
   },
   render: function () {
     return (
-      <button onClick={this.handleClick}>DEBUG Join Room U1R1</button>
+      <button onClick={this.handleClick}>Join Room U1R1</button>
     );
   }
 });
@@ -90,17 +107,24 @@ var NavBarTop = React.createClass({
     var tunesStyle = {
       color: '#CC0000'
     };
+    var currentlyPlayingStyle = {
+      color: '#FFF',
+      display: 'inline',
+      marginLeft: '40px',
+      fontSize: '14px'
+    }
     return (
       <div style={style}>
-        <div style={titleStyle}><span style={piStyle}>pi</span><span style={tunesStyle}>TUNES</span></div>
-        <div style = {NavBarMenuDropdownStyle}>
-          <NavBarMenuDropdown />
+        <div style={titleStyle}><span style={piStyle}>pi</span><span style={tunesStyle}>TUNES</span>
+        <div style={currentlyPlayingStyle}>Currently Playing: {currentlyPlaying}</div>
         </div>
+      
         <div style={debuggerButtonsStyle}>
           <DebuggerButtonJoinQueue />
           <DebuggerButtonJoinRoom />
-          <DebuggerButtonRemVid />
-          <DebuggerButtonLoadVid />
+        </div>
+        <div style = {NavBarMenuDropdownStyle}>
+          <NavBarMenuDropdown />
         </div>
       </div>
     );
