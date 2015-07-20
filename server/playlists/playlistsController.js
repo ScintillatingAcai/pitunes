@@ -4,8 +4,14 @@ var Promise = require('bluebird');
 
 module.exports = {
 
+  attachPlaylist: function(req, res, next, playlist_id) {
+    console.log('attaching playlist_id: ', playlist_id);
+    req.playlist_id = playlist_id;
+    next();
+  },
+
   getPlaylist: function(req, res) {
-    var playlist_ID = (url.parse(req.url).pathname).slice(1);
+    var playlist_ID = req.playlist_id;
     console.log('retrieving info for playlist_id:' + playlist_ID);
     var R = Promise.promisify(utils.retrievePlaylist);
     R(playlist_ID).then(function(playlist) {
