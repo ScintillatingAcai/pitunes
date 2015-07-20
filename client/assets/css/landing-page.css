@@ -176,3 +176,33 @@ p.copyright {
 .j-color-blue {
   color: #00F !important;
 }
+
+.j-center-text {
+    text-align: center;
+}
+
+.j-left-25 {
+    left: 25%;
+}
+
+.j-pointer {
+    cursor: pointer;
+}
+
+.j-display-tablecell {
+    display: table-cell;
+}
+
+.j-padding-left-10 {
+    padding-left: 10px;
+}
+
+
+
+
+
+
+
+
+
+
