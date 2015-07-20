@@ -26,7 +26,7 @@ module.exports = {
       return {id: room.id, 
         name: room.name, 
         private: room.private, 
-        users: room.users.length, 
+        usersCount: room.users.length, 
         currentMedia: room.currentMedia};
     });
     console.log(allRooms);
