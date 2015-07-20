@@ -5,21 +5,6 @@
 var Navbar = ReactBootstrap.Navbar;
 var Nav = ReactBootstrap.Nav;
 
-var currentlyPlaying;
-var updateCurrentlyPlaying = function () {
-  if (mediaStatus.videoId === "") {
-    currentlyPlaying = "Nothing...join queue to start the music!";
-  } else {
-    currentlyPlaying = mediaStatus.videoId;
-  }
-};
-updateCurrentlyPlaying();
-
-socket.on('media status', function () {
-  console.log('media status heard from navBar')
-  updateCurrentlyPlaying();
-});
-
 var DebuggerButtonJoinQueue = React.createClass({
   handleClick: function () {
     socket.emit('user queue join', {user: 1, room: 1});
@@ -27,6 +12,17 @@ var DebuggerButtonJoinQueue = React.createClass({
   render: function () {
     return (
       <button onClick={this.handleClick}>Join Queue U1R1</button>
+    );
+  }
+});
+
+var DebuggerButtonSimVideoDesync = React.createClass({
+  handleClick: function () { 
+    setVideoTime(3);
+  },
+  render: function () {
+    return (
+      <button onClick={this.handleClick}>Sim Desync</button>
     );
   }
 });
@@ -116,10 +112,10 @@ var NavBarTop = React.createClass({
     return (
       <div style={style}>
         <div style={titleStyle}><span style={piStyle}>pi</span><span style={tunesStyle}>TUNES</span>
-        <div style={currentlyPlayingStyle}>Currently Playing: {currentlyPlaying}</div>
         </div>
       
         <div style={debuggerButtonsStyle}>
+          <DebuggerButtonSimVideoDesync />
           <DebuggerButtonJoinQueue />
           <DebuggerButtonJoinRoom />
         </div>
