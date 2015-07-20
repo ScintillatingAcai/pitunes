@@ -8,12 +8,14 @@ var Room = db.Model.extend({
   tableName: 'Rooms',
   hasTimestamps: true,
 
-  users: new Users(), //bookshelf Users collection
-  djQueue: [], //array of bookshelf User models
-  currentMedia: null, //bookshelf Media model
-  mediaTimeElapsed:0,  //seconds elapsed on currentMedia
-  mediaTimer: null,  //Timer object
-  sockets: null,
+  initialize: function() {
+    this.users = new Users(); //bookshelf Users collection
+    this.djQueue = []; //array of bookshelf User models
+    this.currentMedia = null; //bookshelf Media model
+    this.mediaTimeElapsed = 0;  //seconds elapsed on currentMedia
+    this.mediaTimer = null;  //Timer object
+    this.sockets = null;
+  },
 
   setSocket: function(socket) {
     this.sockets = socket;
@@ -25,17 +27,26 @@ var Room = db.Model.extend({
       this.mediaTimer = null;
     }
 
-    if (this.djQueue[0] /*&& this.djQueue[0].getCurrentPlaylist()*/) {
-      console.log('play from current media: ',this.djQueue[0]);
-      this.currentMedia = this.djQueue[0].getCurrentPlaylist().getCurrentMedia(); //XXX fix this
+    if (this.djQueue[0] && this.djQueue[0].getCurrentPlaylist()) {
+      var dj = this.djQueue[0];
+      var playlist = dj.getCurrentPlaylist();
+      this.currentMedia = playlist.getCurrentMedia();
+      this.currentMedia.incrementPlayCount()
+      .then(function(data) {
+        console.log('incrementing media index');
+        playlist.incrementCurrentMediaIndex();
+      });
+
+      console.log('play from current media: ',this.currentMedia.get('youtube_id'));
+
       this.sockets.in(this.get('id')).emit("media status", {
-        videoId: this.currentMedia.youtube_id,
+        videoId: this.currentMedia.get('youtube_id'),
         startSeconds:0,
         status:'start'
       });
       var onFire = function(elapsedTime){
         this.sockets.in(this.get('id')).emit("media status", {
-          videoId: this.currentMedia.youtube_id,
+          videoId: this.currentMedia.get('youtube_id'),
           startSeconds:elapsedTime,
           status:'update'
         });
@@ -56,9 +67,12 @@ var Room = db.Model.extend({
     } else {
       console.log('stop media for no DJ');
 
+      console.log('dj: ', this.djQueue[0]);
+
       this.sockets.in(this.get('id')).emit("media status", {
         videoId: '',
-        startSeconds:0
+        startSeconds:0,
+        status:'stop'
       });
     }
   },
@@ -75,7 +89,6 @@ var Room = db.Model.extend({
   enqueueDJ: function(user_id, sockets) {
     this.sockets = sockets;
     var user = this.users.get(user_id);
-    console.log('user to play: ', user);
     this.djQueue.push(user);
     if (this.djQueue.length === 1) {
       this.playMedia();
@@ -83,7 +96,7 @@ var Room = db.Model.extend({
   },
 
   dequeueDJ: function() {
-    return this.djQueue.shift();
+    this.djQueue.push(this.djQueue.shift());
   },
 
   removeDJFromQueue: function(user_id) {
@@ -112,6 +125,7 @@ var Room = db.Model.extend({
   },
 
   addUser: function(user) {
+    console.log('user to add: ', user.cid);
     this.users.add(user);
   },
 

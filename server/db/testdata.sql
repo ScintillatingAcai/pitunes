@@ -1,13 +1,13 @@
 use piTunes;
 
 -- Users Test Information
-INSERT INTO Users (email, password, display_name, location, current_playlist_id, created_at, updated_at) VALUES ('test1@test.com', '$2a$10$sSDHQ7JpoTCqMJmYpfUy2uSkccf4qdLsnideITNh3uWaE8FVC9aRu' , 'Test User 1', 'test1', 1, '2015-07-15 00:00:00', '2015-07-15 00:00:00');  
-INSERT INTO Users (email, password, display_name, location, current_playlist_id, created_at, updated_at) VALUES ('test2@test.com', '$2a$10$y65el7rqIvT4a3CWEDimPuvGZbBRkHuPUtekb6jaNBt8rqAtVm3M.' , 'Test User 2', 'test2', 4, '2015-07-15 00:00:00', '2015-07-15 00:00:00');  
-INSERT INTO Users (email, password, display_name, location, current_playlist_id, created_at, updated_at) VALUES ('test3@test.com', '$2a$10$d2pp0lcUCCyig997MOq1ZO2kQ868ov9bfDwZIEcJ8c2/dxfVHa..S' , 'Test User 3', 'test3', 5, '2015-07-15 00:00:00', '2015-07-15 00:00:00');  
-INSERT INTO Users (email, password, display_name, location, current_playlist_id, created_at, updated_at) VALUES ('test4@test.com', '$2a$10$.G2bupIS65iF07.Y.0JzYOk7fRpbqk3MsvSGZI2ZZnLxYfpFKFgiu' , 'Test User 4', 'test4', 0, '2015-07-15 00:00:00', '2015-07-15 00:00:00');  
+INSERT INTO Users (email, password, display_name, location, current_playlist_id, created_at, updated_at) VALUES ('test1@test.com', '$2a$10$sSDHQ7JpoTCqMJmYpfUy2uSkccf4qdLsnideITNh3uWaE8FVC9aRu' , 'Test User 1', 'test1', 1, '2015-07-15 00:00:00', '2015-07-15 00:00:00');
+INSERT INTO Users (email, password, display_name, location, current_playlist_id, created_at, updated_at) VALUES ('test2@test.com', '$2a$10$y65el7rqIvT4a3CWEDimPuvGZbBRkHuPUtekb6jaNBt8rqAtVm3M.' , 'Test User 2', 'test2', 4, '2015-07-15 00:00:00', '2015-07-15 00:00:00');
+INSERT INTO Users (email, password, display_name, location, current_playlist_id, created_at, updated_at) VALUES ('test3@test.com', '$2a$10$d2pp0lcUCCyig997MOq1ZO2kQ868ov9bfDwZIEcJ8c2/dxfVHa..S' , 'Test User 3', 'test3', 5, '2015-07-15 00:00:00', '2015-07-15 00:00:00');
+INSERT INTO Users (email, password, display_name, location, current_playlist_id, created_at, updated_at) VALUES ('test4@test.com', '$2a$10$.G2bupIS65iF07.Y.0JzYOk7fRpbqk3MsvSGZI2ZZnLxYfpFKFgiu' , 'Test User 4', 'test4', 0, '2015-07-15 00:00:00', '2015-07-15 00:00:00');
 
 -- PLAYLISTS
-INSERT INTO Playlists (user_id, name, created_at, updated_at) VALUES (1, 'TestUser1 Playlist 1', '2015-07-15 00:00:00', '2015-07-15 00:00:00');  
+INSERT INTO Playlists (user_id, name, created_at, updated_at) VALUES (1, 'TestUser1 Playlist 1', '2015-07-15 00:00:00', '2015-07-15 00:00:00');
 INSERT INTO Playlists (user_id, name, created_at, updated_at) VALUES (1, 'TestUser1 Playlist 2', '2015-07-15 00:00:00', '2015-07-15 00:00:00');
 INSERT INTO Playlists (user_id, name, created_at, updated_at) VALUES (1, 'TestUser1 Playlist 3', '2015-07-15 00:00:00', '2015-07-15 00:00:00');
 

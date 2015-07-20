@@ -30,7 +30,6 @@ module.exports = {
         require: true
       }).then(function(found) {
         if (found) {
-          var userWithJoins = cleanAttributes(found);
 
           // this is an example of how to add related data to the response object
           // userWithJoins.events = [];
@@ -38,7 +37,7 @@ module.exports = {
           //    userWithJoins.events.push(cleanAttributes(item.attributes));
           // });
 
-          callback(null, userWithJoins);
+          callback(null, found);
         } else {
           console.log('user_id not found:' + user_id);
         }
