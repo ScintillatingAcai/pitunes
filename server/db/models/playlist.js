@@ -37,7 +37,6 @@ var Playlist = db.Model.extend({
 
   incrementCurrentMediaIndex:Promise.promisify(function(callback) {
     // get medias in playlist to find length
-    var that = this;
     this.medias().fetch().bind(this)
     .then(function(found) {
       if (!found) return callback(new Error('medias not found'));
