@@ -80,7 +80,6 @@ var onPlayerReady = function (evt) {
 // Socket Event Listener for Media Status Object for
 socket.on('media status', function (data) {
   console.log("HEARD MEDIA STATUS!!!")
-  data.startSeconds = data.startSeconds || 0;
   mediaStatus = data;
   heardNewMediaStatus();
 });
@@ -126,7 +125,7 @@ var loadVideo = function (videoId, startSeconds) {
       // If same video, check if desync is greater than 10 seconds
       console.log("media timer dif: ", mediaStatus.startSeconds - player.getCurrentTime());
       if (mediaStatus.startSeconds - player.getCurrentTime() > 10) {
-        setVideoTime(mediaStatus.videoTime);
+        setVideoTime(startSeconds);
       }
     }
   // If no player in room, reinstaniate it
