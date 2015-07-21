@@ -158,7 +158,7 @@ var Room = db.Model.extend({
   enqueueDJ: function(user_id, sockets) {
     this.sockets = sockets;
     var user = this.users.get(user_id);
-    if (user) {
+    if (user && this.djQueue.indexOf(user) === -1) {
       this.djQueue.push(user);
       if (this.djQueue.length === 1) {
         this.playMedia();
@@ -197,9 +197,8 @@ var Room = db.Model.extend({
 
   addUser: function(user) {
     console.log('user to add: ', user.cid);
-    if (this.users.indexOf(user) === -1) {
-      this.users.add(user);
-    }
+    //dont need to worry about user already being in collection because there can only be one
+    this.users.add(user);
   },
 
   removeUser: function(user_id) {
