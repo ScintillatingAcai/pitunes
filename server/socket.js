@@ -28,6 +28,7 @@ module.exports = function(io) {
         socket.join(data.room);
         socket.broadcast.emit("user room change", data.user);
         socket.emit("user room join", data.user);
+        room.startUserForCurrentMedia(socket);
         console.log('should have emitted: ', "user room join");
         console.log('room users length:  ', room.users.length);
       });

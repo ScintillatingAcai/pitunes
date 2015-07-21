@@ -29,12 +29,10 @@ var Timer = function(onFireCB, onCompleteCB, timeIncrement, totalTime) {
       if ( this.stopDate - dateNow > this.timeIncrement / 1000) {
         increment = this.timeIncrement;
         nextCallback = onFireCB;
-        console.log('fire normal increment: ',increment);
       }
       else {
         increment = Math.max(this.stopDate - dateNow, 0);
         nextCallback = onCompleteCB;
-        console.log('fire short increment: ',increment);
       }
       if (this.stopDate > dateNow) {
         this.timer = setTimeout(this.fire.bind(this, nextCallback), increment);

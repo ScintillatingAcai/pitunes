@@ -87,6 +87,17 @@ var Room = db.Model.extend({
     }
   },
 
+  startUserForCurrentMedia:function(socket) {
+    if (this.currentMedia && this.mediaTimer) {
+      var duration = (new Date() - this.mediaTimer.startDate) / 1000;
+      socket.emit("media status", {
+        videoId: this.currentMedia.get('youtube_id'),
+        startSeconds:duration,
+        status:'start'
+      });
+    }
+  },
+
   convertYTDuration: function (duration) {
     var a = duration.match(/\d+/g);
     if (duration.indexOf('M') >= 0 && duration.indexOf('H') === -1 && duration.indexOf('S') === -1) {
