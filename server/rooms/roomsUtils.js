@@ -61,7 +61,7 @@ module.exports = {
         require: true
       }).then(function(found) {
         if (found) {
-          var roomWithJoins = found.attributes;
+          var roomWithJoins = found;
 
           // this is an example of how to add related data to the response object
           // roomWithJoins.events = [];

@@ -13,5 +13,10 @@ module.exports = function(app) {
 
   app.get('/:user_id', utility.checkUserSession, usersController.getUser); //get one user
   app.put('/:user_id', utility.checkUserSession, usersController.updateUser); //update a user
+
+  // added route for testing w/o authentication
+  // app.get('/:user_id/playlists', utility.checkUserSession, usersController.getAllUserPlaylists);
+  app.get('/:user_id/playlists', usersController.getAllUserPlaylists);
+  app.put('/:user_id/playlists', utility.checkUserSession, usersController.addUserPlaylist);
 };
 

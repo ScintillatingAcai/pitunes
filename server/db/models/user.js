@@ -80,6 +80,16 @@ var User = db.Model.extend({
   playlists: function() {
     var Playlist = require('./playlist');
     return this.hasMany(Playlist, 'user_id');
+  },
+
+  retrieveAllPlaylists: function(callback) {
+    this.playlists().fetch()
+      .then( function(found) {
+        if (!found) return callback(new Error('User playlists not found'));
+        else {
+          callback(null, found);
+        }
+      });
   }
 });
 
