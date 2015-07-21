@@ -9,6 +9,7 @@ var SearchBar = React.createClass({
     this.searchYouTube(this.state.text);
     this.setState({text: ''});
   },
+
   escapeDQ: function (string) {
     return string.replace(/\"/g, "'");
   },
@@ -26,7 +27,6 @@ var SearchBar = React.createClass({
     if (duration.indexOf('H') >= 0 && duration.indexOf('M') === -1 && duration.indexOf('S') === -1) {
       a = [a[0], 0, 0];
     }
-
     duration = 0;
     if (a.length === 3) {
       duration = duration + parseInt(a[0]) * 3600;
@@ -98,7 +98,7 @@ var SearchBar = React.createClass({
             $(".searchResultItem").remove();
             results.forEach(function (e) {
               // TODO Consult with group on refactoring this line - horrible as is
-              $('#searchResults').append('<li class="searchResultItem" style="margin-bottom:10px; margin-left:-30px; list-style:none;"><img className="searchResultImg" style="height:50px; width:50px; margin-right:5px;" src="' + e.img + '" /><div className="searchResultTitle" style="color:#FFF; font-size:10px; display:inline; cursor:pointer;" data-durationDisplay=' + e.durationDisplay + '" data-duration="' + e.duration + '" data-title="' + context.escapeDQ(e.title) + '" data-id="' + e.id + '"> ' + (e.title).slice(0, 35) + '...' + '</div><div style="color:#FFF; font-size:10px; display:inline;"> | ' + e.durationDisplay + '</div></li>');
+              $('#searchResults').append('<li class="searchResultItem" style="margin-bottom:10px; margin-left:-30px; list-style:none;"><img className="searchResultImg" style="height:50px; width:50px; margin-right:5px;" src="' + e.img + '" /><div className="searchResultTitle" style="color:#FFF; font-size:10px; display:inline; cursor:pointer;" data-durationDisplay="' + e.durationDisplay + '" data-duration="' + e.duration + '" data-title="' + context.escapeDQ(e.title) + '" data-id="' + e.id + '"> ' + (e.title).slice(0, 35) + '...' + '</div><div style="color:#FFF; font-size:10px; display:inline;"> | ' + e.durationDisplay + '</div></li>');
             });
             $(".searchResultItem").on('click', function (e) {
               if ($(e.target).attr('className') === 'searchResultTitle') {
