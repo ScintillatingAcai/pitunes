@@ -108,5 +108,5 @@ React.render(
     <div>
         <RoomsContainer source={server_uri + '/api/rooms'} />
     </div>,
-  document.getElementsByClassName('roomsContainer')[0]
+    document.getElementsByClassName('roomsContainer')[0]
 );
