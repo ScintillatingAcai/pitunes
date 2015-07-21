@@ -6,26 +6,25 @@ var user = null,
 var Modal = ReactBootstrap.Modal;
 var Input = ReactBootstrap.Input;
 var Button = ReactBootstrap.Button;
+var rooms;
 
 var RoomsContainer = React.createClass({
     getInitialState: function() {
-      this.getRooms();
-      return null;
+        return { rooms: [] };
     },
-    getRooms: function() {
-      var that = this;
-      $.ajax({
-              url: server_uri + '/api/rooms',
-              type: 'GET',
-              dataType: 'json',
-              success: function(res) {
-                that.setState({rooms: res});
-              }, error: function(res) {
-                console.err(res);
-              }
-            });
+    componentDidMount: function() {
+        var that = this;
+        $.get(this.props.source, function(res){
+            var rooms = res;
+            if (this.isMounted()) {
+              this.setState({
+                rooms: rooms
+              });
+            }
+        }.bind(this));
     },
     render: function() {
+        rooms = this.state.rooms || [];
         return (
             <div>
             <nav className="navbar navbar-default navbar-fixed-top topnav" role="navigation">
@@ -57,30 +56,17 @@ var RoomsContainer = React.createClass({
 
             <a name="rooms"></a>
             <div className="content-section-a">
-
                 <div className="container">
                     <div className="row">
-                        <div className="col-lg-4 col-sm-4">
-                            <div className="clearfix"></div>
-                            <h2 className="section-heading j-center-text">Random Room 1 <br />DJs:</h2>
-                            <div className="j-left-25">
-                                <img className="img-responsive" src="assets/img/ipad.png" alt="" />
-                            </div>
-                        </div>
-                        <div className="col-lg-4 col-sm-4">
-                            <div className="clearfix"></div>
-                            <h2 className="section-heading j-center-text">Random Room 2<br />DJs:</h2>
-                            <div className="j-left-25">
-                                <img className="img-responsive" src="assets/img/ipad.png" alt="" />
-                            </div>
-                        </div>
-                        <div className="col-lg-4 col-sm-4">
-                            <div className="clearfix"></div>
-                            <h2 className="section-heading j-center-text">Random Room 3<br />DJs:</h2>
-                            <div className="j-left-25">
-                                <img className="img-responsive" src="assets/img/ipad.png" alt="" />
-                            </div>
-                        </div>
+                        {
+                            rooms.map(function(room){
+                                return (
+                                    <div>
+                                        <h2 className="section-heading">{room.name} <br />Current DJs: {room.usersCount}</h2>
+                                    </div>
+                                )
+                            })
+                        }
                     </div>
                 </div>
             </div>
@@ -119,7 +105,7 @@ var RoomsContainer = React.createClass({
 
 React.render(
     <div>
-        <RoomsContainer />
+        <RoomsContainer source={server_uri + '/api/rooms'} />
     </div>,
   document.getElementsByClassName('roomsContainer')[0]
 );
