@@ -1,7 +1,6 @@
 var db = require('../schema');
 var Timer = require('./timer');
 var _ = require('lodash');
-var $ = require('jquery');
 var http = require('http');
 var https = require('https');
 

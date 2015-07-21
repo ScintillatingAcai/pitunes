@@ -5,15 +5,9 @@ var List = React.createClass({
   getInitialState: function () {
     return { data: this.props.data };
   },
-
   onClick: function (e) {
     console.log(e.currentTarget.lastChild);
   },
-
-  shouldComponentUpdate: function (nextProps, nextState) {
-    return arrSongs.length === Object.keys(this.state.data).length;
-  },
-
   dragStart: function (e) {
     this.dragged = e.currentTarget;
     e.dataTransfer.effectAllowed = 'move';
@@ -68,9 +62,7 @@ var List = React.createClass({
             draggable="true"
             onDragEnd={this.dragEnd}
             onDragStart={this.dragStart}
-            onClick={this.onClick}
-            onChange={this.onChange}
-            >
+            onClick={this.onClick}>
           {item}
         </div>
       );
@@ -131,14 +123,9 @@ var addSongToPlaylist = function (songNode) {
 }
 
 var Songs = React.createClass({
-  getInitialState: function () {
-    console.log('songs' + arrSongs)
-    return {songs: arrSongs};
-
-  },
   render: function() {
     return (
-      <List data={this.state.songs} /> 
+      <List data={arrSongs} /> 
     );
   }
 });
@@ -173,7 +160,7 @@ var PlaylistSaved = React.createClass({
     return (
       <div style={style}>
         <PlaylistTitle />
-        <Songs  />
+        <Songs />
       </div>
     );
   }
