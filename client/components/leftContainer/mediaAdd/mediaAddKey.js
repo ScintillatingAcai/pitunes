@@ -1,3 +1,3 @@
 // mediaAddKey.js
 
-var YOUTUBE_API_KEY = 'INSERT KEY HERE';
+var YOUTUBE_API_KEY = 'INSERT_KEY_HERE';

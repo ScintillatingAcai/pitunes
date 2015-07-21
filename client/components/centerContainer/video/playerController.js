@@ -7,7 +7,7 @@ s.parentNode.insertBefore(ga, s);
 
 // Stub for JSON object from server
 var mediaStatus = {
-  videoId: null,
+  videoId: "",
   startSeconds: 0
 };
 
@@ -17,7 +17,7 @@ var playerInstaniated = false;
 
 // Initialize player if user joins room and video is currently playing or serve static message if not
 var onYouTubePlayerAPIReady = function () {
-  if (mediaStatus.videoId === null) {
+  if (!mediaStatus.videoId) {
     serveStaticImg();
   } else {
     createPlayer(mediaStatus.videoId);
@@ -87,7 +87,7 @@ socket.on('media status', function (data) {
 
 // Wrapper for loadVideo/serveStaticImg
 var heardNewMediaStatus = function () {
-  if (mediaStatus.videoId === null) {
+  if (!mediaStatus.videoId) {
     serveStaticImg();
   } else {
     loadVideo(mediaStatus.videoId, mediaStatus.startSeconds);
@@ -120,10 +120,11 @@ var loadVideo = function (videoId, startSeconds) {
   // If player already exists...
   if (playerInstaniated) {
     // Load new player if current video is different from new video or same video is being played again
-    if ((player.getVideoData().video_id !== videoId) || startSeconds === 0) {
+    if ((player.getVideoData().video_id !== videoId) || mediaStatus.status === 'start') {
       player.loadVideoById(videoId, startSeconds);
     } else {
       // If same video, check if desync is greater than 10 seconds
+      console.log("media timer dif: ", mediaStatus.startSeconds - player.getCurrentTime());
       if (mediaStatus.startSeconds - player.getCurrentTime() > 10) {
         setVideoTime(mediaStatus.videoTime);
       }

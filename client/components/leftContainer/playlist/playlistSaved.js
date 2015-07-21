@@ -112,7 +112,6 @@ var populatePlaylist = function() {
   for (var song in currentUser.currentPlaylist.songs) {
     arrSongs.push([currentUser.currentPlaylist.songs[song].title + ' | ' + currentUser.currentPlaylist.songs[song].durationDisplay]);
   }
-  console.log(arrSongs)
 };
 
 populatePlaylist();
