@@ -17,42 +17,6 @@ var LandingPageContainer = React.createClass({
     open: function() {
       this.setState({showModal: true});
     },
-    signInUser: function() {
-      var form = document.getElementById('login-form');
-      var data = {email: form[0].value, password: form[1].value};
-      var that = this;
-      $.ajax({
-              url: server_uri + '/api/users/login', 
-              type: 'POST',
-              dataType: 'json',
-              data: data,
-              success: function(res) {
-                user = res;
-                that.setState({showModal: false});
-              },
-              error: function(res) {
-                that.setState({errorMessage: res.statusText});
-              }
-            });
-    },
-    signupUser: function() {
-      var form = document.getElementById('signup-form');
-      var data = {email: form[0].value, password: form[1].value, password: form[2].value, displayName: form[3].value}
-      var that = this;
-      if (form[2].value !== form[3].value) { that.setState({errorMessage: 'Your passwords did not match.'}); return; }
-      $.ajax({url: server_uri + '/api/users/signup',
-              type: 'POST',
-              dataType: 'json',
-              data: data,
-              success: function(res) {
-                user = res;
-                that.setState({showModal: false});
-              },
-              error: function(res) {
-                that.setState({errorMessage: res.statusText});
-              }
-            });
-    },
     signupClick: function() {
       this.setState({showModal: true});
       this.setState({showSignIn: false});
@@ -64,7 +28,7 @@ var LandingPageContainer = React.createClass({
       this.setState({showSignUp: false});
     },
     render: function() {
-        var form = (this.state.showSignIn ? <SignIn /> : <SignUp />);
+        var form = (this.state.showSignIn ? <SignIn signupClick={this.signupClick} close={this.close}/> : <SignUp loginClick={this.loginClick} close={this.close}/>);
         return (
             <div>
             <nav className="navbar navbar-default navbar-fixed-top topnav" role="navigation">
@@ -190,6 +154,25 @@ var LandingPageContainer = React.createClass({
 
 // SignUp Form
 var SignUp = React.createClass({
+  signupUser: function() {
+    var form = document.getElementById('signup-form');
+    var data = {email: form[0].value, password: form[1].value, password: form[2].value, displayName: form[3].value}
+    var that = this;
+    if (form[2].value !== form[3].value) { that.setState({errorMessage: 'Your passwords did not match.'}); return; }
+    $.ajax({url: server_uri + '/api/users/signup',
+            type: 'POST',
+            dataType: 'json',
+            data: data,
+            success: function(res) {
+              user = res;
+              that.setState({showModal: false});
+            },
+            error: function(res) {
+              that.setState({errorMessage: res.statusText});
+            }
+          });
+    this.props.close();
+  },
   render: function() {
     return (
       <div>
@@ -217,7 +200,7 @@ var SignUp = React.createClass({
         <div className="form-group j-center-text">
           <a type="submit" className="btn btn-default btn-md" onClick={this.signupUser}><i className="fa fa-music fa-fw"></i><span className="network-name">Create Account</span></a>
           <br />
-          <a onClick={this.loginClick} data-toggle="modal" data-target="#login-form" data-dismiss="modal">Back To Login</a>
+          <a onClick={this.props.loginClick}>Back To Login</a>
         </div>
       </form>
       </div>
@@ -227,6 +210,25 @@ var SignUp = React.createClass({
 
 // SignIn Form
 var SignIn = React.createClass({
+  signInUser: function() {
+    var form = document.getElementById('login-form');
+    var data = {email: form[0].value, password: form[1].value};
+    var that = this;
+    $.ajax({
+            url: server_uri + '/api/users/login', 
+            type: 'POST',
+            dataType: 'json',
+            data: data,
+            success: function(res) {
+              user = res;
+              that.setState({showModal: false});
+            },
+            error: function(res) {
+              that.setState({errorMessage: res.statusText});
+            }
+          });
+    this.props.close();
+  },
   render: function() {
     return (
       <div>
@@ -247,7 +249,7 @@ var SignIn = React.createClass({
       </form>
       <div className="modal-footer j-center-text">
         <span>Dont Have An Account Yet ?</span>
-        <a className="j-padding-left-10 j-pointer" onClick={this.signupClick}>Sign Up</a>
+        <a className="j-padding-left-10 j-pointer" onClick={this.props.signupClick}>Sign Up</a>
       </div>
       </div>
     );

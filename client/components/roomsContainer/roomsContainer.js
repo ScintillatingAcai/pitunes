@@ -58,16 +58,7 @@ var RoomsContainer = React.createClass({
             <div className="content-section-a">
                 <div className="container">
                     <div className="row">
-                        {
-                            rooms.map(function(room){
-                                return (
-                                    <div>
-                                        <h3 className="j-center-text">{room.name} <br />Current DJs: {room.usersCount}</h3>
-                                        <hr />
-                                    </div>
-                                )
-                            })
-                        }
+                        { <Rooms rooms={rooms} /> }
                     </div>
                 </div>
             </div>
@@ -91,6 +82,23 @@ var RoomsContainer = React.createClass({
                 </div>
             </footer>
 
+            </div>
+        );
+    }
+});
+
+var Rooms = React.createClass({
+    render: function() {
+        return (
+            <div>
+                {this.props.rooms.map(function(room){
+                    return (
+                        <div>
+                            <h3 className="j-center-text">{room.name} <br />Current DJs: {room.usersCount}</h3>
+                            <hr />
+                        </div>
+                    )
+                })}
             </div>
         );
     }
