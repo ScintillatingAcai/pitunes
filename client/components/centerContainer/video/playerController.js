@@ -117,9 +117,9 @@ var stopVideo = function () {
 // Expects 11 character string (YouTube Video ID) and the starttime of video
 var loadVideo = function (videoId, startSeconds) {
   // If player already exists...
+  console.log('media status: ', mediaStatus);
   if (playerInstaniated) {
     // Load new player if current video is different from new video or same video is being played again
-    console.log('media status: ', mediaStatus);
 
     if ((player.getVideoData().video_id !== videoId) || mediaStatus.status === 'start') {
       player.loadVideoById(videoId, startSeconds);

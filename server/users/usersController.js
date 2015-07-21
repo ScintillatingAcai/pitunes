@@ -15,31 +15,23 @@ module.exports = {
   getUser: function(req, res, next) {
     var user_id = req.room_id;
     console.log('retrieving info for user_id:' + user_id);
-    var R = Promise.promisify(utils.retrieveUser);
-    R(user_id).then(function(user) {
-      if (user) {
-        res.json(user);
-      } else {
-        return next(new Error('user does not exist'));
-      }
+    utils.retrieveUser.then(function(user) {
+      if (!user) return next(new Error('user does not exist'));
+      res.json(user);
     })
-    .catch(function(error) {
-      return next(new Error('controller error: ', error));
+    .catch(function(err) {
+      return next(new Error('controller error: ', err));
     });
   },
 
   addUser: function(req, res, next) {
     console.log('adding user: ',req.body);
-    var R = Promise.promisify(utils.storeUser);
-    R(req.body).then(function(data) {
-      if (data) {
-        res.json(data);
-      } else {
-        res.status(500).end();
-      }
+    utils.storeUser.then(function(user) {
+      if (!user) return next(new Error('user does not exist'));
+      res.json(user);
     })
-    .catch(function(error) {
-      console.log('controller error: ',error);
+    .catch(function(err) {
+      return next(new Error('controller error: ', err));
     });
   },
 
@@ -48,33 +40,24 @@ module.exports = {
     var userInfo = req.body;
 
     console.log('updating user_id:', user_id, ' with info: ', userInfo );
-    var R = Promise.promisify(utils.updateUser);
-    R(user_id,userInfo).then(function(user) {
-      if (user) {
-        res.json(user);
-      } else {
-        res.status(500).end();
-      }
+    utils.updateUser(user_id,userInfo).then(function(user) {
+      if (!user) return next(new Error('user does not exist'));
+      res.json(user);
     })
-    .catch(function(error) {
-      console.log('controller error: ',error);
+    .catch(function(err) {
+      return next(new Error('controller error: ', err));
     });
   },
 
   loginUser: function(req, res, next) {
     console.log('checking user: ',req.body);
-    var R = Promise.promisify(utils.loginUser);
-    R(req.body).then(function(data) {
-      if (data) {
-        utility.createSession(req, res, data);
-        res.json(data);
-      } else {
-        res.status(500).end();
-      }
+    utils.loginUser(req.body).then(function(data) {
+      if (!data) return next(new Error('user does not exist'));
+      utility.createSession(req, res, data);
+      res.json(data);
     })
     .catch(function(error) {
-      console.log('controller error: ',error);
-      res.status(500).end();
+      return next(new Error('controller error: ', err));
     });
   },
 

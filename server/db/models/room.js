@@ -4,6 +4,8 @@ var _ = require('lodash');
 var http = require('http');
 var https = require('https');
 
+var Promise = require('bluebird');
+
 var url = require('url');
 
 var Users = require('../collections/users');
@@ -40,7 +42,6 @@ var Room = db.Model.extend({
         this.currentMedia = media;
         this.currentMedia.incrementPlayCount().bind(this)
         .then(function(data) {
-          console.log('incrementing media index');
           playlist.incrementCurrentMediaIndex();
 
           var videoId = this.currentMedia.get('youtube_id');
@@ -61,11 +62,13 @@ var Room = db.Model.extend({
                 // the whole of webpage data has been collected. parsing time!
                 var duration = JSON.parse(response).items[0].contentDetails.duration;
                 console.log('duration received from youtube: ', duration);
-                that.sockets.in(that.get('id')).emit("media status", {
-                  videoId: that.currentMedia.get('youtube_id'),
-                  startSeconds:0,
-                  status:'start'
-                });
+                console.log('room id for media status emit: ', that.get('id'));
+                that.emitMediaStatusMessage(that.sockets.in(that.get('id')), that.currentMedia, 0, 'start');
+                // that.sockets.in(that.get('id')).emit("media status", {
+                //   videoId: that.currentMedia.get('youtube_id'),
+                //   startSeconds:0,
+                //   status:'start'
+                // });
                 that.mediaTimer = that.makeMediaTimer(3000, that.convertYTDuration(duration));
                 that.mediaTimer.start();
             }).on('error', function(err) {
@@ -78,22 +81,33 @@ var Room = db.Model.extend({
 
     } else {
       console.log('stop media for no DJ');
-      this.sockets.in(this.get('id')).emit("media status", {
-        videoId: '',
-        startSeconds:0,
-        status:'stop'
-      });
+      this.emitMediaStatusMessage(this.sockets.in(this.get('id')), null, 0, 'stop');
+      // this.sockets.in(this.get('id')).emit("media status", {
+      //   videoId: '',
+      //   startSeconds:0,
+      //   status:'stop'
+      // });
     }
+  },
+
+  emitMediaStatusMessage: function(socket, media, mediaDuration, statusMessage) {
+    socket.emit("media status", {
+      videoId: media.get('youtube_id'),
+      startSeconds:mediaDuration,
+      status:statusMessage
+    });
   },
 
   startUserForCurrentMedia:function(socket) {
     if (this.currentMedia && this.mediaTimer) {
       var duration = (new Date() - this.mediaTimer.startDate) / 1000;
-      socket.emit("media status", {
-        videoId: this.currentMedia.get('youtube_id'),
-        startSeconds:duration,
-        status:'start'
-      });
+      this.emitMediaStatusMessage(socket, this.currentMedia, duration, 'start');
+
+      // socket.emit("media status", {
+      //   videoId: this.currentMedia.get('youtube_id'),
+      //   startSeconds:duration,
+      //   status:'start'
+      // });
     }
   },
 
@@ -126,11 +140,13 @@ var Room = db.Model.extend({
 
   makeMediaTimer: function(increment, durationSecs) {
     var onFire = function(elapsedTime){
-      this.sockets.in(this.get('id')).emit("media status", {
-        videoId: this.currentMedia.get('youtube_id'),
-        startSeconds:elapsedTime,
-        status:'update'
-      });
+      this.emitMediaStatusMessage(this.sockets, this.currentMedia, elapsedTime, 'update');
+
+      // this.sockets.in(this.get('id')).emit("media status", {
+      //   videoId: this.currentMedia.get('youtube_id'),
+      //   startSeconds:elapsedTime,
+      //   status:'update'
+      // });
     };
     var onComplete = function(){
       // this.sockets.in(this.get('id')).emit("media status", {
@@ -194,22 +210,23 @@ var Room = db.Model.extend({
     return popDJ;
   },
 
-  addUser: function(user) {
+  addUser: Promise.promisify(function(user, callback) {
     console.log('user to add: ', user.cid);
     //dont need to worry about user already being in collection because there can only be one
     this.users.add(user);
-  },
+    callback(null, user);
+  }),
 
-  removeUser: function(user_id) {
+  removeUser: Promise.promisify(function(user_id, callback) {
     var popUser = this.users.get(user_id);
     this.users.remove(popUser);
 
-    return popUser;
-  },
+    callback(null, popUser);
+  }),
 
-  getUser: function(user_id) {
-    return this.users.get(user_id);
-  }
+  getUser: Promise.promisify(function(user_id, callback) {
+    callback(null, this.users.get(user_id));
+  })
 });
 
 module.exports = Room;

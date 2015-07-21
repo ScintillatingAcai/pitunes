@@ -2,6 +2,8 @@ var db = require('../schema');
 var Promise = require('bluebird');
 var bcrypt = require('bcrypt');
 
+var Promise = require('bluebird');
+
 var User = db.Model.extend({
   tableName: 'Users',
   hasTimestamps: true,

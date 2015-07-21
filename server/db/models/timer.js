@@ -19,7 +19,7 @@ var Timer = function(onFireCB, onCompleteCB, timeIncrement, totalTime) {
   this.fire = function(callback) {
     if (this.okayToFire) {
       var dateNow = new Date();
-      console.log('timer fired at duration (sec): ', (dateNow - this.startDate) / 1000);
+      // console.log('timer fired at duration (sec): ', (dateNow - this.startDate) / 1000);
 
       callback((dateNow - this.startDate) / 1000);
 
