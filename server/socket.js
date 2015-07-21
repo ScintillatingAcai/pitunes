@@ -21,16 +21,19 @@ module.exports = function(io) {
       var user_id = data.user;
       var room_id = data.room;
 
-      var R = Promise.promisify(userUtils.retrieveUser);
-      R(user_id).then(function(user) {
+      userUtils.retrieveUser(user_id).then(function(user) {
         var room = roomUtils.getRoom(room_id);
-        room.addUser(user);
-        socket.join(data.room);
-        socket.broadcast.emit("user room change", data.user);
-        socket.emit("user room join", data.user);
-        room.startUserForCurrentMedia(socket);
-        console.log('should have emitted: ', "user room join");
-        console.log('room users length:  ', room.users.length);
+        room.addUser(user).then(function(user) {
+          socket.join(data.room);
+          socket.broadcast.emit("user room change", data.user);
+          socket.emit("user room join", data.user);
+          room.startUserForCurrentMedia(socket);
+          console.log('should have emitted: ', "user room join");
+          console.log('room users length:  ', room.users.length);
+        })
+        .catch(function(err) {
+          console.error(err);
+        });
       });
     });
 
@@ -45,14 +48,17 @@ module.exports = function(io) {
         socket.broadcast.emit("user queue change", JSON.stringify(room.djQueue));
         socket.emit("user queue leave", data.user);
       }
+      room.removeUser(user_id).then(function(user) {
+        socket.broadcast.emit("user room change", data.user);
+        socket.emit("user room leave", data.user);
+        socket.leave(data.room);
 
-      room.removeUser(user_id);
-      socket.broadcast.emit("user room change", data.user);
-      socket.emit("user room leave", data.user);
-      socket.leave(data.room);
-
-      console.log('should have emitted: ', "user room leave");
-      console.log('room users length:  ', room.users.length);
+        console.log('should have emitted: ', "user room leave");
+        console.log('room users length:  ', room.users.length);
+      })
+      .catch(function(err) {
+        console.error(err);
+      });
     });
 
     socket.on('user queue join', function(data){
