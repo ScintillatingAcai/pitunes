@@ -9,7 +9,7 @@ var url = require('url');
 
 var Users = require('../collections/users');
 
-var YOUTUBE_API_KEY = '&key=AIzaSyA_ZnEUUw8uGbEdGfBXH296QX-1nnyeJnQ';
+var YOUTUBE_API_KEY = 'AIzaSyA_ZnEUUw8uGbEdGfBXH296QX-1nnyeJnQ';
 
 var Room = db.Model.extend({
   tableName: 'Rooms',
@@ -45,7 +45,7 @@ var Room = db.Model.extend({
           playlist.incrementCurrentMediaIndex();
 
           var videoId = this.currentMedia.get('youtube_id');
-          var durationSearchUrl = 'https://www.googleapis.com/youtube/v3/videos?id=' + videoId + '&part=contentDetails' + YOUTUBE_API_KEY;
+          var durationSearchUrl = 'https://www.googleapis.com/youtube/v3/videos?id=' + videoId + '&part=contentDetails&key=' + YOUTUBE_API_KEY;
           var link = url.parse(durationSearchUrl);
           var options = {
               host: link.hostname,
