@@ -1,6 +1,6 @@
 var user = null, 
     room = 'root', 
-    server_uri = 'http://' + document.domain + ':3000'; 
+    server_uri = 'http://' + document.domain + ':3000',
     socket = io(server_uri);
 
 var Modal = ReactBootstrap.Modal;
@@ -9,27 +9,13 @@ var Button = ReactBootstrap.Button;
 
 var LandingPageContainer = React.createClass({
     getInitialState: function() {
-      this.getRooms();
-      return {showModal: false, errorMessage: '', showLogin: false, showSignUp: false};
+      return {showModal: false, errorMessage: '', showSignIn: false, showSignUp: false};
     },
     close: function() {
       this.setState({showModal: false, errorMessage: ''});
     },
     open: function() {
       this.setState({showModal: true});
-    },
-    getRooms: function(){
-      var that = this;
-      $.ajax({
-              url: server_uri + '/api/rooms',
-              type: 'GET',
-              dataType: 'json',
-              success: function(res) {
-                that.setState({rooms: res});
-              }, error: function(res) {
-                console.err(res);
-              }
-            });
     },
     signInUser: function() {
       var form = document.getElementById('login-form');
@@ -51,7 +37,7 @@ var LandingPageContainer = React.createClass({
     },
     signupUser: function() {
       var form = document.getElementById('signup-form');
-      var data = {email: form[0].value, email: form[1].value, password: form[2].value}
+      var data = {email: form[0].value, password: form[1].value, password: form[2].value, displayName: form[3].value}
       var that = this;
       if (form[2].value !== form[3].value) { that.setState({errorMessage: 'Your passwords did not match.'}); return; }
       $.ajax({url: server_uri + '/api/users/signup',
@@ -69,73 +55,16 @@ var LandingPageContainer = React.createClass({
     },
     signupClick: function() {
       this.setState({showModal: true});
-      this.setState({showLogin: false});
+      this.setState({showSignIn: false});
       this.setState({showSignUp: true});
     },
     loginClick: function() {
       this.setState({showModal: true});
-      this.setState({showLogin: true});
+      this.setState({showSignIn: true});
       this.setState({showSignUp: false});
     },
-    showLoginForm: function(){
-      return (
-        <div>
-        <form id="login-form">
-          <div className="form-group">
-            <label htmlFor="login-email" className="hide">Email</label>
-            <input type="email" className="form-control input-lg" id="login-email" placeholder="Email" required />
-          </div>
-          <div className="form-group">
-            <label htmlFor="login-password" className="hide">Password</label>
-            <input type="password" className="form-control input-lg " id="login-password" placeholder="Password" required />
-          </div>
-          <div className="form-group j-center-text">
-            <a type="submit" className="btn btn-default btn-md" onClick={this.signInUser}><i className="fa fa-sign-in fa-fw"></i><span className="network-name">Sign In</span></a>
-            <br />
-            <a href="javascript:;" data-dismiss="modal">Forgot Your Password?</a>
-          </div>
-        </form>
-        <div className="modal-footer j-center-text">
-          <span>Dont Have An Account Yet ?</span>
-          <a className="j-padding-left-10 j-pointer" onClick={this.signupClick}>Sign Up</a>
-        </div>
-        </div>
-      );
-    },
-    showSignUpForm: function() {
-      return (
-        <div>
-        <h3>Create An Account</h3>
-        <p>
-          Fill in the form below to create an account.
-        </p>
-        <form id="signupForm">
-          <div className="form-group">
-            <label htmlFor="signup-email" className="hide">Email</label>
-            <input type="email" className="form-control input-lg" id="signup-email" placeholder="Email" required></input>
-          </div>
-          <div className="form-group">
-            <label htmlFor="login-password" className="hide">Password</label>
-            <input type="password" className="form-control input-lg" id="login-password" placeholder="Password" required></input>
-          </div>
-          <div className="form-group">
-            <label htmlFor="login-password2" className="hide">Password</label>
-            <input type="password" className="form-control input-lg" id="login-password2" placeholder="Re-enter Password" required></input>
-          </div>
-          <div className="form-group">
-            <label htmlFor="signup-displayName" className="hide">Fullname</label>
-            <input type="text" className="form-control input-lg" id="signup-displayName" placeholder="Display Name" required></input>
-          </div>
-          <div className="form-group j-center-text">
-            <a type="submit" className="btn btn-default btn-md" onClick={this.signupUser}><i className="fa fa-music fa-fw"></i><span className="network-name">Create Account</span></a>
-            <br />
-            <a onClick={this.loginClick} data-toggle="modal" data-target="#login-form" data-dismiss="modal">Back To Login</a>
-          </div>
-        </form>
-        </div>
-      );
-    },
     render: function() {
+        var form = (this.state.showSignIn ? <SignIn /> : <SignUp />);
         return (
             <div>
             <nav className="navbar navbar-default navbar-fixed-top topnav" role="navigation">
@@ -231,15 +160,7 @@ var LandingPageContainer = React.createClass({
                                 </li>
                                 <li className="footer-menu-divider">&sdot;</li>
                                 <li>
-                                    <a href="#about">About</a>
-                                </li>
-                                <li className="footer-menu-divider">&sdot;</li>
-                                <li>
-                                    <a href="#services">Services</a>
-                                </li>
-                                <li className="footer-menu-divider">&sdot;</li>
-                                <li>
-                                    <a href="#contact">Contact</a>
+                                    <a href="#home">About</a>
                                 </li>
                             </ul>
                             <p className="copyright text-muted small">Copyright &copy; Scintillating Açaí 2015. All Rights Reserved</p>
@@ -254,8 +175,7 @@ var LandingPageContainer = React.createClass({
                         <Modal.Title className="j-center-text">Welcome to <span className="j-color-blue">pi</span>Tunes</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                        {this.state.showLogin ? this.showLoginForm() : null}
-                        {this.state.showSignUp ? this.showSignUpForm() : null}
+                        {form}
                     </Modal.Body>
                     <Modal.Footer>
                         <span className="j-color-red">{this.state.errorMessage}</span>
@@ -266,6 +186,72 @@ var LandingPageContainer = React.createClass({
             </div>
         );
     }
+});
+
+// SignUp Form
+var SignUp = React.createClass({
+  render: function() {
+    return (
+      <div>
+      <h3>Create An Account</h3>
+      <p>
+        Fill in the form below to create an account.
+      </p>
+      <form id="signupForm">
+        <div className="form-group">
+          <label htmlFor="signup-email" className="hide">Email</label>
+          <input type="email" className="form-control input-lg" id="signup-email" placeholder="Email" required></input>
+        </div>
+        <div className="form-group">
+          <label htmlFor="login-password" className="hide">Password</label>
+          <input type="password" className="form-control input-lg" id="login-password" placeholder="Password" required></input>
+        </div>
+        <div className="form-group">
+          <label htmlFor="login-password2" className="hide">Password</label>
+          <input type="password" className="form-control input-lg" id="login-password2" placeholder="Re-enter Password" required></input>
+        </div>
+        <div className="form-group">
+          <label htmlFor="signup-displayName" className="hide">Fullname</label>
+          <input type="text" className="form-control input-lg" id="signup-displayName" placeholder="Display Name" required></input>
+        </div>
+        <div className="form-group j-center-text">
+          <a type="submit" className="btn btn-default btn-md" onClick={this.signupUser}><i className="fa fa-music fa-fw"></i><span className="network-name">Create Account</span></a>
+          <br />
+          <a onClick={this.loginClick} data-toggle="modal" data-target="#login-form" data-dismiss="modal">Back To Login</a>
+        </div>
+      </form>
+      </div>
+    );
+  }
+});
+
+// SignIn Form
+var SignIn = React.createClass({
+  render: function() {
+    return (
+      <div>
+      <form id="login-form">
+        <div className="form-group">
+          <label htmlFor="login-email" className="hide">Email</label>
+          <input type="email" className="form-control input-lg" id="login-email" placeholder="Email" required />
+        </div>
+        <div className="form-group">
+          <label htmlFor="login-password" className="hide">Password</label>
+          <input type="password" className="form-control input-lg " id="login-password" placeholder="Password" required />
+        </div>
+        <div className="form-group j-center-text">
+          <a type="submit" className="btn btn-default btn-md" onClick={this.signInUser}><i className="fa fa-sign-in fa-fw"></i><span className="network-name">Sign In</span></a>
+          <br />
+          <a href="javascript:;" data-dismiss="modal">Forgot Your Password?</a>
+        </div>
+      </form>
+      <div className="modal-footer j-center-text">
+        <span>Dont Have An Account Yet ?</span>
+        <a className="j-padding-left-10 j-pointer" onClick={this.signupClick}>Sign Up</a>
+      </div>
+      </div>
+    );
+  }
 });
 
 React.render(

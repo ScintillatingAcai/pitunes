@@ -62,7 +62,8 @@ var RoomsContainer = React.createClass({
                             rooms.map(function(room){
                                 return (
                                     <div>
-                                        <h2 className="section-heading">{room.name} <br />Current DJs: {room.usersCount}</h2>
+                                        <h3 className="j-center-text">{room.name} <br />Current DJs: {room.usersCount}</h3>
+                                        <hr />
                                     </div>
                                 )
                             })
@@ -77,19 +78,11 @@ var RoomsContainer = React.createClass({
                         <div className="col-lg-12 j-center-text">
                             <ul className="list-inline">
                                 <li>
-                                    <a href="#home">Home</a>
+                                    <a href="landingPage.html">Home</a>
                                 </li>
                                 <li className="footer-menu-divider">&sdot;</li>
                                 <li>
                                     <a href="#about">About</a>
-                                </li>
-                                <li className="footer-menu-divider">&sdot;</li>
-                                <li>
-                                    <a href="#services">Services</a>
-                                </li>
-                                <li className="footer-menu-divider">&sdot;</li>
-                                <li>
-                                    <a href="#contact">Contact</a>
                                 </li>
                             </ul>
                             <p className="copyright text-muted small">Copyright &copy; Scintillating Açaí 2015. All Rights Reserved</p>
