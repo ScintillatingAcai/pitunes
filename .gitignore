@@ -1,7 +1,7 @@
 ### node etc ###
 
 # API Keys
-client/components/leftContainer/mediaAdd/mediaAddKey.js
+mediaAddKey.js
 
 # Logs
 logs

@@ -6,20 +6,6 @@ var Playlist = db.Model.extend({
   tableName: 'Playlists',
   hasTimestamps: true,
 
-  initialize: function(){
-    this.currentMedia = null;
-
-    var that = this;
-    this.on('fetched', Promise.promisify(function(a, b, c, callback) {
-      // console.log('FETCH!!');
-      this.retrieveCurrentMedia(function(err, media) {
-        that.currentMedia = media;
-        console.log('retrieved media (id): ', that.currentMedia.get('id'));
-        callback();
-      });
-    }), this);
-  },
-
   medias: function() {
     var Media = require('./media');
     return this.belongsToMany(Media,'Media_Playlists', 'playlist_id', 'media_id');
@@ -31,9 +17,9 @@ var Playlist = db.Model.extend({
     return this.belongsTo(User, 'user_id');
   },
 
-  getCurrentMedia:function() {
-    return this.currentMedia;
-  },
+  getCurrentMedia:Promise.promisify(function(callback) {
+    return this.retrieveCurrentMedia(callback);
+  }),
 
   incrementCurrentMediaIndex:Promise.promisify(function(callback) {
     // get medias in playlist to find length
@@ -41,7 +27,7 @@ var Playlist = db.Model.extend({
     .then(function(found) {
       if (!found) return callback(new Error('medias not found'));
       var mediaCount = found.length;
-      return (( this.get('current_media_index') + 1 ) % mediaCount) + 1; //order starts at 1 insead of 0
+      return ( this.get('current_media_index') % mediaCount) + 1; //order starts at 1 insead of 0
     }).bind(this)
     .then(function(mediaIndex) {
       console.log('incremented media index: ', mediaIndex);

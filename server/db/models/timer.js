@@ -19,7 +19,7 @@ var Timer = function(onFireCB, onCompleteCB, timeIncrement, totalTime) {
   this.fire = function(callback) {
     if (this.okayToFire) {
       var dateNow = new Date();
-      console.log('timer fired with duration (sec): ', (dateNow - this.startDate) / 1000);
+      console.log('timer fired at duration (sec): ', (dateNow - this.startDate) / 1000);
 
       callback((dateNow - this.startDate) / 1000);
 
@@ -29,16 +29,15 @@ var Timer = function(onFireCB, onCompleteCB, timeIncrement, totalTime) {
       if ( this.stopDate - dateNow > this.timeIncrement / 1000) {
         increment = this.timeIncrement;
         nextCallback = onFireCB;
-        console.log('fire normal increment: ',increment);
       }
       else {
-        increment = Math.min(this.stopDate - dateNow, 0);
+        increment = Math.max(this.stopDate - dateNow, 0);
         nextCallback = onCompleteCB;
-        console.log('fire short increment: ',increment);
       }
       if (this.stopDate > dateNow) {
         this.timer = setTimeout(this.fire.bind(this, nextCallback), increment);
       } else {
+        onCompleteCB();
         this.stop();
       }
     }
