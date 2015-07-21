@@ -2,9 +2,20 @@ var placeholder = document.createElement("div");
 placeholder.className = "placeholder";
 
 var List = React.createClass({
+  
   getInitialState: function () {
     return { data: this.props.data };
   },
+
+  handleClickedSearch: function () {
+    this.state.data = arrSongs;
+    this.forceUpdate();
+  },
+
+  componentDidMount: function () {
+    $('#searchResults').on('click', 'li', this.handleClickedSearch);
+  },
+
   onClick: function (e) {
     console.log(e.currentTarget.lastChild);
   },
