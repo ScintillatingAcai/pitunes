@@ -166,12 +166,12 @@ var SignUp = React.createClass({
             success: function(res) {
               user = res;
               that.setState({showModal: false});
+              this.props.close();
             },
             error: function(res) {
               that.setState({errorMessage: res.statusText});
             }
           });
-    this.props.close();
   },
   render: function() {
     return (
@@ -222,12 +222,13 @@ var SignIn = React.createClass({
             success: function(res) {
               user = res;
               that.setState({showModal: false});
+              this.props.close();
             },
             error: function(res) {
               that.setState({errorMessage: res.statusText});
             }
           });
-    this.props.close();
+
   },
   render: function() {
     return (
