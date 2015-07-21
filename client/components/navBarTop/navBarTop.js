@@ -1,7 +1,5 @@
 // navBarTop.js
 
-
-
 var Navbar = ReactBootstrap.Navbar;
 var Nav = ReactBootstrap.Nav;
 
@@ -103,17 +101,9 @@ var NavBarTop = React.createClass({
     var tunesStyle = {
       color: '#CC0000'
     };
-    var currentlyPlayingStyle = {
-      color: '#FFF',
-      display: 'inline',
-      marginLeft: '40px',
-      fontSize: '14px'
-    }
     return (
       <div style={style}>
-        <div style={titleStyle}><span style={piStyle}>pi</span><span style={tunesStyle}>TUNES</span>
-        </div>
-      
+        <div style={titleStyle}><span style={piStyle}>pi</span><span style={tunesStyle}>TUNES</span></div>
         <div style={debuggerButtonsStyle}>
           <DebuggerButtonSimVideoDesync />
           <DebuggerButtonJoinQueue />
