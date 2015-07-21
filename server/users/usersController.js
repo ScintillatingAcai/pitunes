@@ -84,7 +84,16 @@ module.exports = {
         // res.redirect('/login');
       });
     res.status(200).end();
+  },
+
+  getAllUserPlaylists: function( req, res) {
+    utils.retrieveAllUserPlaylists(req.user_id)
+    .then(function(playlist) {
+      res.json(playlist);
+    });
+  },
+
+  addUserPlaylist: function( req, res) {
+
   }
-
-
 };

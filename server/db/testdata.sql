@@ -12,6 +12,7 @@ INSERT INTO Playlists (user_id, name, created_at, updated_at) VALUES (1, 'TestUs
 INSERT INTO Playlists (user_id, name, created_at, updated_at) VALUES (1, 'TestUser1 Playlist 3', '2015-07-15 00:00:00', '2015-07-15 00:00:00');
 
 INSERT INTO Playlists (user_id, name, created_at, updated_at) VALUES (2, 'TestUser2 Playlist 1', '2015-07-15 00:00:00', '2015-07-15 00:00:00');
+INSERT INTO Playlists (user_id, name, created_at, updated_at) VALUES (2, 'TestUser2 Playlist 2', '2015-07-15 00:00:00', '2015-07-15 00:00:00');
 
 INSERT INTO Playlists (user_id, name, created_at, updated_at) VALUES (3, 'TestUser3 Playlist 1', '2015-07-15 00:00:00', '2015-07-15 00:00:00');
 
@@ -33,6 +34,12 @@ INSERT INTO Medias (youtube_id, created_at, updated_at) VALUES ('YqeW9_5kURI', '
 INSERT INTO Medias (youtube_id, created_at, updated_at) VALUES ('nNi0gyO41VQ', '2015-07-15 00:00:00', '2015-07-15 00:00:00');
 INSERT INTO Medias (youtube_id, created_at, updated_at) VALUES ('RgKAFK5djSk', '2015-07-15 00:00:00', '2015-07-15 00:00:00');
 INSERT INTO Medias (youtube_id, created_at, updated_at) VALUES ('JO7qQ7peKeM', '2015-07-15 00:00:00', '2015-07-15 00:00:00');
+INSERT INTO Medias (youtube_id, created_at, updated_at) VALUES ('n1a7o44WxNo', '2015-07-15 00:00:00', '2015-07-15 00:00:00');
+INSERT INTO Medias (youtube_id, created_at, updated_at) VALUES ('X46t8ZFqUB4', '2015-07-15 00:00:00', '2015-07-15 00:00:00');
+INSERT INTO Medias (youtube_id, created_at, updated_at) VALUES ('IxxstCcJlsc', '2015-07-15 00:00:00', '2015-07-15 00:00:00');
+INSERT INTO Medias (youtube_id, created_at, updated_at) VALUES ('i-gyZ35074k', '2015-07-15 00:00:00', '2015-07-15 00:00:00');
+INSERT INTO Medias (youtube_id, created_at, updated_at) VALUES ('EgT_us6AsDg', '2015-07-15 00:00:00', '2015-07-15 00:00:00');
+INSERT INTO Medias (youtube_id, created_at, updated_at) VALUES ('U8UX2bbCHJw', '2015-07-15 00:00:00', '2015-07-15 00:00:00');
 
 -- ROOMS
 INSERT INTO Rooms (name, created_at, updated_at) VALUES ('Root Room', '2015-07-15 00:00:00', '2015-07-15 00:00:00');
@@ -64,4 +71,13 @@ INSERT INTO Media_Playlists (playlist_id, media_id, media_order) VALUES (3, 12, 
 INSERT INTO Media_Playlists (playlist_id, media_id, media_order) VALUES (3, 13, 3);
 INSERT INTO Media_Playlists (playlist_id, media_id, media_order) VALUES (3, 3, 4);
 
-INSERT INTO Media_Playlists (playlist_id, media_id, media_order) VALUES (4, 8, 1);
+INSERT INTO Media_Playlists (playlist_id, media_id, media_order) VALUES (4, 16, 1);
+INSERT INTO Media_Playlists (playlist_id, media_id, media_order) VALUES (4, 17, 2);
+INSERT INTO Media_Playlists (playlist_id, media_id, media_order) VALUES (4, 18, 3);
+INSERT INTO Media_Playlists (playlist_id, media_id, media_order) VALUES (4, 19, 4);
+INSERT INTO Media_Playlists (playlist_id, media_id, media_order) VALUES (4, 20, 5);
+INSERT INTO Media_Playlists (playlist_id, media_id, media_order) VALUES (4, 21, 6);
+INSERT INTO Media_Playlists (playlist_id, media_id, media_order) VALUES (4, 22, 7);
+
+INSERT INTO Media_Playlists (playlist_id, media_id, media_order) VALUES (5, 8, 1);
+INSERT INTO Media_Playlists (playlist_id, media_id, media_order) VALUES (5, 17, 2);

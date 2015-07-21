@@ -1,4 +1,5 @@
 var db = require('../db/schema');
+var Promise = require('bluebird');
 var Users = require('../db/collections/users');
 var User = require('../db/models/user');
 
@@ -138,5 +139,14 @@ module.exports = {
       .catch(function(error) {
         console.log('error:', error);
       });
-  }
+  },
+
+  retrieveAllUserPlaylists: Promise.promisify(function(user_id, callback) {
+    new User({
+      id: user_id
+    }).retrieveAllPlaylists(function(error, found){
+      callback(null, found);
+    });
+  })
+
 };
