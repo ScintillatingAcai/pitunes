@@ -198,7 +198,7 @@ var SignUp = React.createClass({
           <input type="text" className="form-control input-lg" id="signup-displayName" placeholder="Display Name" required></input>
         </div>
         <div className="form-group j-center-text">
-          <a type="submit" className="btn btn-default btn-md" onClick={this.signupUser}><i className="fa fa-music fa-fw"></i><span className="network-name">Create Account</span></a>
+          <a type="submit" className="btn btn-default btn-md" onClick={this.signupUser}><i className="fa fa-pencil fa-fw"></i><span className="network-name">Create Account</span></a>
           <br />
           <a onClick={this.props.loginClick}>Back To Login</a>
         </div>
