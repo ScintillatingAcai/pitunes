@@ -76,7 +76,7 @@ var RoomsContainer = React.createClass({
                                     <a href="#about">About</a>
                                 </li>
                             </ul>
-                            <p className="copyright text-muted small">Copyright &copy; Scintillating Açaí 2015. All Rights Reserved</p>
+                            <p className="copyright text-muted small">Copyright &copy; 2015, Scintillating Açaí, All Rights Reserved</p>
                         </div>
                     </div>
                 </div>

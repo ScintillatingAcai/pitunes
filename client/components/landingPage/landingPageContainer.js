@@ -127,7 +127,7 @@ var LandingPageContainer = React.createClass({
                                     <a href="#home">About</a>
                                 </li>
                             </ul>
-                            <p className="copyright text-muted small">Copyright &copy 2015, Scintillating Açaí, All rights reserved</p>
+                            <p className="copyright text-muted small">Copyright &copy; 2015, Scintillating Açaí, All Rights Reserved</p>
                         </div>
                     </div>
                 </div>
