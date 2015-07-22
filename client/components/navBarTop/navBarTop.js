@@ -5,7 +5,7 @@ var Nav = ReactBootstrap.Nav;
 
 var DebuggerButtonJoinQueue = React.createClass({
   handleClick: function () {
-    socket.emit('user queue join', {user: user.id, room: 1});
+    socket.emit('user queue join', {user: user, room: 1});
   },
   render: function () {
     return (
@@ -27,7 +27,7 @@ var DebuggerButtonSimVideoDesync = React.createClass({
 
 var DebuggerButtonJoinRoom = React.createClass({
   handleClick: function () {
-    socket.emit('user room join', {user: user.id,room:1})
+    socket.emit('user room join', {user: user, room: 1})
   },
   render: function () {
     return (
