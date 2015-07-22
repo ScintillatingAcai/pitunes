@@ -40,7 +40,7 @@ var LandingPageContainer = React.createClass({
                             <span className="icon-bar"></span>
                             <span className="icon-bar"></span>
                         </button>
-                        <a className="navbar-brand topnav" href="#"><span className="j-color-blue">pi</span>Tunes</a>
+                        <a className="navbar-brand topnav" href="#"><span className="j-color-black">pi</span><span className="j-color-blue">Tunes</span></a>
                     </div>
                     <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                         <ul className="nav navbar-nav navbar-right">
@@ -69,13 +69,13 @@ var LandingPageContainer = React.createClass({
                                 <hr className="intro-divider"></hr>
                                 <ul className="list-inline intro-social-buttons">
                                     <li>
-                                        <a onClick={this.signupClick} className="btn btn-default btn-lg"><i className="fa fa-music fa-fw"></i> <span className="network-name">Sign Up</span></a>
-                                    </li>
-                                    <li>
-                                        <a href="rooms.html" className="btn btn-default btn-lg"><i className="fa fa-users fa-fw"></i> <span className="network-name">Join Room</span></a>
-                                    </li>
-                                    <li>
                                         <a onClick={this.loginClick} className="btn btn-default btn-lg"><i className="fa fa-sign-in fa-fw"></i><span className="network-name">Sign In</span></a>
+                                    </li>
+                                    <li>
+                                        <a href="rooms.html" className="btn btn-default btn-lg"><i className="fa fa-music fa-fw"></i><span className="network-name">Join Room</span></a>
+                                    </li>
+                                    <li>
+                                        <a onClick={this.signupClick} className="btn btn-default btn-lg"><i className="fa fa-pencil fa-fw"></i><span className="network-name">Sign Up</span></a>
                                     </li>
                                 </ul>
                             </div>
@@ -127,7 +127,7 @@ var LandingPageContainer = React.createClass({
                                     <a href="#home">About</a>
                                 </li>
                             </ul>
-                            <p className="copyright text-muted small">Copyright &copy; Scintillating Açaí 2015. All Rights Reserved</p>
+                            <p className="copyright text-muted small">Copyright &copy; 2015, Scintillating Açaí, All Rights Reserved</p>
                         </div>
                     </div>
                 </div>
@@ -136,7 +136,7 @@ var LandingPageContainer = React.createClass({
             <div>
                 <Modal show={this.state.showModal} onHide={this.close}>
                     <Modal.Header closeButton>
-                        <Modal.Title className="j-center-text">Welcome to <span className="j-color-blue">pi</span>Tunes</Modal.Title>
+                        <Modal.Title className="j-center-text">Welcome to <span className="j-color-black">pi</span><span className="j-color-blue">Tunes</span></Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
                         {form}
@@ -198,7 +198,7 @@ var SignUp = React.createClass({
           <input type="text" className="form-control input-lg" id="signup-displayName" placeholder="Display Name" required></input>
         </div>
         <div className="form-group j-center-text">
-          <a type="submit" className="btn btn-default btn-md" onClick={this.signupUser}><i className="fa fa-music fa-fw"></i><span className="network-name">Create Account</span></a>
+          <a type="submit" className="btn btn-default btn-md" onClick={this.signupUser}><i className="fa fa-pencil fa-fw"></i><span className="network-name">Create Account</span></a>
           <br />
           <a onClick={this.props.loginClick}>Back To Login</a>
         </div>
