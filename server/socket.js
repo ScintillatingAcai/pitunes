@@ -69,10 +69,7 @@ module.exports = function(io) {
           console.log('room users length:  ', room.users.length);
 
           allClients.push({socket: socket, user_id: user_id, room_id: room_id});
-        })
-        .catch(function(err) {
-          console.error(err);
-        });
+        }).catch(function(err) {return callback(err);});
       });
     });
 
@@ -102,10 +99,7 @@ module.exports = function(io) {
 
         console.log('should have emitted: ', "user room leave");
         console.log('room users length:  ', room.users.length);
-      })
-      .catch(function(err) {
-        console.error(err);
-      });
+      }).catch(function(err) {return callback(err);});
     });
 
     socket.on('disconnect', function() {
@@ -133,10 +127,7 @@ module.exports = function(io) {
 
           console.log('should have emitted: ', "user room leave");
           console.log('room users length:  ', room.users.length);
-        })
-        .catch(function(err) {
-          console.error(err);
-        });
+        }).catch(function(err) {return callback(err);});
       }
     });
 
@@ -155,10 +146,7 @@ module.exports = function(io) {
 
         console.log('should have emitted: ', "user queue change");
         console.log('dj queue length:  ', room.djQueue.length);
-      })
-      .catch(function(err) {
-        console.error(err);
-      });
+      }).catch(function(err) {return callback(err);});
     });
 
     socket.on('user queue leave', function(data){
