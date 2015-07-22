@@ -78,8 +78,8 @@ module.exports = {
             password: password
           })
           .save().then(function(newUser) {
-              new Users().add(newUser);
-              callback(null, newUser);
+            new Users().add(newUser);
+            callback(null, newUser);
           })
           .catch(function(err) {
             callback(err);
@@ -95,6 +95,7 @@ module.exports = {
   loginUser: Promise.promisify(function(user, callback) {
     var password = user.password;
     var email = user.email;
+    console.log('user: ', user);
 
     new User({
         email: email

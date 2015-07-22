@@ -20,7 +20,6 @@ var Room = db.Model.extend({
     this.users = new Users(); //bookshelf Users collection
     this.djQueue = []; //array of bookshelf User models
     this.currentMedia = null; //bookshelf Media model
-    this.mediaTimeElapsed = 0;  //seconds elapsed on currentMedia
     this.mediaTimer = null;  //Timer object
     this.sockets = null;
   },
@@ -35,9 +34,8 @@ var Room = db.Model.extend({
       this.mediaTimer = null;
     }
 
-    if (this.djQueue[0] && this.djQueue[0].getCurrentPlaylist()) {
+    if (this.djQueue[0]) {
       var dj = this.djQueue[0];
-      console.log(dj.getCurrentPlaylist);
       var playlist = dj.getCurrentPlaylist().bind(this)
       .then(function(playlist) {
         playlist.getCurrentMedia().bind(this)
@@ -139,21 +137,28 @@ var Room = db.Model.extend({
     return _.extend((new db.Model()).toJSON.call(this), {
       users: this.users && this.users.toJSON(),
       djQueue: this.djQueue.length && this.djQueue.map(function(user) {user.toJSON();}),
-      currentMedia: this.currentMedia && this.currentMedia.toJSON(),
-      mediaTimeElapsed: this.mediaTimeElapsed
+      currentMedia: this.currentMedia && this.currentMedia.toJSON()
     },this);
   },
 
-  enqueueDJ: function(user_id, sockets) {
+  enqueueDJ: Promise.promisify(function(user_id, sockets, callback) {
     this.sockets = sockets;
     var user = this.users.get(user_id);
     if (user && this.djQueue.indexOf(user) === -1) {
-      this.djQueue.push(user);
-      if (this.djQueue.length === 1) {
-        this.playMedia();
-      }
+      user.getCurrentPlaylist().then(function(playlist) {
+        if (!playlist) return callback(new Error('user has no current playlist, cannot enter queue'));
+        this.djQueue.push(user);
+        if (this.djQueue.length === 1) {
+          this.playMedia();
+        }
+        return callback(null, user);
+      })
+      .catch(function(err) {
+        callback(err);
+      });
     }
-  },
+    callback(null, null);
+  }),
 
   dequeueDJ: function() {
     this.djQueue.push(this.djQueue.shift());
@@ -185,10 +190,13 @@ var Room = db.Model.extend({
   },
 
   addUser: Promise.promisify(function(user, callback) {
-    console.log('user to add: ', user.cid);
     //dont need to worry about user already being in collection because there can only be one
-    this.users.add(user);
-    callback(null, user);
+    if (!this.users.get(user.id)) {
+      this.users.add(user);
+      callback(null, user);
+    } else {
+      callback(null, null);
+    }
   }),
 
   removeUser: Promise.promisify(function(user_id, callback) {

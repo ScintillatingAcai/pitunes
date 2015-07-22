@@ -32,27 +32,25 @@ var Playlist = db.Model.extend({
     .then(function(found) {
       if (!found) return callback(new Error('medias not found'));
       var mediaCount = found.length;
-      return ( this.get('current_media_index') % mediaCount) + 1; //order starts at 1 insead of 0
-    }).bind(this)
-    .then(function(mediaIndex) {
-      console.log('incremented media media index: ', mediaIndex);
-      this.setCurrentMedia(mediaIndex);
-    });
-  }),
-
-  setCurrentMedia: Promise.promisify(function(currentMedia_ID, callback){
-    this.set('current_media_index', currentMedia_ID);
-
-    this.save().bind(this)
-    .then(function(playlist) {
-      this.retrieveCurrentMedia().bind(this)
-      .then(function(media) {
-        this.currentMedia = media;
-        callback(null, media);
+      var newMediaIndex = ( this.get('current_media_index') % mediaCount) + 1; //order starts at 1 insead of 0
+      console.log('incremented media index: ', newMediaIndex);
+      this.setCurrentMediaIndex(newMediaIndex).then(function(mediaIndex) {
+        callback(null, callback);
       })
       .catch(function(err) {
         callback(err);
       });
+    })
+    .catch(function(err) {
+      callback(err);
+    });
+  }),
+
+  setCurrentMediaIndex: Promise.promisify(function(currentMedia_ID, callback){
+    this.set('current_media_index', currentMedia_ID)
+    .save().bind(this)
+    .then(function(playlist) {
+      callback(null, playlist);
     })
     .catch(function(err) {
       callback(err);

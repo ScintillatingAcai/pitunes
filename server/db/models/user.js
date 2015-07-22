@@ -9,19 +9,7 @@ var User = db.Model.extend({
   hasTimestamps: true,
 
   initialize: function(){
-    this.currentPlaylist = null;
-
-    var that = this;
     this.on('creating', this.hashPassword);
-
-    // this.on('fetched', Promise.promisify(function(a, b, c, callback) {
-    //   this.retrieveCurrentPlaylist(function(err, playlist) {
-    //     that.currentPlaylist = playlist;
-    //     // console.log('User (' + that.get('id') + ') FETCHED playlist: ', that.currentPlaylist);
-    //     console.log(that.cid);
-    //     callback();
-    //   });
-    // }), this);
   },
 
   comparePassword: function(attemptedPassword, callback) {
@@ -43,7 +31,8 @@ var User = db.Model.extend({
 
   getCurrentPlaylist:Promise.promisify(function(callback) {
     this.retrieveCurrentPlaylist().then(function(playlist) {
-      if (!playlist) return callback(new Error('playlist not found'));
+      console.log('playlist: ', playlist)
+      // if (!playlist) return callback(new Error('playlist not found'));
       callback(null, playlist);
     })
     .catch(function(err) {
@@ -59,15 +48,16 @@ var User = db.Model.extend({
 
   retrieveCurrentPlaylist: Promise.promisify(function(callback){
     var Playlist = require('./playlist');
-    if (this.get('current_playlist_id') === 0) callback(null, null); //send back 0 which indicates no playlist but not an error
+    if (this.get('current_playlist_id') === 0) return callback(null, 0); //send back 0 which indicates no playlist but not an error
     // console.log('user attributes: ', this.attributes);
-    console.log('retrieving current playlist for id: ', this.get('current_playlist_id'));
-    return new Playlist().fetch({
+    console.log('playlist id: ', this.get('current_playlist_id'));
+    new Playlist().fetch({
       id:this.get('current_playlist_id')
     })
     .then(function(found) {
+      console.log('found: ', found);
       if (!found) return callback(new Error('media playlist not found'));
-      console.log('retrieved current playlist');
+      console.log('retrieved current playlist (id): ', found.get('id'));
       callback(null,found);
     })
     .catch(function(error) {
