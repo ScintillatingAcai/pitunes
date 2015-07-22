@@ -10,8 +10,8 @@ var List = React.createClass({
   forceUpdatePlaylist: function () {
     this.state.data = arrSongs;
     this.forceUpdate();
-    this.submitUpdatePlaylist(playlistMin);
   },
+
 
   componentDidMount: function () {
     $('#searchResults').on('click', 'li', this.forceUpdatePlaylist);
@@ -65,6 +65,7 @@ var List = React.createClass({
     // TODO fix placeholder, make modal (possibly?) for naming playlist
     currentUser.currentPlaylist = {title: 'New Playlist', songs: []};
     this.forceUpdatePlaylist();
+    this.submitNewPlaylist(playlistMin);
   },
 
   // PLACEHOLDERS
@@ -72,13 +73,13 @@ var List = React.createClass({
   submitNewPlaylist: function (playlist) {
     var context = this;
     if (user) {
-    $.ajax({url: server_uri + '/api/users/' + user.Id + '/playlists',
+    $.ajax({url: server_uri + '/api/users/' + user.id + '/playlists',
       type: 'POST',
       dataType: 'json',
       data: playlist,
       success: function (res) {
         // TODO Confirm with BE - Placeholder, res.Id may change
-        users.currentPlaylist.Id = res.Id;
+        users.currentPlaylist.Id = res.playlist_id;
         console.log('submitted new playlist');
       },
       error: function (res) {
@@ -93,7 +94,7 @@ var List = React.createClass({
   submitUpdatePlaylist: function (playlist) {
     var context = this;
     if (user) {
-      $.ajax({url: server_uri + '/api/users/' + users.Id + '/playlists' + users.currentPlaylist.Id,
+      $.ajax({url: server_uri + '/api/users/' + user.id + '/playlists/' + currentUser.currentPlaylist.id,
         type: 'PUT',
         dataType: 'json',
         data: playlist,
