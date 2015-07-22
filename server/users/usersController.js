@@ -2,7 +2,6 @@ var url = require('url');
 var utils = require('./usersUtils');
 var utility = require('../utility');
 
-var Promise = require('bluebird');
 
 module.exports = {
 

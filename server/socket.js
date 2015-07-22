@@ -1,9 +1,36 @@
+var Promise = require('bluebird');
+
 var userUtils = require('./users/usersUtils');
 var roomUtils = require('./rooms/roomsUtils');
 var playlistUtils = require('./playlists/playlistsUtils');
 var mediasUtils = require('./medias/mediasUtils');
 
-var Promise = require('bluebird');
+var allClients = [];
+
+var addUserToClients = function(user_id, room_id, socket) {
+  if (indexOfUserFromSocket(socket) === -1) {
+    allClients.push({socket: socket, user_id: user_id, room_id: room_id});
+  }
+};
+
+var indexOfUserFromSocket = function(socket) {
+  for (var i = 0; i < allClients.length; i++) {
+    var client = allClients[i];
+    if (client.socket === socket) {
+      return i;
+    }
+  }
+  return -1;
+};
+
+var removeUserFromClients = function(socket) {
+  var index = indexOfUserFromSocket(socket);
+  var userInfo = allClients[index];
+  if (index > -1) {
+    allClients.splice(index, 1);
+  }
+  return userInfo;
+};
 
 module.exports = function(io) {
 
@@ -25,11 +52,13 @@ module.exports = function(io) {
         var room = roomUtils.getRoom(room_id);
         room.addUser(user).then(function(user) {
           socket.join(data.room);
-          socket.broadcast.emit("user room change", data.user);
+          socket.broadcast.emit("user room change",  JSON.stringify(room.users));
           socket.emit("user room join", data.user);
           room.startUserForCurrentMedia(socket);
           console.log('should have emitted: ', "user room join");
           console.log('room users length:  ', room.users.length);
+
+          allClients.push({socket: socket, user_id: user_id, room_id: room_id});
         })
         .catch(function(err) {
           console.error(err);
@@ -49,7 +78,7 @@ module.exports = function(io) {
         socket.emit("user queue leave", data.user);
       }
       room.removeUser(user_id).then(function(user) {
-        socket.broadcast.emit("user room change", data.user);
+        socket.broadcast.emit("user room change", JSON.stringify(room.users));
         socket.emit("user room leave", data.user);
         socket.leave(data.room);
 
@@ -59,6 +88,37 @@ module.exports = function(io) {
       .catch(function(err) {
         console.error(err);
       });
+    });
+
+    socket.on('disconnect', function() {
+
+      var index = indexOfUserFromSocket(socket);
+      if (index > -1) {
+        var userInfo = allClients[index];
+        var user_id = userInfo.user_id;
+        var room_id = userInfo.room_id;
+        removeUserFromClients(socket);
+        console.log('Disconnected User: ', user_id);
+
+
+        var room = roomUtils.getRoom(room_id);
+        if(room.removeDJFromQueue(user_id)) {
+          //just in case they are in queue we will update and broadcast
+          socket.broadcast.emit("user queue change", JSON.stringify(room.djQueue));
+          socket.emit("user queue leave", user_id);
+        }
+        room.removeUser(user_id).then(function(user) {
+          socket.broadcast.emit("user room change", JSON.stringify(room.users));
+          socket.emit("user room leave", user_id);
+          socket.leave(room_id);
+
+          console.log('should have emitted: ', "user room leave");
+          console.log('room users length:  ', room.users.length);
+        })
+        .catch(function(err) {
+          console.error(err);
+        });
+      }
     });
 
     socket.on('user queue join', function(data){

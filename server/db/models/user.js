@@ -14,14 +14,14 @@ var User = db.Model.extend({
     var that = this;
     this.on('creating', this.hashPassword);
 
-    this.on('fetched', Promise.promisify(function(a, b, c, callback) {
-      this.retrieveCurrentPlaylist(function(err, playlist) {
-        that.currentPlaylist = playlist;
-        // console.log('User (' + that.get('id') + ') FETCHED playlist: ', that.currentPlaylist);
-        console.log(that.cid);
-        callback();
-      });
-    }), this);
+    // this.on('fetched', Promise.promisify(function(a, b, c, callback) {
+    //   this.retrieveCurrentPlaylist(function(err, playlist) {
+    //     that.currentPlaylist = playlist;
+    //     // console.log('User (' + that.get('id') + ') FETCHED playlist: ', that.currentPlaylist);
+    //     console.log(that.cid);
+    //     callback();
+    //   });
+    // }), this);
   },
 
   comparePassword: function(attemptedPassword, callback) {
@@ -41,26 +41,23 @@ var User = db.Model.extend({
     });
   },
 
-  getCurrentPlaylist:function() {
-    return this.currentPlaylist;
-  },
+  getCurrentPlaylist:Promise.promisify(function(callback) {
+    this.retrieveCurrentPlaylist().then(function(playlist) {
+      if (!playlist) return callback(new Error('playlist not found'));
+      callback(null, playlist);
+    })
+    .catch(function(err) {
+      callback(err);
+    });
+  }),
 
   setCurrentPlaylist:function(playlist_ID) {
     this.set('current_playlist_id', playlist_ID);
-
     this.save().then(function(playlist) {
-      this.retrieveCurrentPlaylist(function(err, playlist) {
-        this.currentPlaylist = playlist;
-
-      }.bind(this));
-    }.bind(this));
+    });
   },
 
-  updateCurrentPlaylist: function(callback) {
-    var hashPromise = Promise.promisify(this.retrieveCurrentPlaylist);
-  },
-
-  retrieveCurrentPlaylist: function(callback){
+  retrieveCurrentPlaylist: Promise.promisify(function(callback){
     var Playlist = require('./playlist');
     if (this.get('current_playlist_id') === 0) callback(null, null); //send back 0 which indicates no playlist but not an error
     // console.log('user attributes: ', this.attributes);
@@ -76,7 +73,7 @@ var User = db.Model.extend({
     .catch(function(error) {
       callback(error);
     });
-  },
+  }),
 
   //relationship
   playlists: function() {

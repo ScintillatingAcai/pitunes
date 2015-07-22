@@ -37,62 +37,54 @@ var Room = db.Model.extend({
 
     if (this.djQueue[0] && this.djQueue[0].getCurrentPlaylist()) {
       var dj = this.djQueue[0];
-      var playlist = dj.getCurrentPlaylist();
-      playlist.getCurrentMedia().bind(this).then(function(media) {
-        this.currentMedia = media;
-        this.currentMedia.incrementPlayCount().bind(this)
-        .then(function(data) {
-          playlist.incrementCurrentMediaIndex();
+      console.log(dj.getCurrentPlaylist);
+      var playlist = dj.getCurrentPlaylist().bind(this)
+      .then(function(playlist) {
+        playlist.getCurrentMedia().bind(this)
+        .then(function(media) {
+          this.currentMedia = media;
+          this.currentMedia.incrementPlayCount().bind(this)
+          .then(function(data) {
+            playlist.incrementCurrentMediaIndex();
 
-          var videoId = this.currentMedia.get('youtube_id');
-          var durationSearchUrl = 'https://www.googleapis.com/youtube/v3/videos?id=' + videoId + '&part=contentDetails&key=' + YOUTUBE_API_KEY;
-          var link = url.parse(durationSearchUrl);
-          var options = {
-              host: link.hostname,
-              port: link.port,
-              path: link.path
-          };
-          var that = this;
-          https.get(options, function(res) {
-            var response = '';
-            res.on('data', function(data) {
-                // collect the data chunks to the variable named "html"
-                response += data;
-            }).on('end', function() {
-                // the whole of webpage data has been collected. parsing time!
-                var duration = JSON.parse(response).items[0].contentDetails.duration;
-                console.log('duration received from youtube: ', duration);
-                console.log('room id for media status emit: ', that.get('id'));
-                that.emitMediaStatusMessage(that.sockets.in(that.get('id')), that.currentMedia, 0, 'start');
-                // that.sockets.in(that.get('id')).emit("media status", {
-                //   videoId: that.currentMedia.get('youtube_id'),
-                //   startSeconds:0,
-                //   status:'start'
-                // });
-                that.mediaTimer = that.makeMediaTimer(3000, that.convertYTDuration(duration));
-                that.mediaTimer.start();
-            }).on('error', function(err) {
-              console.error(err);
-              this.playMedia();
+            var videoId = this.currentMedia.get('youtube_id');
+            var durationSearchUrl = 'https://www.googleapis.com/youtube/v3/videos?id=' + videoId + '&part=contentDetails&key=' + YOUTUBE_API_KEY;
+            var link = url.parse(durationSearchUrl);
+            var options = {
+                host: link.hostname,
+                port: link.port,
+                path: link.path
+            };
+            var that = this;
+            https.get(options, function(res) {
+              var response = '';
+              res.on('data', function(data) {
+                  // collect the data chunks to the variable named "html"
+                  response += data;
+              }).on('end', function() {
+                  // the whole of webpage data has been collected. parsing time!
+                  var duration = JSON.parse(response).items[0].contentDetails.duration;
+                  console.log('duration received from youtube: ', duration);
+                  that.emitMediaStatusMessage(that.sockets.in(that.get('id')), that.currentMedia, 0, 'start');
+                  that.mediaTimer = that.makeMediaTimer(3000, that.convertYTDuration(duration));
+                  that.mediaTimer.start();
+              }).on('error', function(err) {
+                console.error(err);
+                this.playMedia();
+              });
             });
           });
         });
       });
-
     } else {
       console.log('stop media for no DJ');
       this.emitMediaStatusMessage(this.sockets.in(this.get('id')), null, 0, 'stop');
-      // this.sockets.in(this.get('id')).emit("media status", {
-      //   videoId: '',
-      //   startSeconds:0,
-      //   status:'stop'
-      // });
     }
   },
 
   emitMediaStatusMessage: function(socket, media, mediaDuration, statusMessage) {
     socket.emit("media status", {
-      videoId: media.get('youtube_id'),
+      videoId: media && media.get('youtube_id'),
       startSeconds:mediaDuration,
       status:statusMessage
     });
@@ -102,12 +94,6 @@ var Room = db.Model.extend({
     if (this.currentMedia && this.mediaTimer) {
       var duration = (new Date() - this.mediaTimer.startDate) / 1000;
       this.emitMediaStatusMessage(socket, this.currentMedia, duration, 'start');
-
-      // socket.emit("media status", {
-      //   videoId: this.currentMedia.get('youtube_id'),
-      //   startSeconds:duration,
-      //   status:'start'
-      // });
     }
   },
 
@@ -141,24 +127,12 @@ var Room = db.Model.extend({
   makeMediaTimer: function(increment, durationSecs) {
     var onFire = function(elapsedTime){
       this.emitMediaStatusMessage(this.sockets, this.currentMedia, elapsedTime, 'update');
-
-      // this.sockets.in(this.get('id')).emit("media status", {
-      //   videoId: this.currentMedia.get('youtube_id'),
-      //   startSeconds:elapsedTime,
-      //   status:'update'
-      // });
     };
     var onComplete = function(){
-      // this.sockets.in(this.get('id')).emit("media status", {
-      //   videoId: '',
-      //   startSeconds:0,
-      //   status:'stop'
-      // });
       this.dequeueDJ();
       this.playMedia();
     };
     return new Timer(onFire.bind(this),onComplete.bind(this),increment, durationSecs);
-
   },
 
   toJSON: function() {
