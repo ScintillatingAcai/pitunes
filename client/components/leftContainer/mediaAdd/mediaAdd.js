@@ -42,7 +42,6 @@ var SearchBar = React.createClass({
     }
     return duration;
   },
-
   // Convert ISO 8061 format to MM:SS
   // TODO: Either filter out videos longer than 59:59 or extend to HH:MM:SS format
   convertYTDurationDisplay: function (duration) {
@@ -103,7 +102,9 @@ var SearchBar = React.createClass({
             $(".searchResultItem").on('click', function (e) {
               if ($(e.target).attr('className') === 'searchResultTitle') {
                 loadVideo($(e.target).attr('data-id'), 0);
-                addSongToPlaylist({title: $(e.target).attr('data-title'), id: $(e.target).attr('data-id'), duration: $(e.target).attr('data-duration'), durationDisplay: $(e.target).attr('data-durationDisplay')});
+                if (user.id !== 0) {
+                  addSongToPlaylist({title: $(e.target).attr('data-title'), id: $(e.target).attr('data-id'), duration: $(e.target).attr('data-duration'), durationDisplay: $(e.target).attr('data-durationDisplay')});
+                }
               }
             });
           }
@@ -111,31 +112,24 @@ var SearchBar = React.createClass({
       }
     });
   },
-
   onChange: function (e) {
     e.preventDefault();
     this.setState({text: e.target.value});
   },
-  
   render: function () {
-    
     var style = {
       borderColor: '#EEEEEE',
       position: 'absolute',
       top: 0,
       width: '100%'
-
     };
-
     var searchBarInputStyle = {
       backgroundColor: '#AAAAAA',
       borderColor: '#EEEEEE'
     };
-
     var searchResultsStyle = {
       marginTop: '50px'
     };
-
     return (
       <div>
         <ul id="searchResults" style={searchResultsStyle}></ul>

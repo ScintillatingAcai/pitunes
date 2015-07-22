@@ -62,7 +62,7 @@ var List = React.createClass({
 
   createNewPlaylist: function () {
     // TODO fix placeholder, make modal (possibly?) for naming playlist
-    currentUser.currentPlaylist = {title: 'New Playlist', songs: []};
+    currentUser.currentPlaylist = {name: 'New Playlist', songs: []};
     this.submitNewPlaylist(playlistMin);
   },
 
@@ -213,6 +213,15 @@ var Songs = React.createClass({
 });
 
 var PlaylistTitle = React.createClass({
+  getInitialState: function() {
+    return {title: this.props.title}
+  },
+  componentDidMount: function() {
+    $('#playlistContainer div').on('click', 'button', this.handleNewPlaylist)
+  },
+  handleNewPlaylist: function() {
+    this.setState({title: currentUser.currentPlaylist.name});
+  },
   render: function(){
     var style = {
       textAlign: 'center',
@@ -222,7 +231,7 @@ var PlaylistTitle = React.createClass({
       borderBottom: '2px solid #444444'
     };
     return (
-      <h4 style={style}>{currentUser.currentPlaylist.name}</h4>
+      <h4 style={style}>{this.state.title}</h4>
     );
   }
 });
@@ -241,7 +250,7 @@ var PlaylistSaved = React.createClass({
     };
     return (
       <div id="playlistContainer" style={style}>
-        <PlaylistTitle />
+        <PlaylistTitle title={currentUser.currentPlaylist.name}/>
         <Songs />
       </div>
     );
