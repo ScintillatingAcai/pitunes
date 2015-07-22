@@ -40,11 +40,28 @@ module.exports = {
   //update a playlist in DB by ID
   updatePlaylist: function(playlist_id, playlistInfo, callback) {
     playlist_id = parseInt(playlist_id);
-    new Playlist({
-        id: playlist_id
-      }).fetch().then(function(found) {
+    new Playlist({id: playlist_id})
+      .fetch().then(function(found) {
         if (found) {
-          found.set(playlistInfo);
+            //found.set(playlistInfo);
+            var dbPlaylist = [];
+            playlistInfo.map(function(media, index) {
+              var file = new Media({youtube_id: media});
+
+              file.fetch().
+                then(function(found) {
+                  if (found) {
+                    dbPlaylist.push({playlist_id: playlist_id, media_id: found.id, media_order: index+1});
+                  }
+                  else {
+                    file.save().then(function(media) {
+                      dbPlaylist.push({playlist_id: playlist_id, media_id: media.id, media_order: index+1});
+                    });
+                  }
+                });
+            });
+          found.set(dbPlaylist);  
+
           found.save().then(function(updatedPlaylist) {
               callback(null, updatedPlaylist);
             })

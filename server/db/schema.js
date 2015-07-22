@@ -22,7 +22,10 @@ bookshelf.knex.schema.hasTable('Medias').then(function(exists) {
   if (!exists) {
     bookshelf.knex.schema.createTable('Medias', function (media) {
       media.increments('id').primary();
-      media.string('youtube_id', 100).notNullable();
+      media.string('youtube_id', 20).unique().notNullable();
+      media.string('title', 255).notNullable();
+      media.string('img_url', 255).notNullable();
+      media.integer('duration').unsigned().notNullable();
       media.integer('play_count').unsigned().defaultTo(0);
 //      media.string('name', 255).defaultTo('');
       media.timestamps();
@@ -37,7 +40,7 @@ bookshelf.knex.schema.hasTable('Users').then(function(exists) {
     bookshelf.knex.schema.createTable('Users', function (user) {
       user.increments('id').primary();
       user.string('email', 50).unique().notNullable();
-      user.string('password', 100);
+      user.string('password', 100).notNullable();
       user.string('oauth', 30);
       user.string('display_name', 50).notNullable().defaultTo('Anonymous');
       user.string('icon', 100);
