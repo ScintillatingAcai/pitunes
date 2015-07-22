@@ -105,7 +105,6 @@ var List = React.createClass({
         }
       });
     } else {
-      $(this).trigger('notLoggedIn');
       console.log('not logged in');
     }
   },
