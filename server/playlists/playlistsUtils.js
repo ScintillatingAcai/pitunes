@@ -71,7 +71,7 @@ module.exports = {
 
         if (found) {
           callback(null, found.attributes);
-          console.log('playlist already found:', playlistname);
+          console.log('playlist already found:', playlistName);
 
         } else {
 

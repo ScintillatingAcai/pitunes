@@ -18,7 +18,7 @@ var Room = db.Model.extend({
 
   initialize: function() {
     this.users = new Users(); //bookshelf Users collection
-    this.djQueue = []; //array of bookshelf User models
+    this.djQueue = new Users(); //bookshelf Users collection in order
     this.currentMedia = null; //bookshelf Media model
     this.mediaTimer = null;  //Timer object
     this.sockets = null;
@@ -33,9 +33,8 @@ var Room = db.Model.extend({
       this.mediaTimer.stop();
       this.mediaTimer = null;
     }
-
-    if (this.djQueue[0]) {
-      var dj = this.djQueue[0];
+    var dj = this.dequeueDJ();
+    if (dj) {
       var playlist = dj.getCurrentPlaylist().bind(this)
       .then(function(playlist) {
         playlist.getCurrentMedia().bind(this)
@@ -71,9 +70,9 @@ var Room = db.Model.extend({
                 this.playMedia();
               });
             });
-          });
-        });
-      });
+          }).catch(function(err) {return callback(err);});
+        }).catch(function(err) {return callback(err);});
+      }).catch(function(err) {return callback(err);});
     } else {
       console.log('stop media for no DJ');
       this.emitMediaStatusMessage(this.sockets.in(this.get('id')), null, 0, 'stop');
@@ -127,7 +126,6 @@ var Room = db.Model.extend({
       this.emitMediaStatusMessage(this.sockets, this.currentMedia, elapsedTime, 'update');
     };
     var onComplete = function(){
-      this.dequeueDJ();
       this.playMedia();
     };
     return new Timer(onFire.bind(this),onComplete.bind(this),increment, durationSecs);
@@ -136,7 +134,7 @@ var Room = db.Model.extend({
   toJSON: function() {
     return _.extend((new db.Model()).toJSON.call(this), {
       users: this.users && this.users.toJSON(),
-      djQueue: this.djQueue.length && this.djQueue.map(function(user) {user.toJSON();}),
+      djQueue: this.djQueue && this.djQueue.toJSON(),
       currentMedia: this.currentMedia && this.currentMedia.toJSON()
     },this);
   },
@@ -144,32 +142,31 @@ var Room = db.Model.extend({
   enqueueDJ: Promise.promisify(function(user_id, sockets, callback) {
     this.sockets = sockets;
     var user = this.users.get(user_id);
-    if (user && this.djQueue.indexOf(user) === -1) {
-      user.getCurrentPlaylist().then(function(playlist) {
-        if (!playlist) return callback(new Error('user has no current playlist, cannot enter queue'));
-        this.djQueue.push(user);
-        if (this.djQueue.length === 1) {
-          this.playMedia();
-        }
-        return callback(null, user);
-      })
-      .catch(function(err) {
-        callback(err);
-      });
-    }
-    callback(null, null);
+    if (!user) return callback(new Error('user not in room'));
+    if (this.djQueue.get(user_id)) return callback(new Error('user already in queue'));
+    user.getCurrentPlaylist().bind(this).then(function(playlist) {
+      if (!playlist) return callback(new Error('user has no current playlist, cannot enter queue'));
+      this.djQueue.push(user);
+      if (this.djQueue.length === 1) {
+        this.playMedia();
+      }
+      return callback(null, user);
+    }).catch(function(err) {return callback(err);});
   }),
 
   dequeueDJ: function() {
-    this.djQueue.push(this.djQueue.shift());
+    var dj = this.djQueue.shift();
+    this.djQueue.push(dj);
+    return dj;
   },
 
   removeDJFromQueue: function(user_id) {
+    console.log('queue check 4: ', this.djQueue.length);
     var popDJ;
     var queueIndex;
 
     for (var i = 0; i < this.djQueue.length; i++) {
-      var dj = this.djQueue[i];
+      var dj = this.djQueue.at(i);
       if (user_id === dj.get('id')) {
         popDJ = dj;
         queueIndex = i;
@@ -178,7 +175,7 @@ var Room = db.Model.extend({
     }
 
     if (queueIndex !== undefined) {
-      this.djQueue.splice(queueIndex,1);
+      this.djQueue.remove(popDJ);
     }
     console.log('removed DJ index: ', queueIndex);
 
@@ -202,7 +199,6 @@ var Room = db.Model.extend({
   removeUser: Promise.promisify(function(user_id, callback) {
     var popUser = this.users.get(user_id);
     this.users.remove(popUser);
-
     callback(null, popUser);
   }),
 

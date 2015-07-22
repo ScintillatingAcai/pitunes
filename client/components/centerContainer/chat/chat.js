@@ -21,6 +21,14 @@ var Chat = React.createClass({
       this.setState({items: nextItems});
     }.bind(this));
 
+    socket.on('user room change', function(data){
+      console.log('user room change: ', data);
+    }.bind(this));
+
+    socket.on('user queue change', function(data){
+      console.log('user queue change: ', data);
+    }.bind(this));
+
     return {items: [], text: ''};
   },
   onChange: function(e) {

@@ -31,7 +31,6 @@ var User = db.Model.extend({
 
   getCurrentPlaylist:Promise.promisify(function(callback) {
     this.retrieveCurrentPlaylist().then(function(playlist) {
-      console.log('playlist: ', playlist)
       // if (!playlist) return callback(new Error('playlist not found'));
       callback(null, playlist);
     })
@@ -55,7 +54,6 @@ var User = db.Model.extend({
       id:this.get('current_playlist_id')
     })
     .then(function(found) {
-      console.log('found: ', found);
       if (!found) return callback(new Error('media playlist not found'));
       console.log('retrieved current playlist (id): ', found.get('id'));
       callback(null,found);
