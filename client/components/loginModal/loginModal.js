@@ -4,30 +4,39 @@ var Login = React.createClass({
   getInitialState: function() {
     return {showModal: true, errorMessage: 'testing', showLogin: true, showSignUp: false};
   },
-  close: function() {
+  componentDidMount: function () {
+    $('#playlistContainer').on('click', this.handleNewPlaylistAttempt);
+  },
+  handleNewPlaylistAttempt: function () {
+    console.log("heard newplaylistAttempt");
+    if (user.id === 0) {
+      this.setState({showModal: true});
+    }
+  },
+  close: function () {
     this.setState({showModal: false});
   },
-  open: function() {
+  open: function () {
     this.setState({showModal: true});
   },
-  loginUser: function() {
+  loginUser: function () {
     var form = document.getElementById('loginForm');
     var data = {email: form[0].value, password: form[1].value};
     var that = this;
-    $.ajax({url: server_uri + '/api/users/login', 
+    $.ajax({url: server_uri + '/api/users/login',
             type: 'POST',
             dataType: 'json',
             data: data,
-            success: function(res) {
+            success: function (res) {
               user = res;
               that.setState({showModal: false});
-            } ,
+            },
             error: function(res) {
               that.setState({errorMessage: res.statusText});
             }
     });
   },
-  signupUser: function() {
+  signupUser: function () {
     var form = document.getElementById('signupForm');
     var data = {displayName: form[0].value, email: form[1].value, password: form[2].value};
     var that = this;
