@@ -2,18 +2,19 @@ var placeholder = document.createElement("div");
 placeholder.className = "placeholder";
 
 var List = React.createClass({
-  
+
   getInitialState: function () {
     return { data: this.props.data };
   },
 
-  handleClickedSearch: function () {
+  forceUpdatePlaylist: function () {
     this.state.data = arrSongs;
     this.forceUpdate();
+    this.submitUpdatePlaylist(playlistMin);
   },
 
   componentDidMount: function () {
-    $('#searchResults').on('click', 'li', this.handleClickedSearch);
+    $('#searchResults').on('click', 'li', this.forceUpdatePlaylist);
   },
 
   onClick: function (e) {
@@ -38,6 +39,7 @@ var List = React.createClass({
     if (this.nodePlacement === "after") to++;
     data.splice(to, 0, data.splice(from, 1)[0]);
     this.setState({data: data});
+    this.submitUpdatePlaylist(playlistMin);
   },
 
   dragOver: function (e) {
@@ -58,6 +60,57 @@ var List = React.createClass({
       parent.insertBefore(placeholder, e.target);
     }
   },
+
+  createNewPlaylist: function () {
+    // TODO fix placeholder, make modal (possibly?) for naming playlist
+    currentUser.currentPlaylist = {title: 'New Playlist', songs: []};
+    this.forceUpdatePlaylist();
+  },
+
+  // PLACEHOLDERS
+  // ***
+  submitNewPlaylist: function (playlist) {
+    var context = this;
+    if (user) {
+    $.ajax({url: server_uri + '/api/users/' + user.Id + '/playlists',
+      type: 'POST',
+      dataType: 'json',
+      data: playlist,
+      success: function (res) {
+        // TODO Confirm with BE - Placeholder, res.Id may change
+        users.currentPlaylist.Id = res.Id;
+        console.log('submitted new playlist');
+      },
+      error: function (res) {
+        console.log("error: " + res.statusText);
+      }
+    });
+    } else {
+      console.log('not logged in');
+    }
+  },
+
+  submitUpdatePlaylist: function (playlist) {
+    var context = this;
+    if (user) {
+      $.ajax({url: server_uri + '/api/users/' + users.Id + '/playlists' + users.currentPlaylist.Id,
+        type: 'PUT',
+        dataType: 'json',
+        data: playlist,
+        success: function (res) {
+          console.log('submitted updated playlist');
+        },
+        error: function (res) {
+          console.log("error: " + res.statusText);
+        }
+      });
+    } else {
+      console.log('not logged in');
+    }
+  },
+  // ***
+  // END PLACEHOLDERS
+
   render: function () {
     var style = {
       cursor: 'pointer',
@@ -68,7 +121,7 @@ var List = React.createClass({
     };
     var listItems = this.state.data.map((function (item, i) {
       return (
-        <div style={style} data-id={i}
+          <div style={style} data-id={i}
             key={i}
             draggable="true"
             onDragEnd={this.dragEnd}
@@ -80,7 +133,10 @@ var List = React.createClass({
     }).bind(this));
 
     return (
-      <div onDragOver={this.dragOver}>{listItems}</div>
+      <div>
+        <button onClick={this.createNewPlaylist}>New Playlist</button>
+        <div onDragOver={this.dragOver}>{listItems}</div>
+      </div>
     );
   }
 });
@@ -89,6 +145,7 @@ var List = React.createClass({
 var currentUser = {
   currentPlaylist: {
     title: 'Test Playlist',
+    id: 0,
     songs: [
       {
         img: 'https://i.ytimg.com/vi/2HQaBWziYvY/default.jpg',
@@ -117,12 +174,16 @@ var currentUser = {
 
 
 //take the songs from the user data
-var arrSongs = [];
+var arrSongs;
+var playlistMin;
 var populatePlaylist = function() {
   arrSongs = [];
+  playlistMin = {title: currentUser.currentPlaylist.title, songs: []};
   for (var song in currentUser.currentPlaylist.songs) {
     arrSongs.push([currentUser.currentPlaylist.songs[song].title + ' | ' + currentUser.currentPlaylist.songs[song].durationDisplay]);
+    playlistMin.songs.push(currentUser.currentPlaylist.songs[song].id);
   }
+
 };
 
 populatePlaylist();
