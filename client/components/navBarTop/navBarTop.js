@@ -5,7 +5,7 @@ var Nav = ReactBootstrap.Nav;
 
 var DebuggerButtonJoinQueue = React.createClass({
   handleClick: function () {
-    socket.emit('user queue join', {user: user.display_name, room: 1});
+    socket.emit('user queue join', {user: user.id, room: 1});
   },
   render: function () {
     return (
