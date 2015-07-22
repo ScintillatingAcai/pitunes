@@ -53,11 +53,12 @@ var convertYTDurationDisplay = function (duration) {
 
 var searchYouTube = function (query) {
   var encodedQuery = encodeURIComponent(query);
-  var searchUrl = 'https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=20&order=viewCount&q=' + encodedQuery + '&key=' + YOUTUBE_API_KEY;
+  var searchUrl = 'https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=20&format=5&order=viewCount&q=' + encodedQuery + '&key=' + YOUTUBE_API_KEY;
   $.ajax({
     type: "GET",
     url: searchUrl,
     success: function (response) {
+      console.log(response.items);
       var results = [];
       var resultsIds = [];
       response.items.forEach(function (e) {

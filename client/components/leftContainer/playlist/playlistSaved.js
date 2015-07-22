@@ -213,6 +213,9 @@ var Songs = React.createClass({
 });
 
 var PlaylistTitle = React.createClass({
+  componentDidMount: function() {
+    $()
+  },
   render: function(){
     var style = {
       textAlign: 'center',
