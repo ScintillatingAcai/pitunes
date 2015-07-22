@@ -7,14 +7,14 @@ INSERT INTO Users (email, password, display_name, location, current_playlist_id,
 INSERT INTO Users (email, password, display_name, location, current_playlist_id, created_at, updated_at) VALUES ('test4@test.com', '$2a$10$.G2bupIS65iF07.Y.0JzYOk7fRpbqk3MsvSGZI2ZZnLxYfpFKFgiu' , 'Test User 4', 'test4', 0, '2015-07-15 00:00:00', '2015-07-15 00:00:00');
 
 -- PLAYLISTS
-INSERT INTO Playlists (user_id, name, created_at, updated_at) VALUES (1, 'TestUser1 Playlist 1', '2015-07-15 00:00:00', '2015-07-15 00:00:00');
-INSERT INTO Playlists (user_id, name, created_at, updated_at) VALUES (1, 'TestUser1 Playlist 2', '2015-07-15 00:00:00', '2015-07-15 00:00:00');
-INSERT INTO Playlists (user_id, name, created_at, updated_at) VALUES (1, 'TestUser1 Playlist 3', '2015-07-15 00:00:00', '2015-07-15 00:00:00');
+INSERT INTO Playlists (user_id, name, current_media_index, created_at, updated_at) VALUES (1, 'TestUser1 Playlist 1', 1, '2015-07-15 00:00:00', '2015-07-15 00:00:00');
+INSERT INTO Playlists (user_id, name, current_media_index, created_at, updated_at) VALUES (1, 'TestUser1 Playlist 2', 1,'2015-07-15 00:00:00', '2015-07-15 00:00:00');
+INSERT INTO Playlists (user_id, name, current_media_index, created_at, updated_at) VALUES (1, 'TestUser1 Playlist 3', 1,'2015-07-15 00:00:00', '2015-07-15 00:00:00');
 
-INSERT INTO Playlists (user_id, name, created_at, updated_at) VALUES (2, 'TestUser2 Playlist 1', '2015-07-15 00:00:00', '2015-07-15 00:00:00');
-INSERT INTO Playlists (user_id, name, created_at, updated_at) VALUES (2, 'TestUser2 Playlist 2', '2015-07-15 00:00:00', '2015-07-15 00:00:00');
+INSERT INTO Playlists (user_id, name, current_media_index, created_at, updated_at) VALUES (2, 'TestUser2 Playlist 1', 1,'2015-07-15 00:00:00', '2015-07-15 00:00:00');
+INSERT INTO Playlists (user_id, name, current_media_index, created_at, updated_at) VALUES (2, 'TestUser2 Playlist 2', 1,'2015-07-15 00:00:00', '2015-07-15 00:00:00');
 
-INSERT INTO Playlists (user_id, name, created_at, updated_at) VALUES (3, 'TestUser3 Playlist 1', '2015-07-15 00:00:00', '2015-07-15 00:00:00');
+INSERT INTO Playlists (user_id, name, current_media_index, created_at, updated_at) VALUES (3, 'TestUser3 Playlist 1', 1,'2015-07-15 00:00:00', '2015-07-15 00:00:00');
 
 
 -- MEDIA

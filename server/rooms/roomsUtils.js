@@ -8,7 +8,7 @@ var openSockets;
 module.exports = {
 
   getRoom: function(room_id) {
-    console.log('retrieving info for room_id:' + room_id);
+    console.log('retrieving info for room: ' + room_id);
     var room = singleton.rooms.get(room_id);
     return room;
   },
@@ -25,13 +25,10 @@ module.exports = {
     new Room({
         name: roomname
       }).fetch().then(function(found) {
-
         if (found) {
           callback(null, found);
           console.log('room already found:', name);
-
         } else {
-
           var room = new Room({
             name: roomname,
           })
@@ -39,15 +36,9 @@ module.exports = {
             var allRooms = singleton.rooms;
             allRooms.add(newRoom);
             callback(null, newRoom);
-          })
-          .catch(function(error) {
-            console.log('error:', error);
-          });
+          }).catch(function(err) {return callback(err);});
         }
-      })
-      .catch(function(error) {
-        console.log('error:', error);
-      });
+      }).catch(function(err) {return callback(err);});
   },
 
   //get a room from DB by ID
@@ -73,10 +64,7 @@ module.exports = {
         } else {
           console.log('room_id not found:' + room_id);
         }
-      })
-      .catch(function(error) {
-        console.log('error:', error);
-      });
+      }).catch(function(err) {return callback(err);});
   },
 
   retrieveAllRooms: function(callback) {
@@ -96,10 +84,7 @@ module.exports = {
         } else {
           console.log('rooms not found');
         }
-      })
-      .catch(function(error) {
-        console.log('error:', error);
-      });
+      }).catch(function(err) {return callback(err);});
   },
 
   //update a room in DB by ID
@@ -119,10 +104,7 @@ module.exports = {
         } else {
           console.log('room_id not found:' + room_id);
         }
-      })
-      .catch(function(error) {
-        console.log('error:', error);
-      });
+      }).catch(function(err) {return callback(err);});
   },
 
   //store a new room in DB
@@ -146,15 +128,9 @@ module.exports = {
           room.save().then(function(newRoom) {
               new Rooms().add(newRoom);
               callback(null, newRoom);
-            })
-            .catch(function(error) {
-              console.log('error:', error);
-            });
+            }).catch(function(err) {return callback(err);});
         }
-      })
-      .catch(function(error) {
-        console.log('error:', error);
-      });
+      }).catch(function(err) {return callback(err);});
   },
 
   //get a room from DB by ID
@@ -177,10 +153,7 @@ module.exports = {
         } else {
           console.log('room_id not found:' + room_id);
         }
-      })
-      .catch(function(error) {
-        console.log('error:', error);
-      });
+      }).catch(function(err) {return callback(err);});
   },
 
   socketsForTimer: function(sockets) {
