@@ -8,7 +8,7 @@ var List = React.createClass({
   },
 
   forceUpdatePlaylist: function () {
-    this.state.data = arrSongs;
+    this.setState({data: arrSongs});
     this.forceUpdate();
   },
 
@@ -20,13 +20,14 @@ var List = React.createClass({
   onClick: function (e) {
     console.log(e.currentTarget.lastChild);
   },
+
   dragStart: function (e) {
     this.dragged = e.currentTarget;
     e.dataTransfer.effectAllowed = 'move';
-    
     // Firefox requires dataTransfer data to be set
     e.dataTransfer.setData("text/html", e.currentTarget);
   },
+
   dragEnd: function () {
     this.dragged.style.display = "block";
     this.dragged.parentNode.removeChild(placeholder);
@@ -64,7 +65,7 @@ var List = React.createClass({
   createNewPlaylist: function () {
     // TODO fix placeholder, make modal (possibly?) for naming playlist
     currentUser.currentPlaylist = {title: 'New Playlist', songs: []};
-    this.forceUpdatePlaylist();
+    $(this).trigger('updateTitle');
     this.submitNewPlaylist(playlistMin);
   },
 
@@ -72,15 +73,17 @@ var List = React.createClass({
   // ***
   submitNewPlaylist: function (playlist) {
     var context = this;
-    if (user) {
+    if (user.id !== 0) {
     $.ajax({url: server_uri + '/api/users/' + user.id + '/playlists',
       type: 'POST',
       dataType: 'json',
       data: playlist,
       success: function (res) {
         // TODO Confirm with BE - Placeholder, res.Id may change
-        users.currentPlaylist.Id = res.playlist_id;
+        currentUser.currentPlaylist.Id = res.playlist_id;
         console.log('submitted new playlist');
+        populatePlaylist();
+        context.forceUpdatePlaylist();
       },
       error: function (res) {
         console.log("error: " + res.statusText);
@@ -93,7 +96,7 @@ var List = React.createClass({
 
   submitUpdatePlaylist: function (playlist) {
     var context = this;
-    if (user) {
+    if (user.id !== 0) {
       $.ajax({url: server_uri + '/api/users/' + user.id + '/playlists/' + currentUser.currentPlaylist.id,
         type: 'PUT',
         dataType: 'json',
@@ -179,7 +182,7 @@ var arrSongs;
 var playlistMin;
 var populatePlaylist = function() {
   arrSongs = [];
-  playlistMin = {title: currentUser.currentPlaylist.title, songs: []};
+  playlistMin = {name: currentUser.currentPlaylist.title, songs: []};
   for (var song in currentUser.currentPlaylist.songs) {
     arrSongs.push([currentUser.currentPlaylist.songs[song].title + ' | ' + currentUser.currentPlaylist.songs[song].durationDisplay]);
     playlistMin.songs.push(currentUser.currentPlaylist.songs[song].id);
