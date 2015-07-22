@@ -42,7 +42,7 @@ module.exports = {
   },
 
   updatePlaylist: function(req, res) {
-    var playlist_ID = (url.parse(req.url).pathname).slice(1);
+    var playlist_ID = req.playlist_id;
     var playlistInfo = req.body;
 
     console.log('updating playlist_id:', playlist_ID, ' with info: ', playlistInfo );
