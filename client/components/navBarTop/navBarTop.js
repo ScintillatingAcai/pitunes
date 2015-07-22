@@ -27,7 +27,7 @@ var DebuggerButtonSimVideoDesync = React.createClass({
 
 var DebuggerButtonJoinRoom = React.createClass({
   handleClick: function () {
-    socket.emit('user room join', {user:1,room:1})
+    socket.emit('user room join', {user: user.id,room:1})
   },
   render: function () {
     return (
