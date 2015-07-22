@@ -16,7 +16,6 @@ var ChatList = React.createClass({
 
 var Chat = React.createClass({
   getInitialState: function() {
-
     socket.on('user message', function(data){
       var nextItems = this.state.items.concat([data.displayName + ': ' + data.message]);
       this.setState({items: nextItems});

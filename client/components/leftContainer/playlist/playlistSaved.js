@@ -7,14 +7,12 @@ var List = React.createClass({
     return { data: this.props.data };
   },
 
-  forceUpdatePlaylist: function () {
+  handleClickedSearch: function () {
     this.setState({data: arrSongs});
-    this.forceUpdate();
   },
 
-
   componentDidMount: function () {
-    $('#searchResults').on('click', 'li', this.forceUpdatePlaylist);
+    $('#searchResults').on('click', 'li', this.handleClickedSearch);
   },
 
   onClick: function (e) {
@@ -65,30 +63,28 @@ var List = React.createClass({
   createNewPlaylist: function () {
     // TODO fix placeholder, make modal (possibly?) for naming playlist
     currentUser.currentPlaylist = {title: 'New Playlist', songs: []};
-    $(this).trigger('updateTitle');
     this.submitNewPlaylist(playlistMin);
   },
 
   // PLACEHOLDERS
   // ***
   submitNewPlaylist: function (playlist) {
-    var context = this;
     if (user.id !== 0) {
-    $.ajax({url: server_uri + '/api/users/' + user.id + '/playlists',
-      type: 'POST',
-      dataType: 'json',
-      data: playlist,
-      success: function (res) {
-        // TODO Confirm with BE - Placeholder, res.Id may change
-        currentUser.currentPlaylist.Id = res.playlist_id;
-        console.log('submitted new playlist');
-        populatePlaylist();
-        context.forceUpdatePlaylist();
-      },
-      error: function (res) {
-        console.log("error: " + res.statusText);
-      }
-    });
+      var context = this;
+      $.ajax({url: server_uri + '/api/users/' + user.id + '/playlists',
+        type: 'POST',
+        dataType: 'json',
+        data: playlist,
+        success: function (res) {
+          currentUser.currentPlaylist.Id = res.playlist_id;
+          console.log('submitted new playlist');
+          populatePlaylist();
+          context.handleClickedSearch();
+        },
+        error: function (res) {
+          console.log("error: " + res.statusText);
+        }
+      });
     } else {
       console.log('not logged in');
     }
@@ -121,24 +117,35 @@ var List = React.createClass({
       padding: '0',
       margin: '0 0 0 10px',
       color: '#FFFFFF',
+      fontSize: '10px',
       listStyleType: 'none'
     };
+    var buttonStyle = {
+      backgroundColor: 'white',
+      color: 'black',
+      padding: '0 0 0 0',
+      margin: '0 0 0 2px'
+    }
     var listItems = this.state.data.map((function (item, i) {
       return (
-          <div style={style} data-id={i}
-            key={i}
-            draggable="true"
-            onDragEnd={this.dragEnd}
-            onDragStart={this.dragStart}
-            onClick={this.onClick}>
+        <div style={style} data-id={i}
+          key={i}
+          draggable="true"
+          onDragEnd={this.dragEnd}
+          onDragStart={this.dragStart}
+          onClick={this.onClick}>
           {item}
+          <button style={buttonStyle}>Top</button>
+          <button style={buttonStyle}>Bot</button>
+          <button style={buttonStyle}>Rem</button>
         </div>
+
       );
     }).bind(this));
 
     return (
       <div>
-        <button onClick={this.createNewPlaylist}>New Playlist</button>
+        <button className='buttonNewPlaylist' onClick={this.createNewPlaylist}>New Playlist</button>
         <div onDragOver={this.dragOver}>{listItems}</div>
       </div>
     );
@@ -148,11 +155,11 @@ var List = React.createClass({
 //list of dummy user data
 var currentUser = {
   currentPlaylist: {
-    title: 'Test Playlist',
+    name: 'Test Playlist',
     id: 0,
     songs: [
       {
-        img: 'https://i.ytimg.com/vi/2HQaBWziYvY/default.jpg',
+        img_url: 'https://i.ytimg.com/vi/2HQaBWziYvY/default.jpg',
         title: 'Darude - Sandstorm',
         id: '2HQaBWziYvY',
         duration: 224,
@@ -182,12 +189,11 @@ var arrSongs;
 var playlistMin;
 var populatePlaylist = function() {
   arrSongs = [];
-  playlistMin = {name: currentUser.currentPlaylist.title, songs: []};
+  playlistMin = {name: currentUser.currentPlaylist.name, songs: []};
   for (var song in currentUser.currentPlaylist.songs) {
     arrSongs.push([currentUser.currentPlaylist.songs[song].title + ' | ' + currentUser.currentPlaylist.songs[song].durationDisplay]);
     playlistMin.songs.push(currentUser.currentPlaylist.songs[song].id);
   }
-
 };
 
 populatePlaylist();
@@ -216,7 +222,7 @@ var PlaylistTitle = React.createClass({
       borderBottom: '2px solid #444444'
     };
     return (
-      <h4 style={style}>{currentUser.currentPlaylist.title}</h4>
+      <h4 style={style}>{currentUser.currentPlaylist.name}</h4>
     );
   }
 });
@@ -234,7 +240,7 @@ var PlaylistSaved = React.createClass({
       bottom: '0'
     };
     return (
-      <div style={style}>
+      <div id="playlistContainer" style={style}>
         <PlaylistTitle />
         <Songs />
       </div>
