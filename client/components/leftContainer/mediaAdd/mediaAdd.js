@@ -101,9 +101,9 @@ var SearchBar = React.createClass({
               $('#searchResults').append('<li class="searchResultItem" style="margin-bottom:10px; margin-left:-30px; list-style:none;"><img className="searchResultImg" style="height:50px; width:50px; margin-right:5px;" src="' + e.img + '" /><div className="searchResultTitle" style="color:#FFF; font-size:10px; display:inline; cursor:pointer;" data-durationDisplay="' + e.durationDisplay + '" data-duration="' + e.duration + '" data-title="' + context.escapeDQ(e.title) + '" data-id="' + e.id + '"> ' + (e.title).slice(0, 35) + '...' + '</div><div style="color:#FFF; font-size:10px; display:inline;"> | ' + e.durationDisplay + '</div></li>');
             });
             $(".searchResultItem").on('click', function (e) {
-              if (user.id !== 0) {
-                if ($(e.target).attr('className') === 'searchResultTitle') {
-                  loadVideo($(e.target).attr('data-id'), 0);
+              if ($(e.target).attr('className') === 'searchResultTitle') {
+                loadVideo($(e.target).attr('data-id'), 0);
+                if (user.id !== 0) {
                   addSongToPlaylist({title: $(e.target).attr('data-title'), id: $(e.target).attr('data-id'), duration: $(e.target).attr('data-duration'), durationDisplay: $(e.target).attr('data-durationDisplay')});
                 }
               }
