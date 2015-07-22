@@ -17,8 +17,13 @@ var Playlist = db.Model.extend({
     return this.belongsTo(User, 'user_id');
   },
 
-  getCurrentMedia:Promise.promisify(function(callback) {
-    return this.retrieveCurrentMedia(callback);
+  getCurrentMedia: Promise.promisify(function(callback) {
+    this.retrieveCurrentMedia().then(function(media) {
+      callback(null, media);
+    })
+    .catch(function(err) {
+      callback(err);
+    });
   }),
 
   incrementCurrentMediaIndex:Promise.promisify(function(callback) {
@@ -27,26 +32,32 @@ var Playlist = db.Model.extend({
     .then(function(found) {
       if (!found) return callback(new Error('medias not found'));
       var mediaCount = found.length;
-      return ( this.get('current_media_index') % mediaCount) + 1; //order starts at 1 insead of 0
-    }).bind(this)
-    .then(function(mediaIndex) {
-      console.log('incremented media media index: ', mediaIndex);
-      this.setCurrentMedia(mediaIndex);
+      var newMediaIndex = ( this.get('current_media_index') % mediaCount) + 1; //order starts at 1 insead of 0
+      console.log('incremented media index: ', newMediaIndex);
+      this.setCurrentMediaIndex(newMediaIndex).then(function(mediaIndex) {
+        callback(null, callback);
+      })
+      .catch(function(err) {
+        callback(err);
+      });
+    })
+    .catch(function(err) {
+      callback(err);
     });
   }),
 
-  setCurrentMedia: Promise.promisify(function( currentMedia_ID , callback){
-    this.set('current_media_index', currentMedia_ID);
-
-    this.save().bind(this).then(function(playlist) {
-      this.retrieveCurrentMedia(function(err, currentMedia) {
-        this.currentMedia = currentMedia;
-        callback(null, currentMedia);
-      }.bind(this));
+  setCurrentMediaIndex: Promise.promisify(function(currentMedia_ID, callback){
+    this.set('current_media_index', currentMedia_ID)
+    .save().bind(this)
+    .then(function(playlist) {
+      callback(null, playlist);
+    })
+    .catch(function(err) {
+      callback(err);
     });
   }),
 
-  retrieveCurrentMedia: function(callback){
+  retrieveCurrentMedia: Promise.promisify(function(callback){
     var mediaIndex = this.get('current_media_index');
     if (mediaIndex === 0) return callback(null, null); //send back 0 which indicates no playlist but not an error
 
@@ -59,7 +70,7 @@ var Playlist = db.Model.extend({
     .catch(function(error) {
       callback(error);
     });
-  },
+  }),
 
   retrievePlaylist: Promise.promisify(function( callback ) {
 

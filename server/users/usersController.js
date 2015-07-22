@@ -2,7 +2,6 @@ var url = require('url');
 var utils = require('./usersUtils');
 var utility = require('../utility');
 
-var Promise = require('bluebird');
 
 module.exports = {
 
@@ -26,7 +25,7 @@ module.exports = {
 
   addUser: function(req, res, next) {
     console.log('adding user: ',req.body);
-    utils.storeUser.then(function(user) {
+    utils.storeUser(req.body).then(function(user) {
       if (!user) return next(new Error('user does not exist'));
       res.json(user);
     })

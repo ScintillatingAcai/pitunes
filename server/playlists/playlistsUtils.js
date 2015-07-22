@@ -44,7 +44,7 @@ module.exports = {
         id: playlist_id
       }).fetch().then(function(found) {
         if (found) {
-            found.set(playlistInfo);
+          found.set(playlistInfo);
           found.save().then(function(updatedPlaylist) {
               callback(null, updatedPlaylist);
             })
