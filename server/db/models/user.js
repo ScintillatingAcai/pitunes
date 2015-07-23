@@ -68,13 +68,18 @@ var User = db.Model.extend({
   },
 
   retrieveAllPlaylists: function(callback) {
-    this.playlists().fetch()
-      .then( function(found) {
-        if (!found) return callback(new Error('User playlists not found'));
-        else {
-          callback(null, found);
-        }
-      });
+    this.playlists().fetch(
+      { withRelated: ['medias'],
+        required: true })
+    .then( function(found) {
+      if (!found) return callback(new Error('User playlists not found'));
+      else {
+        callback(null, found);
+      }
+    })
+    .catch(function(error) {
+      callback(error);
+    });
   }
 });
 

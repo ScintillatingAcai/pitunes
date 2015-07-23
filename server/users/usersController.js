@@ -67,13 +67,13 @@ module.exports = {
     res.status(200).end();
   },
 
-  getAllUserPlaylists: function( req, res) {
+  getAllUserPlaylists: function( req, res, next ) {
     utils.retrieveAllUserPlaylists(req.user_id)
     .then(function(playlist) {
       res.json(playlist);
     })
     .catch(function(error) {
-      return next(new Error('controller error: ', err));
+      return next(new Error('controller error: ', error));
     });
   },
 

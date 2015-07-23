@@ -32,7 +32,6 @@ module.exports = {
     var R = Promise.promisify(utils.storePlaylist);
     R(req.user_id, req.body).then(function(playlist) {
       if (playlist) {
-        console.log("playlist info: ", playlist);
         res.json(playlist);
       } else {
         res.status(500).end();
