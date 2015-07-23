@@ -74,15 +74,20 @@ var RoomsContainer = React.createClass({
 var Rooms = React.createClass({
     render: function() {
         return (
-            <div>
-                {roomsCollection.map(function(room){
-                    return (
-                        <div>
-                            <h3 className="j-center-text">{room.get('name')} <br />Current DJs: {room.get('usersCount')}</h3>
-                            <hr />
-                        </div>
-                    )
-                })}
+            <div className="container">
+                <div className="row">
+                    {roomsCollection.map(function(room){
+                        return (
+                            <div className="col-lg-4 col-sm-4">
+                                <div className="clearfix"></div>
+                                <h2 className="section-heading j-center-text">{room.get('name')} <br />Current DJs: {room.get('userCount')}</h2>
+                                <div className="j-left-25">
+                                    <img className="img-responsive" src="assets/img/headphones.jpg" alt="" />
+                                </div>
+                            </div>
+                        )
+                    })}
+                </div>
             </div>
         );
     }
