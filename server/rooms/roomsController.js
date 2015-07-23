@@ -13,6 +13,8 @@ module.exports = {
   getRoom: function(req, res) {
     var room_id = req.room_id;
     var room = utils.getRoom(room_id);
+    console.log('room: ', room);
+    console.log('room json: ', room.toJSON());
 
     if (room) {
       res.json(room);

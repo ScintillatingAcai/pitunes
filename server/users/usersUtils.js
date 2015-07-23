@@ -18,6 +18,31 @@ function cleanAttributes (attributes) {
 
 module.exports = {
 
+  getUser: function(user_id) {
+    console.log('retrieving info for user: ' + user_id);
+    var singleton = require('../singleton.js');
+    var user = singleton.users.get(user_id);
+    return user;
+  },
+
+  getAllUsers: function() {
+    console.log('retrieving all users');
+    var singleton = require('../singleton.js');
+    var allUsers = singleton.users;
+    return allUsers;
+  },
+
+  addUser: function(user, callback) {
+    var singleton = require('../singleton.js');
+    singleton.users.add(user);
+  },
+
+  removeUser: function(user_id, callback) {
+    var singleton = require('../singleton.js');
+    singleton.users.remove(user_id);
+    console.log(singleton.users);
+  },
+
   //get a user from DB by ID
   retrieveUser: Promise.promisify(function(user_id, callback) {
     new User({
@@ -94,22 +119,21 @@ module.exports = {
 
     new User({
         email: email
-      }).fetch().then(function(found) {
+      }).fetch().bind(this)
+    .then(function(found) {
         if (found) {
           found.comparePassword(password, function(err, isMatch) {
             if (err) console.log('error: ', err);
             if (isMatch) {
               //do sessions
               console.log('user authenticated');
-              callback(null, found.attributes);
+               return callback(null, found);
             } else {
               console.log('password incorrect');
               callback(new Error('Password Incorrect'), null);
             }
           });
-
         } else {
-
           console.log('user not found');
           callback(new Error('User not found'), null);
         }
@@ -126,5 +150,7 @@ module.exports = {
       callback(null, found);
     });
   })
-
 };
+
+require('../singleton.js');
+
