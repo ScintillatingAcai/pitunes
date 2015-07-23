@@ -6,11 +6,11 @@ module.exports = {
 
   attachPlaylist: function(req, res, next, playlist_id) {
     console.log('attaching playlist_id: ', playlist_id);
-    req.playlist_id = playlist_id;
+    req.playlist_id = parseInt(playlist_id);
     next();
   },
 
-  getPlaylist: function(req, res) {
+  getPlaylist: function(req, res, next) {
     var playlist_ID = req.playlist_id;
     console.log('retrieving info for playlist_id:' + playlist_ID);
     var R = Promise.promisify(utils.retrievePlaylist);
@@ -23,10 +23,11 @@ module.exports = {
     })
     .catch(function(error) {
       console.log('controller error: ',error);
+      return next(new Error('controller error: ', error));
     });
   },
 
-  addPlaylist: function(req, res) {
+  addPlaylist: function(req, res, next) {
     console.log('adding playlist: ',req.body);
     var R = Promise.promisify(utils.storePlaylist);
     R(req.body).then(function(playlist) {
@@ -38,10 +39,11 @@ module.exports = {
     })
     .catch(function(error) {
       console.log('controller error: ',error);
+      return next(new Error('controller error: ', error));
     });
   },
 
-  updatePlaylist: function(req, res) {
+  updatePlaylist: function(req, res, next) {
     var playlist_ID = req.playlist_id;
     var playlistInfo = req.body;
 
@@ -56,13 +58,14 @@ module.exports = {
     })
     .catch(function(error) {
       console.log('controller error: ',error);
+      return next(new Error('controller error: ', error));
     });
   },
 
-  setDefaultPlaylist: function(req, res) {
+  setDefaultPlaylist: function(req, res, next) {
     var R = Promise.promisify(utils.updateDefaultPlaylist);
 
-    R(req.user_id,req.playlist_id).then(function(user) {
+    R(req.user_id, req.playlist_id).then(function(user) {
       if (user) {
         res.end();
       } else {
@@ -71,8 +74,7 @@ module.exports = {
     })
     .catch(function(error) {
       console.log('controller error: ',error);
+      return next(new Error('controller error: ', error));
     });
   }
-
-
 };

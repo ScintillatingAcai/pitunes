@@ -6,7 +6,7 @@ module.exports = {
 
   attachRoom: function(req, res, next, room_id) {
     console.log('attaching room_id: ', room_id);
-    req.room_id = room_id;
+    req.room_id = parseInt(room_id);
     next();
   },
 
@@ -41,7 +41,7 @@ module.exports = {
     }
   },
 
-  addRoom: function(req, res) {
+  addRoom: function(req, res, next) {
     console.log('adding room: ',req.body);
     var R = Promise.promisify(utils.addRoom);
     R(req.body).then(function(data) {
@@ -53,10 +53,11 @@ module.exports = {
     })
     .catch(function(error) {
       console.log('controller error: ',error);
+      return next(new Error('controller error: ', error));
     });
   },
 
-  updateRoom: function(req, res) {
+  updateRoom: function(req, res, next) {
     var room_ID = req.room_id;
     var roomInfo = req.body;
 
@@ -71,10 +72,11 @@ module.exports = {
     })
     .catch(function(error) {
       console.log('controller error: ',error);
+      return next(new Error('controller error: ', error));
     });
   },
 
-  addDJToQueue: function(req, res) {
+  addDJToQueue: function(req, res, next) {
     var room_id = req.room.id;
     var room = req.room;
 
@@ -91,7 +93,7 @@ module.exports = {
     })
     .catch(function(error) {
       console.log('controller error: ',error);
+      return next(new Error('controller error: ', error));
     });
   }
-
 };
