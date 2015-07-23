@@ -83,6 +83,7 @@ module.exports = function(io) {
       var room = roomUtils.getRoom(room_id);
       if (!user_id) {
         socket.broadcast.in(room_id).emit("user room change", JSON.stringify(room.users));
+        socket.emit("user room change", JSON.stringify(room.users));
         socket.leave(room_id);
         // socket.emit("user room leave", data.user.id);
         return console.log('anon user left room');
@@ -120,6 +121,7 @@ module.exports = function(io) {
         if(room.removeDJFromQueue(user_id)) {
           //just in case they are in queue we will update and broadcast
           socket.broadcast.in(room_id).emit("user queue change", JSON.stringify(room.djQueue));
+          socket.emit("user queue change", JSON.stringify(room.djQueue));
           // socket.emit("user queue change", user_id);
           // socket.emit("user queue leave", user_id);
         }

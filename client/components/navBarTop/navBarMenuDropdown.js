@@ -11,6 +11,17 @@ var SignOut = React.createClass({
   },
   close: function() {
     this.setState({showModal: false});
+
+    var that = this;
+    $.ajax({url: server_uri + '/api/users/logout',
+      type: 'GET',
+      success: function (res) {
+        user = {id: 0, display_name: 'Anonymous' + Math.floor(Math.random() * 1000)};
+      },
+      error: function (res) {
+        console.error('error in user logout')
+      }
+    });
   },
   open: function() {
     this.setState({showModal: true});
