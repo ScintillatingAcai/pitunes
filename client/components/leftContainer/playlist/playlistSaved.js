@@ -29,7 +29,6 @@ var List = React.createClass({
   dragEnd: function () {
     this.dragged.style.display = "block";
     this.dragged.parentNode.removeChild(placeholder);
-
     // Update data
     var data = this.state.data;
     var from = Number(this.dragged.dataset.id);
@@ -62,8 +61,8 @@ var List = React.createClass({
 
   createNewPlaylist: function () {
     // TODO fix placeholder, make modal (possibly?) for naming playlist
-    currentUser.currentPlaylist = {name: 'New Playlist', songs: []};
-    this.submitNewPlaylist(playlistMin);
+    currentUser.currentPlaylist = {name: 'Newer Playlist', songs: []};
+    this.submitNewPlaylist(currentUser.currentPlaylist);
   },
 
   // PLACEHOLDERS
@@ -197,6 +196,39 @@ var populatePlaylist = function() {
 };
 
 populatePlaylist();
+
+var getAllPlaylists = function() {
+  if (user.id !== 0) {
+    $.ajax({url: server_uri + '/api/users/' + user.id + '/playlists/',
+      type: 'GET',
+      dataType: 'json',
+      success: function (res) {
+        console.log('Retrieved playlists', res);
+        user.playlists = res;
+      },
+      error: function(res) {
+        console.log('errorMessage: ' + res.statusText);
+      }
+    });
+  }
+};
+
+var getCurrentPlaylist = function() {
+  if (user.id !== 0) {
+    $.ajax({url: server_uri + '/api/users/' + user.id + '/playlists/' + user.current_playlist_id,
+      type: 'GET',
+      dataType: 'json',
+      success: function (res) {
+        console.log('Retrieved playlists', res);
+        user.playlists = res;
+      },
+      error: function(res) {
+        console.log('errorMessage: ' + res.statusText);
+      }
+    });
+  }
+};
+
 
 var addSongToPlaylist = function (songNode) {
   currentUser.currentPlaylist.songs.push(songNode);

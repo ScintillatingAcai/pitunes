@@ -24,44 +24,44 @@ var Login = React.createClass({
     var data = {email: form[0].value, password: form[1].value};
     var that = this;
     $.ajax({url: server_uri + '/api/users/login',
-            type: 'POST',
-            dataType: 'json',
-            data: data,
-            success: function (res) {
-              user = res;
-              that.setState({showModal: false});
-            },
-            error: function(res) {
-              that.setState({errorMessage: res.statusText});
-            }
+      type: 'POST',
+      dataType: 'json',
+      data: data,
+      success: function (res) {
+        user = res;
+        that.setState({showModal: false});
+      },
+      error: function (res) {
+        that.setState({errorMessage: res.statusText});
+      }
     });
   },
   signupUser: function () {
     var form = document.getElementById('signupForm');
     var data = {displayName: form[0].value, email: form[1].value, password: form[2].value};
     var that = this;
-    $.ajax({url: server_uri + '/api/users/signup', 
+    $.ajax({url: server_uri + '/api/users/signup',
             type: 'POST',
             dataType: 'json',
             data: data,
-            success: function(res) {
+            success: function (res) {
               user = res;
               that.setState({showModal: false});
             } ,
-            error: function(res) {
+            error: function (res) {
               that.setState({errorMessage: res.statusText});
             }
           });
   },
-  signUpClick: function() {
+  signUpClick: function () {
     this.setState({showLogin: false});
     this.setState({showSignUp: true});
   },
-  loginClick: function() {
+  loginClick: function () {
     this.setState({showLogin: true});
     this.setState({showSignUp: false});
   },
-  showLoginForm: function(){
+  showLoginForm: function () {
     return (
       <div>
         <form id='loginForm'>
@@ -74,7 +74,7 @@ var Login = React.createClass({
       </div>
     );
   },
-  showSignUpForm: function() {
+  showSignUpForm: function () {
     return (
       <div>
         <form id='signupForm'>
@@ -89,7 +89,7 @@ var Login = React.createClass({
       </div>
     );
   },
-  render: function() {
+  render: function () {
     var buttonStyle = {
       backgroundColor: 'grey',
       marginTop: '8px'
@@ -114,7 +114,7 @@ var Login = React.createClass({
 });
 
 var LoginModal = React.createClass({
-  render: function() {
+  render: function () {
     return (
       <Login />
     );
