@@ -19,13 +19,14 @@ var glob = require('glob-array');
 
 var paths = {
   sass: ['./scss/**/*.scss'],
-  clientjs: ['./client/components/**/*.js',
-      './client/components/**/**/*.js'],
+  clientjs: ['./client/src/**/*.js',
+      './client/src/**/**/*.js',
+      './client/src/**/**/**/*.js'],
   serverjs: ['./server/*.js',
       './server/**/*.js',
       './server/**/**/*.js'
     ],
-  dist: './dist'
+  dist: './server'
 };
 
 // var libFilesToMove = [];
@@ -120,4 +121,4 @@ gulp.task('install_lib', function() {
 });
 
 //gulp.task('default', ['install_lib', 'babel', 'lint', 'browserify-client']);
-gulp.task('default', ['install_lib', 'browserify-server', 'browserify-client']);
+gulp.task('default', ['install_lib', 'browserify-client']);

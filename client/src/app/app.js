@@ -1,4 +1,3 @@
-// app.js
 var YOUTUBE_API_KEY = 'AIzaSyA_ZnEUUw8uGbEdGfBXH296QX-1nnyeJnQ';
 
 // REMOVE FOR PRODUCITON, TESTING FOR JOHN ONLY
@@ -118,6 +117,7 @@ var AppContainer = React.createClass({
       msUserSelect: 'none',
       userSelect: 'none'
     };
+
     return (
       <div style={style}>
         <LoginModal />
