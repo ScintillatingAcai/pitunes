@@ -63,12 +63,12 @@ var Login = React.createClass({
   },
   showLoginForm: function () {
     return (
-      <div>
+      <div id="loginFormContainer">
         <form id='loginForm'>
           <Input type='email' label='Email Address' placeholder='Enter email' required />
           <Input type='password' label='Password' placeholder='Enter password' required />
         </form>
-        <Button onClick={this.loginUser}>Log In</Button>
+        <Button id="userLoginButton" onClick={this.loginUser}>Log In</Button>
         <Button onClick={this.close}>Cancel</Button>
         <Button onClick={this.signUpClick}>Sign Up</Button>
       </div>

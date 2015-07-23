@@ -7,12 +7,14 @@ var List = React.createClass({
     return { data: this.props.data, text: ''};
   },
 
-  handleClickedSearch: function () {
+  handleClicked: function () {
+    console.log("heardhandleclicked")
     this.setState({data: arrSongs});
   },
 
   componentDidMount: function () {
-    $('#searchResults').on('click', 'li', this.handleClickedSearch);
+    $('#searchResults').on('click', 'li', this.handleClicked);
+    $('#loginFormContainer').on('click', this.handleClicked);
   },
 
   onClick: function (e) {
@@ -271,12 +273,13 @@ var PlaylistTitle = React.createClass({
   getInitialState: function() {
     return {title: this.props.title}
   },
-  // componentDidMount: function() {
-  //   $('#playlistContainer div').on('click', '.buttonNewPlaylist', this.handleNewPlaylist)
-  // },
-  // handleNewPlaylist: function() {
-  //   this.setState({title: user.current_playlist.name});
-  // },
+  componentDidMount: function() {
+    $('#playlistContainer div').on('click', '.buttonNewPlaylist', this.handleNewPlaylist)
+  },
+  handleNewPlaylist: function() {
+    this.setState({title: user.current_playlist.name});
+    this.forceUpdate();
+  },
   render: function(){
     var style = {
       textAlign: 'center',
