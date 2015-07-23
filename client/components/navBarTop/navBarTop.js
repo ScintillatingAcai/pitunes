@@ -3,13 +3,35 @@
 var Navbar = ReactBootstrap.Navbar;
 var Nav = ReactBootstrap.Nav;
 
+var DebuggerButtonGetCurPlaylist = React.createClass({
+  handleClick: function () {
+    getCurrentPlaylist();
+  },
+  render: function () {
+    return (
+      <button onClick={this.handleClick}>Get User Current Playlist</button>
+    );
+  }
+});
+
 var DebuggerButtonJoinQueue = React.createClass({
   handleClick: function () {
     socket.emit('user queue join', {user: user, room: 1});
   },
   render: function () {
     return (
-      <button onClick={this.handleClick}>Join Queue U1R1</button>
+      <button onClick={this.handleClick}>Join Queue</button>
+    );
+  }
+});
+
+var DebuggerButtonLeaveQueue = React.createClass({
+  handleClick: function () {
+    socket.emit('user queue leave', {user: user, room: 1});
+  },
+  render: function () {
+    return (
+      <button onClick={this.handleClick}>Leave Queue</button>
     );
   }
 });
@@ -31,40 +53,18 @@ var DebuggerButtonJoinRoom = React.createClass({
   },
   render: function () {
     return (
-      <button onClick={this.handleClick}>Join Room U1R1</button>
+      <button onClick={this.handleClick}>Join Room</button>
     );
   }
 });
 
-var DebuggerButtonRemVid = React.createClass({
+var DebuggerButtonLeaveRoom = React.createClass({
   handleClick: function () {
-    removeVideo();
+    socket.emit('user room leave', {user: user, room: 1})
   },
   render: function () {
     return (
-      <button onClick={this.handleClick}>DEBUG RemVid</button>
-    );
-  }
-});
-
-var DebuggerButtonRemVid = React.createClass({
-  handleClick: function () {
-    removeVideo();
-  },
-  render: function () {
-    return (
-      <button onClick={this.handleClick}>DEBUG RemVid</button>
-    );
-  }
-});
-
-var DebuggerButtonLoadVid = React.createClass({
-  handleClick: function() {
-     loadVideo('0_Pq0xYr3L4', 10);
-   },
-  render: function() {
-    return (
-      <button onClick={this.handleClick}>LoadTestVid at 0:10</button>
+      <button onClick={this.handleClick}>Leave Room</button>
     );
   }
 });
@@ -105,9 +105,12 @@ var NavBarTop = React.createClass({
       <div style={style}>
         <div style={titleStyle}><span style={piStyle}>pi</span><span style={tunesStyle}>TUNES</span></div>
         <div style={debuggerButtonsStyle}>
+          <DebuggerButtonGetCurPlaylist />
           <DebuggerButtonSimVideoDesync />
           <DebuggerButtonJoinQueue />
+          <DebuggerButtonLeaveQueue />
           <DebuggerButtonJoinRoom />
+          <DebuggerButtonLeaveRoom />
         </div>
         <div style = {NavBarMenuDropdownStyle}>
           <NavBarMenuDropdown />
