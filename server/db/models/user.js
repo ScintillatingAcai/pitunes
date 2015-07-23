@@ -24,26 +24,25 @@ var User = db.Model.extend({
     .then(function(hash) {
       return this.set('password', hash);
     })
-    .catch(function(err) {
-      console.error('hashing error:', err);
-    });
+    .catch(function(err) {console.error('hashing error:', err);});
   },
 
   getCurrentPlaylist:Promise.promisify(function(callback) {
     this.retrieveCurrentPlaylist().then(function(playlist) {
-      // if (!playlist) return callback(new Error('playlist not found'));
+      if (!playlist) return callback(new Error('playlist not found (get current playlist)'));
       callback(null, playlist);
     })
-    .catch(function(err) {
-      callback(err);
-    });
+    .catch(function(err) {callback(err);});
   }),
 
-  setCurrentPlaylist:function(playlist_ID) {
+  setCurrentPlaylist:Promise.promisify(function(playlist_ID, callback) {
     this.set('current_playlist_id', playlist_ID);
     this.save().then(function(playlist) {
-    });
-  },
+      if (!playlist) return callback(new Error('playlist not found (set current playlist)'));
+      callback(null, playlist);
+    })
+    .catch(function(err) {callback(err);});
+  }),
 
   retrieveCurrentPlaylist: Promise.promisify(function(callback){
     var Playlist = require('./playlist');
@@ -56,9 +55,7 @@ var User = db.Model.extend({
       console.log('retrieved current playlist : ', found.get('id'));
       callback(null,found);
     })
-    .catch(function(error) {
-      callback(error);
-    });
+    .catch(function(err) {callback(err);});
   }),
 
   //relationship
@@ -77,9 +74,7 @@ var User = db.Model.extend({
         callback(null, found);
       }
     })
-    .catch(function(error) {
-      callback(error);
-    });
+    .catch(function(err) {callback(err);});
   }
 });
 

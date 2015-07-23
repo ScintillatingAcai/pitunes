@@ -9,9 +9,11 @@ var Media = db.Model.extend({
 
   incrementPlayCount: Promise.promisify(function(callback) {
     return this.fetch().bind(this).then(function(media) {
+      if (!media) return callback(new Error('media not found (before increment)'));
       this.set('play_count',this.get('play_count') + 1);
       this.save().bind(this).then(function(media) {
-        callback();
+        if (!media) return callback(new Error('media not found (after increment)'));
+        callback(null, media);
       });
     });
   }),

@@ -54,7 +54,7 @@ module.exports = {
       utility.createSession(req, res, data);
       res.json(data);
     })
-    .catch(function(error) {
+    .catch(function(err) {
       return next(new Error('controller error: ', err));
     });
   },
