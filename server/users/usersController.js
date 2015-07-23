@@ -7,12 +7,12 @@ module.exports = {
 
   attachUser: function(req, res, next, user_id) {
     console.log('attaching user_id: ', user_id);
-    req.user_id = user_id;
+    req.user_id = parseInt(user_id);
     next();
   },
 
   getUser: function(req, res, next) {
-    var user_id = req.room_id;
+    var user_id = req.user_id;
     console.log('retrieving info for user_id:' + user_id);
     utils.retrieveUser.then(function(user) {
       if (!user) return next(new Error('user does not exist'));
@@ -35,7 +35,7 @@ module.exports = {
   },
 
   updateUser: function(req, res, next) {
-    var user_id = req.room_id;
+    var user_id = req.user_id;
     var userInfo = req.body;
 
     console.log('updating user_id:', user_id, ' with info: ', userInfo );
@@ -49,7 +49,6 @@ module.exports = {
   },
 
   loginUser: function(req, res, next) {
-    console.log('checking user: ',req.body);
     utils.loginUser(req.body).then(function(data) {
       if (!data) return next(new Error('user does not exist'));
       utility.createSession(req, res, data);
@@ -72,6 +71,9 @@ module.exports = {
     utils.retrieveAllUserPlaylists(req.user_id)
     .then(function(playlist) {
       res.json(playlist);
+    })
+    .catch(function(error) {
+      return next(new Error('controller error: ', err));
     });
   },
 

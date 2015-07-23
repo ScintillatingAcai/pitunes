@@ -4,7 +4,7 @@ var Promise = require('bluebird');
 
 module.exports = {
 
-  getMedia: function(req, res) {
+  getMedia: function(req, res, next) {
     var media_id = (url.parse(req.url).pathname).slice(1);
     console.log('retrieving info for media_id:' + media_id);
     var R = Promise.promisify(utils.retrieveMedia);
@@ -17,10 +17,11 @@ module.exports = {
     })
     .catch(function(error) {
       console.log('controller error: ',error);
+      return next(new Error('controller error: ', error));
     });
   },
 
-  addMedia: function(req, res) {
+  addMedia: function(req, res, next) {
     console.log('adding media: ',req.body);
     var R = Promise.promisify(utils.storeMedia);
     R(req.body).then(function(media) {
@@ -32,10 +33,11 @@ module.exports = {
     })
     .catch(function(error) {
       console.log('controller error: ',error);
+      return next(new Error('controller error: ', error));
     });
   },
 
-  updateMedia: function(req, res) {
+  updateMedia: function(req, res, next) {
     var media_id = (url.parse(req.url).pathname).slice(1);
     var mediaInfo = req.body;
 
@@ -50,8 +52,7 @@ module.exports = {
     })
     .catch(function(error) {
       console.log('controller error: ',error);
+      return next(new Error('controller error: ', error));
     });
   }
-
-
 };

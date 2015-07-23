@@ -8,8 +8,6 @@ module.exports = {
 
   //get a playlist from DB by ID
   retrievePlaylist: function(playlist_id, callback) {
-    playlist_id = parseInt(playlist_id);
-
     new Playlist({
         id: playlist_id,
       })
@@ -32,22 +30,27 @@ module.exports = {
           callback(null, found);
         } else {
           console.log('playlist_id not found:' + playlist_id);
+          callback(new Error('Playlist not found'));
         }
       })
       .catch(function(error) {
         console.log('error:', error);
+        callback(error);
       });
   },
 
   //update a playlist in DB by ID
   updatePlaylist: function(playlist_id, playlistInfo, callback) {
-    playlist_id = parseInt(playlist_id);
     playlistSongs = playlistInfo.songs;
     new Playlist({id: playlist_id})
       .fetch().then(function(found) {
         if (found) {
             //found.set(playlistInfo);
             var dbPlaylist = [];
+
+            found.medias().then( function (playlist) {
+              console.log("playlist: " + playlist);
+            });
             console.log('playlist songs: ', playlistSongs);
             playlistSongs.map(function(media, index) {
               var file = new Media({youtube_id: media});
@@ -92,22 +95,19 @@ module.exports = {
         if (found) {
           callback(null, found.attributes);
           console.log('playlist already found:', playlistName);
-
         } else {
-
-          var playlist = new Playlist({
+          new Playlist({
             name: playlistName,
             user_id: user_id
-
+          }).save()
+          .then(function(newPlaylist) {
+            new Playlists().add(newPlaylist);
+            callback(null, newPlaylist);
+          })
+          .catch(function(error) {
+            console.log('error:', error);
+            callback(error);
           });
-
-          playlist.save().then(function(newPlaylist) {
-              new Playlists().add(newPlaylist);
-              callback(null, newPlaylist);
-            })
-            .catch(function(error) {
-              console.log('error:', error);
-            });
         }
       })
       .catch(function(error) {
@@ -124,11 +124,13 @@ module.exports = {
           })
           .catch(function(error) {
             console.log('error:', error);
+            callback(error);
           });
       }
     })
     .catch(function(error) {
       console.log('error:', error);
+      callback(error);
     });
   }
 };

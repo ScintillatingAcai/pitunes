@@ -20,9 +20,6 @@ module.exports = {
 
   //get a user from DB by ID
   retrieveUser: Promise.promisify(function(user_id, callback) {
-    user_id = parseInt(user_id);
-    console.log('retrieving user: ', user_id);
-
     new User({
         id: user_id
       }).fetch()
@@ -37,7 +34,6 @@ module.exports = {
 
   //update a user in DB by ID
   updateUser: Promise.promisify(function(user_id, userInfo, callback) {
-    user_id = parseInt(user_id);
     new User({
         id: user_id
     }).fetch()
@@ -95,7 +91,6 @@ module.exports = {
   loginUser: Promise.promisify(function(user, callback) {
     var password = user.password;
     var email = user.email;
-    console.log('user: ', user);
 
     new User({
         email: email
@@ -109,14 +104,14 @@ module.exports = {
               callback(null, found.attributes);
             } else {
               console.log('password incorrect');
-              callback(null, null);
+              callback(new Error('Password Incorrect'), null);
             }
           });
 
         } else {
 
           console.log('user not found');
-          callback(null,null);
+          callback(new Error('User not found'), null);
         }
       })
       .catch(function(error) {
