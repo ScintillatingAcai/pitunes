@@ -20,6 +20,7 @@ var Room = db.Model.extend({
     this.users = new Users(); //bookshelf Users collection
     this.djQueue = new Users(); //bookshelf Users collection in order
     this.currentMedia = null; //bookshelf Media model
+    this.currentDJ = null; //bookshelf Media model
     this.mediaTimer = null;  //Timer object
     this.sockets = null;
   },
@@ -33,18 +34,18 @@ var Room = db.Model.extend({
       this.mediaTimer.stop();
       this.mediaTimer = null;
     }
-    var dj = this.dequeueDJ();
-    if (dj) {
-      console.log('current dj: ', dj.get('display_name'));
+    this.currentDJ = this.dequeueDJ();
+    if (this.currentDJ) {
+      console.log('current dj: ', this.currentDJ.get('display_name'));
       var currentPlaylist = null;
-      dj.getCurrentPlaylist().bind(this)
+      this.currentDJ.getCurrentPlaylist().bind(this)
       .then(function(playlist) {
         currentPlaylist = playlist;
         return playlist.getCurrentMedia().bind(this);
       })
       .then(function(media) {
         this.currentMedia = media;
-        return this.currentMedia.incrementPlayCount().bind(this)
+        return this.currentMedia.incrementPlayCount().bind(this);
       })
       .then(function(data) {
           return currentPlaylist.incrementCurrentMediaIndex();
@@ -135,7 +136,10 @@ var Room = db.Model.extend({
     }
     console.log('removed DJ index: ', queueIndex);
 
-    if (queueIndex === 0) {
+    if (this.currentDJ === popDJ) {
+      console.log('dj was playing when dequeued so stopping song');
+      this.currentDJ = null;
+      this.currentMedia = null;
       this.playMedia();
     }
 
