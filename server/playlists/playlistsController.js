@@ -30,8 +30,9 @@ module.exports = {
   addPlaylist: function(req, res, next) {
     console.log('adding playlist: ',req.body);
     var R = Promise.promisify(utils.storePlaylist);
-    R(req.body).then(function(playlist) {
+    R(req.user_id, req.body).then(function(playlist) {
       if (playlist) {
+        console.log("playlist info: ", playlist);
         res.json(playlist);
       } else {
         res.status(500).end();

@@ -84,35 +84,21 @@ module.exports = {
   },
 
   //store a new playlist in DB
-  storePlaylist: function(playlist, callback) {
+  storePlaylist: function(user_id, playlist, callback) {
     var playlistName = playlist.name;
-    var user_id = playlist.user_id;
-
+    var user_id = user_id;
+  
     new Playlist({
-        name: playlistName
-      }).fetch().then(function(found) {
-
-        if (found) {
-          callback(null, found.attributes);
-          console.log('playlist already found:', playlistName);
-        } else {
-          new Playlist({
-            name: playlistName,
-            user_id: user_id
-          }).save()
-          .then(function(newPlaylist) {
-            new Playlists().add(newPlaylist);
-            callback(null, newPlaylist);
-          })
-          .catch(function(error) {
-            console.log('error:', error);
-            callback(error);
-          });
-        }
-      })
-      .catch(function(error) {
-        console.log('error:', error);
-      });
+      name: playlistName,
+      user_id: user_id
+    }).save()
+    .then(function(newPlaylist) {
+      callback(null, newPlaylist);
+    })
+    .catch(function(error) {
+      console.log('error:', error);
+      callback(error);
+    });
   },
 
   updateDefaultPlaylist: function(user_id, playlist_id, callback) {
