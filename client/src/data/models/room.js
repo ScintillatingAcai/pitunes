@@ -5,6 +5,6 @@ var RoomModel = Backbone.Model.extend({
     id: null,
     name: null,
     private: null,
-    userCount: null
+    usersCount: null
   }
 });
