@@ -57,6 +57,21 @@ module.exports = {
     .catch(function(error) {
       console.log('controller error: ',error);
     });
+  },
+
+  setDefaultPlaylist: function(req, res) {
+    var R = Promise.promisify(utils.updateDefaultPlaylist);
+
+    R(req.user_id,req.playlist_id).then(function(user) {
+      if (user) {
+        res.end();
+      } else {
+        res.status(500).end();
+      }
+    })
+    .catch(function(error) {
+      console.log('controller error: ',error);
+    });
   }
 
 

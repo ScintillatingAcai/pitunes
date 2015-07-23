@@ -77,11 +77,12 @@ INSERT INTO Media_Playlists (playlist_id, media_id, media_order) VALUES (3, 3, 4
 INSERT INTO Media_Playlists (playlist_id, media_id, media_order) VALUES (4, 16, 1);
 INSERT INTO Media_Playlists (playlist_id, media_id, media_order) VALUES (4, 17, 2);
 INSERT INTO Media_Playlists (playlist_id, media_id, media_order) VALUES (4, 18, 3);
-INSERT INTO Media_Playlists (playlist_id, media_id, media_order) VALUES (4, 19, 4);
-INSERT INTO Media_Playlists (playlist_id, media_id, media_order) VALUES (4, 20, 5);
 
-INSERT INTO Media_Playlists (playlist_id, media_id, media_order) VALUES (5, 8, 1);
-INSERT INTO Media_Playlists (playlist_id, media_id, media_order) VALUES (5, 17, 2);
+INSERT INTO Media_Playlists (playlist_id, media_id, media_order) VALUES (5, 19, 1);
+INSERT INTO Media_Playlists (playlist_id, media_id, media_order) VALUES (5, 20, 2);
+
+INSERT INTO Media_Playlists (playlist_id, media_id, media_order) VALUES (6, 8, 1);
+INSERT INTO Media_Playlists (playlist_id, media_id, media_order) VALUES (6, 17, 2);
 
 INSERT INTO Media_Playlists (playlist_id, media_id, media_order) VALUES (7, 21, 1);
 INSERT INTO Media_Playlists (playlist_id, media_id, media_order) VALUES (7, 21, 2);

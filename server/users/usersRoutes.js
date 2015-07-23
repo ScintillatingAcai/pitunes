@@ -27,5 +27,7 @@ module.exports = function(app) {
   app.post('/:user_id/playlists', playlistsController.addPlaylist);
   app.get('/:user_id/playlists/:playlist_id', playlistsController.getPlaylist);
   app.put('/:user_id/playlists/:playlist_id', playlistsController.updatePlaylist);
+
+  app.put('/:user_id/playlists/:playlist_id/default', playlistsController.setDefaultPlaylist);
 };
 

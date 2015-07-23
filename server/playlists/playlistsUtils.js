@@ -113,5 +113,22 @@ module.exports = {
       .catch(function(error) {
         console.log('error:', error);
       });
+  },
+
+  updateDefaultPlaylist: function(user_id, playlist_id, callback) {
+    new User({id: user_id}).fetch().then(function(found){
+      if (found) {
+        found.set('current_playlist_id', playlist_id).save()
+          .then(function(user) {
+            callback(user);
+          })
+          .catch(function(error) {
+            console.log('error:', error);
+          });
+      }
+    })
+    .catch(function(error) {
+      console.log('error:', error);
+    });
   }
 };
