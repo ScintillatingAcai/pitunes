@@ -35,6 +35,7 @@ var Room = db.Model.extend({
     }
     var dj = this.dequeueDJ();
     if (dj) {
+      console.log('current dj: ', dj.get('display_name'));
       var playlist = dj.getCurrentPlaylist().bind(this)
       .then(function(playlist) {
         playlist.getCurrentMedia().bind(this)
@@ -44,35 +45,13 @@ var Room = db.Model.extend({
           .then(function(data) {
             playlist.incrementCurrentMediaIndex();
 
-            var videoId = this.currentMedia.get('youtube_id');
-            var durationSearchUrl = 'https://www.googleapis.com/youtube/v3/videos?id=' + videoId + '&part=contentDetails&key=' + YOUTUBE_API_KEY;
-            var link = url.parse(durationSearchUrl);
-            var options = {
-                host: link.hostname,
-                port: link.port,
-                path: link.path
-            };
-            var that = this;
-            https.get(options, function(res) {
-              var response = '';
-              res.on('data', function(data) {
-                  // collect the data chunks to the variable named "html"
-                  response += data;
-              }).on('end', function() {
-                  // the whole of webpage data has been collected. parsing time!
-                  var duration = JSON.parse(response).items[0].contentDetails.duration;
-                  console.log('duration received from youtube: ', duration);
-                  that.emitMediaStatusMessage(that.sockets.in(that.get('id')), that.currentMedia, 0, 'start');
-                  that.mediaTimer = that.makeMediaTimer(3000, that.convertYTDuration(duration));
-                  that.mediaTimer.start();
-              }).on('error', function(err) {
-                console.error(err);
-                this.playMedia();
-              });
-            });
-          }).catch(function(err) {return callback(err);});
-        }).catch(function(err) {return callback(err);});
-      }).catch(function(err) {return callback(err);});
+            var duration = this.currentMedia.get('duration');
+            this.emitMediaStatusMessage(this.sockets.in(this.get('id')), this.currentMedia, 0, 'start');
+            this.mediaTimer = this.makeMediaTimer(3000, duration);
+            this.mediaTimer.start();
+          }).catch(function(err) {console.error(err);});
+        }).catch(function(err) {console.error(err);});
+      }).catch(function(err) {console.error(err);});
     } else {
       console.log('stop media for no DJ');
       this.emitMediaStatusMessage(this.sockets.in(this.get('id')), null, 0, 'stop');
@@ -94,36 +73,9 @@ var Room = db.Model.extend({
     }
   },
 
-  convertYTDuration: function (duration) {
-    var a = duration.match(/\d+/g);
-    if (duration.indexOf('M') >= 0 && duration.indexOf('H') === -1 && duration.indexOf('S') === -1) {
-      a = [0, a[0], 0];
-    }
-    if (duration.indexOf('H') >= 0 && duration.indexOf('M') === -1) {
-      a = [a[0], 0, a[1]];
-    }
-    if (duration.indexOf('H') >= 0 && duration.indexOf('M') === -1 && duration.indexOf('S') === -1) {
-      a = [a[0], 0, 0];
-    }
-    duration = 0;
-    if (a.length === 3) {
-      duration = duration + parseInt(a[0]) * 3600;
-      duration = duration + parseInt(a[1]) * 60;
-      duration = duration + parseInt(a[2]);
-    }
-    if (a.length === 2) {
-      duration = duration + parseInt(a[0]) * 60;
-      duration = duration + parseInt(a[1]);
-    }
-    if (a.length === 1) {
-      duration = duration + parseInt(a[0]);
-    }
-    return duration;
-  },
-
   makeMediaTimer: function(increment, durationSecs) {
     var onFire = function(elapsedTime){
-      this.emitMediaStatusMessage(this.sockets, this.currentMedia, elapsedTime, 'update');
+      this.emitMediaStatusMessage(this.sockets.in(this.get('id')), this.currentMedia, elapsedTime, 'update');
     };
     var onComplete = function(){
       this.playMedia();
@@ -146,7 +98,8 @@ var Room = db.Model.extend({
     if (this.djQueue.get(user_id)) return callback(new Error('user already in queue'));
     user.getCurrentPlaylist().bind(this).then(function(playlist) {
       if (!playlist) return callback(new Error('user has no current playlist, cannot enter queue'));
-      this.djQueue.push(user);
+      var insertDJIndex = Math.max(this.djQueue.length - 1, 0);
+      this.djQueue.add(user,{at: insertDJIndex});
       if (this.djQueue.length === 1) {
         this.playMedia();
       }
