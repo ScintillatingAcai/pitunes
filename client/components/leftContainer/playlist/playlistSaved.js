@@ -42,7 +42,7 @@ var List = React.createClass({
     if (this.nodePlacement === "after") to++;
     data.splice(to, 0, data.splice(from, 1)[0]);
     this.setState({data: data});
-    this.submitUpdatePlaylist(playlistMin);
+    this.submitUpdatePlaylist(currentUser.currentPlaylist);
   },
 
   dragOver: function (e) {
@@ -130,7 +130,7 @@ var List = React.createClass({
       color: 'black',
       padding: '0 0 0 0',
       margin: '0 0 0 2px'
-    }
+    };
     var listItems = this.state.data.map((function (item, i) {
       return (
         <div style={style} data-id={i}
@@ -173,37 +173,44 @@ var currentUser = {
         img_url: 'https://i.ytimg.com/vi/2HQaBWziYvY/default.jpg',
         title: 'Darude - Sandstorm',
         id: '2HQaBWziYvY',
-        duration: 224,
-        durationDisplay: '03:44'
+        duration: 224
       },
       {
         img: 'https://i.ytimg.com/vi/59CZt1xsh5s/default.jpg',
         title: 'The Growlers - One Million Lovers',
         id: '59CZt1xsh5s',
         duration: 278,
-        durationDisplay: '04:38'
       },
       {
         img: 'https://i.ytimg.com/vi/BYbJmQj5VkE/default.jpg',
         title: 'FIDLAR - No Waves (Music Video)',
         id: 'BYbJmQj5VkE',
         duration: 190,
-        durationDisplay: '03:10'
       }
     ]
   }
 };
 
+var durationToDisplay = function (duration) {
+  // duration = this.convertYTDuration(duration);
+  var minutes = Math.floor(duration / 60) + "";
+  if (minutes.length === 1) {
+    minutes = "0" + minutes;
+  }
+  var seconds = duration % 60 + "";
+  if (seconds.length === 1) {
+    seconds = "0" + seconds;
+  }
+  return minutes + ":" + seconds;
+};
 
 //take the songs from the user data
 var arrSongs;
-var playlistMin;
 var populatePlaylist = function() {
   arrSongs = [];
-  playlistMin = {name: currentUser.currentPlaylist.name, songs: []};
   for (var song in currentUser.currentPlaylist.songs) {
-    arrSongs.push([currentUser.currentPlaylist.songs[song].title + ' | ' + currentUser.currentPlaylist.songs[song].durationDisplay]);
-    playlistMin.songs.push(currentUser.currentPlaylist.songs[song].id);
+    var displayTime = durationToDisplay(currentUser.currentPlaylist.songs[song].duration);
+    arrSongs.push([currentUser.currentPlaylist.songs[song].title + ' | ' + displayTime]);
   }
 };
 

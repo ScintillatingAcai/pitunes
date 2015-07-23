@@ -103,7 +103,7 @@ var SearchBar = React.createClass({
               if ($(e.target).attr('className') === 'searchResultTitle') {
                 loadVideo($(e.target).attr('data-id'), 0);
                 if (user.id !== 0) {
-                  addSongToPlaylist({title: $(e.target).attr('data-title'), id: $(e.target).attr('data-id'), duration: $(e.target).attr('data-duration'), durationDisplay: $(e.target).attr('data-durationDisplay')});
+                  addSongToPlaylist({title: $(e.target).attr('data-title'), id: $(e.target).attr('data-id'), duration: $(e.target).attr('data-duration')});
                 }
               }
             });
