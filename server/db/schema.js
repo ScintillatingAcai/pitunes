@@ -42,7 +42,7 @@ bookshelf.knex.schema.hasTable('Users').then(function(exists) {
       user.string('email', 50).unique().notNullable();
       user.string('password', 100).notNullable();
       user.string('oauth', 30);
-      user.string('display_name', 50).notNullable().defaultTo('Anonymous');
+      user.string('display_name', 50).notNullable().defaultTo('New User');
       user.string('icon', 100);
       user.string('location', 100);
       user.integer('current_playlist_id').unsigned().defaultTo(0);//.references('id').inTable('Playlists');
