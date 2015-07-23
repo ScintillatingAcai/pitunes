@@ -34,11 +34,20 @@ module.exports = {
             duration: currentMedia.duration,
             play_count: currentMedia.play_count
           } : null;
+      var currentDJ = room.currentDJ ? room.currentDJ.toJSON() : null;
+      currentDJ = currentDJ ?
+          {
+            "id": currentDJ.id,
+            "display_name": currentDJ.display_name,
+            "icon": currentDJ.icon,
+            "location": currentDJ.location,
+          } : null;
       return {id: room.id,
         name: room.name,
         private: room.private,
         usersCount: room.users.length,
         queueCount: room.djQueue.length,
+        currentDJ: currentDJ,
         currentMedia: currentMedia };
     });
 
