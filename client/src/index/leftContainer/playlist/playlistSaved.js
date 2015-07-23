@@ -42,7 +42,7 @@ var List = React.createClass({
     if (this.nodePlacement === "after") to++;
     data.splice(to, 0, data.splice(from, 1)[0]);
     this.setState({data: data});
-    this.submitUpdatePlaylist(user.currentPlaylist);
+    this.submitUpdatePlaylist(user.current_playlist);
   },
 
   dragOver: function (e) {
@@ -66,8 +66,8 @@ var List = React.createClass({
 
   createNewPlaylist: function () {
     // TODO fix placeholder, make modal (possibly?) for naming playlist
-    user.currentPlaylist = {name: this.state.text, songs: []};
-    this.submitNewPlaylist(user.currentPlaylist);
+    user.current_playlist = {name: this.state.text, songs: []};
+    this.submitNewPlaylist(user.current_playlist);
   },
 
   // PLACEHOLDERS
@@ -81,7 +81,7 @@ var List = React.createClass({
         data: playlist,
         success: function (res) {
           user.current_playlist_id = res.id;
-          user.current_playlist.id = res.id;
+          user.current_playlist = {name: res.name, songs: []}
           populatePlaylist();
           context.handleClickedSearch();
           console.log('submitted new playlist');
@@ -98,7 +98,7 @@ var List = React.createClass({
   submitUpdatePlaylist: function (playlist) {
     var context = this;
     if (user.id !== 0) {
-      $.ajax({url: server_uri + '/api/users/' + user.id + '/playlists/' + user.currentPlaylist.id,
+      $.ajax({url: server_uri + '/api/users/' + user.id + '/playlists/' + user.current_playlist.id,
         type: 'PUT',
         dataType: 'json',
         data: playlist,
@@ -164,7 +164,7 @@ var List = React.createClass({
 });
 
 //list of dummy user data
-user.currentPlaylist = {
+user.current_playlist = {
   name: 'Test Playlist',
   id: 4,
   songs: [
@@ -189,6 +189,7 @@ user.currentPlaylist = {
   ]
 };
 
+
 var durationToDisplay = function (duration) {
   // duration = this.convertYTDuration(duration);
   var minutes = Math.floor(duration / 60) + "";
@@ -206,15 +207,15 @@ var durationToDisplay = function (duration) {
 var arrSongs;
 var populatePlaylist = function() {
   arrSongs = [];
-  for (var song in user.currentPlaylist.songs) {
-    var displayTime = durationToDisplay(user.currentPlaylist.songs[song].duration);
-    arrSongs.push([user.currentPlaylist.songs[song].title + ' | ' + displayTime]);
+  for (var song in user.current_playlist.songs) {
+    var displayTime = durationToDisplay(user.current_playlist.songs[song].duration);
+    arrSongs.push([user.current_playlist.songs[song].title + ' | ' + displayTime]);
   }
 };
 
 populatePlaylist();
 
-var getAllPlaylists = function() {
+var getPlaylists = function() {
   if (user.id !== 0) {
     $.ajax({url: server_uri + '/api/users/' + user.id + '/playlists/',
       type: 'GET',
@@ -222,6 +223,11 @@ var getAllPlaylists = function() {
       success: function (res) {
         console.log('Retrieved playlists', res);
         user.playlists = res;
+        // NEED TO HANDLE NEW USERS FIRST PLAYLIST
+        if (user.current_playlist_id !== 0) {
+          user.current_playlist = user.playlists[user.current_playlist_id]
+        }
+        getCurPlaylistSongs();
       },
       error: function(res) {
         console.log('errorMessage: ' + res.statusText);
@@ -230,14 +236,14 @@ var getAllPlaylists = function() {
   }
 };
 
-var getCurrentPlaylist = function() {
+var getCurPlaylistSongs = function() {
   if (user.id !== 0) {
     $.ajax({url: server_uri + '/api/users/' + user.id + '/playlists/' + user.current_playlist_id,
       type: 'GET',
       dataType: 'json',
       success: function (res) {
         console.log('Retrieved playlists', res);
-        user.playlists = res;
+        user.current_playlist.songs = res;
       },
       error: function(res) {
         console.log('errorMessage: ' + res.statusText);
@@ -248,7 +254,7 @@ var getCurrentPlaylist = function() {
 
 
 var addSongToPlaylist = function (songNode) {
-  user.currentPlaylist.songs.push(songNode);
+  user.current_playlist.songs.push(songNode);
   console.log("Added ", songNode, " to playlist");
   populatePlaylist();
 }
@@ -265,12 +271,12 @@ var PlaylistTitle = React.createClass({
   getInitialState: function() {
     return {title: this.props.title}
   },
-  componentDidMount: function() {
-    $('#playlistContainer div').on('click', '.buttonNewPlaylist', this.handleNewPlaylist)
-  },
-  handleNewPlaylist: function() {
-    this.setState({title: user.currentPlaylist.name});
-  },
+  // componentDidMount: function() {
+  //   $('#playlistContainer div').on('click', '.buttonNewPlaylist', this.handleNewPlaylist)
+  // },
+  // handleNewPlaylist: function() {
+  //   this.setState({title: user.current_playlist.name});
+  // },
   render: function(){
     var style = {
       textAlign: 'center',
@@ -299,7 +305,7 @@ var PlaylistSaved = React.createClass({
     };
     return (
       <div id="playlistContainer" style={style}>
-        <PlaylistTitle title={user.currentPlaylist.name}/>
+        <PlaylistTitle title={user.current_playlist.name}/>
         <Songs />
       </div>
     );
