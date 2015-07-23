@@ -82,7 +82,7 @@ var Rooms = React.createClass({
                                 <div className="clearfix"></div>
                                 <h2 className="section-heading j-center-text">{room.get('name')} <br />Current DJs: {room.get('userCount')}</h2>
                                 <div className="j-left-25">
-                                    <img className="img-responsive" src="assets/img/headphones.jpg" alt="" />
+                                    <img className="img-responsive" src={room.get('videoURL')} alt="" />
                                 </div>
                             </div>
                         )

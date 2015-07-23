@@ -4,7 +4,13 @@ var roomsCollection =  new RoomsCollection();
 
 $.get(source, function(res) {
   res.forEach(function(room) {
-    roomsCollection.add(new RoomModel(room));
+    //check if there 'currentMedia' is null and if it's not, create a url property for the video thumbnail
+    if (room.currentMedia === null) {
+      roomsCollection.add(new RoomModel(room));
+    } else {
+      room.videoURL = 'https://i.ytimg.com/vi/' + room.currentMedia + '/hqdefault.jpg';
+      roomsCollection.add(new RoomModel(room));
+    }
   });
 })
   .fail(function() {
