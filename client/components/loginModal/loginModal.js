@@ -5,10 +5,9 @@ var Login = React.createClass({
     return {showModal: true, errorMessage: 'testing', showLogin: true, showSignUp: false};
   },
   componentDidMount: function () {
-    $('#playlistContainer').on('click', this.handleNewPlaylistAttempt);
+    $('.buttonNewPlaylist').on('click', this.handleNewPlaylistAttempt);
   },
   handleNewPlaylistAttempt: function () {
-    console.log("heard newplaylistAttempt");
     if (user.id === 0) {
       this.setState({showModal: true});
     }
@@ -41,17 +40,17 @@ var Login = React.createClass({
     var data = {displayName: form[0].value, email: form[1].value, password: form[2].value};
     var that = this;
     $.ajax({url: server_uri + '/api/users/signup',
-            type: 'POST',
-            dataType: 'json',
-            data: data,
-            success: function (res) {
-              user = res;
-              that.setState({showModal: false});
-            } ,
-            error: function (res) {
-              that.setState({errorMessage: res.statusText});
-            }
-          });
+      type: 'POST',
+      dataType: 'json',
+      data: data,
+      success: function (res) {
+        user = res;
+        that.setState({showModal: false});
+      },
+      error: function (res) {
+        that.setState({errorMessage: res.statusText});
+      }
+    });
   },
   signUpClick: function () {
     this.setState({showLogin: false});

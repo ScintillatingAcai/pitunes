@@ -4,7 +4,7 @@ placeholder.className = "placeholder";
 var List = React.createClass({
 
   getInitialState: function () {
-    return { data: this.props.data };
+    return { data: this.props.data, text: ''};
   },
 
   handleClickedSearch: function () {
@@ -17,6 +17,11 @@ var List = React.createClass({
 
   onClick: function (e) {
     console.log(e.currentTarget.lastChild);
+  },
+
+  onNameChange: function (e) {
+    e.preventDefault();
+    this.setState({text: e.target.value});
   },
 
   dragStart: function (e) {
@@ -61,7 +66,7 @@ var List = React.createClass({
 
   createNewPlaylist: function () {
     // TODO fix placeholder, make modal (possibly?) for naming playlist
-    currentUser.currentPlaylist = {name: 'Newer Playlist', songs: []};
+    currentUser.currentPlaylist = {name: this.state.text, songs: []};
     this.submitNewPlaylist(currentUser.currentPlaylist);
   },
 
@@ -75,6 +80,7 @@ var List = React.createClass({
         dataType: 'json',
         data: playlist,
         success: function (res) {
+          user.current_playlist_id = res.playlist_id;
           currentUser.currentPlaylist.Id = res.playlist_id;
           console.log('submitted new playlist');
           populatePlaylist();
@@ -141,10 +147,16 @@ var List = React.createClass({
 
       );
     }).bind(this));
-
+    var searchBarInputStyle = {
+      backgroundColor: '#AAAAAA',
+      borderColor: '#EEEEEE',
+      width: '30px'
+    };
     return (
       <div>
         <button className='buttonNewPlaylist' onClick={this.createNewPlaylist}>New Playlist</button>
+        <button className='buttonSavePlaylist' onClick={this.savePlaylist}>Save Playlist</button>
+        <input style={searchBarInputStyle} onChange={this.onNameChange} value={this.state.text} placeholder="Name Playlist"/>
         <div onDragOver={this.dragOver}>{listItems}</div>
       </div>
     );
@@ -249,7 +261,7 @@ var PlaylistTitle = React.createClass({
     return {title: this.props.title}
   },
   componentDidMount: function() {
-    $('#playlistContainer div').on('click', 'button', this.handleNewPlaylist)
+    $('#playlistContainer div').on('click', '.buttonNewPlaylist', this.handleNewPlaylist)
   },
   handleNewPlaylist: function() {
     this.setState({title: currentUser.currentPlaylist.name});
