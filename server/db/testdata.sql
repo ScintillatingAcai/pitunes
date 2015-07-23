@@ -3,8 +3,8 @@ use piTunes;
 -- Users Test Information
 INSERT INTO Users (email, password, display_name, location, current_playlist_id, created_at, updated_at) VALUES ('test1@test.com', '$2a$10$sSDHQ7JpoTCqMJmYpfUy2uSkccf4qdLsnideITNh3uWaE8FVC9aRu' , 'Test User 1', 'test1', 1, '2015-07-22 00:00:00', '2015-07-22 00:00:00');
 INSERT INTO Users (email, password, display_name, location, current_playlist_id, created_at, updated_at) VALUES ('test2@test.com', '$2a$10$y65el7rqIvT4a3CWEDimPuvGZbBRkHuPUtekb6jaNBt8rqAtVm3M.' , 'Test User 2', 'test2', 4, '2015-07-22 00:00:00', '2015-07-22 00:00:00');
-INSERT INTO Users (email, password, display_name, location, current_playlist_id, created_at, updated_at) VALUES ('test3@test.com', '$2a$10$d2pp0lcUCCyig997MOq1ZO2kQ868ov9bfDwZIEcJ8c2/dxfVHa..S' , 'Test User 3', 'test3', 5, '2015-07-22 00:00:00', '2015-07-22 00:00:00');
-INSERT INTO Users (email, password, display_name, location, current_playlist_id, created_at, updated_at) VALUES ('test4@test.com', '$2a$10$.G2bupIS65iF07.Y.0JzYOk7fRpbqk3MsvSGZI2ZZnLxYfpFKFgiu' , 'Test User 4', 'test4', 0, '2015-07-22 00:00:00', '2015-07-22 00:00:00');
+INSERT INTO Users (email, password, display_name, location, current_playlist_id, created_at, updated_at) VALUES ('test3@test.com', '$2a$10$d2pp0lcUCCyig997MOq1ZO2kQ868ov9bfDwZIEcJ8c2/dxfVHa..S' , 'Test User 3', 'test3', 6, '2015-07-22 00:00:00', '2015-07-22 00:00:00');
+INSERT INTO Users (email, password, display_name, location, current_playlist_id, created_at, updated_at) VALUES ('test4@test.com', '$2a$10$.G2bupIS65iF07.Y.0JzYOk7fRpbqk3MsvSGZI2ZZnLxYfpFKFgiu' , 'Test User 4', 'test4', 7, '2015-07-22 00:00:00', '2015-07-22 00:00:00');
 
 -- PLAYLISTS
 INSERT INTO Playlists (user_id, name, current_media_index, created_at, updated_at) VALUES (1, 'TestUser1 Playlist 1', 1, '2015-07-22 00:00:00', '2015-07-22 00:00:00');
@@ -16,7 +16,7 @@ INSERT INTO Playlists (user_id, name, current_media_index, created_at, updated_a
 
 INSERT INTO Playlists (user_id, name, current_media_index, created_at, updated_at) VALUES (3, 'TestUser3 Playlist 1', 1,'2015-07-22 00:00:00', '2015-07-22 00:00:00');
 
-INSERT INTO Playlists (user_id, name, created_at, updated_at) VALUES (4, 'TestUser4 Playlist for 30 secs', '2015-07-22 00:00:00', '2015-07-22 00:00:00');
+INSERT INTO Playlists (user_id, name, current_media_index, created_at, updated_at) VALUES (4, 'TestUser4 Playlist for 30 secs', 1, '2015-07-22 00:00:00', '2015-07-22 00:00:00');
 
 -- MEDIA
 INSERT INTO Medias (youtube_id, title, img_url, duration, created_at, updated_at) VALUES ('2HQaBWziYvY', 'Darude - Sandstorm', 'https://i.ytimg.com/vi/2HQaBWziYvY/default.jpg', 225, '2015-07-22 00:00:00', '2015-07-22 00:00:00');
