@@ -6,25 +6,9 @@ var user = null,
 var Modal = ReactBootstrap.Modal;
 var Input = ReactBootstrap.Input;
 var Button = ReactBootstrap.Button;
-var rooms;
 
 var RoomsContainer = React.createClass({
-    getInitialState: function() {
-        return { rooms: [] };
-    },
-    componentDidMount: function() {
-        var that = this;
-        $.get(this.props.source, function(res){
-            var rooms = res;
-            if (this.isMounted()) {
-              this.setState({
-                rooms: rooms
-              });
-            }
-        }.bind(this));
-    },
     render: function() {
-        rooms = this.state.rooms || [];
         return (
             <div>
             <nav className="navbar navbar-default navbar-fixed-top topnav" role="navigation">
@@ -58,7 +42,7 @@ var RoomsContainer = React.createClass({
             <div className="content-section-a">
                 <div className="container">
                     <div className="row">
-                        { <Rooms rooms={rooms} /> }
+                        { <Rooms /> }
                     </div>
                 </div>
             </div>
@@ -91,10 +75,10 @@ var Rooms = React.createClass({
     render: function() {
         return (
             <div>
-                {this.props.rooms.map(function(room){
+                {roomsCollection.map(function(room){
                     return (
                         <div>
-                            <h3 className="j-center-text">{room.name} <br />Current DJs: {room.usersCount}</h3>
+                            <h3 className="j-center-text">{room.get('name')} <br />Current DJs: {room.get('usersCount')}</h3>
                             <hr />
                         </div>
                     )

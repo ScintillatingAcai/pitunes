@@ -35,19 +35,27 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.13.3/react.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.13.3/JSXTransformer.js"></script>
 
+    <!-- Backbone -->
+    <script src="./bower_components/underscore/underscore-min.js"></script>
+    <script src="./bower_components/backbone/backbone-min.js"></script>
+
+    <!-- jQuery -->
+    <script src="assets/js/jquery.js"></script>
+
     <!-- React Bootstrap Core Javascript -->
     <script src="./bower_components/react-bootstrap/react-bootstrap.min.js"></script>
 
-    <script type="text/jsx" src="./components/landingPage/landingPageContainer.js"></script>
+    <!-- Models and Collections -->
+    <script type="text/javascript" src="./src/data/models/room.js"></script>
+    <script type="text/javascript" src="./src/data/collections/rooms.js"></script>
+    <script type="text/javascript" src="./src/rooms/roomController.js"></script>
+    <script type="text/jsx" src="./src/landingPage/landingPageContainer.js"></script>
 
 </head>
 
 <body>
 
     <div class="landingPageContainer"></div>
-
-    <!-- jQuery -->
-    <script src="assets/js/jquery.js"></script>
 
     <!-- Bootstrap Core JavaScript -->
     <script src="assets/js/bootstrap.min.js"></script>
