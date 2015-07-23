@@ -36,21 +36,24 @@ var Room = db.Model.extend({
     var dj = this.dequeueDJ();
     if (dj) {
       console.log('current dj: ', dj.get('display_name'));
-      var playlist = dj.getCurrentPlaylist().bind(this)
+      var currentPlaylist = null;
+      dj.getCurrentPlaylist().bind(this)
       .then(function(playlist) {
-        playlist.getCurrentMedia().bind(this)
-        .then(function(media) {
-          this.currentMedia = media;
-          this.currentMedia.incrementPlayCount().bind(this)
-          .then(function(data) {
-            playlist.incrementCurrentMediaIndex();
-
-            var duration = this.currentMedia.get('duration');
-            this.emitMediaStatusMessage(this.sockets.in(this.get('id')), this.currentMedia, 0, 'start');
-            this.mediaTimer = this.makeMediaTimer(3000, duration);
-            this.mediaTimer.start();
-          }).catch(function(err) {console.error(err);});
-        }).catch(function(err) {console.error(err);});
+        currentPlaylist = playlist;
+        return playlist.getCurrentMedia().bind(this);
+      })
+      .then(function(media) {
+        this.currentMedia = media;
+        return this.currentMedia.incrementPlayCount().bind(this)
+      })
+      .then(function(data) {
+          return currentPlaylist.incrementCurrentMediaIndex();
+      })
+      .then(function(data) {
+          var duration = this.currentMedia.get('duration');
+          this.emitMediaStatusMessage(this.sockets.in(this.get('id')), this.currentMedia, 0, 'start');
+          this.mediaTimer = this.makeMediaTimer(3000, duration);
+          this.mediaTimer.start();
       }).catch(function(err) {console.error(err);});
     } else {
       console.log('stop media for no DJ');

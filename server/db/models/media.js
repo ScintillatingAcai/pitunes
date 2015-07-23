@@ -8,7 +8,7 @@ var Media = db.Model.extend({
   hasTimestamps: true,
 
   incrementPlayCount: Promise.promisify(function(callback) {
-    this.fetch().bind(this).then(function(media) {
+    return this.fetch().bind(this).then(function(media) {
       this.set('play_count',this.get('play_count') + 1);
       this.save().bind(this).then(function(media) {
         callback();
