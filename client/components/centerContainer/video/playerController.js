@@ -86,7 +86,7 @@ socket.on('media status', function (data) {
 
 // Wrapper for loadVideo/serveStaticImg
 var heardNewMediaStatus = function () {
-  if (!mediaStatus.videoId) {
+  if (!mediaStatus && !mediaStatus.videoId) {
     serveStaticImg();
   } else {
     loadVideo(mediaStatus.videoId, mediaStatus.startSeconds);
