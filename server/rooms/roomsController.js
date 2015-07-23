@@ -33,6 +33,7 @@ module.exports = {
         usersCount: room.users.length,
         currentMedia: media };
     });
+
     if (allRooms) {
       res.json(allRooms);
     } else {

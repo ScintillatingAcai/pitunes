@@ -27,7 +27,7 @@ var Playlist = db.Model.extend({
     });
   }),
 
-  incrementCurrentMediaIndex:Promise.promisify(function(callback) {
+  incrementCurrentMediaIndex: Promise.promisify(function(callback) {
     // get medias in playlist to find length
     this.medias().fetch().bind(this)
     .then(function(found) {
@@ -87,6 +87,11 @@ var Playlist = db.Model.extend({
     .catch(function(error) {
       callback(error);
     });
+  }),
+
+  setPlaylist: Promise.promisify(function( playlist, callback){
+    this.medias();
+    console.log(this);
   })
 });
 
