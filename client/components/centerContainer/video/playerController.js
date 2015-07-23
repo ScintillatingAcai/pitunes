@@ -79,15 +79,16 @@ var onPlayerReady = function (evt) {
 // TODO - Discuss w/Kyle the format of what client should expect to recieve/message codes and refactor accordingly
 // Socket Event Listener for Media Status Object for
 socket.on('media status', function (data) {
-  console.log("HEARD MEDIA STATUS!!!")
+  console.log('media status: ', mediaStatus);
   mediaStatus = data;
   heardNewMediaStatus();
 });
 
 // Wrapper for loadVideo/serveStaticImg
 var heardNewMediaStatus = function () {
-  if (!mediaStatus.videoId) {
-    serveStaticImg();
+  if (!mediaStatus || !mediaStatus.videoId) {
+    // serveStaticImg();
+    removeVideo();
   } else {
     loadVideo(mediaStatus.videoId, mediaStatus.startSeconds);
   }
@@ -117,7 +118,6 @@ var stopVideo = function () {
 // Expects 11 character string (YouTube Video ID) and the starttime of video
 var loadVideo = function (videoId, startSeconds) {
   // If player already exists...
-  console.log('media status: ', mediaStatus);
   if (playerInstaniated) {
     // Load new player if current video is different from new video or same video is being played again
 

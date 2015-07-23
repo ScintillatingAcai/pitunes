@@ -54,7 +54,7 @@ var List = React.createClass({
     var relY = e.clientY - this.over.offsetTop;
     var height = this.over.offsetHeight / 2;
     var parent = e.target.parentNode;
-    
+
     if (relY > height) {
       this.nodePlacement = "after";
       parent.insertBefore(placeholder, e.target.nextElementSibling);
@@ -167,7 +167,7 @@ var List = React.createClass({
 var currentUser = {
   currentPlaylist: {
     name: 'Test Playlist',
-    id: 0,
+    id: 4,
     songs: [
       {
         img_url: 'https://i.ytimg.com/vi/2HQaBWziYvY/default.jpg',
@@ -251,7 +251,7 @@ var addSongToPlaylist = function (songNode) {
 var Songs = React.createClass({
   render: function() {
     return (
-      <List data={arrSongs} /> 
+      <List data={arrSongs} />
     );
   }
 });
@@ -285,7 +285,7 @@ var PlaylistSaved = React.createClass({
     var style = {
       background: '#222222',
       border: '2px solid #444444',
-      position: 'absolute', 
+      position: 'absolute',
       width: '100%',
       height: '50%',
       overflow: 'auto',

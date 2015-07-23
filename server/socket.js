@@ -96,6 +96,7 @@ module.exports = function(io) {
       }
       room.removeUser(user_id).then(function(user) {
         socket.broadcast.in(room_id).emit("user room change", JSON.stringify(room.users));
+        socket.emit("user room change", JSON.stringify(room.users));
         socket.leave(room_id);
         // socket.emit("user room leave", data.user.id);
 
@@ -124,6 +125,7 @@ module.exports = function(io) {
         }
         room.removeUser(user_id).then(function(user) {
           socket.broadcast.in(room_id).emit("user room change", JSON.stringify(room.users));
+          socket.emit("user room change", JSON.stringify(room.users));
           socket.leave(room_id);
           // socket.emit("user room leave", user_id);
 
