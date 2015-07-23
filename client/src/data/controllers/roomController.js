@@ -6,6 +6,7 @@ $.get(source, function(res) {
   res.forEach(function(room) {
     //check if there 'currentMedia' is null and if it's not, create a url property for the video thumbnail
     if (room.currentMedia === null) {
+      //TODO: ADD A DEFAULT IMAGE FOR ROOMS THAT ARE NOT PLAYING MUSIC
       roomsCollection.add(new RoomModel(room));
     } else {
       room.videoURL = 'https://i.ytimg.com/vi/' + room.currentMedia + '/hqdefault.jpg';

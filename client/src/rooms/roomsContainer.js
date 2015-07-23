@@ -72,6 +72,9 @@ var RoomsContainer = React.createClass({
 });
 
 var Rooms = React.createClass({
+    roomClick: function(id) {
+        //TODO: SEND USER TO THE ROOM WITH THE ID CLICKED
+    },
     render: function() {
         return (
             <div className="container">
