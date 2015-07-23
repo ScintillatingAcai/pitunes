@@ -1,6 +1,8 @@
 var db = require('../db/schema');
 var Playlists = require('../db/collections/playlists');
 var Playlist = require('../db/models/playlist');
+var Medias = require('../db/collections/medias');
+var Media = require('../db/models/media');
 
 module.exports = {
 
@@ -40,14 +42,15 @@ module.exports = {
   //update a playlist in DB by ID
   updatePlaylist: function(playlist_id, playlistInfo, callback) {
     playlist_id = parseInt(playlist_id);
+    playlistSongs = playlistInfo.songs;
     new Playlist({id: playlist_id})
       .fetch().then(function(found) {
         if (found) {
             //found.set(playlistInfo);
             var dbPlaylist = [];
-            playlistInfo.map(function(media, index) {
+            console.log('playlist songs: ', playlistSongs);
+            playlistSongs.map(function(media, index) {
               var file = new Media({youtube_id: media});
-
               file.fetch().
                 then(function(found) {
                   if (found) {
@@ -60,7 +63,7 @@ module.exports = {
                   }
                 });
             });
-          found.set(dbPlaylist);  
+          found.set(dbPlaylist);
 
           found.save().then(function(updatedPlaylist) {
               callback(null, updatedPlaylist);
