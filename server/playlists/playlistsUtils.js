@@ -48,32 +48,32 @@ module.exports = {
             //found.set(playlistInfo);
             var dbPlaylist = [];
 
-            found.medias().then( function (playlist) {
+            found.medias().fetch().then( function (playlist) {
               console.log("playlist: " + playlist);
             });
-            console.log('playlist songs: ', playlistSongs);
-            playlistSongs.map(function(media, index) {
-              var file = new Media({youtube_id: media});
-              file.fetch().
-                then(function(found) {
-                  if (found) {
-                    dbPlaylist.push({playlist_id: playlist_id, media_id: found.id, media_order: index+1});
-                  }
-                  else {
-                    file.save().then(function(media) {
-                      dbPlaylist.push({playlist_id: playlist_id, media_id: media.id, media_order: index+1});
-                    });
-                  }
-                });
-            });
-          found.set(dbPlaylist);
+            // console.log('playlist songs: ', playlistSongs);
+          //   playlistSongs.map(function(media, index) {
+          //     var file = new Media({youtube_id: media});
+          //     file.fetch().
+          //       then(function(found) {
+          //         if (found) {
+          //           dbPlaylist.push({playlist_id: playlist_id, media_id: found.id, media_order: index+1});
+          //         }
+          //         else {
+          //           file.save().then(function(media) {
+          //             dbPlaylist.push({playlist_id: playlist_id, media_id: media.id, media_order: index+1});
+          //           });
+          //         }
+          //       });
+          //   });
+          // found.set(dbPlaylist);
 
-          found.save().then(function(updatedPlaylist) {
-              callback(null, updatedPlaylist);
-            })
-            .catch(function(error) {
-              console.log('error:', error);
-            });
+          // found.save().then(function(updatedPlaylist) {
+          //     callback(null, updatedPlaylist);
+          //   })
+          //   .catch(function(error) {
+          //     console.log('error:', error);
+          //   });
         } else {
           console.log('playlist_id not found:' + playlist_id);
         }

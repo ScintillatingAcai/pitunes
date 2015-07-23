@@ -11,9 +11,9 @@ module.exports = function (app, express, io) {
                 httpOnly: true,
                 secure: false,
                 secret: 'share me!',
-                cookie: {maxAge: 1000 * 60 * 60 * 24, secure: false},
+                cookie: {maxAge: 1000 * 60 * 60 * 24, secure: true},
                 maxAge: 1000 * 60 * 60 * 24,
-                resave: false,
+                resave: true,
                 saveUninitialized: true
               };
   app.use(expressSession(session));
