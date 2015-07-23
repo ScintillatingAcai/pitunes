@@ -278,7 +278,6 @@ var PlaylistTitle = React.createClass({
   },
   handleNewPlaylist: function() {
     this.setState({title: user.current_playlist.name});
-    this.forceUpdate();
   },
   render: function(){
     var style = {
