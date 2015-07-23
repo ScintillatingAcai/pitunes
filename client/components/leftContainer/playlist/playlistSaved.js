@@ -80,8 +80,8 @@ var List = React.createClass({
         dataType: 'json',
         data: playlist,
         success: function (res) {
-          user.current_playlist_id = res.playlist_id;
-          currentUser.currentPlaylist.Id = res.playlist_id;
+          user.current_playlist_id = res.id;
+          currentUser.currentPlaylist.Id = res.id;
           console.log('submitted new playlist');
           populatePlaylist();
           context.handleClickedSearch();
