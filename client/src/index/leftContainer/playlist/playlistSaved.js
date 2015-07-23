@@ -8,13 +8,11 @@ var List = React.createClass({
   },
 
   handleClicked: function () {
-    console.log("heardhandleclicked")
     this.setState({data: arrSongs});
   },
 
   componentDidMount: function () {
     $('#searchResults').on('click', 'li', this.handleClicked);
-    $('#loginFormContainer').on('click', this.handleClicked);
   },
 
   onClick: function (e) {
@@ -72,8 +70,6 @@ var List = React.createClass({
     this.submitNewPlaylist(user.current_playlist);
   },
 
-  // PLACEHOLDERS
-  // ***
   submitNewPlaylist: function (playlist) {
     if (user.id !== 0) {
       var context = this;
@@ -86,7 +82,6 @@ var List = React.createClass({
           user.current_playlist = {name: res.name, songs: []}
           populatePlaylist();
           context.handleClickedSearch();
-          console.log('submitted new playlist');
         },
         error: function (res) {
           console.log("error: " + res.statusText);

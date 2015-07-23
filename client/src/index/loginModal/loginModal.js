@@ -29,7 +29,6 @@ var Login = React.createClass({
       success: function (res) {
         user = res;
         that.setState({showModal: false});
-        getPlaylists();
       },
       error: function (res) {
         that.setState({errorMessage: res.statusText});
