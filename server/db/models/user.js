@@ -74,9 +74,7 @@ var User = db.Model.extend({
         callback(null, found);
       }
     })
-    .catch(function(error) {
-      callback(error);
-    });
+    .catch(function(err) {callback(err);});
   }
 });
 
