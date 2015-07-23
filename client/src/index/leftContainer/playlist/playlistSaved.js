@@ -7,12 +7,14 @@ var List = React.createClass({
     return { data: this.props.data, text: ''};
   },
 
-  handleClickedSearch: function () {
+  handleClicked: function () {
+    console.log("heardhandleclicked")
     this.setState({data: arrSongs});
   },
 
   componentDidMount: function () {
-    $('#searchResults').on('click', 'li', this.handleClickedSearch);
+    $('#searchResults').on('click', 'li', this.handleClicked);
+    $('#loginFormContainer').on('click', this.handleClicked);
   },
 
   onClick: function (e) {
@@ -42,7 +44,7 @@ var List = React.createClass({
     if (this.nodePlacement === "after") to++;
     data.splice(to, 0, data.splice(from, 1)[0]);
     this.setState({data: data});
-    this.submitUpdatePlaylist(currentUser.currentPlaylist);
+    this.submitUpdatePlaylist(user.current_playlist);
   },
 
   dragOver: function (e) {
@@ -66,8 +68,8 @@ var List = React.createClass({
 
   createNewPlaylist: function () {
     // TODO fix placeholder, make modal (possibly?) for naming playlist
-    currentUser.currentPlaylist = {name: this.state.text, songs: []};
-    this.submitNewPlaylist(currentUser.currentPlaylist);
+    user.current_playlist = {name: this.state.text, songs: []};
+    this.submitNewPlaylist(user.current_playlist);
   },
 
   // PLACEHOLDERS
@@ -81,10 +83,10 @@ var List = React.createClass({
         data: playlist,
         success: function (res) {
           user.current_playlist_id = res.id;
-          currentUser.currentPlaylist.Id = res.id;
-          console.log('submitted new playlist');
+          user.current_playlist = {name: res.name, songs: []}
           populatePlaylist();
           context.handleClickedSearch();
+          console.log('submitted new playlist');
         },
         error: function (res) {
           console.log("error: " + res.statusText);
@@ -98,7 +100,7 @@ var List = React.createClass({
   submitUpdatePlaylist: function (playlist) {
     var context = this;
     if (user.id !== 0) {
-      $.ajax({url: server_uri + '/api/users/' + user.id + '/playlists/' + currentUser.currentPlaylist.id,
+      $.ajax({url: server_uri + '/api/users/' + user.id + '/playlists/' + user.current_playlist.id,
         type: 'PUT',
         dataType: 'json',
         data: playlist,
@@ -164,32 +166,31 @@ var List = React.createClass({
 });
 
 //list of dummy user data
-var currentUser = {
-  currentPlaylist: {
-    name: 'Test Playlist',
-    id: 4,
-    songs: [
-      {
-        img_url: 'https://i.ytimg.com/vi/2HQaBWziYvY/default.jpg',
-        title: 'Darude - Sandstorm',
-        youtube_id: '2HQaBWziYvY',
-        duration: 224
-      },
-      {
-        img_url: 'https://i.ytimg.com/vi/59CZt1xsh5s/default.jpg',
-        title: 'The Growlers - One Million Lovers',
-        youtube_id: '59CZt1xsh5s',
-        duration: 278,
-      },
-      {
-        img_url: 'https://i.ytimg.com/vi/BYbJmQj5VkE/default.jpg',
-        title: 'FIDLAR - No Waves (Music Video)',
-        youtube_id: 'BYbJmQj5VkE',
-        duration: 190,
-      }
-    ]
-  }
+user.current_playlist = {
+  name: 'Test Playlist',
+  id: 4,
+  songs: [
+    {
+      img_url: 'https://i.ytimg.com/vi/2HQaBWziYvY/default.jpg',
+      title: 'Darude - Sandstorm',
+      youtube_id: '2HQaBWziYvY',
+      duration: 224
+    },
+    {
+      img_url: 'https://i.ytimg.com/vi/59CZt1xsh5s/default.jpg',
+      title: 'The Growlers - One Million Lovers',
+      youtube_id: '59CZt1xsh5s',
+      duration: 278,
+    },
+    {
+      img_url: 'https://i.ytimg.com/vi/BYbJmQj5VkE/default.jpg',
+      title: 'FIDLAR - No Waves (Music Video)',
+      youtube_id: 'BYbJmQj5VkE',
+      duration: 190,
+    }
+  ]
 };
+
 
 var durationToDisplay = function (duration) {
   // duration = this.convertYTDuration(duration);
@@ -208,15 +209,15 @@ var durationToDisplay = function (duration) {
 var arrSongs;
 var populatePlaylist = function() {
   arrSongs = [];
-  for (var song in currentUser.currentPlaylist.songs) {
-    var displayTime = durationToDisplay(currentUser.currentPlaylist.songs[song].duration);
-    arrSongs.push([currentUser.currentPlaylist.songs[song].title + ' | ' + displayTime]);
+  for (var song in user.current_playlist.songs) {
+    var displayTime = durationToDisplay(user.current_playlist.songs[song].duration);
+    arrSongs.push([user.current_playlist.songs[song].title + ' | ' + displayTime]);
   }
 };
 
 populatePlaylist();
 
-var getAllPlaylists = function() {
+var getPlaylists = function() {
   if (user.id !== 0) {
     $.ajax({url: server_uri + '/api/users/' + user.id + '/playlists/',
       type: 'GET',
@@ -224,6 +225,11 @@ var getAllPlaylists = function() {
       success: function (res) {
         console.log('Retrieved playlists', res);
         user.playlists = res;
+        // NEED TO HANDLE NEW USERS FIRST PLAYLIST
+        if (user.current_playlist_id !== 0) {
+          user.current_playlist = user.playlists[user.current_playlist_id]
+        }
+        getCurPlaylistSongs();
       },
       error: function(res) {
         console.log('errorMessage: ' + res.statusText);
@@ -232,14 +238,14 @@ var getAllPlaylists = function() {
   }
 };
 
-var getCurrentPlaylist = function() {
+var getCurPlaylistSongs = function() {
   if (user.id !== 0) {
     $.ajax({url: server_uri + '/api/users/' + user.id + '/playlists/' + user.current_playlist_id,
       type: 'GET',
       dataType: 'json',
       success: function (res) {
         console.log('Retrieved playlists', res);
-        user.playlists = res;
+        user.current_playlist.songs = res;
       },
       error: function(res) {
         console.log('errorMessage: ' + res.statusText);
@@ -250,7 +256,7 @@ var getCurrentPlaylist = function() {
 
 
 var addSongToPlaylist = function (songNode) {
-  currentUser.currentPlaylist.songs.push(songNode);
+  user.current_playlist.songs.push(songNode);
   console.log("Added ", songNode, " to playlist");
   populatePlaylist();
 }
@@ -271,7 +277,7 @@ var PlaylistTitle = React.createClass({
     $('#playlistContainer div').on('click', '.buttonNewPlaylist', this.handleNewPlaylist)
   },
   handleNewPlaylist: function() {
-    this.setState({title: currentUser.currentPlaylist.name});
+    this.setState({title: user.current_playlist.name});
   },
   render: function(){
     var style = {
@@ -301,7 +307,7 @@ var PlaylistSaved = React.createClass({
     };
     return (
       <div id="playlistContainer" style={style}>
-        <PlaylistTitle title={currentUser.currentPlaylist.name}/>
+        <PlaylistTitle title={user.current_playlist.name}/>
         <Songs />
       </div>
     );
