@@ -39,7 +39,7 @@ var convertYTDuration = function (duration) {
 // Convert ISO 8061 format to MM:SS
 // TODO: Either filter out videos longer than 59:59 or extend to HH:MM:SS format
 var convertYTDurationDisplay = function (duration) {
-  duration = this.convertYTDuration(duration);
+  duration = convertYTDuration(duration);
   var minutes = Math.floor(duration / 60) + "";
   if (minutes.length === 1) {
     minutes = "0" + minutes;
