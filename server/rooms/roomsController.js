@@ -24,14 +24,22 @@ module.exports = {
   getAllRooms: function(req, res) {
     var allRooms = utils.getAllRooms().toJSON().map(function(room) {
 
-      var media = room.currentMedia ?
-          {id: room.currentMedia.id, youtube_id: room.currentMedia.youtube_id} :
-          null;
+      var currentMedia = room.currentMedia ? room.currentMedia.toJSON() : null;
+      currentMedia = currentMedia ?
+          {
+            id: currentMedia.id,
+            youtube_id: currentMedia.youtube_id,
+            title: currentMedia.title,
+            img_url: currentMedia.img_url,
+            duration: currentMedia.duration,
+            play_count: currentMedia.play_count
+          } : null;
       return {id: room.id,
         name: room.name,
         private: room.private,
         usersCount: room.users.length,
-        currentMedia: media };
+        queueCount: room.djQueue.length,
+        currentMedia: currentMedia };
     });
 
     if (allRooms) {
