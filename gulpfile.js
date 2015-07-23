@@ -26,7 +26,7 @@ var paths = {
       './server/**/*.js',
       './server/**/**/*.js'
     ],
-  dist: './client'
+  dist: './server'
 };
 
 // var libFilesToMove = [];
