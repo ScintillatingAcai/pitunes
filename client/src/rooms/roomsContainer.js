@@ -81,7 +81,7 @@ var Rooms = React.createClass({
                 <div className="row">
                     {roomsCollection.map(function(room){
                         return (
-                            <div className="col-lg-4 col-sm-4">
+                            <div className="col-lg-4 col-sm-4" onClick={this.roomClick(room.get('id'))}>
                                 <div className="clearfix"></div>
                                 <h2 className="section-heading j-center-text">{room.get('name')} <br />Current DJs: {room.get('userCount')}</h2>
                                 <div className="j-left-25">

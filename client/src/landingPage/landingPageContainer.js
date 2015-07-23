@@ -86,7 +86,6 @@ var LandingPageContainer = React.createClass({
 
             <a name="services"></a>
             <div className="content-section-a">
-
                 <div className="container">
                     <div className="row">
                         <div className="col-lg-4 col-sm-4">
