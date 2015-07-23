@@ -176,13 +176,13 @@ var currentUser = {
         duration: 224
       },
       {
-        img: 'https://i.ytimg.com/vi/59CZt1xsh5s/default.jpg',
+        img_url: 'https://i.ytimg.com/vi/59CZt1xsh5s/default.jpg',
         title: 'The Growlers - One Million Lovers',
         youtube_id: '59CZt1xsh5s',
         duration: 278,
       },
       {
-        img: 'https://i.ytimg.com/vi/BYbJmQj5VkE/default.jpg',
+        img_url: 'https://i.ytimg.com/vi/BYbJmQj5VkE/default.jpg',
         title: 'FIDLAR - No Waves (Music Video)',
         youtube_id: 'BYbJmQj5VkE',
         duration: 190,

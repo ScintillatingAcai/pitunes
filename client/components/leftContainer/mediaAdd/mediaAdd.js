@@ -103,7 +103,8 @@ var SearchBar = React.createClass({
               if ($(e.target).attr('className') === 'searchResultTitle') {
                 loadVideo($(e.target).attr('data-id'), 0);
                 if (user.id !== 0) {
-                  addSongToPlaylist({title: $(e.target).attr('data-title'), youtube_id: $(e.target).attr('data-id'), img: $(e.target).attr('data-img'), duration: $(e.target).attr('data-duration')});
+                  console.log($(e.target).attr('data-img'));
+                  addSongToPlaylist({title: $(e.target).attr('data-title'), youtube_id: $(e.target).attr('data-id'), img_url: $(e.target).attr('data-img'), duration: $(e.target).attr('data-duration')});
                 }
               }
             });
