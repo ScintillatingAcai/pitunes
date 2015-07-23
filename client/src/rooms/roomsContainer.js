@@ -74,8 +74,10 @@ var RoomsContainer = React.createClass({
 var Rooms = React.createClass({
     roomClick: function(id) {
         //TODO: SEND USER TO THE ROOM WITH THE ID CLICKED
+        console.log('clicked room id is: ' + id);
     },
     render: function() {
+        var self = this;
         return (
             <div className="container">
                 <div className="row">
@@ -83,7 +85,7 @@ var Rooms = React.createClass({
                         return (
                             <div className="col-lg-4 col-sm-4">
                                 <div className="clearfix"></div>
-                                <h2 className="section-heading j-center-text">{room.get('name')} <br />Current DJs: {room.get('userCount')}</h2>
+                                <h2 className="section-heading j-center-text" onClick={self.roomClick.bind(this, room.get('id'))}>{room.get('name')} <br />Current DJs: {room.get('userCount')}</h2>
                                 <div className="j-left-25">
                                     <img className="img-responsive" src={room.get('videoURL')} alt="" />
                                 </div>
