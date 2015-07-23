@@ -172,19 +172,19 @@ var currentUser = {
       {
         img_url: 'https://i.ytimg.com/vi/2HQaBWziYvY/default.jpg',
         title: 'Darude - Sandstorm',
-        id: '2HQaBWziYvY',
+        youtube_id: '2HQaBWziYvY',
         duration: 224
       },
       {
         img: 'https://i.ytimg.com/vi/59CZt1xsh5s/default.jpg',
         title: 'The Growlers - One Million Lovers',
-        id: '59CZt1xsh5s',
+        youtube_id: '59CZt1xsh5s',
         duration: 278,
       },
       {
         img: 'https://i.ytimg.com/vi/BYbJmQj5VkE/default.jpg',
         title: 'FIDLAR - No Waves (Music Video)',
-        id: 'BYbJmQj5VkE',
+        youtube_id: 'BYbJmQj5VkE',
         duration: 190,
       }
     ]
