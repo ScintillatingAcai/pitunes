@@ -13,8 +13,6 @@ module.exports = {
   getRoom: function(req, res) {
     var room_id = req.room_id;
     var room = utils.getRoom(room_id);
-    console.log('room: ', room);
-    console.log('room json: ', room.toJSON());
 
     if (room) {
       res.json(room);
@@ -24,10 +22,11 @@ module.exports = {
   },
 
   getAllRooms: function(req, res) {
-    console.log(utils.getAllRooms().get('1').toJSON());
     var allRooms = utils.getAllRooms().toJSON().map(function(room) {
+      console.log('room: ', room);
+      console.log('currentMedia: ', room.currentMedia);
 
-      var currentMedia = room.currentMedia ? room.currentMedia.toJSON() : null;
+      var currentMedia = room.currentMedia ? room.currentMedia : null;
       currentMedia = currentMedia ?
           {
             id: currentMedia.id,
@@ -37,7 +36,7 @@ module.exports = {
             duration: currentMedia.duration,
             play_count: currentMedia.play_count
           } : null;
-      var currentDJ = room.currentDJ ? room.currentDJ.toJSON() : null;
+      var currentDJ = room.currentDJ ? room.currentDJ : null;
       currentDJ = currentDJ ?
           {
             "id": currentDJ.id,
