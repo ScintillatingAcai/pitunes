@@ -1,6 +1,5 @@
 var db = require('../schema');
 var Timer = require('./timer');
-var _ = require('lodash');
 var http = require('http');
 var https = require('https');
 
@@ -88,11 +87,13 @@ var Room = db.Model.extend({
   },
 
   toJSON: function() {
-    return _.extend((new db.Model()).toJSON.call(this), {
-      users: this.users && this.users.toJSON(),
-      djQueue: this.djQueue && this.djQueue.toJSON(),
-      currentMedia: this.currentMedia && this.currentMedia.toJSON()
-    },this);
+    var JSONObject = (new db.Model()).toJSON.call(this);
+    JSONObject.users = this.users && this.users.toJSON();
+    JSONObject.djQueue = this.djQueue && this.djQueue.toJSON();
+    JSONObject.currentMedia = this.currentMedia && this.currentMedia.toJSON();
+    JSONObject.currentDJ = this.currentDJ && this.currentDJ.toJSON();
+
+    return JSONObject;
   },
 
   enqueueDJ: Promise.promisify(function(user_id, sockets, callback) {
