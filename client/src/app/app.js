@@ -1,7 +1,8 @@
 var YOUTUBE_API_KEY = 'AIzaSyA_ZnEUUw8uGbEdGfBXH296QX-1nnyeJnQ';
 
-// REMOVE FOR PRODUCITON, TESTING FOR JOHN ONLY
 var app = new AppModel();
+
+// REMOVE FOR PRODUCITON, TESTING FOR JOHN ONLY
 
 var escapeDQ = function (string) {
   return string.replace(/\"/g, "'");
@@ -123,7 +124,7 @@ var AppContainer = React.createClass({
       <div style={style}>
         <LoginModal />
         <NavBarTop />
-        <LeftContainer />
+        <LeftContainer model={app.get('user')}/>
         <CenterContainer />
         <RightContainer />
         <NavBarBot />
