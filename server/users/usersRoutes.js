@@ -28,6 +28,6 @@ module.exports = function(app) {
   app.get('/:user_id/playlists/:playlist_id', playlistsController.getPlaylist);
   app.put('/:user_id/playlists/:playlist_id', playlistsController.updatePlaylist);
 
-  app.put('/:user_id/playlists/:playlist_id/default', playlistsController.setDefaultPlaylist);
+  app.put('/:user_id/playlists/:playlist_id/current', usersController.setCurrentPlaylist);
 };
 

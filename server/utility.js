@@ -1,5 +1,5 @@
 exports.isLoggedIn = function(req, res) {
-  return req.session ? !! req.session.user : false;
+  return req.session ? !! req.session.user_id : false;
 };
 
 exports.checkUserSession = function(req, res, next) {
@@ -12,10 +12,11 @@ exports.checkUserSession = function(req, res, next) {
 };
 
 exports.createSession = function(req, res, newUser) {
-  return req.session.regenerate(function() { //XXX check if this is async, currently programmed as sync
-    req.session.user = newUser;
+  req.session.regenerate(function() { //XXX check if this is async, currently programmed as sync
+
     // res.redirect('/');
   });
+    req.session.user_id = newUser.id;
 };
 
 exports.errorLogger = function (error, req, res, next) {
