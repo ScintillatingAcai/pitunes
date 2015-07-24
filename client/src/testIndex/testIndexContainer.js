@@ -40,12 +40,12 @@ var LandingPageContainer = React.createClass({
                             <span className="icon-bar"></span>
                             <span className="icon-bar"></span>
                         </button>
-                        <a className="navbar-brand topnav" href="#"><span className="j-color-black">pi</span><span className="j-color-blue">Tunes</span></a>
+                        <a className="navbar-brand topnav" href="landingPage.html">pi<span className="j-color-blue">Tunes</span></a>
                     </div>
                     <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                         <ul className="nav navbar-nav navbar-right">
                             <li>
-                                <a href="#home">Home</a>
+                                <a href="landingPage.html">Home</a>
                             </li>
                             <li>
                                 <a href="rooms.html">Rooms</a>
@@ -59,78 +59,30 @@ var LandingPageContainer = React.createClass({
             </nav>
 
             <a name="home"></a>
-            <div className="intro-header">
+            <div className="body-container">
                 <div className="container">
                     <div className="row">
                         <div className="col-lg-12">
                             <div className="intro-message">
-                                <h1>piTunes</h1>
-                                <h3 className="j-font-uppercase">Listen to music with the people you love</h3>
-                                <hr className="intro-divider"></hr>
-                                <ul className="list-inline intro-social-buttons">
-                                    <li>
-                                        <a onClick={this.loginClick} className="btn btn-default btn-lg"><i className="fa fa-sign-in fa-fw"></i><span className="network-name">Sign In</span></a>
-                                    </li>
-                                    <li>
-                                        <a href="rooms.html" className="btn btn-default btn-lg"><i className="fa fa-music fa-fw"></i><span className="network-name">Join Room</span></a>
-                                    </li>
-                                    <li>
-                                        <a onClick={this.signupClick} className="btn btn-default btn-lg"><i className="fa fa-pencil fa-fw"></i><span className="network-name">Sign Up</span></a>
-                                    </li>
-                                </ul>
+                              <div className="top">
+                                top
+                              </div>
+                              <div className="bot">
+                                bot
+                              </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <a name="services"></a>
-            <div className="content-section-a">
-                <div className="container">
-                    <div className="row">
-                        <div className="col-lg-4 col-sm-4">
-                            <div className="clearfix"></div>
-                            <h2 className="section-heading j-center-text">Random Room 1 <br />DJs:</h2>
-                            <div className="j-left-25">
-                                <img className="img-responsive" src="assets/img/headphones.jpg" alt="" />
-                            </div>
-                        </div>
-                        <div className="col-lg-4 col-sm-4">
-                            <div className="clearfix"></div>
-                            <h2 className="section-heading j-center-text">Random Room 2<br />DJs:</h2>
-                            <div className="j-left-25">
-                                <img className="img-responsive" src="assets/img/ipad.png" alt="" />
-                            </div>
-                        </div>
-                        <div className="col-lg-4 col-sm-4">
-                            <div className="clearfix"></div>
-                            <h2 className="section-heading j-center-text">Random Room 3<br />DJs:</h2>
-                            <div className="j-left-25">
-                                <img className="img-responsive" src="assets/img/headphones.jpg" alt="" />
-                            </div>
-                        </div>
+            <div className='j-footer-bot'>
+                <div className="row">
+                    <div className="col-lg-12">
+                        <p className="copyright text-muted small">Copyright &copy; 2015, Scintillating Açaí, All Rights Reserved</p>
                     </div>
                 </div>
             </div>
-
-            <footer>
-                <div className="container">
-                    <div className="row">
-                        <div className="col-lg-12 j-center-text">
-                            <ul className="list-inline">
-                                <li>
-                                    <a href="#home">Home</a>
-                                </li>
-                                <li className="footer-menu-divider">&sdot;</li>
-                                <li>
-                                    <a href="#home">About</a>
-                                </li>
-                            </ul>
-                            <p className="copyright text-muted small">Copyright &copy; 2015, Scintillating Açaí, All Rights Reserved</p>
-                        </div>
-                    </div>
-                </div>
-            </footer>
 
             <div>
                 <Modal show={this.state.showModal} onHide={this.close}>

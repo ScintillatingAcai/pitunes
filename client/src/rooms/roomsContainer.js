@@ -7,7 +7,13 @@ var Modal = ReactBootstrap.Modal;
 var Input = ReactBootstrap.Input;
 var Button = ReactBootstrap.Button;
 
-var RoomsContainer = React.createClass({
+var RoomsView = React.createClass({
+    //Event listener for changes to roomsCollection
+    componentDidMount: function() {
+        roomsCollection.on('change', function() {
+            this.forceUpdate();
+        }.bind(this));
+    },
     render: function() {
         return (
             <div>
@@ -85,7 +91,7 @@ var Rooms = React.createClass({
                         return (
                             <div className="col-lg-4 col-sm-4">
                                 <div className="clearfix"></div>
-                                <h2 className="section-heading j-center-text" onClick={self.roomClick.bind(this, room.get('id'))}>{room.get('name')} <br />Current DJs: {room.get('userCount')}</h2>
+                                <h2 className="section-heading j-center-text" onClick={self.roomClick.bind(this, room.get('id'))}>{room.get('name')} <br />Current DJs: {room.get('usersCount')}</h2>
                                 <div className="j-left-25">
                                     <img className="img-responsive" src={room.get('videoURL')} alt="" />
                                 </div>
@@ -100,7 +106,7 @@ var Rooms = React.createClass({
 
 React.render(
     <div>
-        <RoomsContainer source={server_uri + '/api/rooms'} />
+        <RoomsView source={server_uri + '/api/rooms'} />
     </div>,
     document.getElementsByClassName('roomsContainer')[0]
 );
