@@ -1,8 +1,11 @@
 var db = require('../db/schema');
+var Promise = require('bluebird');
 var Playlists = require('../db/collections/playlists');
 var Playlist = require('../db/models/playlist');
 var Medias = require('../db/collections/medias');
 var Media = require('../db/models/media');
+var Media_Playlists = require('../db/collections/media_playlists');
+var Media_Playlist = require('../db/models/media_playlist');
 
 module.exports = {
 
@@ -40,53 +43,53 @@ module.exports = {
   },
 
   //update a playlist in DB by ID
-  updatePlaylist: function(playlist_id, playlistInfo, callback) {
-    playlistSongs = playlistInfo.songs;
-    new Playlist({id: playlist_id})
-      .fetch().then(function(found) {
+  updatePlaylist: Promise.promisify(function(playlist_id, playlistInfo, callback) {
+    playlistMedias = playlistInfo.medias;
+    new Playlist({id: playlist_id}).fetch()
+      .then(function(found) {
         if (found) {
-            //found.set(playlistInfo);
-            var dbPlaylist = [];
-
-            found.medias().fetch().then( function (playlist) {
-              console.log("playlist: " + playlist);
+          new Media_Playlists().query({where: {playlist_id: found.id}}).fetch()
+          .then(function (found) {
+            return found.invokeThen('destroy');
+          })
+          .then( function ( found ) {
+          // check all the songs exists in the db
+            return new Medias(playlistMedias).mapThen( function (media, index) {
+              return media.fetch().then(function (exist) {
+                if (!exist) {
+                  media.create().then(function( newMedia ) {  
+                  return  new Media_Playlist({playlist_id: playlist_id, media_id: newMedia.get('id'), media_order: index+1}).save();
+                  });
+                }
+                else {
+                  return new Media_Playlist({playlist_id: playlist_id, media_id: media.get('id'), media_order: index+1}).save();
+                }
+              });
+            })
+            .then(function ( medias ) {
+              return new Playlist({id: playlist_id}).medias().fetch();
+            })
+            .then(function ( playlists ) {
+                callback(null, playlists);
             });
-            // console.log('playlist songs: ', playlistSongs);
-          //   playlistSongs.map(function(media, index) {
-          //     var file = new Media({youtube_id: media});
-          //     file.fetch().
-          //       then(function(found) {
-          //         if (found) {
-          //           dbPlaylist.push({playlist_id: playlist_id, media_id: found.id, media_order: index+1});
-          //         }
-          //         else {
-          //           file.save().then(function(media) {
-          //             dbPlaylist.push({playlist_id: playlist_id, media_id: media.id, media_order: index+1});
-          //           });
-          //         }
-          //       });
-          //   });
-          // found.set(dbPlaylist);
+          });
 
-          // found.save().then(function(updatedPlaylist) {
-          //     callback(null, updatedPlaylist);
-          //   })
-          //   .catch(function(error) {
-          //     console.log('error:', error);
-          //   });
-        } else {
+            // .catch(function(error) {
+            //   console.log('error:', error);
+            // }); 
+        }
+        else {
           console.log('playlist_id not found:' + playlist_id);
         }
       })
       .catch(function(error) {
         console.log('error:', error);
       });
-  },
+  }),
 
   //store a new playlist in DB
   storePlaylist: function(user_id, playlist, callback) {
     var playlistName = playlist.name;
-    var user_id = user_id;
   
     new Playlist({
       name: playlistName,

@@ -47,9 +47,8 @@ module.exports = {
     var playlist_ID = req.playlist_id;
     var playlistInfo = req.body;
 
-    console.log('updating playlist_id:', playlist_ID, ' with info: ', playlistInfo );
-    var R = Promise.promisify(utils.updatePlaylist);
-    R(playlist_ID,playlistInfo).then(function(playlist) {
+    // console.log('updating playlist_id:', playlist_ID, ' with info: ', playlistInfo );
+    utils.updatePlaylist(playlist_ID,playlistInfo).then(function(playlist) {
       if (playlist) {
         res.json(playlist);
       } else {

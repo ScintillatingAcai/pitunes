@@ -4,9 +4,14 @@ var Promise = require('bluebird');
 
 module.exports = {
 
+  attachMedia: function(req, res, next, media_id) {
+    console.log('attaching media_id: ', media_id);
+    req.media_id = parseInt(media_id);
+    next();
+  },
+
   getMedia: function(req, res, next) {
-    var media_id = (url.parse(req.url).pathname).slice(1);
-    console.log('retrieving info for media_id:' + media_id);
+    console.log('retrieving info for media_id:' + req.media_id);
     var R = Promise.promisify(utils.retrieveMedia);
     R(media_id).then(function(media) {
       if (media) {
@@ -38,12 +43,11 @@ module.exports = {
   },
 
   updateMedia: function(req, res, next) {
-    var media_id = (url.parse(req.url).pathname).slice(1);
     var mediaInfo = req.body;
 
-    console.log('updating media_id:', media_id, ' with info: ', mediaInfo );
+    console.log('updating media_id:', req.media_id, ' with info: ', mediaInfo );
     var R = Promise.promisify(utils.updateMedia);
-    R(media_ID,playlistInfo).then(function(media) {
+    R(req.media_id, playlistInfo).then(function(media) {
       if (media) {
         res.json(media);
       } else {

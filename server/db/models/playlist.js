@@ -78,8 +78,7 @@ var Playlist = db.Model.extend({
 
   retrievePlaylist: Promise.promisify(function( callback ) {
     this.fetch({
-      withRelated: ['medias'],
-      required: true
+      withRelated: ['medias']
     })
     .then(function(playlist) {
       if (!playlist) return callback(new Error('playlist not found'));
