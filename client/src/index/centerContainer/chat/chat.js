@@ -22,7 +22,9 @@ var Chat = React.createClass({
     }.bind(this));
 
     socket.on('user room change', function(data){
-      console.log('user room change: ', data);
+      console.log('user room change: ', JSON.parse(data));
+      app.get('current_room').get('users').set(JSON.parse(data));
+      app.get('current_room').trigger('userRoomChange');
     }.bind(this));
 
     socket.on('user queue change', function(data){
