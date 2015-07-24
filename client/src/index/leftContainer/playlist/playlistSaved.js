@@ -8,15 +8,20 @@ var List = React.createClass({
   },
 
   handleNewCurrentPlaylist: function () {
-    this.setState({data: app.get('user').get('current_playlist').get('songs')});
+    console.log('List fired handleNewCurrentPlaylist');
+    var newData = app.get('user').get('current_playlist').get('medias').map(function (e) {
+      return e.attributes;
+    });
+    this.setState({data: newData});
   },
 
   componentDidMount: function () {
-    var context = this;
-    Backbone.on('newCurrentPlaylist', function () {
-      console.log('playlist heard newCurrentPlaylist');
-      context.handleNewCurrentPlaylist();
-    });
+    this.props.model.on('change:current_playlist', function () {
+      console.log('List heard userChange');
+      if (app.get('user').get('current_playlist')) {
+        this.handleNewCurrentPlaylist();
+      }
+    }.bind(this));
   },
 
   onClick: function (e) {
@@ -130,6 +135,7 @@ var List = React.createClass({
       padding: '0 0 0 0',
       margin: '0 0 0 2px'
     };
+    console.log(this.state);
     var listItems = this.state.data.map((function (item, i) {
       return (
         <div style={style} data-id={i}
@@ -261,7 +267,7 @@ var addSongToPlaylist = function (songNode) {
 var Songs = React.createClass({
   render: function() {
     return (
-      <List data={arrSongs} />
+      <List model={app.get('user')} data={arrSongs} />
     );
   }
 });
@@ -271,14 +277,18 @@ var PlaylistTitle = React.createClass({
     return {title: this.props.title}
   },
   componentDidMount: function() {
-    var context = this;
-    Backbone.on('newCurrentPlaylist', function() {
-      console.log('heard newCurrentPlaylist')
-      context.handleNewCurrentPlaylist();
-    })
+    this.props.model.on('change:current_playlist', function () {
+      console.log('playlistTitle heard userChange');
+      // this.forceUpdate();
+      if (app.get('user').get('current_playlist')) {
+        this.handleNewCurrentPlaylist();
+      }
+    }.bind(this));
+
   },
   handleNewCurrentPlaylist: function() {
-    this.setState({title: app.get('user').get('current_playlist').get('attributes').name});
+    // console.log(app.get('user').get('current_playlist').get('attributes'));
+    this.setState({title: app.get('user').get('current_playlist').get('name')});
   },
   render: function(){
     var style = {
@@ -308,7 +318,7 @@ var PlaylistSaved = React.createClass({
     };
     return (
       <div id="playlistContainer" style={style}>
-        <PlaylistTitle title={user.current_playlist.name}/>
+        <PlaylistTitle model={app.get('user')} title={'No current playlist'}/>
         <Songs />
       </div>
     );

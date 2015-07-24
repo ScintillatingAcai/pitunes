@@ -16,7 +16,7 @@ var DebuggerButtonGetCurPlaylist = React.createClass({
 
 var DebuggerButtonJoinQueue = React.createClass({
   handleClick: function () {
-    socket.emit('user queue join', {user: user, room: 1});
+    socket.emit('user queue join', {user: app.get('user').attributes, room: 1});
   },
   render: function () {
     return (
@@ -27,7 +27,7 @@ var DebuggerButtonJoinQueue = React.createClass({
 
 var DebuggerButtonLeaveQueue = React.createClass({
   handleClick: function () {
-    socket.emit('user queue leave', {user: user, room: 1});
+    socket.emit('user queue leave', {user: app.get('user').attributes, room: 1});
   },
   render: function () {
     return (
@@ -49,7 +49,7 @@ var DebuggerButtonSimVideoDesync = React.createClass({
 
 var DebuggerButtonJoinRoom = React.createClass({
   handleClick: function () {
-    socket.emit('user room join', {user: user, room: 1})
+    socket.emit('user room join', {user: app.get('user').attributes, room: 1})
   },
   render: function () {
     return (
@@ -60,7 +60,7 @@ var DebuggerButtonJoinRoom = React.createClass({
 
 var DebuggerButtonLeaveRoom = React.createClass({
   handleClick: function () {
-    socket.emit('user room leave', {user: user, room: 1})
+    socket.emit('user room leave', {user: app.get('user').attributes, room: 1})
   },
   render: function () {
     return (

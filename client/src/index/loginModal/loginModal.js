@@ -27,7 +27,7 @@ var Login = React.createClass({
       dataType: 'json',
       data: data,
       success: function (res) {
-        var loggedUser = new UserModel({
+        app.get('user').set({
           email: res.email,
           id: res.id,
           password: res.password,
@@ -38,7 +38,9 @@ var Login = React.createClass({
           created_at: res.create_at,
           updated_at: res.updated_at
         });
-        app.set('user', loggedUser);
+        // var loggedUser = new UserModel({
+        // });
+        // app.set('user', loggedUser);
         app.get('user').retrievePlaylists();
         that.setState({showModal: false});
       },

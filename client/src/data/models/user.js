@@ -10,7 +10,7 @@ var UserModel = Backbone.Model.extend({
     location: null,
     playlists: new PlaylistsCollection(),
     current_playlist_id: null,
-    current_playlist: new PlaylistModel(),
+    current_playlist: null,
     created_at: null,
     updated_at: null
   },
@@ -29,13 +29,13 @@ var UserModel = Backbone.Model.extend({
             playlist.set(key, jsonPlaylist[key]);
           }
         }
-        playlistsCollection.add(new PlaylistModel(playlist));
+        playlistsCollection.add(playlist);
       });
     }).done(function () {
       context.set('playlists', playlistsCollection);
       var curPlaylistInd = context.get('current_playlist_id');
       context.set('current_playlist', playlistsCollection.get(curPlaylistInd));
-      Backbone.trigger('newCurrentPlaylist');
+      console.log(context.get('current_playlist'));
     }).fail(function () {
       console.log('GET request to ' + source + ' failed.');
     });
