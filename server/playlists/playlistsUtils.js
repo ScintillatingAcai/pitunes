@@ -99,20 +99,5 @@ module.exports = {
       console.log('error:', error);
       callback(error);
     });
-  },
-
-  updateDefaultPlaylist: function(user_id, playlist_id, callback) {
-    new User({id: user_id}).fetch().then(function(found){
-      if (found) {
-        found.setCurrentMedia(playlist_id);
-      }
-      else {
-        callback(new Error("User not found to update default playlist"));
-      }
-    })
-    .catch(function(error) {
-      console.log('error:', error);
-      callback(error);
-    });
   }
 };

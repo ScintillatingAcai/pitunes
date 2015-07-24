@@ -148,8 +148,26 @@ module.exports = {
     }).retrieveAllPlaylists(function(error, found){
       callback(null, found);
     });
+  }),
+
+  updateCurrentPlaylist: Promise.promisify( function(user_id, playlist_id, callback) {
+    var user = this.getUser(user_id);
+
+    if (user) {
+      user.setCurrentPlaylist(playlist_id)    
+      .then(function(user){
+        console.log("userUtils: ", user);
+        callback(null, user);
+      })
+      .catch(function(error) {
+        console.log('error:', error);
+        callback(error);
+      });
+    }
+    else {
+      callback(new Error("User not found to update current playlist"));
+    }
   })
 };
 
 require('../singleton.js');
-

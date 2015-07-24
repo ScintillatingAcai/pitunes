@@ -1,4 +1,3 @@
-var url = require('url');
 var utils = require('./usersUtils');
 var utility = require('../utility');
 
@@ -56,6 +55,7 @@ module.exports = {
       utils.addUser(user);
       // create the new cookie session
       utility.createSession(req, res, user);
+
       res.json(user);
     })
     .catch(function(err) {
@@ -64,7 +64,8 @@ module.exports = {
   },
 
   logoutUser: function(req, res, next) {
-    utils.removeUser(req.session.user.id);
+    console.log("logout session user id: ", req.session.user_id);
+    utils.removeUser(req.session.user_id);
     req.session.destroy(function(){
       console.log('session destroyed');
         // res.redirect('/login');
@@ -84,5 +85,19 @@ module.exports = {
 
   addUserPlaylist: function( req, res) {
 
+  },
+  
+  setCurrentPlaylist: function(req, res, next) {
+    utils.updateCurrentPlaylist(req.user_id, req.playlist_id)
+    .then( function (user) {
+      if (user) {
+        res.end();
+      } else {
+        res.status(500).end();
+      }
+    })
+    .catch(function(error) {
+      return next(new Error('controller error: ', error));
+    });
   }
 };
