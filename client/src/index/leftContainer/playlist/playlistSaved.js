@@ -7,12 +7,16 @@ var List = React.createClass({
     return { data: this.props.data, text: ''};
   },
 
-  handleClicked: function () {
-    this.setState({data: arrSongs});
+  handleNewCurrentPlaylist: function () {
+    this.setState({data: app.get('user').get('current_playlist').get('songs')});
   },
 
   componentDidMount: function () {
-    $('#searchResults').on('click', 'li', this.handleClicked);
+    var context = this;
+    Backbone.on('newCurrentPlaylist', function () {
+      console.log('playlist heard newCurrentPlaylist');
+      context.handleNewCurrentPlaylist();
+    });
   },
 
   onClick: function (e) {
@@ -42,7 +46,7 @@ var List = React.createClass({
     if (this.nodePlacement === "after") to++;
     data.splice(to, 0, data.splice(from, 1)[0]);
     this.setState({data: data});
-    this.submitUpdatePlaylist(user.current_playlist);
+    // this.submitUpdatePlaylist(user.current_playlist);
   },
 
   dragOver: function (e) {
@@ -50,11 +54,9 @@ var List = React.createClass({
     this.dragged.style.display = "none";
     if (e.target.className === "placeholder") return;
     this.over = e.target;
-    // Inside the dragOver method
     var relY = e.clientY - this.over.offsetTop;
     var height = this.over.offsetHeight / 2;
     var parent = e.target.parentNode;
-
     if (relY > height) {
       this.nodePlacement = "after";
       parent.insertBefore(placeholder, e.target.nextElementSibling);
@@ -66,7 +68,7 @@ var List = React.createClass({
 
   createNewPlaylist: function () {
     // TODO fix placeholder, make modal (possibly?) for naming playlist
-    user.current_playlist = {name: this.state.text, songs: []};
+    app.get('user').set('current_playlist', new PlaylistModel({name: this.state.text, medias: new MediasCollection()}));
     this.submitNewPlaylist(user.current_playlist);
   },
 
@@ -79,7 +81,7 @@ var List = React.createClass({
         data: playlist,
         success: function (res) {
           user.current_playlist_id = res.id;
-          user.current_playlist = {name: res.name, songs: []}
+          user.current_playlist = {name: res.name, songs: []};
           populatePlaylist();
           context.handleClickedSearch();
         },
