@@ -8,7 +8,9 @@ var Playlist = db.Model.extend({
 
   medias: function() {
     var Media = require('./media');
-    return this.belongsToMany(Media,'Media_Playlists', 'playlist_id', 'media_id');
+    return this.belongsToMany(Media,'Media_Playlists', 'playlist_id', 'media_id').query(function(qb){
+      qb.orderBy('media_order','ASC');
+    });
   },
 
   user: function() {
@@ -75,14 +77,14 @@ var Playlist = db.Model.extend({
   }),
 
   retrievePlaylist: Promise.promisify(function( callback ) {
-
-    this.medias().query(function(qb){
-      qb.orderBy('media_order','ASC');
-    }).fetch()
-    .then(function(found) {
-      if (!found) return callback(new Error('media not found'));
-      console.log('retrieved current media');
-      callback(null,found);
+    this.fetch({
+      withRelated: ['medias'],
+      required: true
+    })
+    .then(function(playlist) {
+      if (!playlist) return callback(new Error('playlist not found'));
+      console.log('retrieved playlist');
+      callback(null,playlist);
     })
     .catch(function(error) {
       callback(error);

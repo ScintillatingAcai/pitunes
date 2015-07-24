@@ -23,8 +23,6 @@ module.exports = {
 
   getAllRooms: function(req, res) {
     var allRooms = utils.getAllRooms().toJSON().map(function(room) {
-      console.log('room: ', room);
-      console.log('currentMedia: ', room.currentMedia);
 
       var currentMedia = room.currentMedia ? room.currentMedia : null;
       currentMedia = currentMedia ?

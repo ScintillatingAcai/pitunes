@@ -18,6 +18,12 @@ var User = db.Model.extend({
     });
   },
 
+  //relationship
+  playlists: function() {
+    var Playlist = require('./playlist');
+    return this.hasMany(Playlist, 'user_id');
+  },
+
   hashPassword: function(callback){
     var hashPromise = Promise.promisify(bcrypt.hash);
     return hashPromise(this.get('password'), 10).bind(this)
@@ -27,15 +33,15 @@ var User = db.Model.extend({
     .catch(function(err) {console.error('hashing error:', err);});
   },
 
-  getCurrentPlaylist:Promise.promisify(function(callback) {
-    this.retrieveCurrentPlaylist().then(function(playlist) {
+  getCurrentPlaylist: Promise.promisify(function(callback) {
+    this.retrievePlaylist(this.get('current_playlist_id')).then(function(playlist) {
       if (!playlist) return callback(new Error('playlist not found (get current playlist)'));
       callback(null, playlist);
     })
     .catch(function(err) {callback(err);});
   }),
 
-  setCurrentPlaylist:Promise.promisify(function(playlist_ID, callback) {
+  setCurrentPlaylist: Promise.promisify(function(playlist_ID, callback) {
     this.set('current_playlist_id', playlist_ID);
     this.save().then(function(playlist) {
       if (!playlist) return callback(new Error('playlist not found (set current playlist)'));
@@ -44,25 +50,19 @@ var User = db.Model.extend({
     .catch(function(err) {callback(err);});
   }),
 
-  retrieveCurrentPlaylist: Promise.promisify(function(callback){
+  retrievePlaylist: Promise.promisify(function(playlist_id, callback){
     var Playlist = require('./playlist');
-    if (this.get('current_playlist_id') === 0) return callback(null, 0); //send back 0 which indicates no playlist but not an error
+    if (playlist_id === 0) return callback(null, 0); //send back 0 which indicates no playlist but not an error
     new Playlist({
-      id:this.get('current_playlist_id')
+      id:playlist_id
     }).fetch()
-    .then(function(found) {
-      if (!found) return callback(new Error('media playlist not found'));
-      console.log('retrieved current playlist : ', found.get('id'));
-      callback(null,found);
+    .then(function(playlist) {
+      if (!playlist) return callback(new Error('media playlist not found'));
+      console.log('retrieved current playlist : ', playlist.get('id'));
+      callback(null,playlist);
     })
     .catch(function(err) {callback(err);});
   }),
-
-  //relationship
-  playlists: function() {
-    var Playlist = require('./playlist');
-    return this.hasMany(Playlist, 'user_id');
-  },
 
   retrieveAllPlaylists: function(callback) {
     this.playlists().fetch(
