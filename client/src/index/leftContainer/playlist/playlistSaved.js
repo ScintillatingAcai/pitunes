@@ -269,10 +269,14 @@ var PlaylistTitle = React.createClass({
     return {title: this.props.title}
   },
   componentDidMount: function() {
-    $('#playlistContainer div').on('click', '.buttonNewPlaylist', this.handleNewPlaylist)
+    var context = this;
+    Backbone.on('newCurrentPlaylist', function() {
+      console.log('heard newCurrentPlaylist')
+      context.handleNewCurrentPlaylist();
+    })
   },
-  handleNewPlaylist: function() {
-    this.setState({title: user.current_playlist.name});
+  handleNewCurrentPlaylist: function() {
+    this.setState({title: app.get('user').get('current_playlist').get('attributes').name});
   },
   render: function(){
     var style = {

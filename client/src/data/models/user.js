@@ -35,6 +35,8 @@ var UserModel = Backbone.Model.extend({
       context.set('playlists', playlistsCollection);
       var curPlaylistInd = context.get('current_playlist_id');
       context.set('current_playlist', playlistsCollection.get(curPlaylistInd));
+      Backbone.trigger('newCurrentPlaylist');
+
     }).fail(function () {
       console.log('GET request to ' + source + ' failed.');
     });
