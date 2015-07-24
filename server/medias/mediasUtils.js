@@ -59,11 +59,8 @@ module.exports = {
 
   //store a new media in DB
   storeMedia: function(media, callback) {
-    var mediaName = media.name;
 
-    new Media({
-        name: mediaName
-      }).fetch().then(function(found) {
+    new Media(media).fetch().then(function(found) {
 
         if (found) {
           callback(null, found.attributes);
@@ -71,9 +68,7 @@ module.exports = {
 
         } else {
 
-          var media = new Media({
-            name: mediaName
-          });
+          var media = new Media(media);
 
           media.save().then(function(newMedia) {
               new Medias().add(newMedia);
