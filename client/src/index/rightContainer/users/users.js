@@ -14,25 +14,60 @@ for (var key in dummyUsers) {
 }
 
 var Users = React.createClass({
-  render: function() {
+  componentDidMount: function () {
+    var context = this;
+    this.props.model.on('change', function () {
+      console.log(this.props.model.get('users').models);
+      console.log('USERS LIST HEARD CHANGE');
+        context.handleRoomChange();
+    }.bind(this));
+    
+    this.props.model.on('newSong', function () {
+      console.log('List heard curPL medias change');
+      if (app.get('user').get('current_playlist')) {
+        this.handleNewCurrentPlaylist();
+      }
+    }.bind(this));
+  },
+  handleRoomChange: function () {
+    this.forceUpdate();
+  },
+  render: function () {
     var style = {
       cursor: 'pointer',
       marginBottom: '5px',
       padding: '0',
       margin: '0',
-      color: 'grey',
+      color: '#FFF',
       listStyleType: 'none'
-    }
-    var listItems = arrUsers.map((function(item, i) {
+    };
+    var listItems;
+    if (this.props.model.get('users').models.length > 0) {
+      listItems = this.props.model.get('users').models.map(function (item, i) {
+        return (
+          <li style={style} data-id={i} key={i}>
+            {item.get('display_name')}
+          </li>
+        );
+      });
       return (
-        <li style={style} data-id={i} key={i}>
-          {item}
-        </li>
+        <ul>{listItems}</ul>
       );
-    }).bind(this));
-    return (
-      <ul >{listItems}</ul>
-    );
+    } else {
+      // listItems = ["No one in room"].map(function (item, i) {
+      //   return (
+      //     <li style={style} data-id={i} key={i}>
+      //       {item}
+      //     </li>
+      //   );
+      // });
+      // return (
+      //   <ul>{listItems}</ul>
+      // );
+      return (
+        <ul></ul>
+      );
+    }
   }
 });
 
@@ -40,10 +75,10 @@ var UsersTitle = React.createClass({
   render: function() {
     var style = {
       textAlign: 'center',
-      color: 'grey'
+      color: '#FFF'
     };
     return (
-      <h3 style={style}>Online Users</h3>
+      <h3 style={style} >Online Users</h3>
     );
   }
 });
@@ -57,12 +92,13 @@ var OnlineUsers = React.createClass({
       width: '100%',
       height: '50%',
       overflow: 'auto',
-      bottom: '0'
+      bottom: '0',
+      color: '#FFF'
     };
     return (
       <div style={style}>
         <UsersTitle />
-        <Users />
+        <Users model={app.get('current_room')} />
       </div>
     );
   }
