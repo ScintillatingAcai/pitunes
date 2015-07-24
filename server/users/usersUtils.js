@@ -40,7 +40,6 @@ module.exports = {
   removeUser: function(user_id, callback) {
     var singleton = require('../singleton.js');
     singleton.users.remove(user_id);
-    console.log(singleton.users);
   },
 
   //get a user from DB by ID
