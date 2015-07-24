@@ -9,6 +9,10 @@ var PlaylistModel = Backbone.Model.extend({
     name: null,
     updated_at: null,
     user_id: null
+  },
+  initialize: function (params) {
+
   }
+
 });
 

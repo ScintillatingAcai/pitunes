@@ -10,14 +10,22 @@ var List = React.createClass({
   handleNewCurrentPlaylist: function () {
     console.log('List fired handleNewCurrentPlaylist');
     var newData = app.get('user').get('current_playlist').get('medias').map(function (e) {
-      return e.attributes;
+      // console.log(e)
+      return e.get('title') + " | " + durationToDisplay(e.get('duration'));
     });
     this.setState({data: newData});
   },
 
   componentDidMount: function () {
     this.props.model.on('change:current_playlist', function () {
-      console.log('List heard userChange');
+      console.log('List heard change/add');
+      if (app.get('user').get('current_playlist')) {
+        this.handleNewCurrentPlaylist();
+      }
+    }.bind(this));
+    
+    this.props.model.on('newSong', function () {
+      console.log('List heard curPL medias change');
       if (app.get('user').get('current_playlist')) {
         this.handleNewCurrentPlaylist();
       }
@@ -124,18 +132,17 @@ var List = React.createClass({
     var style = {
       cursor: 'pointer',
       padding: '0',
-      margin: '0 0 0 10px',
+      margin: '0 0 5px 10px',
       color: '#FFFFFF',
-      fontSize: '10px',
+      fontSize: '12px',
       listStyleType: 'none'
     };
-    var buttonStyle = {
-      backgroundColor: 'white',
-      color: 'black',
-      padding: '0 0 0 0',
-      margin: '0 0 0 2px'
-    };
-    console.log(this.state);
+    // var buttonStyle = {
+    //   backgroundColor: 'white',
+    //   color: 'black',
+    //   padding: '0 0 0 0',
+    //   margin: '0 0 0 2px'
+    // };
     var listItems = this.state.data.map((function (item, i) {
       return (
         <div style={style} data-id={i}
@@ -145,9 +152,6 @@ var List = React.createClass({
           onDragStart={this.dragStart}
           onClick={this.onClick}>
           {item}
-          <button style={buttonStyle}>Top</button>
-          <button style={buttonStyle}>Bot</button>
-          <button style={buttonStyle}>Rem</button>
         </div>
 
       );
@@ -288,7 +292,12 @@ var PlaylistTitle = React.createClass({
   },
   handleNewCurrentPlaylist: function() {
     // console.log(app.get('user').get('current_playlist').get('attributes'));
-    this.setState({title: app.get('user').get('current_playlist').get('name')});
+    if (app.get('user').get('current_playlist').get('name')) {
+      console.log(app.get('user').get('current_playlist').get('name'))
+      this.setState({title: app.get('user').get('current_playlist').get('name')});
+    } else {
+      this.setState({title: 'No Playlist'});
+    }
   },
   render: function(){
     var style = {
@@ -318,7 +327,7 @@ var PlaylistSaved = React.createClass({
     };
     return (
       <div id="playlistContainer" style={style}>
-        <PlaylistTitle model={app.get('user')} title={'No current playlist'}/>
+        <PlaylistTitle model={app.get('user')} title={'Sign in to create a Playlist!'}/>
         <Songs />
       </div>
     );
