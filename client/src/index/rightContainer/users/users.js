@@ -21,12 +21,11 @@ var Users = React.createClass({
       console.log('USERS LIST HEARD CHANGE');
         context.handleRoomChange();
     }.bind(this));
-    
-    this.props.model.on('newSong', function () {
-      console.log('List heard curPL medias change');
-      if (app.get('user').get('current_playlist')) {
-        this.handleNewCurrentPlaylist();
-      }
+
+    this.props.model.on('userRoomChange', function () {
+      console.log(this.props.model.get('users').models);
+      console.log('USERS LIST HEARD CHANGE');
+        context.handleRoomChange();
     }.bind(this));
   },
   handleRoomChange: function () {
@@ -88,7 +87,7 @@ var OnlineUsers = React.createClass({
     var style = {
       background: '#222222',
       border: '2px solid #444444',
-      position: 'absolute', 
+      position: 'absolute',
       width: '100%',
       height: '50%',
       overflow: 'auto',

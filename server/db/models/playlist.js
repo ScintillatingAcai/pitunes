@@ -93,7 +93,6 @@ var Playlist = db.Model.extend({
 
   setPlaylist: Promise.promisify(function( playlist, callback){
     this.medias();
-    console.log(this);
   })
 });
 

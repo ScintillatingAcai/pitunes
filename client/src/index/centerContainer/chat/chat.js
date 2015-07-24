@@ -22,7 +22,9 @@ var Chat = React.createClass({
     }.bind(this));
 
     socket.on('user room change', function(data){
-      console.log('user room change: ', data);
+      console.log('user room change: ', JSON.parse(data));
+      app.get('current_room').get('users').set(JSON.parse(data));
+      app.get('current_room').trigger('userRoomChange');
     }.bind(this));
 
     socket.on('user queue change', function(data){
@@ -41,7 +43,7 @@ var Chat = React.createClass({
     MAKE THE VARIABLE NAME EQUAL TO THE CURRENT USER
     ************************************************
     */
-    var name = user.display_name;
+    var name = app.get('user').get('display_name');
     if (this.state.text === '') { return; }
     socket.emit('user message', {displayName: name, message: this.state.text});
     var nextItems = this.state.items.concat([name + ': ' + this.state.text]);
