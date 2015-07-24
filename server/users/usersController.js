@@ -49,10 +49,14 @@ module.exports = {
   },
 
   loginUser: function(req, res, next) {
-    utils.loginUser(req.body).then(function(data) {
-      if (!data) return next(new Error('user does not exist'));
-      utility.createSession(req, res, data);
-      res.json(data);
+    utils.loginUser(req.body).then(function(user) {
+      if (!user) return next(new Error('user does not exist'));
+
+      // add into memory model
+      utils.addUser(user);
+      // create the new cookie session
+      utility.createSession(req, res, user);
+      res.json(user);
     })
     .catch(function(err) {
       return next(new Error('controller error: ', err));
@@ -60,6 +64,7 @@ module.exports = {
   },
 
   logoutUser: function(req, res, next) {
+    utils.removeUser(req.session.user.id);
     req.session.destroy(function(){
       console.log('session destroyed');
         // res.redirect('/login');

@@ -60,7 +60,9 @@ module.exports = function(io) {
         return console.log('anon user entered room');
       }
 
-      userUtils.retrieveUser(user_id).then(function(user) {
+      var user = userUtils.getUser(user_id);
+
+      if (user) {
         room.addUser(user).then(function(user) {
           if (!user) return console.error('user already in room');
           socket.join(room_id);
@@ -73,7 +75,7 @@ module.exports = function(io) {
 
           allClients.push({socket: socket, user_id: user_id, room_id: room_id});
         }).catch(function(err) {console.error(err);});
-      });
+      }
     });
 
     socket.on('user room leave', function(data){

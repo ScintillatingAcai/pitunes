@@ -2,19 +2,21 @@ var db = require('../db/schema');
 var Rooms = require('../db/collections/rooms');
 var Room = require('../db/models/room');
 
-var singleton;
 var openSockets;
 
 module.exports = {
 
   getRoom: function(room_id) {
     console.log('retrieving info for room: ' + room_id);
+    var singleton = require('../singleton.js');
+    console.log(singleton);
     var room = singleton.rooms.get(room_id);
     return room;
   },
 
   getAllRooms: function() {
     console.log('retrieving all rooms');
+    var singleton = require('../singleton.js');
     var allRooms = singleton.rooms;
     return allRooms;
   },
@@ -33,6 +35,7 @@ module.exports = {
             name: roomname,
           })
           .save().then(function(newRoom) {
+            var singleton = require('../singleton.js');
             var allRooms = singleton.rooms;
             allRooms.add(newRoom);
             callback(null, newRoom);
@@ -161,5 +164,3 @@ module.exports = {
     openSockets = sockets;
   }
 };
-
-singleton = require('../singleton.js');
