@@ -1,6 +1,7 @@
 var YOUTUBE_API_KEY = 'AIzaSyA_ZnEUUw8uGbEdGfBXH296QX-1nnyeJnQ';
 
 // REMOVE FOR PRODUCITON, TESTING FOR JOHN ONLY
+var app = new AppModel();
 
 var escapeDQ = function (string) {
   return string.replace(/\"/g, "'");

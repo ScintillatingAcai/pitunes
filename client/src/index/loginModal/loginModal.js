@@ -1,7 +1,7 @@
 var Input = ReactBootstrap.Input;
 
 var Login = React.createClass({
-  getInitialState: function() {
+  getInitialState: function () {
     return {showModal: true, errorMessage: 'testing', showLogin: true, showSignUp: false};
   },
   componentDidMount: function () {
@@ -27,7 +27,19 @@ var Login = React.createClass({
       dataType: 'json',
       data: data,
       success: function (res) {
-        user = res;
+        var loggedUser = new UserModel({
+          email: res.email,
+          id: res.id,
+          password: res.password,
+          oath: res.oath,
+          display_name: res.display_name,
+          icon: res.icon,
+          current_playlist_id: res.current_playlist_id,
+          created_at: res.create_at,
+          updated_at: res.updated_at
+        });
+        app.set('user', loggedUser);
+        app.get('user').retrievePlaylists();
         that.setState({showModal: false});
       },
       error: function (res) {

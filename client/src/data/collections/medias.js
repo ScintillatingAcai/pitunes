@@ -1,5 +1,13 @@
 // Medias Collection
 
 var MediasCollection = Backbone.Collection.extend({
-  model: 'Media'
+  
+  model: MediaModel,
+
+  initialize: function (params) {
+    this.on("delete", function (media) {
+      this.remove(media);
+    });
+  }
+
 });

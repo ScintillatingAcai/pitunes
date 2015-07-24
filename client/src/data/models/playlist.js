@@ -5,7 +5,7 @@ var PlaylistModel = Backbone.Model.extend({
     created_at: null,
     current_media_index: null,
     id: null,
-    medias: new Songs(),
+    medias: new MediasCollection(),
     name: null,
     updated_at: null,
     user_id: null
