@@ -24,6 +24,7 @@ module.exports = {
   },
 
   getAllRooms: function(req, res) {
+    console.log(utils.getAllRooms().get('1').toJSON());
     var allRooms = utils.getAllRooms().toJSON().map(function(room) {
 
       var currentMedia = room.currentMedia ? room.currentMedia.toJSON() : null;

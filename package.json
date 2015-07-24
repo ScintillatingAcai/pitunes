@@ -26,7 +26,6 @@
     "express-session": "^1.11.3",
     "jquery": "^2.1.4",
     "knex": "^0.8.6",
-    "lodash": "^3.10.0",
     "morgan": "^1.6.1",
     "mysql": "^2.7.0",
     "react": "^0.13.3",
