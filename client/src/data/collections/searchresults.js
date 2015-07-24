@@ -1,5 +1,7 @@
 // Search Results Collection
 
 var SearchResultsCollection = Backbone.Collection.extend({
-  model: 'SearchResult'
+
+  model: SearchResultModel
+  
 });
