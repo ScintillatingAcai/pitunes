@@ -30,19 +30,11 @@ h6 {
     font-weight: 400;
 }
 
-.intro-header {
+.body-container {
     padding-top: 50px; /* If you're making other pages, make sure there is 50px of padding to make sure the navbar doesn't overlap content! */
-    padding-bottom: 50px;
-    text-align: center;
-    color: #f8f8f8;
-    background: url(../img/dj.jpg) no-repeat center center;
-    background-size: cover;
-}
-
-.intro-message {
-    position: relative;
-    padding-top: 20%;
-    padding-bottom: 20%;
+    /*padding-bottom: 80px;*/
+    color: #grey;
+    background-color: #f8f8f8;
 }
 
 .intro-message > h1 {
@@ -160,11 +152,6 @@ h6 {
     }
 }
 
-footer {
-    padding: 50px 0;
-    background-color: #f8f8f8;
-}
-
 p.copyright {
     margin: 15px 0 0;
 }
@@ -174,11 +161,11 @@ p.copyright {
 }
 
 .j-color-blue {
-    color: #00F !important;
+    color: #00F;
 }
 
 .j-color-red {
-    color: #FF0000 !important;
+    color: #FF0000;
 }
 
 .j-center-text {
@@ -206,7 +193,12 @@ p.copyright {
 }
 
 .j-footer-bot {
+    background-color: #f8f8f8;
     bottom: 0;
+    width: 100%;
+    position: absolute;
+    text-align: center;
+
 }
 
 
