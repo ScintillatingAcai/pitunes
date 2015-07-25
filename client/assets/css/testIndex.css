@@ -203,6 +203,7 @@ p.copyright {
 }
 
 .j-footer-bot {
+    position: absolute;
     background-color: #f8f8f8;
     bottom: 0;
     width: 100%;

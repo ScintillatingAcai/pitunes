@@ -20,23 +20,22 @@ var LoginController = React.createClass({
   },
   signInUser: function() {
     var form = document.getElementById('signIn-form');
-    var data = { email: form[0].value, password: form[1].value };
-    var self = this;
-    $.ajax({
-      url: server_uri + '/api/users/login', 
-      type: 'POST',
-      dataType: 'json',
-      data: data,
-      success: function(res) {
-        console.log('user has been logged in');
-        user = res;
-        self.close();
-      },
-      error: function(res) {
-        console.log(res.statusText)
-        self.setState({ errorMessage: res.statusText });
-      }
-    });
+        var data = {email: form[0].value, password: form[1].value};
+        var self = this;
+        $.ajax({url: server_uri + '/api/users/login',
+          type: 'POST',
+          dataType: 'json',
+          data: data,
+          success: function (res) {
+            app.get('user').set(res);
+            app.get('user').retrievePlaylists();
+            app.get('user').trigger('login');
+            self.close();
+          },
+          error: function (res) {
+            self.setState({errorMessage: res.statusText + ": " + res.responseText });
+          }
+        });
   },
   signUpUser: function() {
     var form = document.getElementById('signUp-form');
@@ -49,12 +48,13 @@ var LoginController = React.createClass({
       dataType: 'json',
       data: data,
       success: function(res) {
-        console.log('user has been signed up');
-        user = res;
+        app.get('user').set(res);
+        app.get('user').retrievePlaylists();
+        app.get('user').trigger('login');
         self.close();
       },
       error: function(res) {
-        self.setState({ errorMessage: res.statusText });
+        self.setState({errorMessage: res.statusText + ": " + res.responseText });
       }
     });
   },
@@ -71,18 +71,8 @@ var LoginController = React.createClass({
     **/
 
     /*
-      INDIVIDUAL ROOM VIEW - THE BASIC TEMPLATE VIEW OF EVERY ROO
-      
-      Left container:
-          MediaAddContainer
-          PlaylistSavedContainer
-      Center container:
-          VideoContainer
-          ChatContainer
-      Right container:
-          QueueContainer
-          UserContainer
-
+      INDIVIDUAL ROOM VIEW - THE BASIC TEMPLATE VIEW OF EVERY ROOM
+      <AppContainer />
     **/
     var view;
     if (this.state.atLandingPage === true) {
@@ -92,7 +82,7 @@ var LoginController = React.createClass({
       view = (<div><RoomsView /></div>);
     }
     if (this.state.atRoomPage === true) {
-      view = (<div><LeftContainer /></div>);
+      view = (<div><AppContainer /></div>);
     }
 
     return (
@@ -101,10 +91,10 @@ var LoginController = React.createClass({
         <TestSignOutModal close={this.close} signOutClick={this.signOutClick} showSignOut={this.state.showSignOut} />
         <TestSignUpModal close={this.close} signInClick={this.signInClick} signUpUser={this.signUpUser} showSignUp={this.state.showSignUp} errorMessage={this.state.errorMessage} />
         <TestSignInModal close={this.close} signUpClick={this.signUpClick} signInUser={this.signInUser} showSignIn={this.state.showSignIn} errorMessage={this.state.errorMessage} />
+        <TestBottomNavBar />
 
         {view}
 
-        <TestBottomNavBar />
 
       </div>
     );
