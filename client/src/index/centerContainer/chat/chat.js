@@ -29,6 +29,8 @@ var Chat = React.createClass({
 
     socket.on('user queue change', function(data){
       console.log('user queue change: ', data);
+      app.get('current_room').get('djQueue').set(JSON.parse(data));
+      app.get('current_room').trigger('djQueueChange');
     }.bind(this));
 
     return {items: [], text: ''};

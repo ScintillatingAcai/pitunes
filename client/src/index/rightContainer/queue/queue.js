@@ -14,6 +14,23 @@ for (var key in room.queue) {
 }
 
 var QueueList = React.createClass({
+  componentDidMount: function () {
+    var context = this;
+    this.props.model.on('change', function () {
+      console.log(this.props.model.get('djQueue').models);
+      console.log('QUEUE LIST HEARD CHANGE');
+        context.handleRoomChange();
+    }.bind(this));
+
+    this.props.model.on('djQueueChange', function () {
+      console.log(this.props.model.get('djQueue').models);
+      console.log('QUEUE LIST HEARD CHANGE');
+        context.handleRoomChange();
+    }.bind(this));
+  },
+  handleRoomChange: function () {
+    this.forceUpdate();
+  },
   render: function() {
     var style = {
       cursor: 'pointer',
@@ -22,17 +39,34 @@ var QueueList = React.createClass({
       margin: '0',
       color: '#FFFFFF',
       listStyleType: 'none'
-    }
-    var listItems = arrQueue.map((function(item, i) {
+    };
+    var listItems;
+    if (this.props.model.get('djQueue').models.length > 0) {
+      listItems = this.props.model.get('djQueue').models.map(function (item, i) {
+        return (
+          <li style={style} data-id={i} key={i}>
+            {item.get('display_name')}
+          </li>
+        );
+      });
       return (
-        <li style={style} data-id={i} key={i}>
-          {item}
-        </li>
+        <ul>{listItems}</ul>
       );
-    }).bind(this));
-    return (
-      <ul >{listItems}</ul>
-    );
+    } else {
+      // listItems = ["No one in room"].map(function (item, i) {
+      //   return (
+      //     <li style={style} data-id={i} key={i}>
+      //       {item}
+      //     </li>
+      //   );
+      // });
+      // return (
+      //   <ul>{listItems}</ul>
+      // );
+      return (
+        <ul></ul>
+      );
+    }
   }
 });
 
@@ -53,7 +87,7 @@ var Queue = React.createClass({
     var style = {
       background: '#222222',
       border: '2px solid #444444',
-      position: 'absolute', 
+      position: 'absolute',
       width: '100%',
       height: '50%',
       overflow: 'auto'
@@ -61,7 +95,7 @@ var Queue = React.createClass({
     return (
       <div style={style}>
         <QueueTitle />
-        <QueueList />
+        <QueueList model={app.get('current_room')} />
       </div>
     );
   }
