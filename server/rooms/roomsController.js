@@ -1,6 +1,4 @@
-var url = require('url');
 var utils = require('./roomsUtils');
-var Promise = require('bluebird');
 
 module.exports = {
 
@@ -16,6 +14,47 @@ module.exports = {
 
     if (room) {
       res.json(room);
+    } else {
+      res.status(500).end();
+    }
+  },
+
+  getTop3Rooms: function(req, res) {
+    var allRooms = utils.getAllRooms().toJSON()
+    .sort(function (a,b) {
+      return a.users.length < b.users.length;
+    }).slice(0,3)
+    .map(function(room) {
+
+      var currentMedia = room.currentMedia ? room.currentMedia : null;
+      currentMedia = currentMedia ?
+          {
+            id: currentMedia.id,
+            youtube_id: currentMedia.youtube_id,
+            title: currentMedia.title,
+            img_url: currentMedia.img_url,
+            duration: currentMedia.duration,
+            play_count: currentMedia.play_count
+          } : null;
+      var currentDJ = room.currentDJ ? room.currentDJ : null;
+      currentDJ = currentDJ ?
+          {
+            "id": currentDJ.id,
+            "display_name": currentDJ.display_name,
+            "icon": currentDJ.icon,
+            "location": currentDJ.location,
+          } : null;
+      return {id: room.id,
+        name: room.name,
+        private: room.private,
+        usersCount: room.users.length,
+        queueCount: room.djQueue.length,
+        currentDJ: currentDJ,
+        currentMedia: currentMedia };
+    });
+
+    if (allRooms) {
+      res.json(allRooms);
     } else {
       res.status(500).end();
     }
