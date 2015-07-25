@@ -1,6 +1,6 @@
 var YOUTUBE_API_KEY = 'AIzaSyA_ZnEUUw8uGbEdGfBXH296QX-1nnyeJnQ';
 
-var app = new AppModel({});
+var app = new AppModel();
 
 // REMOVE FOR PRODUCITON, TESTING FOR JOHN ONLY
 
