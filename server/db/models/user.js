@@ -43,7 +43,7 @@ var User = db.Model.extend({
 
   setCurrentPlaylist: Promise.promisify(function(playlist_ID, callback) {
     this.set('current_playlist_id', playlist_ID);
-    this.save().then(function(user) {
+    return this.save().then(function(user) {
       if (!user) return callback(new Error('playlist not found (set current playlist)'));
       callback(null, user);
     })

@@ -131,27 +131,6 @@ module.exports = {
       }).catch(function(err) {return callback(err);});
   }),
 
-  //get a room from DB by ID
-  addDJToQueue: Promise.promisify(function(dj_id, room_id, callback) {
-    dj_id = parseInt(dj_id);
-
-    console.log('adding DJ to queue ');
-
-    new Room({
-        id: room_id
-      }).fetch().then(function(newRoom) {
-        if (newRoom) {
-          console.log('open sockets: ', openSockets);
-          newRoom.setSocket(openSockets); //testing adding a socket this way
-          newRoom.enqueueDJ(dj_id);
-
-          callback(null, newRoom);
-        } else {
-          console.log('room_id not found:' + room_id);
-        }
-      }).catch(function(err) {return callback(err);});
-  }),
-
   socketsForTimer: function(sockets) {
     console.log('setting sockets for timer');
     openSockets = sockets;
