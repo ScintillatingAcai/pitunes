@@ -27,20 +27,7 @@ var Login = React.createClass({
       dataType: 'json',
       data: data,
       success: function (res) {
-        app.get('user').set({
-          email: res.email,
-          id: res.id,
-          password: res.password,
-          oath: res.oath,
-          display_name: res.display_name,
-          icon: res.icon,
-          current_playlist_id: res.current_playlist_id,
-          created_at: res.create_at,
-          updated_at: res.updated_at
-        });
-        // var loggedUser = new UserModel({
-        // });
-        // app.set('user', loggedUser);
+        app.get('user').set(res);
         app.get('user').retrievePlaylists();
         app.get('user').trigger('login');
         that.setState({showModal: false});

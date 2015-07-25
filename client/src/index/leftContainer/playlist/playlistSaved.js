@@ -149,8 +149,6 @@ var List = React.createClass({
       console.log('not logged in');
     }
   },
-  // ***
-  // END PLACEHOLDERS
 
   render: function () {
     var style = {
@@ -161,12 +159,6 @@ var List = React.createClass({
       fontSize: '12px',
       listStyleType: 'none'
     };
-    // var buttonStyle = {
-    //   backgroundColor: 'white',
-    //   color: 'black',
-    //   padding: '0 0 0 0',
-    //   margin: '0 0 0 2px'
-    // };
     var listItems = this.state.data.map((function (item, i) {
       return (
         <div style={style} data-id={i}
@@ -180,16 +172,16 @@ var List = React.createClass({
 
       );
     }).bind(this));
-    var searchBarInputStyle = {
+    var nameInputStyle = {
       backgroundColor: '#AAAAAA',
       borderColor: '#EEEEEE',
-      width: '30px'
+      width: '100px',
+      margin: '0 0 0 5px'
     };
     return (
       <div>
-        <button className='buttonNewPlaylist' onClick={this.createNewPlaylist}>New Playlist</button>
-        <button className='buttonSavePlaylist' onClick={this.savePlaylist}>Save Playlist</button>
-        <input style={searchBarInputStyle} onChange={this.onNameChange} value={this.state.text} placeholder="Name Playlist"/>
+        <button className='btn btn-sm buttonNewPlaylist' onClick={this.createNewPlaylist}>New Playlist</button>
+        <input style={nameInputStyle} onChange={this.onNameChange} value={this.state.text} placeholder="Name Playlist"/>
         <div onDragOver={this.dragOver}>{listItems}</div>
       </div>
     );
@@ -223,7 +215,7 @@ var PlaylistTitle = React.createClass({
     if (app.get('user').get('current_playlist').get('name')) {
       this.setState({title: app.get('user').get('current_playlist').get('name')});
     } else {
-      this.setState({title: 'No Playlist'});
+      this.setState({title: 'No Playlist Title'});
     }
   },
   render: function(){
