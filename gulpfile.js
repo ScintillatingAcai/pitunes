@@ -22,11 +22,14 @@ var paths = {
   clientjs: ['./client/src/**/*.js',
       './client/src/**/**/*.js',
       './client/src/**/**/**/*.js'],
+  clientapp: ['./client/src/app/app.js',
+      './client/src/landingPage/landingPageContainer.js',
+      './client/scr/rooms/roomsContainer.js'],
   serverjs: ['./server/*.js',
       './server/**/*.js',
       './server/**/**/*.js'
     ],
-  dist: './server'
+  dist: './dist'
 };
 
 // var libFilesToMove = [];
@@ -48,7 +51,7 @@ var paths = {
 // 
 gulp.task('browserify-client', function (cb) {
 
-  var files = glob.sync(paths.clientjs);
+  var files = glob.sync(paths.clientapp);
   var b = browserify();
   console.log(files.length);
   files.forEach(function (file) {
