@@ -15,12 +15,9 @@ var AppContainer = React.createClass({
 
     return (
       <div style={style}>
-        <LoginModal />
-        <NavBarTop />
         <LeftContainer model={app.get('user')}/>
         <CenterContainer />
         <RightContainer />
-        <NavBarBot />
       </div>
     );
   }

@@ -37,6 +37,16 @@ h6 {
     background-color: #f8f8f8;
 }
 
+.intro-header {
+    padding-top: 50px; /* If you're making other pages, make sure there is 50px of padding to make sure the navbar doesn't overlap content! */
+    padding-bottom: 50px;
+    text-align: center;
+    color: #f8f8f8;
+    background: url(../img/dj.jpg) no-repeat center center;
+    background-size: cover;
+    height: 120vh;
+}
+
 .intro-message > h1 {
     margin: 0;
     text-shadow: 2px 2px 3px rgba(0,0,0,0.6);
@@ -196,8 +206,11 @@ p.copyright {
     background-color: #f8f8f8;
     bottom: 0;
     width: 100%;
-    position: absolute;
     text-align: center;
+}
+
+.j-padding-top-15-percent {
+    padding-top: 15%;
 }
 
 
