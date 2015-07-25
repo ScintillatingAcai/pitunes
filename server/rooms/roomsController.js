@@ -102,7 +102,7 @@ module.exports = {
     utils.addRoom(req.body)
     .then(function(data) {
       if (data) {
-        res.json(data);
+        res.json(data.toJSON({omitPivot: true}));
       } else {
         res.status(500).end();
       }
@@ -114,14 +114,13 @@ module.exports = {
   },
 
   updateRoom: function(req, res, next) {
-    var room_ID = req.room_id;
     var roomInfo = req.body;
 
-    console.log('updating room_id:', room_ID, ' with info: ', roomInfo );
-    utils.updateRoom(room_ID,roomInfo)
+    console.log('updating room_id:', req.room_id, ' with info: ', roomInfo );
+    utils.updateRoom(req.room_id, roomInfo)
     .then(function(room) {
       if (room) {
-        res.json(room);
+        res.json(room.toJSON({omitPivot: true}));
       } else {
         res.status(500).end();
       }

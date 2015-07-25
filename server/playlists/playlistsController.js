@@ -14,7 +14,7 @@ module.exports = {
     utils.retrievePlaylist(playlist_ID)
     .then(function(playlist) {
       if (playlist) {
-        res.json(playlist);
+        res.json(playlist.toJSON({omitPivot: true}));
       } else {
         res.status(500).end();
       }
@@ -30,7 +30,7 @@ module.exports = {
     utils.storePlaylist(req.user_id, req.body)
     .then(function(playlist) {
       if (playlist) {
-        res.json(playlist);
+        res.json(playlist.toJSON({omitPivot: true}));
       } else {
         res.status(500).end();
       }
@@ -48,7 +48,7 @@ module.exports = {
     utils.updatePlaylist(playlist_ID,playlistInfo)
     .then(function(playlist) {
       if (playlist) {
-        res.json(playlist);
+        res.json(playlist.toJSON({omitPivot: true}));
       } else {
         res.status(500).end();
       }

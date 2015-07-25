@@ -15,7 +15,7 @@ module.exports = {
     console.log('retrieving info for user_id:' + user_id);
     utils.retrieveUser.then(function(user) {
       if (!user) return next(new Error('user does not exist'));
-      res.json(user);
+      res.json(user.toJSON({omitPivot: true}));
     })
     .catch(function(err) {
       return next(new Error('controller error: ', err));
@@ -26,7 +26,7 @@ module.exports = {
     console.log('adding user: ',req.body);
     utils.storeUser(req.body).then(function(user) {
       if (!user) return next(new Error('user does not exist'));
-      res.json(user);
+      res.json(user.toJSON({omitPivot: true}));
     })
     .catch(function(err) {
       return next(new Error('controller error: ', err));
@@ -40,7 +40,7 @@ module.exports = {
     console.log('updating user_id:', user_id, ' with info: ', userInfo );
     utils.updateUser(user_id,userInfo).then(function(user) {
       if (!user) return next(new Error('user does not exist'));
-      res.json(user);
+      res.json(user.toJSON({omitPivot: true}));
     })
     .catch(function(err) {
       return next(new Error('controller error: ', err));
@@ -56,7 +56,7 @@ module.exports = {
       // create the new cookie session
       utility.createSession(req, res, user);
 
-      res.json(user);
+      res.json(user.toJSON({omitPivot: true}));
     })
     .catch(function(err) {
       return next(new Error('controller error: ', err));
@@ -76,7 +76,7 @@ module.exports = {
   getAllUserPlaylists: function( req, res, next ) {
     utils.retrieveAllUserPlaylists(req.user_id)
     .then(function(playlist) {
-      res.json(playlist);
+      res.json(playlist.toJSON({omitPivot: true}));
     })
     .catch(function(error) {
       return next(new Error('controller error: ', error));
