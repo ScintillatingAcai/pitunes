@@ -1,6 +1,6 @@
 var LoginController = React.createClass({
   getInitialState: function() {
-    return { atLandingPage: true, showSignIn: false, showSignUp: false, showSignOut: false, errorMessage: '' };
+    return { atRoomPage: true, atRoomsPage: false, atLandingPage: false, showSignIn: false, showSignUp: false, showSignOut: false, errorMessage: '' };
   },
   close: function() {
     console.log('close');
@@ -40,9 +40,9 @@ var LoginController = React.createClass({
   },
   signUpUser: function() {
     var form = document.getElementById('signUp-form');
-    var data = { email: form[0].value, password: form[1].value, password: form[2].value, displayName: form[3].value }
+    var data = { email: form[0].value, password: form[1].value, password: form[2].value, displayName: form[3].value };
     var self = this;
-    if (form[1].value !== form[2].value) { self.setState({ errorMessage: 'Your passwords did not match.'} ); return; }
+    if (form[1].value !== form[2].value) { self.setState({ errorMessage: 'Your passwords did not match.' }); return; }
     $.ajax({
       url: server_uri + '/api/users/signup',
       type: 'POST',
@@ -60,28 +60,39 @@ var LoginController = React.createClass({
   },
   render: function() {
 
-    /* LANDING PAGE VIEW:
+    /* LANDING PAGE VIEW - HOME PAGE FOR THE APP
       <LandingPageBackground signInClick={this.signInClick} signUpClick={this.signUpClick} />
-      <LandingPagePopularRooms />
+      <LandingPagePopularRooms /> 
     **/
 
     /*
-      ROOMS VIEW:
-
+      ROOMS VIEW - LIST OF ALL THE ROOMS CURRENTLY MADE:
+      <RoomsView />
     **/
 
     /*
-      INDIVIDUAL ROOM VIEW:
+      INDIVIDUAL ROOM VIEW - THE BASIC TEMPLATE VIEW OF EVERY ROO
+      
+      Left container:
+          MediaAddContainer
+          PlaylistSavedContainer
+      Center container:
+          VideoContainer
+          ChatContainer
+      Right container:
+          QueueContainer
+          UserContainer
 
     **/
     var view;
     if (this.state.atLandingPage === true) {
-      view = (
-        <div>
-        <LandingPageBackground signInClick={this.signInClick} signUpClick={this.signUpClick} />
-        <LandingPagePopularRooms />
-        </div>
-      );
+      view = (<div><LandingPageBackground signInClick={this.signInClick} signUpClick={this.signUpClick} /><LandingPagePopularRooms /></div>);
+    }
+    if (this.state.atRoomsPage === true) {
+      view = (<div><RoomsView /></div>);
+    }
+    if (this.state.atRoomPage === true) {
+      view = (<div><LeftContainer /></div>);
     }
 
     return (
