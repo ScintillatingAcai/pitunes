@@ -1,7 +1,7 @@
 var ChatList = React.createClass({
   render: function() {
     var style = {
-      color: 'grey',
+      color: '#FFF',
       listStyleType: 'none',
       bottom: '0',
       maxHeight: '100%',
