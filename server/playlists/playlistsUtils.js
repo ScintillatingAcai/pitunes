@@ -56,12 +56,20 @@ module.exports = {
               return media_playlists.invokeThen('destroy');
             })
             .then( function ( empty_playlists ) {
+              console.log('test1');
             // check all the songs exists in the db
               return new Medias(playlistMedias).mapThen( function (media, index) {
+                console.log('test2');
+
                 return media.fetch().then(function (exist) {
+                  console.log('test3');
+
                   if (!exist) {
-                    media.create().then(function( newMedia ) {  
-                    return  new Media_Playlist({playlist_id: playlist_id, media_id: newMedia.get('id'), media_order: index+1}).save();
+                    console.log('test4');
+                    console.log('media:', media);
+                    media.save().then(function( newMedia ) {
+                      console.log('test5');
+                      return  new Media_Playlist({playlist_id: playlist_id, media_id: newMedia.get('id'), media_order: index+1}).save();
                     });
                   }
                   else {
@@ -70,9 +78,12 @@ module.exports = {
                 });
               })
               .then(function ( medias ) {
+                console.log('test6');
                 return new Playlist({id: playlist_id}).retrievePlaylist();
               })
               .then(function ( playlists ) {
+                 console.log('test7');
+
                   callback(null, playlists);
               })
               .catch(function(error) {
@@ -88,7 +99,7 @@ module.exports = {
           .catch(function(error) {
             console.log('error:', error);
             callback(error);
-          });  
+          });
         }
         else {
           console.log('playlist_id not found:' + playlist_id);
@@ -104,13 +115,23 @@ module.exports = {
   //store a new playlist in DB
   storePlaylist: Promise.promisify(function(user_id, playlist, callback) {
     var playlistName = playlist.name;
-  
+    console.log('playlistname: ', playlistName);
+
     new Playlist({
       name: playlistName,
       user_id: user_id
     }).save()
     .then(function(newPlaylist) {
-      callback(null, newPlaylist);
+      var singleton = require('../singleton.js');
+      var user = singleton.users.get(user_id);
+      user.setCurrentPlaylist(newPlaylist.get('id')).then(function(user) {
+        if (!user) return callback(new Error('no user found in new playlist'));
+        callback(null, newPlaylist);
+      })
+      .catch(function(error) {
+        console.log('error:', error);
+        callback(error);
+      });
     })
     .catch(function(error) {
       console.log('error:', error);

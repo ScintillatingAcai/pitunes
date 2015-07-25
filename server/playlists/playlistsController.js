@@ -59,5 +59,5 @@ module.exports = {
       console.log('controller error: ',error);
       return next(new Error('controller error: ', error));
     });
-  }  
+  }
 };

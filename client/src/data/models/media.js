@@ -2,16 +2,29 @@
 
 var MediaModel = Backbone.Model.extend({
   defaults: {
-    _pivot_media_id: null,
-    _pivot_playlist_id: null,
-    created_at: null,
     duration: null,
-    id: null,
     img_url: null,
-    play_count: null,
     title: null,
-    updated_at: null,
     youtube_id: null
-  }
+  },
+
+  toJSON: function() {
+    var JSONObject = (new Backbone.Model()).toJSON.call(this);
+
+    console.log(JSONObject);
+    var cleanJSON = {};
+    for (var key in JSONObject) {
+        if (key.charAt(0) === '_') {
+
+        } else if (key === 'created_at' || key === 'updated_at') {
+
+        } else {
+          cleanJSON[key] = JSONObject[key];
+        }
+    }
+    console.log(cleanJSON);
+
+    return cleanJSON;
+  },
 });
 

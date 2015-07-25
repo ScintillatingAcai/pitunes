@@ -23,17 +23,18 @@ var List = React.createClass({
         this.handleNewCurrentPlaylist();
       }
     }.bind(this));
-    
+
     this.props.model.on('newSong', function () {
       console.log('List heard curPL medias change');
       if (app.get('user').get('current_playlist')) {
         this.handleNewCurrentPlaylist();
       }
+      this.submitUpdatePlaylist(app.get('user').get('current_playlist'));
     }.bind(this));
   },
 
   onClick: function (e) {
-    console.log(e.currentTarget.lastChild);
+
   },
 
   onNameChange: function (e) {
@@ -59,7 +60,7 @@ var List = React.createClass({
     if (this.nodePlacement === "after") to++;
     data.splice(to, 0, data.splice(from, 1)[0]);
     this.setState({data: data});
-    // this.submitUpdatePlaylist(user.current_playlist);
+    this.submitUpdatePlaylist(app.get('user').get('current_playlist'));
   },
 
   dragOver: function (e) {
@@ -81,22 +82,25 @@ var List = React.createClass({
 
   createNewPlaylist: function () {
     // TODO fix placeholder, make modal (possibly?) for naming playlist
-    app.get('user').set('current_playlist', new PlaylistModel({name: this.state.text, medias: new MediasCollection()}));
-    this.submitNewPlaylist(user.current_playlist);
+    console.log('name: ', this.state.text);
+    var newPlaylist = new PlaylistModel({name: this.state.text, medias: new MediasCollection()});
+    this.submitNewPlaylist(newPlaylist);
   },
 
   submitNewPlaylist: function (playlist) {
-    if (user.id !== 0) {
+    var jsonPlaylist = playlist.toJSON();
+    if (app.get('user').get('id') !== 0) {
       var context = this;
-      $.ajax({url: server_uri + '/api/users/' + user.id + '/playlists',
+      $.ajax({url: server_uri + '/api/users/' + app.get('user').get('id') + '/playlists',
         type: 'POST',
         dataType: 'json',
-        data: playlist,
+        data: jsonPlaylist,
         success: function (res) {
-          user.current_playlist_id = res.id;
-          user.current_playlist = {name: res.name, songs: []};
-          populatePlaylist();
-          context.handleClickedSearch();
+          console.log('id: ', res.id);
+          console.log(res);
+          app.get('user').set('current_playlist_id', res.id);
+          playlist.set('id', res.id);
+          app.get('user').set('current_playlist', playlist);
         },
         error: function (res) {
           console.log("error: " + res.statusText);
@@ -108,12 +112,18 @@ var List = React.createClass({
   },
 
   submitUpdatePlaylist: function (playlist) {
+    var jsonPlaylist = playlist.toJSON();
+    if (!jsonPlaylist.current_media_index && jsonPlaylist.medias.length > 0) {
+      console.log('heard 0 media index with medias');
+      jsonPlaylist.current_media_index = 1;
+    }
+    console.log('playlist: ', jsonPlaylist);
     var context = this;
-    if (user.id !== 0) {
-      $.ajax({url: server_uri + '/api/users/' + user.id + '/playlists/' + user.current_playlist.id,
+    if (app.get('user').get('id') !== 0) {
+      $.ajax({url: server_uri + '/api/users/' + app.get('user').get('id') + '/playlists/' + app.get('user').get('current_playlist_id'),
         type: 'PUT',
         dataType: 'json',
-        data: playlist,
+        data: jsonPlaylist,
         success: function (res) {
           console.log('submitted updated playlist');
         },
