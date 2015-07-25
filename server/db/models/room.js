@@ -36,18 +36,16 @@ var Room = db.Model.extend({
     this.currentDJ = this.dequeueDJ();
     if (this.currentDJ) {
       console.log('current dj: ', this.currentDJ.get('display_name'));
-      var currentPlaylist = null;
       this.currentDJ.getCurrentPlaylist().bind(this)
       .then(function(playlist) {
-        currentPlaylist = playlist;
+          return playlist.incrementCurrentMediaIndex().bind(this);
+      })
+      .then(function(playlist) {
         return playlist.getCurrentMedia().bind(this);
       })
       .then(function(media) {
         this.currentMedia = media;
         return this.currentMedia.incrementPlayCount().bind(this);
-      })
-      .then(function(data) {
-          return currentPlaylist.incrementCurrentMediaIndex();
       })
       .then(function(data) {
           var duration = this.currentMedia.get('duration');
@@ -81,6 +79,7 @@ var Room = db.Model.extend({
       this.emitMediaStatusMessage(this.sockets.in(this.get('id')), this.currentMedia, elapsedTime, 'update');
     };
     var onComplete = function(){
+      this.djQueue.push(this.currentDJ);
       this.playMedia();
     };
     return new Timer(onFire.bind(this),onComplete.bind(this),increment, durationSecs);
@@ -103,8 +102,13 @@ var Room = db.Model.extend({
     if (this.djQueue.get(user_id)) return callback(new Error('user already in queue'));
     user.getCurrentPlaylist().bind(this).then(function(playlist) {
       if (!playlist) return callback(new Error('user has no current playlist, cannot enter queue'));
-      var insertDJIndex = Math.max(this.djQueue.length - 1, 0);
-      this.djQueue.add(user,{at: insertDJIndex});
+      return playlist.medias().fetch().bind(this);
+    })
+    .then(function (medias) {
+      if (!medias || medias.length === 0) return callback(new Error('playlist has no medias'));
+      // var insertDJIndex = Math.max(this.djQueue.length - 1, 0);
+      // this.djQueue.add(user,{at: insertDJIndex});
+      this.djQueue.push(user);
       if (this.djQueue.length === 1) {
         this.playMedia();
       }
@@ -114,7 +118,7 @@ var Room = db.Model.extend({
 
   dequeueDJ: function() {
     var dj = this.djQueue.shift();
-    this.djQueue.push(dj);
+    // this.djQueue.push(dj);
     return dj;
   },
 

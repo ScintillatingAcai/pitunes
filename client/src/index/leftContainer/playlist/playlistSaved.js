@@ -126,10 +126,11 @@ var List = React.createClass({
 
   submitUpdatePlaylist: function (playlist) {
     var jsonPlaylist = playlist.toJSON();
-    if (!jsonPlaylist.current_media_index && jsonPlaylist.medias.length > 0) {
-      console.log('heard 0 media index with medias');
-      jsonPlaylist.current_media_index = 1;
-    }
+    delete jsonPlaylist.current_media_index;
+    // if (!jsonPlaylist.current_media_index && jsonPlaylist.medias.length > 0) {
+    //   console.log('heard 0 media index with medias');
+    //   jsonPlaylist.current_media_index = 1;
+    // }
     console.log('playlist: ', jsonPlaylist);
     var context = this;
     if (app.get('user').get('id') !== 0) {
