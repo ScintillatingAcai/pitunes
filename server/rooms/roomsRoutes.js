@@ -6,14 +6,10 @@ var utility = require('../utility');
 module.exports = function(app) {
 
   app.param('room_id', roomsController.attachRoom);
-  app.get('/', roomsController.getAllRooms); //get all rooms
+  app.get('/', roomsController.getRoomsRouter); //get all rooms
   app.post('/', utility.checkUserSession, roomsController.addRoom); //add a room
-
-  app.get('/top/3', roomsController.getTop3Rooms); // get top 3 rooms 
 
   app.get('/:room_id', roomsController.getRoom); //get one room
   app.put('/:room_id', utility.checkUserSession, roomsController.updateRoom); //update a room
-  app.post('/:room_id/addDJ', utility.checkUserSession, roomsController.addDJToQueue); //add a DJ to room
-
 };
 
