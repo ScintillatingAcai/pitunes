@@ -49,7 +49,11 @@ module.exports = {
     new Playlist({id: playlist_id}).fetch()
       .then(function(found) {
         if (found) {
-          found.set('name', playlistInfo.name).save()
+          found.set('name', playlistInfo.name)
+          if (playlistInfo.current_media_index) {
+            found.set('current_media_index', playlistInfo.current_media_index);
+          }
+          found.save()
           .then( function ( playlist ){
             new Media_Playlists().query({where: {playlist_id: found.id}}).fetch()
             .then(function (media_playlists) {
@@ -125,6 +129,7 @@ module.exports = {
       var singleton = require('../singleton.js');
       var user = singleton.users.get(user_id);
       user.setCurrentPlaylist(newPlaylist.get('id')).then(function(user) {
+        console.log('user after playlist: ', user);
         if (!user) return callback(new Error('no user found in new playlist'));
         callback(null, newPlaylist);
       })
