@@ -31,10 +31,10 @@ module.exports = {
           callback(null, found);
           console.log('room already found:', name);
         } else {
-          var room = new Room({
-            name: roomname,
-          })
-          .save().then(function(newRoom) {
+          new Room({
+            name: roomname
+          }).save()
+          .then(function(newRoom) {
             var singleton = require('../singleton.js');
             var allRooms = singleton.rooms;
             allRooms.add(newRoom);
@@ -55,7 +55,7 @@ module.exports = {
         require: true
       }).then(function(found) {
         if (found) {
-          var roomWithJoins = found;
+          // var roomWithJoins = found;
 
           // this is an example of how to add related data to the response object
           // roomWithJoins.events = [];
@@ -63,7 +63,7 @@ module.exports = {
           //    roomWithJoins.events.push(cleanAttributes(item.attributes));
           // });
 
-          callback(null, roomWithJoins);
+          callback(null, found);
         } else {
           console.log('room_id not found:' + room_id);
         }
@@ -71,12 +71,11 @@ module.exports = {
   }),
 
   retrieveAllRooms: Promise.promisify(function(callback) {
-
-    new Rooms().reset().fetch()
+    new Rooms().fetch()
     .then(function(found) {
         if (found) {
           console.log('found all rooms');
-          var roomsWithJoins = found;
+          // var roomsWithJoins = found;
 
           // this is an example of how to add related data to the response object
           // roomWithJoins.events = [];
@@ -84,7 +83,7 @@ module.exports = {
           //    roomWithJoins.events.push(cleanAttributes(item.attributes));
           // });
 
-          callback(null, roomsWithJoins);
+          callback(null, found);
         } else {
           console.log('rooms not found');
         }
@@ -93,22 +92,23 @@ module.exports = {
 
   //update a room in DB by ID
   updateRoom: Promise.promisify(function(room_id, roomInfo, callback) {
-    room_id = parseInt(room_id);
     new Room({
         id: room_id
       }).fetch().then(function(found) {
         if (found) {
-            found.set(roomInfo);
-          found.save().then(function(updatedRoom) {
+            found.set(roomInfo).save()
+            .then(function(updatedRoom) {
               callback(null, updatedRoom);
             })
             .catch(function(error) {
               console.log('error:', error);
             });
         } else {
-          console.log('room_id not found:' + room_id);
+          callback(new Error("No room found"));
         }
-      }).catch(function(err) {return callback(err);});
+      }).catch(function(err) {
+        return callback(err);
+      });
   }),
 
   //store a new room in DB
@@ -118,19 +118,13 @@ module.exports = {
     new Room({
         name: name
       }).fetch().then(function(found) {
-
         if (found) {
-          callback(null, found.attributes);
+          callback(null, found);
           console.log('room already found:', name);
-
         } else {
-
           var room = new Room({
             name: name,
-          });
-
-          room.save().then(function(newRoom) {
-              new Rooms().add(newRoom);
+          }).save().then(function(newRoom) {
               callback(null, newRoom);
             }).catch(function(err) {return callback(err);});
         }

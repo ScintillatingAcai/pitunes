@@ -3,7 +3,7 @@ exports.isLoggedIn = function(req, res) {
 };
 
 exports.checkUserSession = function(req, res, next) {
-  if (!exports.isLoggedIn(req)) {
+  if (!exports.isLoggedIn(req) || (req.user_id === req.session.user_id)) {
     // res.redirect('#/');
     console.error('user not logged in');
   } else {

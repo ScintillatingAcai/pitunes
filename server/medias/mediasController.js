@@ -13,7 +13,7 @@ module.exports = {
     utils.retrieveMedia(req.media_id)
     .then(function(media) {
       if (media) {
-        res.json(media);
+        res.json(media.toJSON({omitPivot: true}));
       } else {
         res.status(500).end();
       }
@@ -28,7 +28,7 @@ module.exports = {
     utils.retrieveTopMedias()
     .then(function(media) {
       if (media) {
-        res.json(media);
+        res.json(media.toJSON({omitPivot: true}));
       } else {
         res.status(500).end();
       }
@@ -44,7 +44,7 @@ module.exports = {
     utils.storeMedia(req.body)
     .then(function(media) {
       if (media) {
-        res.json(media);
+        res.json(media.toJSON({omitPivot: true}));
       } else {
         res.status(500).end();
       }
@@ -62,7 +62,7 @@ module.exports = {
     utils.updateMedia(req.media_id, playlistInfo)
     .then(function(media) {
       if (media) {
-        res.json(media);
+        res.json(media.toJSON({omitPivot: true}));
       } else {
         res.status(500).end();
       }
