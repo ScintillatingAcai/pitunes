@@ -14,7 +14,7 @@ var SignIn = React.createClass({
               this.props.close();
             },
             error: function(res) {
-              that.setState({errorMessage: res.statusText});
+              that.setState({errorMessage: res.statusText + ': ' + res.responseText});
             }
           });
 

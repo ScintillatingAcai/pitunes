@@ -45,7 +45,7 @@ var Login = React.createClass({
         that.setState({showModal: false});
       },
       error: function (res) {
-        that.setState({errorMessage: res.statusText});
+        that.setState({errorMessage: res.statusText + ": " + res.responseText });
       }
     });
   },
@@ -62,7 +62,7 @@ var Login = React.createClass({
         that.setState({showModal: false});
       },
       error: function (res) {
-        that.setState({errorMessage: res.statusText});
+        that.setState({errorMessage: res.statusText + ": " + res.responseText });
       }
     });
   },

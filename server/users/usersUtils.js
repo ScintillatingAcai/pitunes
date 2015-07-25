@@ -118,27 +118,28 @@ module.exports = {
 
     new User({
         email: email
-      }).fetch().bind(this)
+      }).fetch()
     .then(function(found) {
         if (found) {
           found.comparePassword(password, function(err, isMatch) {
-            if (err) console.log('error: ', err);
+            if (err) console.error('error: ', err);
             if (isMatch) {
               //do sessions
               console.log('user authenticated');
-               return callback(null, found);
+              return callback(null, found);
             } else {
-              console.log('password incorrect');
-              callback(new Error('Password Incorrect'), null);
+              console.error('password incorrect');
+              callback(new Error('Password Incorrect'));
             }
           });
         } else {
-          console.log('user not found');
-          callback(new Error('User not found'), null);
+          console.error('user not found');
+          callback(new Error('User not found'));
         }
       })
       .catch(function(error) {
-        console.log('error:', error);
+        console.error('error:', error);
+        callback(new Error('User not found'));
       });
   }),
 
