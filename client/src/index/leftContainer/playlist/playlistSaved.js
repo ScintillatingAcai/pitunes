@@ -7,11 +7,24 @@ var List = React.createClass({
     return { data: this.props.data, text: ''};
   },
 
+  durationToDisplay: function (duration) {
+    var minutes = Math.floor(duration / 60) + "";
+    if (minutes.length === 1) {
+      minutes = "0" + minutes;
+    }
+    var seconds = duration % 60 + "";
+    if (seconds.length === 1) {
+      seconds = "0" + seconds;
+    }
+    return minutes + ":" + seconds;
+  },
+
   handleNewCurrentPlaylist: function () {
     console.log('List fired handleNewCurrentPlaylist');
+    var context = this;
     var newData = app.get('user').get('current_playlist').get('medias').map(function (e) {
       // console.log(e)
-      return e.get('title') + " | " + durationToDisplay(e.get('duration'));
+      return e.get('title') + " | " + context.durationToDisplay(e.get('duration'));
     });
     this.setState({data: newData});
   },
@@ -182,99 +195,10 @@ var List = React.createClass({
   }
 });
 
-//list of dummy user data
-user.current_playlist = {
-  name: 'Test Playlist',
-  id: 4,
-  songs: [
-    {
-      img_url: 'https://i.ytimg.com/vi/2HQaBWziYvY/default.jpg',
-      title: 'Darude - Sandstorm',
-      youtube_id: '2HQaBWziYvY',
-      duration: 224
-    },
-    {
-      img_url: 'https://i.ytimg.com/vi/59CZt1xsh5s/default.jpg',
-      title: 'The Growlers - One Million Lovers',
-      youtube_id: '59CZt1xsh5s',
-      duration: 278,
-    },
-    {
-      img_url: 'https://i.ytimg.com/vi/BYbJmQj5VkE/default.jpg',
-      title: 'FIDLAR - No Waves (Music Video)',
-      youtube_id: 'BYbJmQj5VkE',
-      duration: 190,
-    }
-  ]
-};
-
-
-var durationToDisplay = function (duration) {
-  // duration = this.convertYTDuration(duration);
-  var minutes = Math.floor(duration / 60) + "";
-  if (minutes.length === 1) {
-    minutes = "0" + minutes;
-  }
-  var seconds = duration % 60 + "";
-  if (seconds.length === 1) {
-    seconds = "0" + seconds;
-  }
-  return minutes + ":" + seconds;
-};
-
-//take the songs from the user data
-var arrSongs;
-var populatePlaylist = function() {
-  arrSongs = [];
-  for (var song in user.current_playlist.songs) {
-    var displayTime = durationToDisplay(user.current_playlist.songs[song].duration);
-    arrSongs.push([user.current_playlist.songs[song].title + ' | ' + displayTime]);
-  }
-};
-
-populatePlaylist();
-
-var getPlaylists = function() {
-  if (user.id !== 0) {
-    $.ajax({url: server_uri + '/api/users/' + user.id + '/playlists/',
-      type: 'GET',
-      dataType: 'json',
-      success: function (res) {
-        console.log('Retrieved playlists', res);
-        user.playlists = res;
-        // NEED TO HANDLE NEW USERS FIRST PLAYLIST
-        if (user.current_playlist_id !== 0) {
-          user.current_playlist = user.playlists[user.current_playlist_id]
-        }
-        getCurPlaylistSongs();
-      },
-      error: function(res) {
-        console.log('errorMessage: ' + res.statusText);
-      }
-    });
-  }
-};
-
-var getCurPlaylistSongs = function() {
-  if (user.id !== 0) {
-    $.ajax({url: server_uri + '/api/users/' + user.id + '/playlists/' + user.current_playlist_id,
-      type: 'GET',
-      dataType: 'json',
-      success: function (res) {
-        console.log('Retrieved playlists', res);
-        user.current_playlist.songs = res;
-      },
-      error: function(res) {
-        console.log('errorMessage: ' + res.statusText);
-      }
-    });
-  }
-};
-
 var Songs = React.createClass({
   render: function() {
     return (
-      <List model={app.get('user')} data={arrSongs} />
+      <List model={app.get('user')} data={[]} />
     );
   }
 });
