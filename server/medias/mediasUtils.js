@@ -11,13 +11,9 @@ module.exports = {
 
     new Media({
         id: media_id,
-      }).fetch({
-        //add related data we would like to return in the withRelated array
-        withRelated: [],
-        require: true
-      }).then(function(found) {
+      }).fetch().then(function(found) {
         if (found) {
-          var mediaWithJoins = cleanAttributes(found.attributes);
+          //var mediaWithJoins = cleanAttributes(found);
 
           // this is an example of how to add related data to the response object
           // mediaWithJoins.events = [];
@@ -25,7 +21,7 @@ module.exports = {
           //    mediaWithJoins.events.push(cleanAttributes(item.attributes));
           // });
 
-          callback(null, mediaWithJoins);
+          callback(null, found);
         } else {
           console.log('media_id not found:' + media_id);
           callback(new Error("Media not found"));

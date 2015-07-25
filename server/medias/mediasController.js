@@ -12,7 +12,7 @@ module.exports = {
 
   getMedia: function(req, res, next) {
     console.log('retrieving info for media_id:' + req.media_id);
-    utils.retrieveMedia(media_id)
+    utils.retrieveMedia(req.media_id)
     .then(function(media) {
       if (media) {
         res.json(media);
