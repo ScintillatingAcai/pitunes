@@ -1,6 +1,4 @@
-var url = require('url');
 var utils = require('./playlistsUtils');
-var Promise = require('bluebird');
 
 module.exports = {
 
