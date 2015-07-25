@@ -1,4 +1,5 @@
 var db = require('../db/schema');
+var Promise = require('bluebird');
 var Rooms = require('../db/collections/rooms');
 var Room = require('../db/models/room');
 
@@ -20,7 +21,7 @@ module.exports = {
     return allRooms;
   },
 
-  addRoom: function(room, callback) {
+  addRoom: Promise.promisify(function(room, callback) {
     var roomname = room.name;
     console.log('roomname: ', roomname);
     new Room({
@@ -41,10 +42,10 @@ module.exports = {
           }).catch(function(err) {return callback(err);});
         }
       }).catch(function(err) {return callback(err);});
-  },
+  }),
 
   //get a room from DB by ID
-  retrieveRoom: function(room_id, callback) {
+  retrieveRoom: Promise.promisify(function(room_id, callback) {
     room_id = parseInt(room_id);
     new Room({
         id: room_id
@@ -67,11 +68,12 @@ module.exports = {
           console.log('room_id not found:' + room_id);
         }
       }).catch(function(err) {return callback(err);});
-  },
+  }),
 
-  retrieveAllRooms: function(callback) {
+  retrieveAllRooms: Promise.promisify(function(callback) {
 
-    new Rooms().reset().fetch().then(function(found) {
+    new Rooms().reset().fetch()
+    .then(function(found) {
         if (found) {
           console.log('found all rooms');
           var roomsWithJoins = found;
@@ -87,10 +89,10 @@ module.exports = {
           console.log('rooms not found');
         }
       }).catch(function(err) {return callback(err);});
-  },
+  }),
 
   //update a room in DB by ID
-  updateRoom: function(room_id, roomInfo, callback) {
+  updateRoom: Promise.promisify(function(room_id, roomInfo, callback) {
     room_id = parseInt(room_id);
     new Room({
         id: room_id
@@ -107,10 +109,10 @@ module.exports = {
           console.log('room_id not found:' + room_id);
         }
       }).catch(function(err) {return callback(err);});
-  },
+  }),
 
   //store a new room in DB
-  storeRoom: function(room, callback) {
+  storeRoom: Promise.promisify(function(room, callback) {
     var roomname = room.name;
 
     new Room({
@@ -133,15 +135,14 @@ module.exports = {
             }).catch(function(err) {return callback(err);});
         }
       }).catch(function(err) {return callback(err);});
-  },
+  }),
 
   //get a room from DB by ID
-  addDJToQueue: function(dj_id, room_id, callback) {
+  addDJToQueue: Promise.promisify(function(dj_id, room_id, callback) {
     room_id = parseInt(room_id);
     dj_id = parseInt(dj_id);
 
     console.log('adding DJ to queue ');
-
 
     new Room({
         id: room_id
@@ -156,7 +157,7 @@ module.exports = {
           console.log('room_id not found:' + room_id);
         }
       }).catch(function(err) {return callback(err);});
-  },
+  }),
 
   socketsForTimer: function(sockets) {
     console.log('setting sockets for timer');

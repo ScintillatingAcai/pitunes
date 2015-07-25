@@ -12,8 +12,23 @@ module.exports = {
 
   getMedia: function(req, res, next) {
     console.log('retrieving info for media_id:' + req.media_id);
-    var R = Promise.promisify(utils.retrieveMedia);
-    R(media_id).then(function(media) {
+    utils.retrieveMedia(req.media_id)
+    .then(function(media) {
+      if (media) {
+        res.json(media);
+      } else {
+        res.status(500).end();
+      }
+    })
+    .catch(function(error) {
+      console.log('controller error: ',error);
+      return next(new Error('controller error: ', error));
+    });
+  },
+
+  getTopMedias: function(req, res, next) {
+    utils.retrieveTopMedias()
+    .then(function(media) {
       if (media) {
         res.json(media);
       } else {
@@ -28,8 +43,8 @@ module.exports = {
 
   addMedia: function(req, res, next) {
     console.log('adding media: ',req.body);
-    var R = Promise.promisify(utils.storeMedia);
-    R(req.body).then(function(media) {
+    utils.storeMedia(req.body)
+    .then(function(media) {
       if (media) {
         res.json(media);
       } else {
@@ -46,8 +61,8 @@ module.exports = {
     var mediaInfo = req.body;
 
     console.log('updating media_id:', req.media_id, ' with info: ', mediaInfo );
-    var R = Promise.promisify(utils.updateMedia);
-    R(req.media_id, playlistInfo).then(function(media) {
+    utils.updateMedia(req.media_id, playlistInfo)
+    .then(function(media) {
       if (media) {
         res.json(media);
       } else {

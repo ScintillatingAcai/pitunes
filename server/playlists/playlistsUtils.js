@@ -10,7 +10,7 @@ var Media_Playlist = require('../db/models/media_playlist');
 module.exports = {
 
   //get a playlist from DB by ID
-  retrievePlaylist: function(playlist_id, callback) {
+  retrievePlaylist: Promise.promisify(function(playlist_id, callback) {
     new Playlist({
         id: playlist_id,
       })
@@ -40,7 +40,7 @@ module.exports = {
         console.log('error:', error);
         callback(error);
       });
-  },
+  }),
 
   //update a playlist in DB by ID
   updatePlaylist: Promise.promisify(function(playlist_id, playlistInfo, callback) {
@@ -77,27 +77,32 @@ module.exports = {
               })
               .catch(function(error) {
                 console.log('error:', error);
+                callback(error);
               });
             })
             .catch(function(error) {
               console.log('error:', error);
+              callback(error);
             });
           })
           .catch(function(error) {
             console.log('error:', error);
+            callback(error);
           });  
         }
         else {
           console.log('playlist_id not found:' + playlist_id);
+          callback(new Error("Playlist not found"));
         }
       })
       .catch(function(error) {
         console.log('error:', error);
+        callback(error);
       });
   }),
 
   //store a new playlist in DB
-  storePlaylist: function(user_id, playlist, callback) {
+  storePlaylist: Promise.promisify(function(user_id, playlist, callback) {
     var playlistName = playlist.name;
   
     new Playlist({
@@ -111,5 +116,5 @@ module.exports = {
       console.log('error:', error);
       callback(error);
     });
-  }
+  })
 };

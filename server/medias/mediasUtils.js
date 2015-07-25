@@ -1,22 +1,19 @@
 var db = require('../db/schema');
+var Promise = require('bluebird');
 var Medias = require('../db/collections/medias');
 var Media = require('../db/models/media');
 
 module.exports = {
 
   //get a media from DB by ID
-  retrieveMedia: function(media_id, callback) {
+  retrieveMedia: Promise.promisify(function(media_id, callback) {
     media_id = parseInt(media_id);
 
     new Media({
         id: media_id,
-      }).fetch({
-        //add related data we would like to return in the withRelated array
-        withRelated: [],
-        require: true
-      }).then(function(found) {
+      }).fetch().then(function(found) {
         if (found) {
-          var mediaWithJoins = cleanAttributes(found.attributes);
+          //var mediaWithJoins = cleanAttributes(found);
 
           // this is an example of how to add related data to the response object
           // mediaWithJoins.events = [];
@@ -24,18 +21,20 @@ module.exports = {
           //    mediaWithJoins.events.push(cleanAttributes(item.attributes));
           // });
 
-          callback(null, mediaWithJoins);
+          callback(null, found);
         } else {
           console.log('media_id not found:' + media_id);
+          callback(new Error("Media not found"));
         }
       })
       .catch(function(error) {
         console.log('error:', error);
+        callback(error);
       });
-  },
+  }),
 
   //update a media in DB by ID
-  updateMedia: function(media_id, mediaInfo, callback) {
+  updateMedia: Promise.promisify( function(media_id, mediaInfo, callback) {
     media_id = parseInt(media_id);
     new Media({
         id: media_id
@@ -50,15 +49,17 @@ module.exports = {
             });
         } else {
           console.log('media_id not found:' + media_id);
+          callback(new Error("Media not found"));
         }
       })
       .catch(function(error) {
         console.log('error:', error);
+        callback(error);
       });
-  },
+  }),
 
   //store a new media in DB
-  storeMedia: function(media, callback) {
+  storeMedia: Promise.promisify( function(media, callback) {
 
     new Media(media).fetch().then(function(found) {
 
@@ -76,11 +77,26 @@ module.exports = {
             })
             .catch(function(error) {
               console.log('error:', error);
+              callback(error);
             });
         }
       })
       .catch(function(error) {
         console.log('error:', error);
+        callback(error);
       });
-  }
+  }),
+
+  retrieveTopMedias: Promise.promisify( function (callback) {
+    new Medias().query(function(qb){
+      qb.where('play_count', '>', 0).orderBy('play_count','DESC').limit(10);
+      }).fetch()
+    .then(function (medias) {
+      callback(null, medias);
+    })
+    .catch(function(error) {
+      console.log('error:', error);
+      callback(error);
+    });
+  })
 };
