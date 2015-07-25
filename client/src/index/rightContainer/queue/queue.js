@@ -82,6 +82,45 @@ var QueueTitle = React.createClass({
   }
 });
 
+var QueueJoinButton = React.createClass({
+  getInitialState: function () {
+    return {
+      inQueue: this.props.inQueue,
+      text: 'Join Queue'
+    };
+  },
+  componentDidMount: function () {
+    this.props.model.on('login', function () {
+      $('#queueJoinButton').removeClass('disabled');
+    });
+    this.props.model.on('logout', function () {
+      $('#queueJoinButton').addClass('disabled');
+    })
+  },
+  handleClick: function () {
+    if (!this.state.inQueue) {
+      socket.emit('user queue join', {user: app.get('user').attributes, room: 1});
+      this.setState({inQueue: !this.state.inQueue, text: 'Leave Queue'})
+    } else {
+      socket.emit('user queue leave', {user: app.get('user').attributes, room: 1});
+      this.setState({inQueue: !this.state.inQueue, text: 'Join Queue'})
+      this.getText();
+    }
+  },
+  getText: function () {
+    if (!this.state.inQueue) {
+      return 'Join Queue';
+    } else {
+      return 'Leave Queue';
+    }
+  },
+  render: function () {
+    return (
+      <button id="queueJoinButton" className='btn btn-sm disabled' onClick={this.handleClick}>{this.state.text}</button>
+    );
+  }
+});
+
 var Queue = React.createClass({
   render: function() {
     var style = {
@@ -92,10 +131,20 @@ var Queue = React.createClass({
       height: '50%',
       overflow: 'auto'
     };
+    var buttonStyle = {
+      position: 'absolute',
+      textAlign: 'center',
+      width: '100%',
+      bottom: '0',
+      margin: '0 0 10px 0'
+    }
     return (
       <div style={style}>
         <QueueTitle />
         <QueueList model={app.get('current_room')} />
+        <div className='text-center' style={buttonStyle}>
+        <QueueJoinButton model={app.get('user')} inQueue={false} />
+        </div>
       </div>
     );
   }

@@ -271,13 +271,6 @@ var getCurPlaylistSongs = function() {
   }
 };
 
-
-var addSongToPlaylist = function (songNode) {
-  user.current_playlist.songs.push(songNode);
-  console.log("Added ", songNode, " to playlist");
-  populatePlaylist();
-}
-
 var Songs = React.createClass({
   render: function() {
     return (
@@ -303,7 +296,6 @@ var PlaylistTitle = React.createClass({
   handleNewCurrentPlaylist: function() {
     // console.log(app.get('user').get('current_playlist').get('attributes'));
     if (app.get('user').get('current_playlist').get('name')) {
-      console.log(app.get('user').get('current_playlist').get('name'))
       this.setState({title: app.get('user').get('current_playlist').get('name')});
     } else {
       this.setState({title: 'No Playlist'});

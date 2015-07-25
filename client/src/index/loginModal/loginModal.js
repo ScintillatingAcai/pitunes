@@ -42,6 +42,7 @@ var Login = React.createClass({
         // });
         // app.set('user', loggedUser);
         app.get('user').retrievePlaylists();
+        app.get('user').trigger('login');
         that.setState({showModal: false});
       },
       error: function (res) {
