@@ -12,7 +12,27 @@ var PlaylistModel = Backbone.Model.extend({
   },
   initialize: function (params) {
 
-  }
+  },
+  toJSON: function() {
+    var JSONObject = (new Backbone.Model()).toJSON.call(this);
+    JSONObject.medias = this.get('medias') && this.get('medias').toJSON();
+
+    console.log(JSONObject);
+    var cleanJSON = {};
+    for (var key in JSONObject) {
+      if (key.charAt(0) === '_') {
+
+      } else if (key === 'created_at' || key === 'updated_at') {
+
+      } else {
+        cleanJSON[key] = JSONObject[key];
+      }
+    }
+    console.log('playlistJSON:', cleanJSON);
+
+
+    return cleanJSON;
+  },
 
 });
 

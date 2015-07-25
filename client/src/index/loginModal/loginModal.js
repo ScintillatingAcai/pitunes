@@ -5,7 +5,7 @@ var Login = React.createClass({
     return {showModal: true, errorMessage: 'testing', showLogin: true, showSignUp: false};
   },
   componentDidMount: function () {
-    $('.buttonNewPlaylist').on('click', this.handleNewPlaylistAttempt);
+
   },
   handleNewPlaylistAttempt: function () {
     if (user.id === 0) {
