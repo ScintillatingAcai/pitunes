@@ -133,7 +133,6 @@ module.exports = {
 
   //get a room from DB by ID
   addDJToQueue: Promise.promisify(function(dj_id, room_id, callback) {
-    room_id = parseInt(room_id);
     dj_id = parseInt(dj_id);
 
     console.log('adding DJ to queue ');

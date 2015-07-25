@@ -25,7 +25,14 @@ module.exports = {
   },
 
   getTopMedias: function(req, res, next) {
-    utils.retrieveTopMedias()
+    var query = require('url').parse(req.url,true).query;
+    var num = 10;
+
+    if (query.top && (parseInt(query.top) > 0)) {
+      num = parseInt(query.top);
+    }
+
+    utils.retrieveTopMedias(num)
     .then(function(media) {
       if (media) {
         res.json(media.toJSON({omitPivot: true}));
@@ -37,6 +44,7 @@ module.exports = {
       console.log('controller error: ',error);
       return next(new Error('controller error: ', error));
     });
+    
   },
 
   addMedia: function(req, res, next) {

@@ -87,9 +87,9 @@ module.exports = {
       });
   }),
 
-  retrieveTopMedias: Promise.promisify( function (callback) {
+  retrieveTopMedias: Promise.promisify( function (num, callback) {
     new Medias().query(function(qb){
-      qb.where('play_count', '>', 0).orderBy('play_count','DESC').limit(10);
+      qb.where('play_count', '>', 0).orderBy('play_count','DESC').limit(num);
       }).fetch()
     .then(function (medias) {
       callback(null, medias);

@@ -19,11 +19,21 @@ module.exports = {
     }
   },
 
-  getTop3Rooms: function(req, res) {
+  getRoomsRouter: function( req, res) {
+    var query = require('url').parse(req.url,true).query;
+    if (query.top && (parseInt(query.top) > 0)) {
+      module.exports.getTopRooms(req, res, parseInt(query.top));
+    }
+    else {
+      module.exports.getAllRooms(req, res);
+    }
+  },
+
+  getTopRooms: function(req, res, num) {
     var allRooms = utils.getAllRooms().toJSON()
     .sort(function (a,b) {
       return a.users.length < b.users.length;
-    }).slice(0,3)
+    }).slice(0,num)
     .map(function(room) {
 
       var currentMedia = room.currentMedia ? room.currentMedia : null;
@@ -121,27 +131,6 @@ module.exports = {
     .then(function(room) {
       if (room) {
         res.json(room.toJSON({omitPivot: true}));
-      } else {
-        res.status(500).end();
-      }
-    })
-    .catch(function(error) {
-      console.log('controller error: ',error);
-      return next(new Error('controller error: ', error));
-    });
-  },
-
-  addDJToQueue: function(req, res, next) {
-    var room_id = req.room.id;
-    var room = req.room;
-
-    var dj_id = req.body.id;
-    var dj = req.body;
-
-    utils.addDJToQueue(dj_id,room_id)
-    .then(function(data) {
-      if (data) {
-        res.json(data);
       } else {
         res.status(500).end();
       }
