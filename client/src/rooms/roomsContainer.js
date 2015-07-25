@@ -3,10 +3,6 @@ var user = null,
     server_uri = 'http://' + document.domain + ':3000'; 
     socket = io(server_uri);
 
-var Modal = ReactBootstrap.Modal;
-var Input = ReactBootstrap.Input;
-var Button = ReactBootstrap.Button;
-
 var RoomsView = React.createClass({
     //Event listener for changes to roomsCollection
     componentDidMount: function() {

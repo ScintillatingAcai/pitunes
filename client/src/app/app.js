@@ -15,20 +15,17 @@ var AppContainer = React.createClass({
 
     return (
       <div style={style}>
-        <LoginModal />
-        <NavBarTop />
         <LeftContainer model={app.get('user')}/>
         <CenterContainer />
         <RightContainer />
-        <NavBarBot />
       </div>
     );
   }
 });
 
-React.render(
-  <div>
-    <AppContainer />
-  </div>,
-  document.getElementsByClassName('appWrapper')[0]
+React.render(    
+  <div>    
+    <AppContainer />   
+  </div>,    
+  document.getElementsByClassName('appWrapper')[0]   
 );

@@ -71,7 +71,7 @@ var Chat = React.createClass({
     };
     var divStyle = {
       background: '#222222',
-      border: '2px solid #444444',
+      border: '1px solid #e7e7e7',
       position: 'absolute',
       width: '100%',
       height: '50%',

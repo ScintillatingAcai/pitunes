@@ -3,12 +3,12 @@ var LeftContainer = React.createClass({
     var style = {
       position: 'absolute',
       left: '0',
-      minHeight: '88%',
       width: '25%',
       margin: '0px 0px 0px 0px',
-      backgroundColor: '#222222',
-      border: '2px solid #444444',
-      bottom: '4%'
+      backgroundColor: '#F8F8F8',
+      border: '1px solid #e7e7e7',
+      bottom: '52px',
+      top: '50px'
     };
     return (
       <div style={style}>
