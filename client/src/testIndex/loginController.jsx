@@ -61,8 +61,9 @@ var LoginController = React.createClass({
   render: function() {
     return (
       <div>
-      <TestTopNavBar signInClick={this.signInClick} />
+      <TestTopNavBar signInClick={this.signInClick} singOutClick={this.signOutClick} />
       <TestBottomNavBar />
+      <CenterContainer />
       <TestSignOutModal close={this.close} signOutClick={this.signOutClick} showSignOut={this.state.showSignOut} />
       <TestSignUpModal close={this.close} signInClick={this.signInClick} signUpUser={this.signUpUser} showSignUp={this.state.showSignUp} errorMessage={this.state.errorMessage} />
       <TestSignInModal close={this.close} signUpClick={this.signUpClick} signInUser={this.signInUser} showSignIn={this.state.showSignIn} errorMessage={this.state.errorMessage} />

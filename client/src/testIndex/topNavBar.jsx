@@ -1,6 +1,6 @@
 var TestTopNavBar = React.createClass({
   render: function() {
-    //TODO: IF SIGNED IN, INSTEAK OF SIGN IN BUTTON, SHOW SIGN OUT BUTTON.
+    //TODO: IF SIGNED IN, INSTEAD OF SIGN IN BUTTON, SHOW SIGN OUT BUTTON.
     return (
       <nav className="navbar navbar-default navbar-fixed-top topnav" role="navigation">
         <div className="container topnav">
