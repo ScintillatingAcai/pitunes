@@ -60,8 +60,8 @@ module.exports = {
 
   addRoom: function(req, res, next) {
     console.log('adding room: ',req.body);
-    var R = Promise.promisify(utils.addRoom);
-    R(req.body).then(function(data) {
+    utils.addRoom(req.body)
+    .then(function(data) {
       if (data) {
         res.json(data);
       } else {
@@ -79,8 +79,8 @@ module.exports = {
     var roomInfo = req.body;
 
     console.log('updating room_id:', room_ID, ' with info: ', roomInfo );
-    var R = Promise.promisify(utils.updateRoom);
-    R(room_ID,roomInfo).then(function(room) {
+    utils.updateRoom(room_ID,roomInfo)
+    .then(function(room) {
       if (room) {
         res.json(room);
       } else {
@@ -100,8 +100,8 @@ module.exports = {
     var dj_id = req.body.id;
     var dj = req.body;
 
-    var R = Promise.promisify(utils.addDJToQueue);
-    R(dj_id,room_id).then(function(data) {
+    utils.addDJToQueue(dj_id,room_id)
+    .then(function(data) {
       if (data) {
         res.json(data);
       } else {

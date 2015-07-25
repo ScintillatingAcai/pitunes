@@ -13,7 +13,5 @@ module.exports = function(app) {
 
   app.post('/', roomsController.addRoom); //add a room
   app.get('/', roomsController.getAllRooms); //get all rooms
-
-
 };
 
