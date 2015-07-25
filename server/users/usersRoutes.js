@@ -23,11 +23,11 @@ module.exports = function(app) {
 
   
   // added route for testing w/o authentication
-  app.get('/:user_id/playlists', usersController.getAllUserPlaylists);
-  app.post('/:user_id/playlists', playlistsController.addPlaylist);
-  app.get('/:user_id/playlists/:playlist_id', playlistsController.getPlaylist);
-  app.put('/:user_id/playlists/:playlist_id', playlistsController.updatePlaylist);
+  app.get('/:user_id/playlists', usersController.getAllUserPlaylists); // Get all User's playlists
+  app.post('/:user_id/playlists', playlistsController.addPlaylist); // Creates a new playlist
+  app.get('/:user_id/playlists/:playlist_id', playlistsController.getPlaylist); // Returns the current specific playlist
+  app.put('/:user_id/playlists/:playlist_id', playlistsController.updatePlaylist); // Updates the current playlist
 
-  app.put('/:user_id/playlists/:playlist_id/current', usersController.setCurrentPlaylist);
+  app.put('/:user_id/playlists/:playlist_id/current', usersController.setCurrentPlaylist); // Sets the current playlist to the default
 };
 
