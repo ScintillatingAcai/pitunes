@@ -95,7 +95,7 @@ var QueueJoinButton = React.createClass({
     });
     this.props.model.on('logout', function () {
       $('#queueJoinButton').addClass('disabled');
-    })
+    });
   },
   handleClick: function () {
     if (!this.state.inQueue) {
