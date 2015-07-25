@@ -49,7 +49,7 @@ module.exports = {
 
   loginUser: function(req, res, next) {
     utils.loginUser(req.body).then(function(user) {
-      if (!user) return next(new Error('user does not exist'));
+      if (!user) return res.status(401).end('user does not exist');
 
       // add into memory model
       utils.addUser(user);
@@ -59,7 +59,8 @@ module.exports = {
       res.json(user.toJSON({omitPivot: true}));
     })
     .catch(function(err) {
-      return next(new Error('controller error: ', err));
+      console.error(err);
+      return res.status(401).end(err.message);
     });
   },
 
