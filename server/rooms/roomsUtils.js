@@ -36,8 +36,8 @@ module.exports = {
           }).save()
           .then(function(newRoom) {
             var singleton = require('../singleton.js');
-            var allRooms = singleton.rooms;
-            allRooms.add(newRoom);
+            newRoom.setSocket(singleton.sockets);
+            singleton.rooms.add(newRoom);
             callback(null, newRoom);
           }).catch(function(err) {return callback(err);});
         }
@@ -131,8 +131,15 @@ module.exports = {
       }).catch(function(err) {return callback(err);});
   }),
 
-  socketsForTimer: function(sockets) {
+  setSocketsForTimer: function(sockets) {
     console.log('setting sockets for timer');
     openSockets = sockets;
+    // var singleton = require('../singleton.js');
+    // singleton.sockets = sockets;
+  },
+
+  getSocketsForTimer: function() {
+    console.log('getting sockets for timer');
+    return openSockets;
   }
 };

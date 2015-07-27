@@ -34,7 +34,7 @@ var removeUserFromClients = function(socket) {
 
 module.exports = function(io) {
 
-  roomUtils.socketsForTimer(io.sockets);
+  roomUtils.setSocketsForTimer(io.sockets);
 
   io.on('connection', function (socket) {
 
@@ -50,6 +50,11 @@ module.exports = function(io) {
       var user_id = data.user.id;
       var room_id = data.room;
 
+      var index = indexOfUserFromSocket(socket);
+      if (index > -1) {
+        return console.log('user already has socket in a room');
+      }
+
       var room = roomUtils.getRoom(room_id);
       if (!user_id) {
         socket.join(room_id);
@@ -63,9 +68,9 @@ module.exports = function(io) {
       var user = userUtils.getUser(user_id);
 
       if (user) {
+        socket.join(room_id);
         room.addUser(user).then(function(user) {
           if (!user) return console.error('user already in room');
-          socket.join(room_id);
           socket.in(room_id).emit("user room change",  JSON.stringify(room.users));
           socket.emit("user room change",  JSON.stringify(room.users));
           // socket.emit("user room join", data.user);
@@ -146,7 +151,7 @@ module.exports = function(io) {
       if (!user_id) return console.error('anon user cannot join queue');
 
       var room = roomUtils.getRoom(room_id);
-      room.enqueueDJ(user_id, io.sockets).then(function(user) {
+      room.enqueueDJ(user_id).then(function(user) {
         if (!user) return console.error('user cannot join queue');
         socket.broadcast.in(room_id).emit("user queue change", JSON.stringify(room.djQueue));
         socket.emit("user queue change", JSON.stringify(room.djQueue));
