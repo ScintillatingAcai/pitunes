@@ -95,37 +95,6 @@ var List = React.createClass({
     }
   },
 
-  createNewPlaylist: function () {
-    // TODO fix placeholder, make modal (possibly?) for naming playlist
-    console.log('name: ', this.state.text);
-    var newPlaylist = new PlaylistModel({name: this.state.text, medias: new MediasCollection()});
-    this.submitNewPlaylist(newPlaylist);
-  },
-
-  submitNewPlaylist: function (playlist) {
-    var jsonPlaylist = playlist.toJSON();
-    if (app.get('user').get('id') !== 0) {
-      var context = this;
-      $.ajax({url: server_uri + '/api/users/' + app.get('user').get('id') + '/playlists',
-        type: 'POST',
-        dataType: 'json',
-        data: jsonPlaylist,
-        success: function (res) {
-          console.log('id: ', res.id);
-          console.log(res);
-          app.get('user').set('current_playlist_id', res.id);
-          playlist.set('id', res.id);
-          app.get('user').set('current_playlist', playlist);
-        },
-        error: function (res) {
-          console.log("error: " + res.statusText);
-        }
-      });
-    } else {
-      console.log('not logged in');
-    }
-  },
-
   submitUpdatePlaylist: function (playlist) {
     var jsonPlaylist = playlist.toJSON();
     delete jsonPlaylist.current_media_index;
@@ -169,7 +138,7 @@ var List = React.createClass({
           onDragEnd={this.dragEnd}
           onDragStart={this.dragStart}
           onClick={this.onClick}>
-          {item}
+          {i + 1}. {item}
         </div>
 
       );
@@ -182,8 +151,6 @@ var List = React.createClass({
     };
     return (
       <div>
-        <button className='btn btn-sm buttonNewPlaylist' onClick={this.createNewPlaylist}>New Playlist</button>
-        <input style={nameInputStyle} onChange={this.onNameChange} value={this.state.text} placeholder="Name Playlist"/>
         <div onDragOver={this.dragOver}>{listItems}</div>
       </div>
     );
@@ -204,10 +171,15 @@ var PlaylistTitle = React.createClass({
   },
   componentDidMount: function() {
     this.props.model.on('change:current_playlist', function () {
-      console.log('playlistTitle heard change');
-      // this.forceUpdate();
+      console.log('playlistTitle heard change in user\'s current_playlist');
       if (app.get('user').get('current_playlist')) {
         this.handleNewCurrentPlaylist();
+        console.log("!!!!!!!!")
+        $('.playlistNavigateButtonLeft').removeClass('hidden');
+        $('.playlistNavigateButtonRight').removeClass('hidden');
+        $('.playlistNavigateMenuDropdown').removeClass('hidden');
+        $('.playlistTitleContainer').removeClass('text-center');
+        $('.playlistTitleContainer').addClass('text-left');
       }
     }.bind(this));
 
@@ -222,19 +194,84 @@ var PlaylistTitle = React.createClass({
   },
   render: function(){
     var style = {
-      textAlign: 'center',
       color: 'white',
-      marginTop: '10px',
-      paddingBottom: '10px',
-      borderBottom: '2px solid #444444'
+      borderBottom: '2px solid #FFF',
+      minHeight: '30px'
     };
+    var dropdownStyle = {  
+      marginTop: '-8px'
+    };
+    var buttonStyle = {
+      margin: '0 5px 0 5px'
+    }
     return (
-      <h4 style={style}>{this.state.title}</h4>
+      <div>
+      <h4 className='playlistTitleContainer text-center' style={style}>
+        <button className='btn btn-xs playlistNavigateButtonLeft hidden' style={buttonStyle}>
+          <span className="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+        </button>
+        {this.state.title}
+        <button className='btn btn-xs playlistNavigateButtonRight hidden' style={buttonStyle}>
+          <span className="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+        </button>
+        <div style={dropdownStyle} className="playlistNavigateMenuDropdown btn-group pull-right hidden">
+          <button type="button" className="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <span className="glyphicon glyphicon-list" aria-hidden="true"></span>
+          </button>
+          <ul className="dropdown-menu dropdown-menu-right">
+            <li><a href="#" onClick={this.props.newPlaylistClick}>New Playlist</a></li>
+            <li><a href="#">Rename Playlist</a></li>
+            <li><a href="#">Delete Playlist</a></li>
+          </ul>
+        </div>
+      </h4>
+      </div>
     );
   }
 });
 
 var PlaylistSaved = React.createClass({
+  getInitialState: function () {
+    return { showNewPlaylist: false};
+  },
+  close: function() {
+    console.log('closed newPlaylist');
+    this.setState({ showNewPlaylist: false});
+  },
+  newPlaylistClick: function () {
+    this.setState({ showNewPlaylist: true});
+  },
+  createNewPlaylist: function () {
+    var form = document.getElementById('newPlaylist-form');
+    console.log('newPlaylist name: ', form[0].value);
+    var newPlaylist = new PlaylistModel({name: form[0].value, medias: new MediasCollection()});
+    this.submitNewPlaylist(newPlaylist);
+  },
+
+  submitNewPlaylist: function (playlist) {
+    var jsonPlaylist = playlist.toJSON();
+    if (app.get('user').get('id') !== 0) {
+      var context = this;
+      $.ajax({url: server_uri + '/api/users/' + app.get('user').get('id') + '/playlists',
+        type: 'POST',
+        dataType: 'json',
+        data: jsonPlaylist,
+        success: function (res) {
+          console.log('id: ', res.id);
+          console.log(res);
+          app.get('user').set('current_playlist_id', res.id);
+          playlist.set('id', res.id);
+          app.get('user').set('current_playlist', playlist);
+          context.close();
+        },
+        error: function (res) {
+          console.log("error: " + res.statusText);
+        }
+      });
+    } else {
+      console.log('not logged in');
+    }
+  },
   render: function() {
     var style = {
       background: '#222222',
@@ -248,7 +285,8 @@ var PlaylistSaved = React.createClass({
     };
     return (
       <div id="playlistContainer" style={style}>
-        <PlaylistTitle model={app.get('user')} title={'Sign in to create a Playlist!'}/>
+        <NewPlaylistModal close={this.close} createNewPlaylist={this.createNewPlaylist} showNewPlaylist={this.state.showNewPlaylist}/>
+        <PlaylistTitle newPlaylistClick={this.newPlaylistClick} model={app.get('user')} title={'Sign in to create a Playlist!'}/>
         <Songs />
       </div>
     );

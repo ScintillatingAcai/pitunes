@@ -20,10 +20,7 @@ var TestTopNavBar = React.createClass({
             <a className="navbar-brand topnav" href="landingPage.html"><span className="j-color-black">pi</span><span className="j-color-blue">Tunes</span></a>
           </div>
           <div style={style}>
-            <DebuggerButtonGetCurPlaylist />
             <DebuggerButtonSimVideoDesync />
-            <DebuggerButtonJoinQueue />
-            <DebuggerButtonLeaveQueue />
             <DebuggerButtonJoinRoom />
             <DebuggerButtonLeaveRoom />
           </div>
