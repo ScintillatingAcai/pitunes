@@ -11,9 +11,9 @@ var CurrentRoomModel = Backbone.Model.extend({
   },
 
   initialize: function () {
-    this.on('change:id', function () {
-      this.retrieveCurrentRoomInfo();
-    }.bind(this));
+    // this.on('change:id', function () {
+    //   this.retrieveCurrentRoomInfo();
+    // }.bind(this));
   },
 
   retrieveCurrentRoomInfo: function () {
@@ -64,5 +64,6 @@ var CurrentRoomModel = Backbone.Model.extend({
         this.set(key, json[key]);
       }
     }
+
   }
 });

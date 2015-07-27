@@ -33,7 +33,7 @@ var List = React.createClass({
 
   componentDidMount: function () {
     this.props.model.on('change:current_playlist', function () {
-      console.log('List heard change/add');
+      console.log('Playlist heard change');
       if (app.get('user').get('current_playlist')) {
         this.handleNewCurrentPlaylist();
       }
@@ -204,7 +204,7 @@ var PlaylistTitle = React.createClass({
   },
   componentDidMount: function() {
     this.props.model.on('change:current_playlist', function () {
-      console.log('playlistTitle heard userChange');
+      console.log('playlistTitle heard change');
       // this.forceUpdate();
       if (app.get('user').get('current_playlist')) {
         this.handleNewCurrentPlaylist();
