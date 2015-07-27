@@ -1,3 +1,32 @@
+var $ = require('jquery');
+var React = require('react'); 
+var Backbone = require('backbone');
+
+var TopNavBar = require('./topNavBar.jsx');
+// var AppContainer = require('../app/app.jsx');
+var BottomNavBar = require('./bottomNavBar.jsx');
+var SignInModal = require('./signInModal.jsx');
+var SignUpModal = require('./signUpModal.jsx');
+var SignOutModal = require('./signOutModal.jsx');
+var AppContainer = require('../app/app.jsx');
+var AppModel = require('../data/models/app.js');
+
+var app = new AppModel();
+
+var server_uri = 'http://' + document.domain + ':3000',
+  socket = io(server_uri);
+
+// return (
+//   <div>
+//     <TestTopNavBar signInClick={this.signInClick} signOutClick={this.signOutClick} />
+//     <TestSignOutModal close={this.close} signOutClick={this.signOutClick} showSignOut={this.state.showSignOut} />
+//     <TestSignUpModal close={this.close} signInClick={this.signInClick} signUpUser={this.signUpUser} showSignUp={this.state.showSignUp} errorMessage={this.state.errorMessage} />
+//     <TestSignInModal close={this.close} signUpClick={this.signUpClick} signInUser={this.signInUser} showSignIn={this.state.showSignIn} errorMessage={this.state.errorMessage} />
+//     <TestBottomNavBar />
+//     <AppContainer />
+//   </div>
+// );
+
 var LoginController = React.createClass({
   getInitialState: function() {
     return { showSignIn: false, showSignUp: false, showSignOut: false, errorMessage: '' };
@@ -61,11 +90,11 @@ var LoginController = React.createClass({
   render: function() {
     return (
       <div>
-        <TestTopNavBar signInClick={this.signInClick} signOutClick={this.signOutClick} />
-        <TestSignOutModal close={this.close} signOutClick={this.signOutClick} showSignOut={this.state.showSignOut} />
-        <TestSignUpModal close={this.close} signInClick={this.signInClick} signUpUser={this.signUpUser} showSignUp={this.state.showSignUp} errorMessage={this.state.errorMessage} />
-        <TestSignInModal close={this.close} signUpClick={this.signUpClick} signInUser={this.signInUser} showSignIn={this.state.showSignIn} errorMessage={this.state.errorMessage} />
-        <TestBottomNavBar />
+        <TopNavBar signInClick={this.signInClick} signOutClick={this.signOutClick} />
+        <BottomNavBar />
+        <SignInModal close={this.close} signUpClick={this.signUpClick} signInUser={this.signInUser} showSignIn={this.state.showSignIn} errorMessage={this.state.errorMessage} />
+        <SignUpModal close={this.close} signInClick={this.signInClick} signUpUser={this.signUpUser} showSignUp={this.state.showSignUp} errorMessage={this.state.errorMessage} />
+        <SignOutModal close={this.close} signOutClick={this.signOutClick} showSignOut={this.state.showSignOut} />
         <AppContainer />
       </div>
     );

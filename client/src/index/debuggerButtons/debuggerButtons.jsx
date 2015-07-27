@@ -1,7 +1,11 @@
-// navBarTop.js
+var React = require('react');
 
-var Navbar = ReactBootstrap.Navbar;
-var Nav = ReactBootstrap.Nav;
+var server_uri = 'http://' + document.domain + ':3000',
+  socket = io(server_uri);
+
+//TODO: fix this to pull the real app
+var AppModel = require('../../data/models/app.js');
+var app = new AppModel();
 
 var DebuggerButtonGetCurPlaylist = React.createClass({
   handleClick: function () {
@@ -16,7 +20,7 @@ var DebuggerButtonGetCurPlaylist = React.createClass({
 
 var DebuggerButtonJoinQueue = React.createClass({
   handleClick: function () {
-    socket.emit('user queue join', {user: app.get('user').attributes, room: 1});
+    socket.emit('user queue join', { user: app.get('user').attributes, room: 1 });
   },
   render: function () {
     return (
@@ -49,7 +53,7 @@ var DebuggerButtonSimVideoDesync = React.createClass({
 
 var DebuggerButtonJoinRoom = React.createClass({
   handleClick: function () {
-    socket.emit('user room join', {user: app.get('user').attributes, room: 1})
+    socket.emit('user room join', { user: app.get('user').attributes, room: 1 })
     app.get('current_room').set('id', 1);
   },
   render: function () {
@@ -61,7 +65,7 @@ var DebuggerButtonJoinRoom = React.createClass({
 
 var DebuggerButtonLeaveRoom = React.createClass({
   handleClick: function () {
-    socket.emit('user room leave', {user: app.get('user').attributes, room: 1})
+    socket.emit('user room leave', { user: app.get('user').attributes, room: 1 })
   },
   render: function () {
     return (
@@ -70,42 +74,16 @@ var DebuggerButtonLeaveRoom = React.createClass({
   }
 });
 
-var NavBarTop = React.createClass({
+var DebuggerButtons = React.createClass({
   render: function() {
     var style = {
-      background: '#222222',
-      border: '2px solid #444444',
-      position: 'absolute', 
-      width: '100%',
-      height: '8%'
-    };
-    var titleStyle = {
-      height:'100%',
-      color: 'grey',
-      fontSize: '200%',
-      marginLeft: '7%'
-    };
-    var debuggerButtonsStyle = {
       right: '30%',
       top: '10%',
       height: '100%',
       position: 'absolute'
     };
-    var NavBarMenuDropdownStyle = {
-      right: '6%',
-      top: '0',
-      position: 'absolute',
-    };
-    var piStyle = {
-      color: '#FFF'
-    };
-    var tunesStyle = {
-      color: '#CC0000'
-    };
     return (
-      <div style={style}>
-        <div style={titleStyle}><span style={piStyle}>pi</span><span style={tunesStyle}>TUNES</span></div>
-        <div style={debuggerButtonsStyle}>
+        <div style={style}>
           <DebuggerButtonGetCurPlaylist />
           <DebuggerButtonSimVideoDesync />
           <DebuggerButtonJoinQueue />
@@ -113,11 +91,8 @@ var NavBarTop = React.createClass({
           <DebuggerButtonJoinRoom />
           <DebuggerButtonLeaveRoom />
         </div>
-        <div style = {NavBarMenuDropdownStyle}>
-          <NavBarMenuDropdown />
-        </div>
-      </div>
     );
-
   }
 });
+
+module.exports = DebuggerButtons;

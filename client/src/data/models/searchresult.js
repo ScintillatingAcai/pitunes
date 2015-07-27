@@ -1,3 +1,5 @@
+var Backbone = require('backbone');
+
 // Search Result Model
 
 var SearchResultModel = Backbone.Model.extend({
@@ -10,3 +12,4 @@ var SearchResultModel = Backbone.Model.extend({
   }
 });
 
+module.exports = SearchResultModel;

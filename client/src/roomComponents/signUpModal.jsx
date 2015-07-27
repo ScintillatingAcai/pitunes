@@ -1,11 +1,14 @@
+var React = require('react');
+var $ = require('jquery');
+var ReactBootstrap = require('react-bootstrap');
+var Modal = ReactBootstrap.Modal;
+
 var user = null, 
   room = 'root', 
   server_uri = 'http://' + document.domain + ':3000',
   socket = io(server_uri);
 
-var Modal = ReactBootstrap.Modal;
-
-var TestSignUpModal = React.createClass({
+var SignUpModal = React.createClass({
   render: function() {
     return (
       <div>
@@ -53,5 +56,5 @@ var TestSignUpModal = React.createClass({
   }
 });
 
-
+module.exports = SignUpModal;
 

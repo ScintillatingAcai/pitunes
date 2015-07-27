@@ -1,17 +1,9 @@
-var room = {
-  queue: {
-    0: 'John',
-    1: 'Zach',
-    2: 'Kyle',
-    3: 'Josh'
-  }
-};
+var React = require('react');
+var $ = require('jquery');
 
-
-var arrQueue = [];
-for (var key in room.queue) {
-  arrQueue.push(room.queue[key]);
-}
+//TODO: app needs to be defined from the main part
+var AppModel = require('../../../data/models/app.js');
+var app = new AppModel();
 
 var QueueList = React.createClass({
   componentDidMount: function () {
@@ -149,3 +141,5 @@ var Queue = React.createClass({
     );
   }
 });
+
+module.exports = Queue;

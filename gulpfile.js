@@ -22,14 +22,12 @@ var paths = {
   clientjs: ['./client/src/**/*.js',
       './client/src/**/**/*.js',
       './client/src/**/**/**/*.js'],
-  clientapp: ['./client/src/app/app.js',
-      './client/src/landingPage/landingPageContainer.js',
-      './client/scr/rooms/roomsContainer.js'],
+  clientapp: ['./client/src/roomComponents/loginController.jsx'],
   serverjs: ['./server/*.js',
       './server/**/*.js',
       './server/**/**/*.js'
     ],
-  dist: './dist'
+  dist: './client/dist'
 };
 
 // var libFilesToMove = [];
@@ -61,7 +59,7 @@ gulp.task('browserify-client', function (cb) {
   return b.transform(babelify).bundle()
    .pipe(source('bundle-client.min.js'))
    .pipe(buffer())
-   .pipe(uglify())
+   // .pipe(uglify())
    .pipe(gulp.dest(paths.dist + '/client'));
 });
 

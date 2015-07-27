@@ -1,5 +1,8 @@
-// Playlist Model
+var Backbone = require('backbone');
 
+var MediasCollection = require('../collections/medias.js');
+
+// Playlist Model
 var PlaylistModel = Backbone.Model.extend({
   defaults: {
     created_at: null,
@@ -36,3 +39,4 @@ var PlaylistModel = Backbone.Model.extend({
 
 });
 
+module.exports = PlaylistModel;

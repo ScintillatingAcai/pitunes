@@ -1,3 +1,8 @@
+var React = require('react');
+
+var VideoPlayer = require('./video/player.jsx');
+var Chat = require('./chat/chat.jsx');
+
 var CenterContainer = React.createClass({
   render: function() {
     var style = {
@@ -12,9 +17,11 @@ var CenterContainer = React.createClass({
     };
     return (
       <div style={style}>
-        <VideoContainer />
-        <ChatContainer />
+        <VideoPlayer />
+        <Chat />
       </div>
     );
   }
 });
+
+module.exports = CenterContainer;

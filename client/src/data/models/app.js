@@ -1,3 +1,7 @@
+var Backbone = require('backbone');
+var UserModel = require('./user.js');
+var CurrentRoomModel = require('./currentRoom.js');
+
 // App Model
 var AppModel = Backbone.Model.extend({
   initialize: function () {
@@ -5,3 +9,5 @@ var AppModel = Backbone.Model.extend({
     this.set('current_room', new CurrentRoomModel());
   }
 });
+
+module.exports = AppModel;

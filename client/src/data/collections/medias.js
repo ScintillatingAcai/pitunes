@@ -1,4 +1,6 @@
-// Medias Collection
+var Backbone = require('backbone');
+var MediaModel = require('../models/media.js');
+
 var MediasCollection = Backbone.Collection.extend({
   model: MediaModel,
   initialize: function (params) {
@@ -7,3 +9,5 @@ var MediasCollection = Backbone.Collection.extend({
     // }.bind(this));
   }
 });
+
+module.exports = MediasCollection;

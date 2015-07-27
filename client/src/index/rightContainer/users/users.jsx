@@ -1,17 +1,7 @@
-var dummyUsers = {
-  0: 'John',
-  1: 'Josh',
-  2: 'Terry',
-  3: 'Justin',
-  4: 'Mark',
-  5: 'Daniel',
-  6: 'Nathan'
-};
+var React = require('react');
 
-var arrUsers = [];
-for (var key in dummyUsers) {
-  arrUsers.push(dummyUsers[key]);
-}
+var AppModel = require('../../../data/models/app.js');
+var app = new AppModel();
 
 var Users = React.createClass({
   componentDidMount: function () {
@@ -102,3 +92,5 @@ var OnlineUsers = React.createClass({
     );
   }
 });
+
+module.exports = OnlineUsers;

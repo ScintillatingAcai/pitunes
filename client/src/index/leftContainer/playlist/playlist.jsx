@@ -1,14 +1,19 @@
+var React = require('react');
+var $ = require('jquery');
+
+var PlaylistModel = require('../../../data/models/playlist.js');
+var MediasCollection = require('../../../data/collections/medias.js');
+var AppModel = require('../../../data/models/app.js');
+
 var placeholder = document.createElement("div");
 placeholder.className = "placeholder";
 
 var app = new AppModel();
 
 var List = React.createClass({
-
   getInitialState: function () {
-    return { data: this.props.data, text: ''};
+    return { data: this.props.data, text: '' };
   },
-
   durationToDisplay: function (duration) {
     var minutes = Math.floor(duration / 60) + "";
     if (minutes.length === 1) {
@@ -20,7 +25,6 @@ var List = React.createClass({
     }
     return minutes + ":" + seconds;
   },
-
   handleNewCurrentPlaylist: function () {
     console.log('List fired handleNewCurrentPlaylist');
     var context = this;
@@ -28,9 +32,8 @@ var List = React.createClass({
       // console.log(e)
       return e.get('title') + " | " + context.durationToDisplay(e.get('duration'));
     });
-    this.setState({data: newData});
+    this.setState({ data: newData });
   },
-
   componentDidMount: function () {
     this.props.model.on('change:current_playlist', function () {
       console.log('Playlist heard change');
@@ -47,23 +50,19 @@ var List = React.createClass({
       this.submitUpdatePlaylist(app.get('user').get('current_playlist'));
     }.bind(this));
   },
-
   onClick: function (e) {
 
   },
-
   onNameChange: function (e) {
     e.preventDefault();
     this.setState({text: e.target.value});
   },
-
   dragStart: function (e) {
     this.dragged = e.currentTarget;
     e.dataTransfer.effectAllowed = 'move';
     // Firefox requires dataTransfer data to be set
     e.dataTransfer.setData("text/html", e.currentTarget);
   },
-
   dragEnd: function () {
     this.dragged.style.display = "block";
     this.dragged.parentNode.removeChild(placeholder);
@@ -74,10 +73,9 @@ var List = React.createClass({
     if (from < to) to--;
     if (this.nodePlacement === "after") to++;
     data.splice(to, 0, data.splice(from, 1)[0]);
-    this.setState({data: data});
+    this.setState({ data: data });
     this.submitUpdatePlaylist(app.get('user').get('current_playlist'));
   },
-
   dragOver: function (e) {
     e.preventDefault();
     this.dragged.style.display = "none";
@@ -94,7 +92,39 @@ var List = React.createClass({
       parent.insertBefore(placeholder, e.target);
     }
   },
+<<<<<<< HEAD:client/src/index/leftContainer/playlist/playlistSaved.js
 
+=======
+  createNewPlaylist: function () {
+    // TODO fix placeholder, make modal (possibly?) for naming playlist
+    console.log('name: ', this.state.text);
+    var newPlaylist = new PlaylistModel({name: this.state.text, medias: new MediasCollection()});
+    this.submitNewPlaylist(newPlaylist);
+  },
+  submitNewPlaylist: function (playlist) {
+    var jsonPlaylist = playlist.toJSON();
+    if (app.get('user').get('id') !== 0) {
+      var context = this;
+      $.ajax({url: server_uri + '/api/users/' + app.get('user').get('id') + '/playlists',
+        type: 'POST',
+        dataType: 'json',
+        data: jsonPlaylist,
+        success: function (res) {
+          console.log('id: ', res.id);
+          console.log(res);
+          app.get('user').set('current_playlist_id', res.id);
+          playlist.set('id', res.id);
+          app.get('user').set('current_playlist', playlist);
+        },
+        error: function (res) {
+          console.log("error: " + res.statusText);
+        }
+      });
+    } else {
+      console.log('not logged in');
+    }
+  },
+>>>>>>> (client) Fixed gulpfile browserify. All files now use require. Deleted unecessary file:client/src/index/leftContainer/playlist/playlist.jsx
   submitUpdatePlaylist: function (playlist) {
     var jsonPlaylist = playlist.toJSON();
     delete jsonPlaylist.current_media_index;
@@ -120,7 +150,6 @@ var List = React.createClass({
       console.log('not logged in');
     }
   },
-
   render: function () {
     var style = {
       cursor: 'pointer',
@@ -187,9 +216,9 @@ var PlaylistTitle = React.createClass({
   handleNewCurrentPlaylist: function() {
     // console.log(app.get('user').get('current_playlist').get('attributes'));
     if (app.get('user').get('current_playlist').get('name')) {
-      this.setState({title: app.get('user').get('current_playlist').get('name')});
+      this.setState({ title: app.get('user').get('current_playlist').get('name') });
     } else {
-      this.setState({title: 'No Playlist Title'});
+      this.setState({ title: 'No Playlist Title' });
     }
   },
   render: function(){
@@ -230,6 +259,7 @@ var PlaylistTitle = React.createClass({
   }
 });
 
+<<<<<<< HEAD:client/src/index/leftContainer/playlist/playlistSaved.js
 var PlaylistSaved = React.createClass({
   getInitialState: function () {
     return { showNewPlaylist: false};
@@ -272,6 +302,9 @@ var PlaylistSaved = React.createClass({
       console.log('not logged in');
     }
   },
+=======
+var Playlist = React.createClass({
+>>>>>>> (client) Fixed gulpfile browserify. All files now use require. Deleted unecessary file:client/src/index/leftContainer/playlist/playlist.jsx
   render: function() {
     var style = {
       background: '#222222',
@@ -292,3 +325,5 @@ var PlaylistSaved = React.createClass({
     );
   }
 });
+
+module.exports = Playlist;

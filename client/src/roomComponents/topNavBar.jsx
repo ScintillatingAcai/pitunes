@@ -1,12 +1,9 @@
-var TestTopNavBar = React.createClass({
+var React = require('react');
+var DebuggerButtons = require('../index/debuggerButtons/debuggerButtons.jsx');
+
+var TopNavBar = React.createClass({
   render: function() {
     //TODO: IF SIGNED IN, INSTEAD OF SIGN IN BUTTON, SHOW SIGN OUT BUTTON.
-    var style = {
-      right: '30%',
-      top: '10%',
-      height: '100%',
-      position: 'absolute'
-    };
     return (
       <nav className="navbar navbar-default navbar-fixed-top topnav" role="navigation">
         <div className="container topnav">
@@ -19,10 +16,15 @@ var TestTopNavBar = React.createClass({
             </button>
             <a className="navbar-brand topnav" href="landingPage.html"><span className="j-color-black">pi</span><span className="j-color-blue">Tunes</span></a>
           </div>
+<<<<<<< HEAD
           <div style={style}>
             <DebuggerButtonSimVideoDesync />
             <DebuggerButtonJoinRoom />
             <DebuggerButtonLeaveRoom />
+=======
+          <div>
+            <DebuggerButtons />
+>>>>>>> (client) Fixed gulpfile browserify. All files now use require. Deleted unecessary file
           </div>
           <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul className="nav navbar-nav navbar-right">
@@ -42,3 +44,5 @@ var TestTopNavBar = React.createClass({
     );
   }
 });
+
+module.exports = TopNavBar;

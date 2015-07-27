@@ -1,3 +1,7 @@
+var React = require('react');
+var MediaAdd = require('./mediaAdd/mediaAdd.jsx');
+var Playlist = require('./playlist/playlist.jsx')
+
 var LeftContainer = React.createClass({
   render: function() {
     var style = {
@@ -12,9 +16,11 @@ var LeftContainer = React.createClass({
     };
     return (
       <div style={style}>
-        <MediaAddContainer />
-        <PlaylistSavedContainer />
+        <MediaAdd />
+        <Playlist />
       </div>
     );
   }
 });
+
+module.exports = LeftContainer;
