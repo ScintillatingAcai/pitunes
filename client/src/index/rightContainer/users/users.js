@@ -16,17 +16,17 @@ for (var key in dummyUsers) {
 var Users = React.createClass({
   componentDidMount: function () {
     var context = this;
-    this.props.model.on('change', function () {
+    this.props.model.on('change:users', function () {
       console.log(this.props.model.get('users').models);
       console.log('USERS LIST HEARD CHANGE');
         context.handleRoomChange();
     }.bind(this));
 
-    this.props.model.on('room status', function () {
-      console.log(this.props.model.get('users').models);
-      console.log('USERS LIST HEARD CHANGE');
-        context.handleRoomChange();
-    }.bind(this));
+    // this.props.model.on('room status', function () {
+    //   console.log(this.props.model.get('users').models);
+    //   console.log('USERS LIST HEARD CHANGE');
+    //     context.handleRoomChange();
+    // }.bind(this));
   },
   handleRoomChange: function () {
     this.forceUpdate();
