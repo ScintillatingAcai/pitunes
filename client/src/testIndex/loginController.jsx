@@ -20,7 +20,7 @@ var LoginController = React.createClass({
   },
   signInUser: function() {
     var form = document.getElementById('signIn-form');
-        var data = {email: form[0].value, password: form[1].value};
+        var data = { email: form[0].value, password: form[1].value };
         var self = this;
         $.ajax({url: server_uri + '/api/users/login',
           type: 'POST',
@@ -33,7 +33,7 @@ var LoginController = React.createClass({
             self.close();
           },
           error: function (res) {
-            self.setState({errorMessage: res.statusText + ": " + res.responseText });
+            self.setState({ errorMessage: res.statusText + ": " + res.responseText });
           }
         });
   },
@@ -59,28 +59,17 @@ var LoginController = React.createClass({
     });
   },
   render: function() {
-
-    /* LANDING PAGE VIEW - HOME PAGE FOR THE APP
-      <LandingPageBackground signInClick={this.signInClick} signUpClick={this.signUpClick} />
-      <LandingPagePopularRooms /> 
-    **/
-
-    /*
-      ROOMS VIEW - LIST OF ALL THE ROOMS CURRENTLY MADE:
-      <RoomsView />
-    **/
-
-    /*
-      INDIVIDUAL ROOM VIEW - THE BASIC TEMPLATE VIEW OF EVERY ROOM
-      <AppContainer />
-    **/
     var view;
+
+    //LANDING PAGE VIEW - HOME PAGE FOR THE APP
     if (this.state.atLandingPage === true) {
       view = (<div><LandingPageBackground signInClick={this.signInClick} signUpClick={this.signUpClick} /><LandingPagePopularRooms /></div>);
     }
+    //ROOMS VIEW - LIST OF ALL THE ROOMS CURRENTLY MADE:
     if (this.state.atRoomsPage === true) {
       view = (<div><RoomsView /></div>);
     }
+    //INDIVIDUAL ROOM VIEW - THE BASIC TEMPLATE VIEW OF EVERY ROOM
     if (this.state.atRoomPage === true) {
       view = (<div><AppContainer /></div>);
     }

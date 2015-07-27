@@ -22,10 +22,3 @@ var AppContainer = React.createClass({
     );
   }
 });
-
-React.render(    
-  <div>    
-    <AppContainer />   
-  </div>,    
-  document.getElementsByClassName('appWrapper')[0]   
-);
