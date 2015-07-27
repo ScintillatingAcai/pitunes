@@ -51,6 +51,7 @@ var List = React.createClass({
       }
       this.submitUpdatePlaylist(app.get('user').get('current_playlist'));
     }.bind(this));
+
   },
   onClick: function (e) {
 
@@ -201,7 +202,17 @@ var PlaylistTitle = React.createClass({
       console.log('playlistTitle heard change in user\'s current_playlist');
       if (app.get('user').get('current_playlist')) {
         this.handleNewCurrentPlaylist();
-        console.log("!!!!!!!!")
+        $('.playlistNavigateButtonLeft').removeClass('hidden');
+        $('.playlistNavigateButtonRight').removeClass('hidden');
+        $('.playlistNavigateMenuDropdown').removeClass('hidden');
+        $('.playlistTitleContainer').removeClass('text-center');
+        $('.playlistTitleContainer').addClass('text-left');
+      }
+    }.bind(this));
+    this.props.model.on('currentPlaylistNewName', function () {
+      console.log('playlistTitle heard currentPlaylistNewName');
+      if (app.get('user').get('current_playlist')) {
+        this.handleNewCurrentPlaylist();
         $('.playlistNavigateButtonLeft').removeClass('hidden');
         $('.playlistNavigateButtonRight').removeClass('hidden');
         $('.playlistNavigateMenuDropdown').removeClass('hidden');
@@ -247,7 +258,7 @@ var PlaylistTitle = React.createClass({
           </button>
           <ul className="dropdown-menu dropdown-menu-right">
             <li><a href="#" onClick={this.props.newPlaylistClick}>New Playlist</a></li>
-            <li><a href="#">Rename Playlist</a></li>
+            <li><a href="#" onClick={this.props.renamePlaylistClick}>Rename Playlist</a></li>
             <li><a href="#">Delete Playlist</a></li>
           </ul>
         </div>
@@ -259,14 +270,17 @@ var PlaylistTitle = React.createClass({
 
 var Playlist = React.createClass({
   getInitialState: function () {
-    return { showNewPlaylist: false};
+    return { showNewPlaylist: false, showRenamePlaylist: false};
   },
   close: function() {
-    console.log('closed newPlaylist');
-    this.setState({ showNewPlaylist: false});
+    console.log('closed playlist modal');
+    this.setState({ showNewPlaylist: false, showRenamePlaylist: false});
   },
   newPlaylistClick: function () {
     this.setState({ showNewPlaylist: true});
+  },
+  renamePlaylistClick: function () {
+    this.setState({ showRenamePlaylist: true});
   },
   createNewPlaylist: function () {
     var form = document.getElementById('newPlaylist-form');
@@ -298,6 +312,33 @@ var Playlist = React.createClass({
       console.log('not logged in');
     }
   },
+
+  submitUpdatePlaylist: function () {
+    playlist = app.get('user').get('current_playlist')
+    var form = document.getElementById('renamePlaylist-form');
+    var jsonPlaylist = playlist.toJSON();
+    delete jsonPlaylist.current_media_index;
+    jsonPlaylist.name = form[0].value;
+    console.log('playlist: ', jsonPlaylist);
+    var context = this;
+    if (app.get('user').get('id') !== 0) {
+      $.ajax({url: server_uri + '/api/users/' + app.get('user').get('id') + '/playlists/' + app.get('user').get('current_playlist_id'),
+        type: 'PUT',
+        dataType: 'json',
+        data: jsonPlaylist,
+        success: function (res) {
+          app.get('user').get('current_playlist').set('name', res.name);
+          app.get('user').trigger('currentPlaylistNewName');
+          context.close();
+        },
+        error: function (res) {
+          console.log("error: " + res.statusText);
+        }
+      });
+    } else {
+      console.log('not logged in');
+    }
+  },
   render: function() {
     var style = {
       background: '#222222',
@@ -312,7 +353,8 @@ var Playlist = React.createClass({
     return (
       <div id="playlistContainer" style={style}>
         <NewPlaylistModal close={this.close} createNewPlaylist={this.createNewPlaylist} showNewPlaylist={this.state.showNewPlaylist}/>
-        <PlaylistTitle newPlaylistClick={this.newPlaylistClick} model={app.get('user')} title={'Sign in to create a Playlist!'}/>
+        <RenamePlaylistModal close={this.close} submitUpdatePlaylist={this.submitUpdatePlaylist} showRenamePlaylist={this.state.showRenamePlaylist}/>
+        <PlaylistTitle renamePlaylistClick={this.renamePlaylistClick} newPlaylistClick={this.newPlaylistClick} model={app.get('user')} title={'Sign in to create a Playlist!'}/>
         <Songs />
       </div>
     );
