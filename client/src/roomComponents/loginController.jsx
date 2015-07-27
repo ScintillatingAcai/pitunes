@@ -1,6 +1,6 @@
 var LoginController = React.createClass({
   getInitialState: function() {
-    return { atRoomPage: true, atRoomsPage: false, atLandingPage: false, showSignIn: false, showSignUp: false, showSignOut: false, errorMessage: '' };
+    return { showSignIn: false, showSignUp: false, showSignOut: false, errorMessage: '' };
   },
   close: function() {
     console.log('close');
@@ -59,32 +59,14 @@ var LoginController = React.createClass({
     });
   },
   render: function() {
-    var view;
-
-    //LANDING PAGE VIEW - HOME PAGE FOR THE APP
-    if (this.state.atLandingPage === true) {
-      view = (<div><LandingPageBackground signInClick={this.signInClick} signUpClick={this.signUpClick} /><LandingPagePopularRooms /></div>);
-    }
-    //ROOMS VIEW - LIST OF ALL THE ROOMS CURRENTLY MADE:
-    if (this.state.atRoomsPage === true) {
-      view = (<div><RoomsView /></div>);
-    }
-    //INDIVIDUAL ROOM VIEW - THE BASIC TEMPLATE VIEW OF EVERY ROOM
-    if (this.state.atRoomPage === true) {
-      view = (<div><AppContainer /></div>);
-    }
-
     return (
       <div>
-        <TestTopNavBar signInClick={this.signInClick} singOutClick={this.signOutClick} />
+        <TestTopNavBar signInClick={this.signInClick} signOutClick={this.signOutClick} />
         <TestSignOutModal close={this.close} signOutClick={this.signOutClick} showSignOut={this.state.showSignOut} />
         <TestSignUpModal close={this.close} signInClick={this.signInClick} signUpUser={this.signUpUser} showSignUp={this.state.showSignUp} errorMessage={this.state.errorMessage} />
         <TestSignInModal close={this.close} signUpClick={this.signUpClick} signInUser={this.signInUser} showSignIn={this.state.showSignIn} errorMessage={this.state.errorMessage} />
         <TestBottomNavBar />
-
-        {view}
-
-
+        <AppContainer />
       </div>
     );
   }
