@@ -1,6 +1,12 @@
 var TestTopNavBar = React.createClass({
   render: function() {
     //TODO: IF SIGNED IN, INSTEAD OF SIGN IN BUTTON, SHOW SIGN OUT BUTTON.
+    var style = {
+      right: '30%',
+      top: '10%',
+      height: '100%',
+      position: 'absolute'
+    };
     return (
       <nav className="navbar navbar-default navbar-fixed-top topnav" role="navigation">
         <div className="container topnav">
@@ -12,6 +18,14 @@ var TestTopNavBar = React.createClass({
               <span className="icon-bar"></span>
             </button>
             <a className="navbar-brand topnav" href="landingPage.html"><span className="j-color-black">pi</span><span className="j-color-blue">Tunes</span></a>
+          </div>
+          <div style={style}>
+            <DebuggerButtonGetCurPlaylist />
+            <DebuggerButtonSimVideoDesync />
+            <DebuggerButtonJoinQueue />
+            <DebuggerButtonLeaveQueue />
+            <DebuggerButtonJoinRoom />
+            <DebuggerButtonLeaveRoom />
           </div>
           <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul className="nav navbar-nav navbar-right">
