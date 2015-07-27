@@ -22,7 +22,7 @@ var QueueList = React.createClass({
         context.handleRoomChange();
     }.bind(this));
 
-    this.props.model.on('djQueueChange', function () {
+    this.props.model.on('room status', function () {
       console.log(this.props.model.get('djQueue').models);
       console.log('QUEUE LIST HEARD CHANGE');
         context.handleRoomChange();

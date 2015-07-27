@@ -21,17 +21,24 @@ var Chat = React.createClass({
       this.setState({items: nextItems});
     }.bind(this));
 
-    socket.on('user room change', function(data){
-      console.log('user room change: ', JSON.parse(data));
-      app.get('current_room').get('users').set(JSON.parse(data));
-      app.get('current_room').trigger('userRoomChange');
+    // socket.on('user room change', function(data){
+    //   console.log('user room change: ', JSON.parse(data));
+    //   app.get('current_room').get('users').set(JSON.parse(data));
+    //   app.get('current_room').trigger('userRoomChange');
+    // }.bind(this));
+
+    socket.on('room status', function(data){
+      console.log('room status: ', data);
+      app.get('current_room').updateForRoomStatus(data);
+      // console.log('updated room info: ', app.get('current_room'));
+      app.get('current_room').trigger('room status');
     }.bind(this));
 
-    socket.on('user queue change', function(data){
-      console.log('user queue change: ', data);
-      app.get('current_room').get('djQueue').set(JSON.parse(data));
-      app.get('current_room').trigger('djQueueChange');
-    }.bind(this));
+    // socket.on('user queue change', function(data){
+    //   console.log('user queue change: ', data);
+    //   app.get('current_room').get('djQueue').set(JSON.parse(data));
+    //   app.get('current_room').trigger('djQueueChange');
+    // }.bind(this));
 
     return {items: [], text: ''};
   },

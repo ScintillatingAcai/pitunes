@@ -25,14 +25,17 @@ var Room = db.Model.extend({
   },
 
   setSocket: function(socket) {
+    console.log('setting socket for room: ', this.get('id'));
     this.sockets = socket;
   },
 
   playMedia: function() {
+
     if (this.mediaTimer) {
       this.mediaTimer.stop();
       this.mediaTimer = null;
     }
+    this.emitRoomStatusMessage(this.sockets.in(this.get('id')));
     this.currentDJ = this.dequeueDJ();
     if (this.currentDJ) {
       console.log('current dj: ', this.currentDJ.get('display_name'));
@@ -52,11 +55,22 @@ var Room = db.Model.extend({
           this.emitMediaStatusMessage(this.sockets.in(this.get('id')), this.currentMedia, 0, 'start');
           this.mediaTimer = this.makeMediaTimer(3000, duration);
           this.mediaTimer.start();
-      }).catch(function(err) {console.error(err);});
+          this.emitRoomStatusMessage(this.sockets.in(this.get('id')));
+
+      }).catch(function(err) {
+        console.error(err);
+        console.log('skipping to next queuedDJ');
+        this.playMedia();
+      });
     } else {
       console.log('stop media for no DJ');
       this.emitMediaStatusMessage(this.sockets.in(this.get('id')), null, 0, 'stop');
+      this.emitRoomStatusMessage(this.sockets.in(this.get('id')));
     }
+  },
+
+  emitRoomStatusMessage: function(socket) {
+    socket.emit("room status", this.toJSON());
   },
 
   emitMediaStatusMessage: function(socket, media, mediaDuration, statusMessage) {
@@ -95,8 +109,7 @@ var Room = db.Model.extend({
     return JSONObject;
   },
 
-  enqueueDJ: Promise.promisify(function(user_id, sockets, callback) {
-    this.sockets = sockets;
+  enqueueDJ: Promise.promisify(function(user_id, callback) {
     var user = this.users.get(user_id);
     if (!user) return callback(new Error('user not in room'));
     if (this.djQueue.get(user_id)) return callback(new Error('user already in queue'));
@@ -109,9 +122,10 @@ var Room = db.Model.extend({
       // var insertDJIndex = Math.max(this.djQueue.length - 1, 0);
       // this.djQueue.add(user,{at: insertDJIndex});
       this.djQueue.push(user);
-      if (this.djQueue.length === 1) {
+      if (this.currentMedia === null) {
         this.playMedia();
       }
+      this.emitRoomStatusMessage(this.sockets.in(this.get('id')));
       return callback(null, user);
     }).catch(function(err) {return callback(err);});
   }),
@@ -148,6 +162,8 @@ var Room = db.Model.extend({
       this.playMedia();
     }
 
+    this.emitRoomStatusMessage(this.sockets.in(this.get('id')));
+
     return popDJ;
   },
 
@@ -155,8 +171,10 @@ var Room = db.Model.extend({
     //dont need to worry about user already being in collection because there can only be one
     if (!this.users.get(user.id)) {
       this.users.add(user);
+      this.emitRoomStatusMessage(this.sockets.in(this.get('id')));
       callback(null, user);
     } else {
+      this.emitRoomStatusMessage(this.sockets.in(this.get('id')));
       callback(null, null);
     }
   }),
@@ -164,6 +182,7 @@ var Room = db.Model.extend({
   removeUser: Promise.promisify(function(user_id, callback) {
     var popUser = this.users.get(user_id);
     this.users.remove(popUser);
+    this.emitRoomStatusMessage(this.sockets.in(this.get('id')));
     callback(null, popUser);
   }),
 

@@ -43,4 +43,26 @@ var CurrentRoomModel = Backbone.Model.extend({
       console.log('GET request to ' + source + ' failed.');
     });
   },
+
+  updateForRoomStatus: function(json) {
+    for (var key in json) {
+      if (key === 'updated_at' || key === 'created_at' || key.charAt(0) === '_') {
+
+      } else if (key === 'users') {
+        var users = new UsersCollection(json.users);
+        this.set('users', users);
+      } else if (key === 'djQueue') {
+        var djQueue = new UsersCollection(json.djQueue);
+        this.set('djQueue', djQueue);
+      } else if (key === 'currentMedia') {
+        var currentMedia = new MediaModel(json.currentMedia);
+        this.set('currentMedia', currentMedia);
+      } else if (key === 'currentDJ') {
+        var currentDJ = new UserModel(json.currentDJ);
+        this.set('currentDJ', currentDJ);
+      } else {
+        this.set(key, json[key]);
+      }
+    }
+  }
 });

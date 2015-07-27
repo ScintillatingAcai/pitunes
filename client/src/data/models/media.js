@@ -11,7 +11,7 @@ var MediaModel = Backbone.Model.extend({
   toJSON: function() {
     var JSONObject = (new Backbone.Model()).toJSON.call(this);
 
-    console.log(JSONObject);
+    //console.log(JSONObject);
     var cleanJSON = {};
     for (var key in JSONObject) {
         if (key.charAt(0) === '_') {
@@ -22,7 +22,7 @@ var MediaModel = Backbone.Model.extend({
           cleanJSON[key] = JSONObject[key];
         }
     }
-    console.log(cleanJSON);
+    // console.log(cleanJSON);
 
     return cleanJSON;
   },
