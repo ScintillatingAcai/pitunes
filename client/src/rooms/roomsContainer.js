@@ -1,7 +1,8 @@
-var user = null, 
-    room = 'root', 
-    server_uri = 'http://' + document.domain + ':3000'; 
-    socket = io(server_uri);
+var React = require('react');
+var RoomsCollection = require('../data/collections/rooms.js');
+var RoomModel = require('../data/models/room.js');
+var roomsCollection = new RoomsCollection();
+var source = 'http://' + document.domain + ':3000/api/rooms';
 
 var RoomsView = React.createClass({
     //Event listener for changes to roomsCollection
@@ -10,7 +11,28 @@ var RoomsView = React.createClass({
             this.forceUpdate();
         }.bind(this));
     },
+
+    getAllRooms: function(){
+      $.get(source, function(res) {
+          res.forEach(function(room) {
+            //check if there 'currentMedia' is null and if it's not, create a url property for the video thumbnail
+            if (room.currentMedia === null) {
+              //TODO: ADD A DEFAULT IMAGE FOR ROOMS THAT ARE NOT PLAYING MUSIC
+              roomsCollection.add(new RoomModel(room));
+            } else {
+              room.videoURL = 'https://i.ytimg.com/vi/' + room.currentMedia + '/hqdefault.jpg';
+              roomsCollection.add(new RoomModel(room));
+            }
+          });
+        })
+      .fail(function() {
+        console.log('error with GET request to ' + source);
+      });
+    },
+
     render: function() {
+        this.getAllRooms();
+
         return (
             <div>
             <nav className="navbar navbar-default navbar-fixed-top topnav" role="navigation">
@@ -100,9 +122,4 @@ var Rooms = React.createClass({
     }
 });
 
-React.render(
-    <div>
-        <RoomsView source={server_uri + '/api/rooms'} />
-    </div>,
-    document.getElementsByClassName('roomsContainer')[0]
-);
+module.exports = RoomsView;
