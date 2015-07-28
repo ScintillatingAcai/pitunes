@@ -168,6 +168,32 @@ module.exports = {
     else {
       callback(new Error("User not found to update current playlist"));
     }
+  }),
+
+  updateLastPlaylistCurrent: Promise.promisify(function (user_id, callback) {
+    var user = this.getUser(user_id);
+
+    if ( user ) {
+      user.playlists().query(function(qb){
+        qb.orderBy('updated_at','DESC');
+      }).fetchOne()
+      .then(function (playlist) {
+        var id = playlist.length > 0 ? playlist.get('id'): 0;
+
+        user.set('current_playlist_id', playlist.get('id')).save()
+        .then( function() {
+          callback(null, {current_playlist_id: id});
+        })
+        .catch(function(error) {
+          console.log('error:', error);
+          callback(error);
+        });
+      })
+      .catch(function(error) {
+        console.log('error:', error);
+        callback(error);
+      });
+    }
   })
 };
 

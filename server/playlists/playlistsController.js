@@ -45,13 +45,24 @@ module.exports = {
     var playlist_ID = req.playlist_id;
     var playlistInfo = req.body;
 
-    utils.updatePlaylist(playlist_ID,playlistInfo)
+    utils.updatePlaylist(playlist_ID, playlistInfo)
     .then(function(playlist) {
       if (playlist) {
         res.json(playlist.toJSON({omitPivot: true}));
       } else {
         res.status(500).end();
       }
+    })
+    .catch(function(error) {
+      console.log('controller error: ',error);
+      return next(new Error('controller error: ', error));
+    });
+  },
+
+  deletePlaylist: function(req, res, next) {
+    utils.deletePlaylist(req.playlist_id)
+    .then(function() {
+      console.log("finished deletePlaylist");
     })
     .catch(function(error) {
       console.log('controller error: ',error);
