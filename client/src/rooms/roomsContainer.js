@@ -44,15 +44,15 @@ var RoomsView = React.createClass({
                             <span className="icon-bar"></span>
                             <span className="icon-bar"></span>
                         </button>
-                        <a className="navbar-brand topnav" href="landingPage.html"><span className="j-color-black">pi</span><span className="j-color-blue">Tunes</span></a>
+                        <a className="navbar-brand topnav" href="#/"><span className="j-color-black">pi</span><span className="j-color-blue">Tunes</span></a>
                     </div>
                     <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                         <ul className="nav navbar-nav navbar-right">
                             <li>
-                                <a href="landingPage.html">Home</a>
+                                <a href="#/">Home</a>
                             </li>
                             <li>
-                                <a href="#rooms">Rooms</a>
+                                <a href="#/rooms">Rooms</a>
                             </li>
                             <li>
                                 <a className="j-pointer" onClick={this.loginClick}>Sign In</a>
@@ -77,7 +77,7 @@ var RoomsView = React.createClass({
                         <div className="col-lg-12 j-center-text">
                             <ul className="list-inline">
                                 <li>
-                                    <a href="landingPage.html">Home</a>
+                                    <a href="#/">Home</a>
                                 </li>
                                 <li className="footer-menu-divider">&sdot;</li>
                                 <li>
