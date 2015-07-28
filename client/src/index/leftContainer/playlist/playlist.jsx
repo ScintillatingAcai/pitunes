@@ -38,7 +38,10 @@ var List = React.createClass({
     app.get('user').get('current_playlist').get('medias').each(function (e, index) {
       var mediaIndex =  ( index + mediaLength - next_media_index + 1) % mediaLength ;
       console.log('mediaIndex: ', mediaIndex);
-      newData[mediaIndex] = e.get('title') + " | " + context.durationToDisplay(e.get('duration'));
+      var mediaObject = {};
+      mediaObject.text = e.get('title') + " | " + context.durationToDisplay(e.get('duration'));
+      mediaObject.id = e.get('id');
+      newData[mediaIndex] = mediaObject;
     });
     this.setState({ data: newData });
   },
@@ -83,6 +86,15 @@ var List = React.createClass({
     if (this.nodePlacement === "after") to++;
     data.splice(to, 0, data.splice(from, 1)[0]);
     this.setState({ data: data });
+    var newMedias = new MediasCollection();
+    for (var i = 0; i < this.state.data.length; i++) {
+      var aData = this.state.data[i];
+      var aDataID = aData.id;
+      var aMedia = app.get('user').get('current_playlist').get('medias').get(aDataID);
+      newMedias.push(aMedia);
+    }
+    app.get('user').get('current_playlist').set('medias', newMedias);
+    app.get('user').get('current_playlist').set('current_media_index', 0);
     this.submitUpdatePlaylist(app.get('user').get('current_playlist'));
   },
   dragOver: function (e) {
@@ -132,7 +144,7 @@ var List = React.createClass({
   },
   submitUpdatePlaylist: function (playlist) {
     var jsonPlaylist = playlist.toJSON();
-    delete jsonPlaylist.current_media_index;
+    // // delete jsonPlaylist.current_media_index;
     // if (!jsonPlaylist.current_media_index && jsonPlaylist.medias.length > 0) {
     //   console.log('heard 0 media index with medias');
     //   jsonPlaylist.current_media_index = 1;
@@ -164,6 +176,7 @@ var List = React.createClass({
       fontSize: '12px',
       listStyleType: 'none'
     };
+    console.log(this.state.data);
     var listItems = this.state.data.map((function (item, i) {
       return (
         <div style={style} data-id={i}
@@ -172,7 +185,7 @@ var List = React.createClass({
           onDragEnd={this.dragEnd}
           onDragStart={this.dragStart}
           onClick={this.onClick}>
-          {i + 1}. {item}
+          {i + 1}. {item.text}
         </div>
 
       );
