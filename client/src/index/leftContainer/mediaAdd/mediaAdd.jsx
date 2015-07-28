@@ -107,7 +107,7 @@ var SearchBar = React.createClass({
             }
             $(".searchResultItem").remove();
             results.forEach(function (e) {
-              
+
               // TODO Consult with group on refactoring this line - horrible as is
               $('#searchResults').append('<li class="searchResultItem" style="margin-bottom:10px; margin-left:-30px; list-style:none;"><img className="searchResultImg" style="height:50px; width:50px; margin-right:5px;" src="' + e.img + '" /><div className="searchResultTitle" style="color:#FFF; font-size:10px; display:inline; cursor:pointer;" data-durationDisplay="' + e.durationDisplay + '" data-duration="' + e.duration + '" data-title="' + context.escapeDQ(e.title) + '" data-youtubeid="' + e.id + '" data-img="' + e.img + '"> ' + (e.title).slice(0, 35) + '...' + '</div><div style="color:#FFF; font-size:10px; display:inline;"> | ' + e.durationDisplay + '</div></li>');
             });
@@ -121,7 +121,8 @@ var SearchBar = React.createClass({
                     img_url: $(e.target).attr('data-img'),
                     duration: parseInt($(e.target).attr('data-duration'), 10)
                   });
-                  app.get('user').get('current_playlist').get('medias').add(newSong);
+                  var addIndex = app.get('user').get('current_playlist').get('current_media_index');
+                  app.get('user').get('current_playlist').get('medias').add(newSong, {at: addIndex});
                   app.get('user').trigger('newSong');
                   // addSongToPlaylist({title: $(e.target).attr('data-title'), youtube_id: $(e.target).attr('data-id'), img_url: $(e.target).attr('data-img'), duration: parseInt($(e.target).attr('data-duration'))});
                 }
@@ -159,10 +160,10 @@ var SearchBar = React.createClass({
 
 var MediaAdd = React.createClass({
   render: function() {
-    var style = {  
+    var style = {
       background: '#222222',
       border: '1px solid #e7e7e7',
-      position: 'absolute', 
+      position: 'absolute',
       width: '100%',
       height: '50%',
       overflow: 'auto',
