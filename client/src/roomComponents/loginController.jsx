@@ -90,9 +90,4 @@ var LoginController = React.createClass({
   }
 });
 
-React.render(
-  <div>
-    <LoginController />
-  </div>,
-  document.getElementsByClassName('testIndexPageContainer')[0]
-);
+module.exports = LoginController;

@@ -1,7 +1,8 @@
-var user = null, 
-    room = 'root', 
-    server_uri = 'http://' + document.domain + ':3000'; 
-    socket = io(server_uri);
+var React = require('react');
+var RoomsCollection = require('../data/collections/rooms.js');
+var RoomModel = require('../data/models/room.js');
+var roomsCollection = new RoomsCollection();
+var source = 'http://' + document.domain + ':3000/api/rooms';
 
 var RoomsView = React.createClass({
     //Event listener for changes to roomsCollection
@@ -10,7 +11,28 @@ var RoomsView = React.createClass({
             this.forceUpdate();
         }.bind(this));
     },
+
+    getAllRooms: function(){
+      $.get(source, function(res) {
+          res.forEach(function(room) {
+            //check if there 'currentMedia' is null and if it's not, create a url property for the video thumbnail
+            if (room.currentMedia === null) {
+              //TODO: ADD A DEFAULT IMAGE FOR ROOMS THAT ARE NOT PLAYING MUSIC
+              roomsCollection.add(new RoomModel(room));
+            } else {
+              room.videoURL = 'https://i.ytimg.com/vi/' + room.currentMedia + '/hqdefault.jpg';
+              roomsCollection.add(new RoomModel(room));
+            }
+          });
+        })
+      .fail(function() {
+        console.log('error with GET request to ' + source);
+      });
+    },
+
     render: function() {
+        this.getAllRooms();
+
         return (
             <div>
             <nav className="navbar navbar-default navbar-fixed-top topnav" role="navigation">
@@ -22,15 +44,15 @@ var RoomsView = React.createClass({
                             <span className="icon-bar"></span>
                             <span className="icon-bar"></span>
                         </button>
-                        <a className="navbar-brand topnav" href="landingPage.html"><span className="j-color-black">pi</span><span className="j-color-blue">Tunes</span></a>
+                        <a className="navbar-brand topnav" href="#/"><span className="j-color-black">pi</span><span className="j-color-blue">Tunes</span></a>
                     </div>
                     <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                         <ul className="nav navbar-nav navbar-right">
                             <li>
-                                <a href="landingPage.html">Home</a>
+                                <a href="#/">Home</a>
                             </li>
                             <li>
-                                <a href="#rooms">Rooms</a>
+                                <a href="#/rooms">Rooms</a>
                             </li>
                             <li>
                                 <a className="j-pointer" onClick={this.loginClick}>Sign In</a>
@@ -55,7 +77,7 @@ var RoomsView = React.createClass({
                         <div className="col-lg-12 j-center-text">
                             <ul className="list-inline">
                                 <li>
-                                    <a href="landingPage.html">Home</a>
+                                    <a href="#/">Home</a>
                                 </li>
                                 <li className="footer-menu-divider">&sdot;</li>
                                 <li>
@@ -100,9 +122,4 @@ var Rooms = React.createClass({
     }
 });
 
-React.render(
-    <div>
-        <RoomsView source={server_uri + '/api/rooms'} />
-    </div>,
-    document.getElementsByClassName('roomsContainer')[0]
-);
+module.exports = RoomsView;

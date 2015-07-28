@@ -1,7 +1,9 @@
-var RoomsView = React.createClass({
+var React = require('react');
+
+module.exports.RoomsView = React.createClass({
   componentDidMount: function() {
     roomsCollection.on('change', function() {
-      this.forceUpdate()
+      this.forceUpdate();
     }.bind(this));
   },
   render: function() {
@@ -17,7 +19,7 @@ var RoomsView = React.createClass({
   }
 });
 
-var Rooms = React.createClass({
+module.exports.Rooms = React.createClass({
   roomClick: function(id) {
     /*
       TODO: SEND USER TO THE ROOM WITH THE ID THAT WAS CLICKED
@@ -45,3 +47,4 @@ var Rooms = React.createClass({
     );
   }
 });
+
