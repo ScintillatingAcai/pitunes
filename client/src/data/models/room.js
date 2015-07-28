@@ -1,3 +1,5 @@
+var Backbone = require('backbone');
+
 //A Backbone model for a room
 var RoomModel = Backbone.Model.extend({
   defaults: {
@@ -8,3 +10,5 @@ var RoomModel = Backbone.Model.extend({
     usersCount: null
   }
 });
+
+module.exports = RoomModel;

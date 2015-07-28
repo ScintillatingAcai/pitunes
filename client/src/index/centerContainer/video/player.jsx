@@ -1,4 +1,4 @@
-// player.js
+var React = require('react');
 
 var VideoPlayer = React.createClass({
   render: function() {
@@ -15,3 +15,5 @@ var VideoPlayer = React.createClass({
     );
   }
 });
+
+module.exports = VideoPlayer;

@@ -1,3 +1,10 @@
+var React = require('react');
+
+var app = require('../../../roomComponents/loginController.jsx');
+
+var server_uri = 'http://' + document.domain + ':3000',
+  socket = io(server_uri);
+
 var ChatList = React.createClass({
   render: function() {
     var style = {
@@ -18,7 +25,7 @@ var Chat = React.createClass({
   getInitialState: function() {
     socket.on('user message', function(data){
       var nextItems = this.state.items.concat([data.displayName + ': ' + data.message]);
-      this.setState({items: nextItems});
+      this.setState({ items: nextItems });
     }.bind(this));
 
     // socket.on('user room change', function(data){
@@ -43,7 +50,7 @@ var Chat = React.createClass({
     return {items: [], text: ''};
   },
   onChange: function(e) {
-    this.setState({text: e.target.value});
+    this.setState({ text: e.target.value });
   },
   handleSubmit: function(e) {
     e.preventDefault();
@@ -54,8 +61,8 @@ var Chat = React.createClass({
     */
     var name = app.get('user').get('display_name');
     if (this.state.text === '') { return; }
-    socket.emit('user message', {displayName: name, message: this.state.text});
-    var nextItems = this.state.items.concat([name + ': ' + this.state.text]);
+    socket.emit('user message', { displayName: name, message: this.state.text });
+    var nextItems = this.state.items.concat([ name + ': ' + this.state.text ]);
     var nextText = '';
     this.setState({items: nextItems, text: nextText});
   },
@@ -107,3 +114,5 @@ var Chat = React.createClass({
     );
   }
 });
+
+module.exports = Chat;

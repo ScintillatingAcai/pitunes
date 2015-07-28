@@ -1,3 +1,5 @@
+var $ = require('jquery');
+
 var ga = document.createElement('script');
 ga.type = 'text/javascript';
 ga.async = false;
@@ -161,3 +163,5 @@ var loadVideo = function (videoId, startSeconds) {
     });
   }
 };
+
+module.exports = onYouTubePlayerAPIReady;

@@ -1,9 +1,13 @@
+var React = require('react');
+var ReactBootstrap = require('react-bootstrap');
+var Modal = ReactBootstrap.Modal;
+
 var user = null, 
   room = 'root', 
   server_uri = 'http://' + document.domain + ':3000',
   socket = io(server_uri);
 
-var TestSignOutModal = React.createClass({
+var SignOutModal = React.createClass({
   getInitialState: function() {
     return { errorMessage: '' };
   },
@@ -49,5 +53,6 @@ var TestSignOutModal = React.createClass({
   }
 });
 
+module.exports = SignOutModal;
 
 

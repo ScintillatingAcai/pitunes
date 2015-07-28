@@ -1,6 +1,10 @@
-var YOUTUBE_API_KEY = 'AIzaSyA_ZnEUUw8uGbEdGfBXH296QX-1nnyeJnQ';
+var React = require('react');
 
-var app = new AppModel();
+var AppModel = require('../data/models/app.js');
+var LeftContainer = require('../index/leftContainer/leftContainer.jsx');
+var CenterContainer = require('../index/centerContainer/centerContainer.jsx');
+var RightContainer = require('../index/rightContainer/rightContainer.jsx');
+var app = require('../roomComponents/loginController.jsx');
 
 var AppContainer = React.createClass({
   render: function () {
@@ -12,7 +16,6 @@ var AppContainer = React.createClass({
       msUserSelect: 'none',
       userSelect: 'none'
     };
-
     return (
       <div style={style}>
         <LeftContainer model={app.get('user')}/>
@@ -22,3 +25,5 @@ var AppContainer = React.createClass({
     );
   }
 });
+
+module.exports = AppContainer;

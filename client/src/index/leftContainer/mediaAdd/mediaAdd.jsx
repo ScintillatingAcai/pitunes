@@ -1,19 +1,26 @@
-var SearchBar = React.createClass({
+var React = require('react');
+var $ = require('jquery');
 
+var app = require('../../../roomComponents/loginController.jsx');
+var MediaModel = require('../../../data/models/media.js');
+
+var server_uri = 'http://' + document.domain + ':3000',
+  socket = io(server_uri);
+
+var YOUTUBE_API_KEY = 'AIzaSyA_ZnEUUw8uGbEdGfBXH296QX-1nnyeJnQ';
+
+var SearchBar = React.createClass({
   getInitialState: function () {
     return {text: ''};
   },
-
   handleSubmit: function (e) {
     e.preventDefault();
     this.searchYouTube(this.state.text);
     this.setState({text: ''});
   },
-
   escapeDQ: function (string) {
     return string.replace(/\"/g, "'");
   },
-
   // Convert YouTube ISO 8061 Format to Int equal to total number of seconds in video
   convertYTDuration: function (duration) {
     var a = duration.match(/\d+/g);
@@ -56,7 +63,6 @@ var SearchBar = React.createClass({
     }
     return minutes + ":" + seconds;
   },
-
   searchYouTube: function (query) {
     var encodedQuery = encodeURIComponent(query);
     var searchUrl = 'https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=20&order=viewCount&q=' + encodedQuery + '&key=' + YOUTUBE_API_KEY;
@@ -168,3 +174,5 @@ var MediaAdd = React.createClass({
     );
   }
 });
+
+module.exports = MediaAdd;

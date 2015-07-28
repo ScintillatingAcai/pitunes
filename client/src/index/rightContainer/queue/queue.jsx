@@ -1,17 +1,10 @@
-var room = {
-  queue: {
-    0: 'John',
-    1: 'Zach',
-    2: 'Kyle',
-    3: 'Josh'
-  }
-};
+var React = require('react');
+var $ = require('jquery');
 
+var app = require('../../../roomComponents/loginController.jsx');
 
-var arrQueue = [];
-for (var key in room.queue) {
-  arrQueue.push(room.queue[key]);
-}
+var server_uri = 'http://' + document.domain + ':3000',
+  socket = io(server_uri);
 
 var QueueList = React.createClass({
   componentDidMount: function () {
@@ -149,3 +142,5 @@ var Queue = React.createClass({
     );
   }
 });
+
+module.exports = Queue;

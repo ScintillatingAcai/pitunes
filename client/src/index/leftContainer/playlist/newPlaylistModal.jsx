@@ -1,5 +1,8 @@
-// New Playlist Modal
+var React = require('react');
+var $ = require('jquery');
+var ReactBootstrap = require('react-bootstrap');
 
+// New Playlist Modal
 var Modal = ReactBootstrap.Modal;
 
 var NewPlaylistModal = React.createClass({
@@ -23,9 +26,10 @@ var NewPlaylistModal = React.createClass({
             </form>
             </div>
           </Modal.Body>
-
         </Modal>
       </div>
     );
   }
 });
+
+module.exports = NewPlaylistModal;

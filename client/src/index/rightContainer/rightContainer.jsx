@@ -1,4 +1,7 @@
-// rightContainer.js
+var React = require('react');
+
+var Queue = require('./queue/queue.jsx');
+var OnlineUsers = require('./users/users.jsx');
 
 var RightContainer = React.createClass({
   render: function() {
@@ -14,9 +17,11 @@ var RightContainer = React.createClass({
     };
     return (
       <div className="rightContainer" style={style}>
-        <QueueContainer />
-        <UserContainer />
+        <Queue />
+        <OnlineUsers />
       </div>
     );
   }
 });
+
+module.exports = RightContainer;

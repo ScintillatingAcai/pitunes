@@ -1,5 +1,6 @@
-// Media Model
+var Backbone = require('backbone');
 
+// Media Model
 var MediaModel = Backbone.Model.extend({
   defaults: {
     duration: null,
@@ -7,7 +8,6 @@ var MediaModel = Backbone.Model.extend({
     title: null,
     youtube_id: null
   },
-
   toJSON: function() {
     var JSONObject = (new Backbone.Model()).toJSON.call(this);
 
@@ -28,3 +28,4 @@ var MediaModel = Backbone.Model.extend({
   },
 });
 
+module.exports = MediaModel;

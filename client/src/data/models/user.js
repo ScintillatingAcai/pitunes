@@ -1,3 +1,10 @@
+var Backbone = require('backbone');
+var $ = require('jquery');
+
+var PlaylistsCollection = require('../collections/playlists.js');
+var PlaylistModel = require('./playlist.js');
+var MediasCollection = require('../collections/medias.js');
+
 //A Backbone model for the user who is logged in
 var UserModel = Backbone.Model.extend({
   defaults: {
@@ -48,3 +55,5 @@ var UserModel = Backbone.Model.extend({
   },
 
 });
+
+module.exports = UserModel;

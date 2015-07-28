@@ -1,4 +1,6 @@
-var TestBottomNavBar = React.createClass({
+var React = require('react');
+
+var BottomNavBar = React.createClass({
   render: function() {
     return (
       <footer>
@@ -22,3 +24,5 @@ var TestBottomNavBar = React.createClass({
     );
   }
 });
+
+module.exports = BottomNavBar;

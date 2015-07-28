@@ -1,5 +1,10 @@
-// Current Room Model
+var Backbone = require('backbone');
 
+var UsersCollection = require('../collections/users.js');
+var MediaModel = require('./media.js');
+var UserModel = require('./user.js')
+
+// Current Room Model
 var CurrentRoomModel = Backbone.Model.extend({
   defaults: {
     currentMedia: null,
@@ -9,13 +14,11 @@ var CurrentRoomModel = Backbone.Model.extend({
     users: new UsersCollection(),
     djQueue: new UsersCollection()
   },
-
   initialize: function () {
     // this.on('change:id', function () {
     //   this.retrieveCurrentRoomInfo();
     // }.bind(this));
   },
-
   retrieveCurrentRoomInfo: function () {
     var source = 'http://' + document.domain + ':3000/api/rooms/' + this.get('id');
     var context = this;
@@ -43,7 +46,6 @@ var CurrentRoomModel = Backbone.Model.extend({
       console.log('GET request to ' + source + ' failed.');
     });
   },
-
   updateForRoomStatus: function(json) {
     for (var key in json) {
       if (key === 'updated_at' || key === 'created_at' || key.charAt(0) === '_') {
@@ -67,3 +69,5 @@ var CurrentRoomModel = Backbone.Model.extend({
 
   }
 });
+
+module.exports = CurrentRoomModel;
