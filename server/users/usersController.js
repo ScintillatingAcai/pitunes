@@ -55,8 +55,6 @@ module.exports = {
       utils.addUser(user);
       // create the new cookie session
       utility.createSession(req, res, user);
-
-      res.json(user.toJSON({omitPivot: true}));
     })
     .catch(function(err) {
       console.error(err);
@@ -70,8 +68,8 @@ module.exports = {
     req.session.destroy(function(){
       console.log('session destroyed');
         // res.redirect('/login');
+        res.status(200).end();
       });
-    res.status(200).end();
   },
 
   getAllUserPlaylists: function( req, res, next ) {
@@ -87,7 +85,7 @@ module.exports = {
   addUserPlaylist: function( req, res) {
 
   },
-  
+
   setCurrentPlaylist: function(req, res, next) {
     utils.updateCurrentPlaylist(req.user_id, req.playlist_id)
     .then( function (user) {

@@ -4,23 +4,30 @@ exports.isLoggedIn = function(req, res) {
 
 exports.checkUserSession = function(req, res, next) {
   if (req.user_id && (req.user_id !== req.session.user_id)) {
-    console.error('user not logged in');
+    console.error('user not logged in 1');
+    console.error('req user_id: ', req.user_id);
+    console.error('session user_id: ', req.session.user_id);
+    console.error('session: ', req.session.user_id);
+
+    // res.status(401).send({error: "u"});
   }
   else if (!exports.isLoggedIn(req)) {
     // res.redirect('#/');
-    console.error('user not logged in');
-  } 
+    console.error('user not logged in 2');
+  }
   else {
     next();
   }
 };
 
 exports.createSession = function(req, res, newUser) {
-  req.session.regenerate(function() { //XXX check if this is async, currently programmed as sync
-
+  req.session.regenerate(function(err) { //XXX check if this is async, currently programmed as sync
+    if (err) return console.error(err);
     // res.redirect('/');
-  });
     req.session.user_id = newUser.id;
+    res.json(newUser.toJSON({omitPivot: true}));
+
+  });
 };
 
 exports.errorLogger = function (error, req, res, next) {
