@@ -201,39 +201,57 @@ var Songs = React.createClass({
 
 var PlaylistTitle = React.createClass({
   getInitialState: function() {
-    return {title: this.props.title}
+    return {title: this.props.title, playlistData: []}
   },
   componentDidMount: function() {
     this.props.model.on('change:current_playlist', function () {
       console.log('playlistTitle heard change in user\'s current_playlist');
       if (app.get('user').get('current_playlist')) {
-        this.handleNewCurrentPlaylist();
-        $('.playlistNavigateButtonLeft').removeClass('hidden');
-        $('.playlistNavigateButtonRight').removeClass('hidden');
+        this.getUsersPlaylists();
+        $('.playlistSelectDropdown').removeClass('hidden');
         $('.playlistNavigateMenuDropdown').removeClass('hidden');
-        $('.playlistTitleContainer').removeClass('text-center');
-        $('.playlistTitleContainer').addClass('text-left');
       }
     }.bind(this));
     this.props.model.on('currentPlaylistNewName', function () {
       console.log('playlistTitle heard currentPlaylistNewName');
       if (app.get('user').get('current_playlist')) {
-        this.handleNewCurrentPlaylist();
-        $('.playlistNavigateButtonLeft').removeClass('hidden');
-        $('.playlistNavigateButtonRight').removeClass('hidden');
+        this.getUsersPlaylists();
+        $('.playlistSelectDropdown').removeClass('hidden');
         $('.playlistNavigateMenuDropdown').removeClass('hidden');
-        $('.playlistTitleContainer').removeClass('text-center');
-        $('.playlistTitleContainer').addClass('text-left');
       }
     }.bind(this));
 
   },
+  getUsersPlaylists: function () {
+    var context = this;
+    if (app.get('user').get('id') !== 0) {
+      $.ajax({url: server_uri + '/api/users/' + app.get('user').get('id') + '/playlists/',
+        type: 'GET',
+        success: function (res) {
+          console.log('got playlist');
+          console.log(res);
+          var playlistNames = res.map(function(e) {
+            return e.name;
+          });
+          console.log(playlistNames);
+          context.setState({playlistData: playlistNames})
+          context.handleNewCurrentPlaylist();
+        },
+        error: function (res) {
+          console.log("error: " + res.statusText);
+        }
+      });
+    } else {
+      console.log('not logged in');
+    }
+  },
+
   handleNewCurrentPlaylist: function() {
     // console.log(app.get('user').get('current_playlist').get('attributes'));
     if (app.get('user').get('current_playlist').get('name')) {
-      this.setState({ title: app.get('user').get('current_playlist').get('name') });
+      this.setState({ title: app.get('user').get('current_playlist').get('name')});
     } else {
-      this.setState({ title: 'No Playlist Title' });
+      this.setState({ title: 'No Playlist Title'});
     }
   },
   render: function(){
@@ -247,17 +265,26 @@ var PlaylistTitle = React.createClass({
     };
     var buttonStyle = {
       margin: '0 5px 0 5px'
-    }
+    };
+    var playlistItems = this.state.playlistData.map((function (item, i) {
+      return (
+        <li data-id={i} key={i}><a>
+          {item}
+        </a></li>
+      );
+    }).bind(this));
     return (
       <div>
       <h4 className='playlistTitleContainer text-center' style={style}>
-        <button className='btn btn-xs playlistNavigateButtonLeft hidden' style={buttonStyle}>
-          <span className="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-        </button>
+        <div style={dropdownStyle} className="playlistSelectDropdown btn-group pull-left hidden">
+          <button type="button" className="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <span className="caret"></span>
+          </button>
+          <ul className="dropdown-menu dropdown-menu-left">
+            {playlistItems}
+          </ul>
+        </div>
         {this.state.title}
-        <button className='btn btn-xs playlistNavigateButtonRight hidden' style={buttonStyle}>
-          <span className="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-        </button>
         <div style={dropdownStyle} className="playlistNavigateMenuDropdown btn-group pull-right hidden">
           <button type="button" className="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <span className="glyphicon glyphicon-list" aria-hidden="true"></span>
@@ -360,7 +387,7 @@ var Playlist = React.createClass({
       <div id="playlistContainer" style={style}>
         <NewPlaylistModal close={this.close} createNewPlaylist={this.createNewPlaylist} showNewPlaylist={this.state.showNewPlaylist}/>
         <RenamePlaylistModal close={this.close} submitUpdatePlaylist={this.submitUpdatePlaylist} showRenamePlaylist={this.state.showRenamePlaylist}/>
-        <PlaylistTitle renamePlaylistClick={this.renamePlaylistClick} newPlaylistClick={this.newPlaylistClick} model={app.get('user')} title={'Sign in to create a Playlist!'}/>
+        <PlaylistTitle renamePlaylistClick={this.renamePlaylistClick} newPlaylistClick={this.newPlaylistClick} model={app.get('user')} data={[]} title={'Sign in to create a Playlist!'}/>
         <Songs />
       </div>
     );
