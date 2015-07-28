@@ -252,15 +252,31 @@ var PlaylistTitle = React.createClass({
   },
 
   handleNewCurrentPlaylist: function () {
-    // console.log(app.get('user').get('current_playlist').get('attributes'));
     if (app.get('user').get('current_playlist').get('name')) {
       this.setState({ title: app.get('user').get('current_playlist').get('name') });
     } else {
       this.setState({ title: 'No Playlist Title' });
     }
   },
-  swapPlaylist: function () {
-    console.log('test')
+  swapPlaylist: function (e) {
+    console.log('user clicked playlist #', e.target.getAttribute('data-playlistid'));
+    var newPlaylistId = e.target.getAttribute('data-playlistid')
+    var context = this;
+    if (app.get('user').get('id') !== 0) {
+      $.ajax({url: 'api/users/' + app.get('user').get('id') + '/playlists/' + newPlaylistId + '/current',
+        type: 'PUT',
+        success: function (res) {
+          console.log('user current_playlist_id changed to ', newPlaylistId);
+          app.get('user').set('current_playlist_id', newPlaylistId);
+          app.get('user').set('current_playlist', app.get('user').get('playlists').get(newPlaylistId));
+        },
+        error: function (res) {
+          console.log("error: " + res.statusText);
+        }
+      });
+    } else {
+      console.log('not logged in');
+    }
   },
   render: function (){
     var style = {
@@ -276,7 +292,7 @@ var PlaylistTitle = React.createClass({
     };
     var playlistItems = this.state.playlistData.map((function (item, i) {
       return (
-        <li data-id={i} key={i}><a onClick={this.swapPlaylist}>
+        <li data-id={i} key={i}><a data-playlistid={item.id} onClick={this.swapPlaylist}>
           {item.text}
         </a></li>
       );
