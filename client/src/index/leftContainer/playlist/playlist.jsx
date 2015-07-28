@@ -236,7 +236,7 @@ var PlaylistTitle = React.createClass({
           console.log('got playlist');
           console.log(res);
           var playlistNames = res.map(function(e) {
-            return e.name;
+            return {id: e.id, text: e.name};
           });
           console.log(playlistNames);
           context.setState({ playlistData: playlistNames })
@@ -259,6 +259,9 @@ var PlaylistTitle = React.createClass({
       this.setState({ title: 'No Playlist Title' });
     }
   },
+  swapPlaylist: function () {
+    console.log('test')
+  },
   render: function (){
     var style = {
       color: 'white',
@@ -273,8 +276,8 @@ var PlaylistTitle = React.createClass({
     };
     var playlistItems = this.state.playlistData.map((function (item, i) {
       return (
-        <li data-id={i} key={i}><a>
-          {item}
+        <li data-id={i} key={i}><a onClick={this.swapPlaylist}>
+          {item.text}
         </a></li>
       );
     }).bind(this));
