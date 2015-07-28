@@ -11,9 +11,7 @@ module.exports = {
 
   //get a playlist from DB by ID
   retrievePlaylist: Promise.promisify(function(playlist_id, callback) {
-    new Playlist({
-        id: playlist_id,
-      })
+    new Playlist({id: playlist_id })
       .retrievePlaylist()
       // .fetch({
       //   //add related data we would like to return in the withRelated array
@@ -49,7 +47,7 @@ module.exports = {
     new Playlist({id: playlist_id}).fetch()
       .then(function(found) {
         if (found) {
-          found.set('name', playlistInfo.name)
+          found.set('name', playlistInfo.name);
           if (playlistInfo.current_media_index) {
             found.set('current_media_index', playlistInfo.current_media_index);
             console.log('current media index set to: ', found.get('current_media_index'));
@@ -136,6 +134,18 @@ module.exports = {
     .catch(function(error) {
       console.log('error:', error);
       callback(error);
+    });
+  }),
+
+  deletePlaylist: Promise.promisify(function (playlist_id, callback) {
+    new Media_Playlists().query({where: {playlist_id: playlist_id}}).fetch()
+    .then(function (playlist) {
+      return playlist.invokeThen('destroy');
+    })
+    .then(function(){
+      return new Playlist({id: playlist_id}).destroy();
+    }).then( function () {
+      callback();
     });
   })
 };

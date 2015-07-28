@@ -98,5 +98,12 @@ module.exports = {
     .catch(function(error) {
       return next(new Error('controller error: ', error));
     });
+  },
+
+  setLastPlaylistCurrent: function ( req, res, next) {
+    utils.updateLastPlaylistCurrent(req.user_id)
+    .then( function( playlist ) {
+      res.json(playlist);
+    });
   }
 };
