@@ -347,7 +347,7 @@ var Playlist = React.createClass({
   },
 
   submitUpdatePlaylist: function () {
-    playlist = app.get('user').get('current_playlist')
+    var playlist = app.get('user').get('current_playlist')
     var form = document.getElementById('renamePlaylist-form');
     var jsonPlaylist = playlist.toJSON();
     delete jsonPlaylist.current_media_index;

@@ -6,7 +6,7 @@ var ReactBootstrap = require('react-bootstrap');
 var Modal = ReactBootstrap.Modal;
 
 var NewPlaylistModal = React.createClass({
-  render: function() {
+  render: function () {
     return (
       <div>
         <Modal show={this.props.showNewPlaylist} onHide={this.props.close}>

@@ -15,8 +15,13 @@ var SearchBar = React.createClass({
   },
   handleSubmit: function (e) {
     e.preventDefault();
-    this.searchYouTube(this.state.text);
-    this.setState({text: ''});
+    this.setState({text: e.target.value});
+    if (e.target.value !== '') {
+      this.searchYouTube(e.target.value);
+    }
+    if (e.target.value === '') {
+      $(".searchResultItem").remove();
+    }
   },
   escapeDQ: function (string) {
     return string.replace(/\"/g, "'");
@@ -127,10 +132,6 @@ var SearchBar = React.createClass({
       }
     });
   },
-  onChange: function (e) {
-    e.preventDefault();
-    this.setState({text: e.target.value});
-  },
   render: function () {
     var style = {
       borderColor: '#EEEEEE',
@@ -148,8 +149,8 @@ var SearchBar = React.createClass({
     return (
       <div>
         <ul id="searchResults" style={searchResultsStyle}></ul>
-        <form style={style} onSubmit={this.handleSubmit}>
-          <input style={searchBarInputStyle} onChange={this.onChange} value={this.state.text} className="form-control" placeholder="Search YouTube"/>
+        <form style={style}>
+          <input style={searchBarInputStyle} onChange={this.handleSubmit} value={this.state.text} className="form-control" placeholder="Search YouTube"/>
         </form>
       </div>
     );
