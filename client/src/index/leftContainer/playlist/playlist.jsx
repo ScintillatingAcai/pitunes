@@ -4,6 +4,7 @@ var $ = require('jquery');
 var PlaylistModel = require('../../../data/models/playlist.js');
 var MediasCollection = require('../../../data/collections/medias.js');
 var NewPlaylistModal = require('./newPlaylistModal.jsx');
+var RenamePlaylistModal = require('./renamePlaylistModal.jsx');
 var app = require('../../../roomComponents/loginController.jsx');
 
 var server_uri = 'http://' + document.domain + ':3000',
@@ -314,7 +315,7 @@ var Playlist = React.createClass({
   },
 
   submitUpdatePlaylist: function () {
-    playlist = app.get('user').get('current_playlist')
+    var playlist = app.get('user').get('current_playlist')
     var form = document.getElementById('renamePlaylist-form');
     var jsonPlaylist = playlist.toJSON();
     delete jsonPlaylist.current_media_index;
