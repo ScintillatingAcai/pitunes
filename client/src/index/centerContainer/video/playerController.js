@@ -163,3 +163,5 @@ var loadVideo = function (videoId, startSeconds) {
     });
   }
 };
+
+module.exports = onYouTubePlayerAPIReady;

@@ -3,12 +3,14 @@ var $ = require('jquery');
 
 var PlaylistModel = require('../../../data/models/playlist.js');
 var MediasCollection = require('../../../data/collections/medias.js');
-var AppModel = require('../../../data/models/app.js');
+var NewPlaylistModal = require('./newPlaylistModal.jsx');
+var app = require('../../../roomComponents/loginController.jsx');
+
+var server_uri = 'http://' + document.domain + ':3000',
+  socket = io(server_uri);
 
 var placeholder = document.createElement("div");
 placeholder.className = "placeholder";
-
-var app = new AppModel();
 
 var List = React.createClass({
   getInitialState: function () {
@@ -92,9 +94,6 @@ var List = React.createClass({
       parent.insertBefore(placeholder, e.target);
     }
   },
-<<<<<<< HEAD:client/src/index/leftContainer/playlist/playlistSaved.js
-
-=======
   createNewPlaylist: function () {
     // TODO fix placeholder, make modal (possibly?) for naming playlist
     console.log('name: ', this.state.text);
@@ -124,7 +123,6 @@ var List = React.createClass({
       console.log('not logged in');
     }
   },
->>>>>>> (client) Fixed gulpfile browserify. All files now use require. Deleted unecessary file:client/src/index/leftContainer/playlist/playlist.jsx
   submitUpdatePlaylist: function (playlist) {
     var jsonPlaylist = playlist.toJSON();
     delete jsonPlaylist.current_media_index;
@@ -259,8 +257,7 @@ var PlaylistTitle = React.createClass({
   }
 });
 
-<<<<<<< HEAD:client/src/index/leftContainer/playlist/playlistSaved.js
-var PlaylistSaved = React.createClass({
+var Playlist = React.createClass({
   getInitialState: function () {
     return { showNewPlaylist: false};
   },
@@ -277,7 +274,6 @@ var PlaylistSaved = React.createClass({
     var newPlaylist = new PlaylistModel({name: form[0].value, medias: new MediasCollection()});
     this.submitNewPlaylist(newPlaylist);
   },
-
   submitNewPlaylist: function (playlist) {
     var jsonPlaylist = playlist.toJSON();
     if (app.get('user').get('id') !== 0) {
@@ -302,9 +298,6 @@ var PlaylistSaved = React.createClass({
       console.log('not logged in');
     }
   },
-=======
-var Playlist = React.createClass({
->>>>>>> (client) Fixed gulpfile browserify. All files now use require. Deleted unecessary file:client/src/index/leftContainer/playlist/playlist.jsx
   render: function() {
     var style = {
       background: '#222222',

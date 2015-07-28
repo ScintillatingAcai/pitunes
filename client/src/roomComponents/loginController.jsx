@@ -2,30 +2,18 @@ var $ = require('jquery');
 var React = require('react'); 
 var Backbone = require('backbone');
 
+var AppModel = require('../data/models/app.js');
+var app = new AppModel();
+module.exports = app;
 var TopNavBar = require('./topNavBar.jsx');
-// var AppContainer = require('../app/app.jsx');
 var BottomNavBar = require('./bottomNavBar.jsx');
 var SignInModal = require('./signInModal.jsx');
 var SignUpModal = require('./signUpModal.jsx');
 var SignOutModal = require('./signOutModal.jsx');
 var AppContainer = require('../app/app.jsx');
-var AppModel = require('../data/models/app.js');
-
-var app = new AppModel();
 
 var server_uri = 'http://' + document.domain + ':3000',
   socket = io(server_uri);
-
-// return (
-//   <div>
-//     <TestTopNavBar signInClick={this.signInClick} signOutClick={this.signOutClick} />
-//     <TestSignOutModal close={this.close} signOutClick={this.signOutClick} showSignOut={this.state.showSignOut} />
-//     <TestSignUpModal close={this.close} signInClick={this.signInClick} signUpUser={this.signUpUser} showSignUp={this.state.showSignUp} errorMessage={this.state.errorMessage} />
-//     <TestSignInModal close={this.close} signUpClick={this.signUpClick} signInUser={this.signInUser} showSignIn={this.state.showSignIn} errorMessage={this.state.errorMessage} />
-//     <TestBottomNavBar />
-//     <AppContainer />
-//   </div>
-// );
 
 var LoginController = React.createClass({
   getInitialState: function() {
@@ -51,7 +39,8 @@ var LoginController = React.createClass({
     var form = document.getElementById('signIn-form');
         var data = { email: form[0].value, password: form[1].value };
         var self = this;
-        $.ajax({url: server_uri + '/api/users/login',
+        $.ajax({
+          url: server_uri + '/api/users/login',
           type: 'POST',
           dataType: 'json',
           data: data,

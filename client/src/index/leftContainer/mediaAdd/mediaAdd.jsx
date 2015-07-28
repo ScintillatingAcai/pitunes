@@ -1,6 +1,12 @@
 var React = require('react');
 var $ = require('jquery');
 
+var app = require('../../../roomComponents/loginController.jsx');
+var MediaModel = require('../../../data/models/media.js');
+
+var server_uri = 'http://' + document.domain + ':3000',
+  socket = io(server_uri);
+
 var YOUTUBE_API_KEY = 'AIzaSyA_ZnEUUw8uGbEdGfBXH296QX-1nnyeJnQ';
 
 var SearchBar = React.createClass({

@@ -16,15 +16,8 @@ var TopNavBar = React.createClass({
             </button>
             <a className="navbar-brand topnav" href="landingPage.html"><span className="j-color-black">pi</span><span className="j-color-blue">Tunes</span></a>
           </div>
-<<<<<<< HEAD
-          <div style={style}>
-            <DebuggerButtonSimVideoDesync />
-            <DebuggerButtonJoinRoom />
-            <DebuggerButtonLeaveRoom />
-=======
           <div>
             <DebuggerButtons />
->>>>>>> (client) Fixed gulpfile browserify. All files now use require. Deleted unecessary file
           </div>
           <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul className="nav navbar-nav navbar-right">

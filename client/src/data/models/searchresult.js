@@ -1,7 +1,5 @@
 var Backbone = require('backbone');
 
-// Search Result Model
-
 var SearchResultModel = Backbone.Model.extend({
   defaults: {
     duration: null,

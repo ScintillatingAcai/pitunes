@@ -3,42 +3,7 @@ var React = require('react');
 var server_uri = 'http://' + document.domain + ':3000',
   socket = io(server_uri);
 
-//TODO: fix this to pull the real app
-var AppModel = require('../../data/models/app.js');
-var app = new AppModel();
-
-var DebuggerButtonGetCurPlaylist = React.createClass({
-  handleClick: function () {
-    getCurrentPlaylist();
-  },
-  render: function () {
-    return (
-      <button onClick={this.handleClick}>Get User Current Playlist</button>
-    );
-  }
-});
-
-var DebuggerButtonJoinQueue = React.createClass({
-  handleClick: function () {
-    socket.emit('user queue join', { user: app.get('user').attributes, room: 1 });
-  },
-  render: function () {
-    return (
-      <button onClick={this.handleClick}>Join Queue</button>
-    );
-  }
-});
-
-var DebuggerButtonLeaveQueue = React.createClass({
-  handleClick: function () {
-    socket.emit('user queue leave', {user: app.get('user').attributes, room: 1});
-  },
-  render: function () {
-    return (
-      <button onClick={this.handleClick}>Leave Queue</button>
-    );
-  }
-});
+var app = require('../../roomComponents/loginController.jsx');
 
 var DebuggerButtonSimVideoDesync = React.createClass({
   handleClick: function () { 
@@ -84,10 +49,7 @@ var DebuggerButtons = React.createClass({
     };
     return (
         <div style={style}>
-          <DebuggerButtonGetCurPlaylist />
           <DebuggerButtonSimVideoDesync />
-          <DebuggerButtonJoinQueue />
-          <DebuggerButtonLeaveQueue />
           <DebuggerButtonJoinRoom />
           <DebuggerButtonLeaveRoom />
         </div>

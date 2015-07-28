@@ -1,7 +1,6 @@
 var React = require('react');
 
-var AppModel = require('../../../data/models/app.js');
-var app = new AppModel();
+var app = require('../../../roomComponents/loginController.jsx');
 
 var server_uri = 'http://' + document.domain + ':3000',
   socket = io(server_uri);
