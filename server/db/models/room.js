@@ -86,7 +86,9 @@ var Room = db.Model.extend({
   },
 
   emitUserStatusMessage: function(socket) {
-    socket.emit("user status", this.currentDJ.toJSON());
+    //socket.emit("user status", this.currentDJ.toJSON());
+    //only sending the id since the client currently just checks it and pulls their playlists
+    socket.emit("user status", {id: this.currentDJ.get('id')});
   },
 
   emitMediaStatusMessage: function(socket, media, mediaDuration, statusMessage) {
