@@ -22,6 +22,7 @@ var Room = db.Model.extend({
     this.currentDJ = null; //bookshelf Media model
     this.mediaTimer = null;  //Timer object
     this.sockets = null;
+    this.lastRoomStatus = null;
   },
 
   setSocket: function(socket) {
@@ -53,10 +54,10 @@ var Room = db.Model.extend({
       .then(function(data) {
           var duration = this.currentMedia.get('duration');
           this.emitMediaStatusMessage(this.sockets.in(this.get('id')), this.currentMedia, 0, 'start');
-          this.mediaTimer = this.makeMediaTimer(3000, duration);
+          this.mediaTimer = this.makeMediaTimer(5000, duration);
           this.mediaTimer.start();
           this.emitRoomStatusMessage(this.sockets.in(this.get('id')));
-
+          this.emitUserStatusMessage(this.sockets.in(this.get('id')));
       }).catch(function(err) {
         console.error(err);
         console.log('skipping to next queuedDJ');
@@ -70,7 +71,24 @@ var Room = db.Model.extend({
   },
 
   emitRoomStatusMessage: function(socket) {
-    socket.emit("room status", this.toJSON());
+    var roomJSON = this.toJSON();
+    var result = {};
+    for (var key in roomJSON) {
+      var attr = roomJSON[key];
+      var oldAttr = this.lastRoomStatus ? this.lastRoomStatus[key] : {};
+      if (JSON.stringify(attr) !== JSON.stringify(oldAttr)) {
+        result[key] = attr;
+      }
+    }
+    this.lastRoomStatus = roomJSON;
+    console.log('emitting room status with change count: ', Object.keys(result).length);
+    socket.emit("room status", result);
+  },
+
+  emitUserStatusMessage: function(socket) {
+    //socket.emit("user status", this.currentDJ.toJSON());
+    //only sending the id since the client currently just checks it and pulls their playlists
+    socket.emit("user status", {id: this.currentDJ.get('id')});
   },
 
   emitMediaStatusMessage: function(socket, media, mediaDuration, statusMessage) {

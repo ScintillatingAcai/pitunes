@@ -41,6 +41,15 @@ var Chat = React.createClass({
       app.get('current_room').trigger('room status');
     }.bind(this));
 
+    socket.on('user status', function(data){
+      console.log('user status: ', data);
+      if (app.get('user').get('id') === data.id) {
+        app.get('user').updateForUserStatus(data);
+      }
+      // console.log('updated room info: ', app.get('current_room'));
+      app.get('user').trigger('user status');
+    }.bind(this));
+
     // socket.on('user queue change', function(data){
     //   console.log('user queue change: ', data);
     //   app.get('current_room').get('djQueue').set(JSON.parse(data));

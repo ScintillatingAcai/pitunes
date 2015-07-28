@@ -7,8 +7,8 @@ ga.src = 'http://www.youtube.com/player_api';
 var s = document.getElementsByTagName('script')[0];
 s.parentNode.insertBefore(ga, s);
 
-var user = null, 
-  room = 'root', 
+var user = null,
+  room = 'root',
   server_uri = 'http://' + document.domain + ':3000',
   socket = io(server_uri);
 
@@ -132,7 +132,7 @@ var loadVideo = function (videoId, startSeconds) {
       player.loadVideoById(videoId, startSeconds);
     } else {
       // If same video, check if desync is greater than 10 seconds
-      console.log("media timer dif: ", mediaStatus.startSeconds - player.getCurrentTime());
+      // console.log("media timer dif: ", mediaStatus.startSeconds - player.getCurrentTime());
       if (mediaStatus.startSeconds - player.getCurrentTime() > 10) {
         setVideoTime(startSeconds);
       }

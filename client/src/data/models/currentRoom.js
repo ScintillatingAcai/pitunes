@@ -18,6 +18,15 @@ var CurrentRoomModel = Backbone.Model.extend({
     // this.on('change:id', function () {
     //   this.retrieveCurrentRoomInfo();
     // }.bind(this));
+    // this.listenTo(this.users,'reset', function() {
+    //   console.log('room heard users reset');
+    //   this.trigger('reset:users');
+    // }.bind(this));
+
+    // this.listenTo(this.djQueue,'reset', function() {
+    //   console.log('room heard djQueue reset');
+    //   this.trigger('reset:djQueue');
+    // }.bind(this));
   },
   retrieveCurrentRoomInfo: function () {
     var source = 'http://' + document.domain + ':3000/api/rooms/' + this.get('id');
