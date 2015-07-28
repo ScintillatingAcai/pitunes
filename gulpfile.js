@@ -22,7 +22,7 @@ var paths = {
   clientjs: ['./client/src/**/*.js',
       './client/src/**/**/*.js',
       './client/src/**/**/**/*.js'],
-  clientapp: ['./client/src/roomComponents/loginController.jsx'],
+  clientapp: ['./client/src/app/router.jsx'],
   serverjs: ['./server/*.js',
       './server/**/*.js',
       './server/**/**/*.js'

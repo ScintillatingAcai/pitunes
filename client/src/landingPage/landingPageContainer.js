@@ -45,10 +45,10 @@ var LandingPageContainer = React.createClass({
                     <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                         <ul className="nav navbar-nav navbar-right">
                             <li>
-                                <a href="#home">Home</a>
+                                <a href="#/">Home</a>
                             </li>
                             <li>
-                                <a href="rooms.html">Rooms</a>
+                                <a href="#/rooms">Rooms</a>
                             </li>
                             <li>
                                 <a className="j-pointer" onClick={this.loginClick}>Sign In</a>
@@ -72,7 +72,7 @@ var LandingPageContainer = React.createClass({
                                         <a onClick={this.loginClick} className="btn btn-default btn-lg"><i className="fa fa-sign-in fa-fw"></i><span className="network-name">Sign In</span></a>
                                     </li>
                                     <li>
-                                        <a href="rooms.html" className="btn btn-default btn-lg"><i className="fa fa-music fa-fw"></i><span className="network-name">Join Room</span></a>
+                                        <a href="#/" className="btn btn-default btn-lg"><i className="fa fa-music fa-fw"></i><span className="network-name">Join Room</span></a>
                                     </li>
                                     <li>
                                         <a onClick={this.signupClick} className="btn btn-default btn-lg"><i className="fa fa-pencil fa-fw"></i><span className="network-name">Sign Up</span></a>
