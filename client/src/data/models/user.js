@@ -54,6 +54,10 @@ var UserModel = Backbone.Model.extend({
 
   },
 
+  updateForUserStatus: function(json) {
+    this.retrievePlaylists();
+  }
+
 });
 
 module.exports = UserModel;

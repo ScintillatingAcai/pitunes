@@ -5,17 +5,17 @@ var app = require('../../../roomComponents/loginController.jsx');
 var Users = React.createClass({
   componentDidMount: function () {
     var context = this;
-    this.props.model.on('change:users', function () {
-      console.log(this.props.model.get('users').models);
-      console.log('USERS LIST HEARD CHANGE');
-        context.handleRoomChange();
-    }.bind(this));
-
-    // this.props.model.on('room status', function () {
+    // this.props.model.on('reset:users', function () {
     //   console.log(this.props.model.get('users').models);
     //   console.log('USERS LIST HEARD CHANGE');
     //     context.handleRoomChange();
     // }.bind(this));
+
+    this.props.model.on('room status', function () {
+      console.log(this.props.model.get('users').models);
+      console.log('USERS LIST HEARD CHANGE');
+        context.handleRoomChange();
+    }.bind(this));
   },
   handleRoomChange: function () {
     this.forceUpdate();

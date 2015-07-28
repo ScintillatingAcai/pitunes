@@ -29,11 +29,16 @@ var List = React.createClass({
     return minutes + ":" + seconds;
   },
   handleNewCurrentPlaylist: function () {
-    console.log('List fired handleNewCurrentPlaylist');
     var context = this;
-    var newData = app.get('user').get('current_playlist').get('medias').map(function (e) {
-      // console.log(e)
-      return e.get('title') + " | " + context.durationToDisplay(e.get('duration'));
+    var newData = [];
+    var mediaLength = app.get('user').get('current_playlist').get('medias').length;
+    var current_media_index = app.get('user').get('current_playlist').get('current_media_index');
+    var next_media_index = ( current_media_index ) % mediaLength + 1;
+    console.log('medias length: ', mediaLength);
+    app.get('user').get('current_playlist').get('medias').each(function (e, index) {
+      var mediaIndex =  ( index + mediaLength - next_media_index + 1) % mediaLength ;
+      console.log('mediaIndex: ', mediaIndex);
+      newData[mediaIndex] = e.get('title') + " | " + context.durationToDisplay(e.get('duration'));
     });
     this.setState({ data: newData });
   },
@@ -237,7 +242,7 @@ var PlaylistTitle = React.createClass({
       borderBottom: '2px solid #FFF',
       minHeight: '30px'
     };
-    var dropdownStyle = {  
+    var dropdownStyle = {
       marginTop: '-8px'
     };
     var buttonStyle = {

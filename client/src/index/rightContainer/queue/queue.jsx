@@ -9,17 +9,17 @@ var server_uri = 'http://' + document.domain + ':3000',
 var QueueList = React.createClass({
   componentDidMount: function () {
     var context = this;
-    this.props.model.on('change:djQueue', function () {
-      console.log(this.props.model.get('djQueue').models);
-      console.log('QUEUE LIST HEARD CHANGE');
-        context.handleRoomChange();
-    }.bind(this));
-
-    // this.props.model.on('room status', function () {
+    // this.props.model.on('reset:djQueue', function () {
     //   console.log(this.props.model.get('djQueue').models);
     //   console.log('QUEUE LIST HEARD CHANGE');
     //     context.handleRoomChange();
     // }.bind(this));
+
+    this.props.model.on('room status', function () {
+      console.log(this.props.model.get('djQueue').models);
+      console.log('QUEUE LIST HEARD CHANGE');
+        context.handleRoomChange();
+    }.bind(this));
   },
   handleRoomChange: function () {
     this.forceUpdate();
