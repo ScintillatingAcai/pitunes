@@ -214,6 +214,8 @@ p.copyright {
     padding-top: 15%;
 }
 
+div.placeholder { background: #FFFFFF; }
+div.placeholder:before { content: "Drop here"; color: #C0C0C0; }
 
 
 

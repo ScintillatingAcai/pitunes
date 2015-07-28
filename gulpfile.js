@@ -1,7 +1,7 @@
 var gulp = require('gulp');
 var gutil = require('gulp-util');
 var concat = require('gulp-concat');
-var sass = require('gulp-sass');
+// var sass = require('gulp-sass');
 var minifyCss = require('gulp-minify-css');
 var rename = require('gulp-rename');
 var sh = require('shelljs');
@@ -30,7 +30,7 @@ var paths = {
   dist: './client/dist'
 };
 
-// var libFilesToMove = [];
+// var libFilesToMove = []; 
 
 
 // gulp.task('sass', function(done) {
@@ -100,7 +100,7 @@ gulp.task('lint', function() {
 });
 
 gulp.task('watch', function() {
-  gulp.watch(paths.clientjs,paths.serverjs);
+  gulp.watch(paths.clientjs, ['browserify-client']);
 });
 
 gulp.task('git-check', function(done) {
