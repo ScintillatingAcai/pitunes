@@ -8,7 +8,7 @@ var RenamePlaylistModal = require('./renamePlaylistModal.jsx');
 var app = require('../../../roomComponents/loginController.jsx');
 
 var server_uri = 'http://' + document.domain + ':3000',
-  socket = io(server_uri);
+    socket = io(server_uri);
 
 var placeholder = document.createElement("div");
 placeholder.className = "placeholder";
@@ -67,7 +67,7 @@ var List = React.createClass({
   },
   onNameChange: function (e) {
     e.preventDefault();
-    this.setState({text: e.target.value});
+    this.setState({ text: e.target.value });
   },
   dragStart: function (e) {
     this.dragged = e.currentTarget;
@@ -114,8 +114,6 @@ var List = React.createClass({
     }
   },
   createNewPlaylist: function () {
-    // TODO fix placeholder, make modal (possibly?) for naming playlist
-    console.log('name: ', this.state.text);
     var newPlaylist = new PlaylistModel({name: this.state.text, medias: new MediasCollection()});
     this.submitNewPlaylist(newPlaylist);
   },
@@ -144,12 +142,6 @@ var List = React.createClass({
   },
   submitUpdatePlaylist: function (playlist) {
     var jsonPlaylist = playlist.toJSON();
-    // // delete jsonPlaylist.current_media_index;
-    // if (!jsonPlaylist.current_media_index && jsonPlaylist.medias.length > 0) {
-    //   console.log('heard 0 media index with medias');
-    //   jsonPlaylist.current_media_index = 1;
-    // }
-    console.log('playlist: ', jsonPlaylist);
     var context = this;
     if (app.get('user').get('id') !== 0) {
       $.ajax({url: server_uri + '/api/users/' + app.get('user').get('id') + '/playlists/' + app.get('user').get('current_playlist_id'),
@@ -157,7 +149,7 @@ var List = React.createClass({
         dataType: 'json',
         data: jsonPlaylist,
         success: function (res) {
-          console.log('submitted updated playlist');
+          console.log('Submitted updated playlist');
         },
         error: function (res) {
           console.log("error: " + res.statusText);
@@ -213,10 +205,10 @@ var Songs = React.createClass({
 });
 
 var PlaylistTitle = React.createClass({
-  getInitialState: function() {
+  getInitialState: function () {
     return {title: this.props.title, playlistData: []}
   },
-  componentDidMount: function() {
+  componentDidMount: function () {
     this.props.model.on('change:current_playlist', function () {
       console.log('playlistTitle heard change in user\'s current_playlist');
       if (app.get('user').get('current_playlist')) {
@@ -244,10 +236,10 @@ var PlaylistTitle = React.createClass({
           console.log('got playlist');
           console.log(res);
           var playlistNames = res.map(function(e) {
-            return e.name;
+            return {id: e.id, text: e.name};
           });
           console.log(playlistNames);
-          context.setState({playlistData: playlistNames})
+          context.setState({ playlistData: playlistNames })
           context.handleNewCurrentPlaylist();
         },
         error: function (res) {
@@ -259,15 +251,34 @@ var PlaylistTitle = React.createClass({
     }
   },
 
-  handleNewCurrentPlaylist: function() {
-    // console.log(app.get('user').get('current_playlist').get('attributes'));
+  handleNewCurrentPlaylist: function () {
     if (app.get('user').get('current_playlist').get('name')) {
-      this.setState({ title: app.get('user').get('current_playlist').get('name')});
+      this.setState({ title: app.get('user').get('current_playlist').get('name') });
     } else {
-      this.setState({ title: 'No Playlist Title'});
+      this.setState({ title: 'No Playlist Title' });
     }
   },
-  render: function(){
+  swapPlaylist: function (e) {
+    console.log('user clicked playlist #', e.target.getAttribute('data-playlistid'));
+    var newPlaylistId = e.target.getAttribute('data-playlistid')
+    var context = this;
+    if (app.get('user').get('id') !== 0) {
+      $.ajax({url: 'api/users/' + app.get('user').get('id') + '/playlists/' + newPlaylistId + '/current',
+        type: 'PUT',
+        success: function (res) {
+          console.log('user current_playlist_id changed to ', newPlaylistId);
+          app.get('user').set('current_playlist_id', newPlaylistId);
+          app.get('user').set('current_playlist', app.get('user').get('playlists').get(newPlaylistId));
+        },
+        error: function (res) {
+          console.log("error: " + res.statusText);
+        }
+      });
+    } else {
+      console.log('not logged in');
+    }
+  },
+  render: function (){
     var style = {
       color: 'white',
       borderBottom: '2px solid #FFF',
@@ -281,8 +292,8 @@ var PlaylistTitle = React.createClass({
     };
     var playlistItems = this.state.playlistData.map((function (item, i) {
       return (
-        <li data-id={i} key={i}><a>
-          {item}
+        <li data-id={i} key={i}><a data-playlistid={item.id} onClick={this.swapPlaylist}>
+          {item.text}
         </a></li>
       );
     }).bind(this));
@@ -318,19 +329,17 @@ var Playlist = React.createClass({
   getInitialState: function () {
     return { showNewPlaylist: false, showRenamePlaylist: false};
   },
-  close: function() {
-    console.log('closed playlist modal');
-    this.setState({ showNewPlaylist: false, showRenamePlaylist: false});
+  close: function () {
+    this.setState({ showNewPlaylist: false, showRenamePlaylist: false });
   },
   newPlaylistClick: function () {
-    this.setState({ showNewPlaylist: true});
+    this.setState({ showNewPlaylist: true });
   },
   renamePlaylistClick: function () {
-    this.setState({ showRenamePlaylist: true});
+    this.setState({ showRenamePlaylist: true });
   },
   createNewPlaylist: function () {
     var form = document.getElementById('newPlaylist-form');
-    console.log('newPlaylist name: ', form[0].value);
     var newPlaylist = new PlaylistModel({name: form[0].value, medias: new MediasCollection()});
     this.submitNewPlaylist(newPlaylist);
   },
@@ -365,7 +374,6 @@ var Playlist = React.createClass({
     var jsonPlaylist = playlist.toJSON();
     delete jsonPlaylist.current_media_index;
     jsonPlaylist.name = form[0].value;
-    console.log('playlist: ', jsonPlaylist);
     var context = this;
     if (app.get('user').get('id') !== 0) {
       $.ajax({url: server_uri + '/api/users/' + app.get('user').get('id') + '/playlists/' + app.get('user').get('current_playlist_id'),
@@ -385,7 +393,7 @@ var Playlist = React.createClass({
       console.log('not logged in');
     }
   },
-  render: function() {
+  render: function () {
     var style = {
       background: '#222222',
       border: '1px solid #e7e7e7',
