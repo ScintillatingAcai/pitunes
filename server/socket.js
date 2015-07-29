@@ -61,6 +61,7 @@ module.exports = function(io) {
         // socket.in(room_id).emit("user room change",  JSON.stringify(room.users));
         // socket.emit("user room change",  JSON.stringify(room.users));
         room.startUserForCurrentMedia(socket);
+        allClients.push({socket: socket, user_id: user_id, room_id: room_id});
         return console.log('anon user entered room');
       }
 
@@ -121,8 +122,8 @@ module.exports = function(io) {
     });
 
     socket.on('disconnect', function() {
-
       var index = indexOfUserFromSocket(socket);
+      console.log('disconnected socket index: ', index);
       if (index > -1) {
         var userInfo = allClients[index];
         var user_id = userInfo.user_id;
