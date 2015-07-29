@@ -50,8 +50,6 @@ var DebuggerButtons = React.createClass({
     return (
         <div style={style}>
           <DebuggerButtonSimVideoDesync />
-          <DebuggerButtonJoinRoom app={this.props.app} />
-          <DebuggerButtonLeaveRoom app={this.props.app}/>
         </div>
     );
   }
