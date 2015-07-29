@@ -10,10 +10,8 @@ var RoomsView = React.createClass({
         roomsCollection.on('change', function() {
             this.forceUpdate();
         }.bind(this));
-    },
-
-    getAllRooms: function(){
-      $.get(source, function(res) {
+        var self = this;
+        $.get(source, function(res) {
           res.forEach(function(room) {
             //check if there 'currentMedia' is null and if it's not, create a url property for the video thumbnail
             if (room.currentMedia === null) {
@@ -24,15 +22,13 @@ var RoomsView = React.createClass({
               roomsCollection.add(new RoomModel(room));
             }
           });
+          self.forceUpdate();
         })
       .fail(function() {
         console.log('error with GET request to ' + source);
       });
     },
-
     render: function() {
-        this.getAllRooms();
-
         return (
             <div>
             <nav className="navbar navbar-default navbar-fixed-top topnav" role="navigation">
@@ -97,8 +93,7 @@ var RoomsView = React.createClass({
 
 var Rooms = React.createClass({
     roomClick: function(id) {
-        //TODO: SEND USER TO THE ROOM WITH THE ID CLICKED
-        console.log('clicked room id is: ' + id);
+        window.location.href = 'http://' + document.domain + ':3000/#/room/' + id;
     },
     render: function() {
         var self = this;

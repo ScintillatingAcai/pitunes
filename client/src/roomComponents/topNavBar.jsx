@@ -1,9 +1,9 @@
 var React = require('react');
 var DebuggerButtons = require('../index/debuggerButtons/debuggerButtons.jsx');
+var app = require('./loginController.jsx');
 
 var TopNavBar = React.createClass({
   render: function() {
-    //TODO: IF SIGNED IN, INSTEAD OF SIGN IN BUTTON, SHOW SIGN OUT BUTTON.
     return (
       <nav className="navbar navbar-default navbar-fixed-top topnav" role="navigation">
         <div className="container topnav">

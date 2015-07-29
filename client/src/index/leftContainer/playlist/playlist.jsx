@@ -93,7 +93,7 @@ var List = React.createClass({
   },
   dragEnd: function () {
     this.dragged.style.display = "block";
-    this.dragged.parentNode.removeChild(placeholder);
+    this.over.parentNode.removeChild(placeholder);
     // Update data
     var data = this.state.data;
     var from = Number(this.dragged.dataset.id);
@@ -121,6 +121,7 @@ var List = React.createClass({
     var relY = e.clientY - this.over.offsetTop;
     var height = this.over.offsetHeight / 2;
     var parent = e.target.parentNode;
+    debugger;
     if (relY > height) {
       this.nodePlacement = "after";
       parent.insertBefore(placeholder, e.target.nextElementSibling);
@@ -210,9 +211,7 @@ var List = React.createClass({
       margin: '0 0 0 5px'
     };
     return (
-      <div>
-        <div onDragOver={this.dragOver}>{listItems}</div>
-      </div>
+      <div onDragOver={this.dragOver}>{listItems}</div>
     );
   }
 });
