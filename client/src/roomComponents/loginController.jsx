@@ -19,6 +19,10 @@ var LoginController = React.createClass({
   getInitialState: function() {
     return { showSignIn: false, showSignUp: false, showSignOut: false, errorMessage: '' };
   },
+  componentDidMount: function () {
+    socket.emit('user room join', { user: app.get('user').attributes, room: this.props.params.room_id})
+    app.get('current_room').set('id', this.props.params.room_id);
+  },
   close: function() {
     console.log('close');
     this.setState({ showSignIn: false, showSignUp: false, showSignOut: false, errorMessage: '' });
@@ -48,6 +52,8 @@ var LoginController = React.createClass({
             app.get('user').set(res);
             app.get('user').retrievePlaylists();
             app.get('user').trigger('login');
+            socket.emit('user room join', { user: app.get('user').attributes, room: self.props.params.room_id})
+            app.get('current_room').set('id', self.props.params.room_id);
             self.close();
           },
           error: function (res) {
