@@ -11,27 +11,25 @@ var StatusBar = React.createClass({
   componentDidMount: function () {
     var context = this;
     socket.on('room status', function (data) {
-      if (data.currentDJ === null) {
-        context.setState({currentDJ: null});
-      } else if (data.currentMedia) {
-        context.setState({currentDJ: 'Futballguy'});
-        context.setState({videoTitle: data.currentMedia.title});
-      }
+      var newRoomStatus = data;
+      context.heardRoomStatus(newRoomStatus);
     });
-
   },
-  heardMediaStatus: function () {
-
-  },
-  headRoomStatus: function () {
-
+  heardRoomStatus: function (data) {
+    if (data.currentDJ === null) {
+      this.setState({currentDJ: null});
+    } else if (data.currentMedia) {
+      var dj = this.props.app.get('current_room').get('currentDJ').get('display_name');
+      this.setState({currentDJ: dj});
+      this.setState({videoTitle: data.currentMedia.title});
+    }
   },
   generateStatusMessage: function () {
     var djStyle = {
-      color: '#0000FF'
+      color: '#99B2FF'
     };
     var songStyle = {
-      color: '#FF0000'
+      color: '#FF3333'
     };
     if (this.state.currentDJ === null) {
       return 'No Song Currently Playing';
