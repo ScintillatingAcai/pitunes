@@ -2,19 +2,13 @@ var React = require('react');
 var Router = require('react-router');
 var LandingPageContainer = require('../landingPage/landingPageContainer.js');
 var RoomsView = require('../rooms/roomsContainer.js');
-var AppContainer = require('../global/loginController.jsx');
+var RoomContainer = require('../room/roomContainer.jsx');
 var Route = Router.Route;
 var RouteHandler = Router.RouteHandler;
 var DefaultRoute = Router.DefaultRoute;
 var NotFoundRoute = Router.NotFoundRoute;
 
-var TopNavBar = require('../roomComponents/topNavBar.jsx');
-var BottomNavBar = require('../roomComponents/bottomNavBar.jsx');
-var SignInModal = require('../roomComponents/signInModal.jsx');
-var SignUpModal = require('../roomComponents/signUpModal.jsx');
-var SignOutModal = require('../roomComponents/signOutModal.jsx');
-
-var NavigationController = require('./navigationController.jsx');
+var NavigationController = require('../navigation/navigationController.jsx');
 
 var AppModel = require('../data/models/app.js');
 var app = new AppModel();
@@ -55,7 +49,7 @@ var RoomsViewWrapper = React.createClass({
 
 var RoomWrapper = React.createClass({
   render: function() {
-    return ( <AppContainer app={app} room_id={this.props.params.room_id}/> );
+    return ( <RoomContainer app={app} room_id={this.props.params.room_id}/> );
   }
 });
 

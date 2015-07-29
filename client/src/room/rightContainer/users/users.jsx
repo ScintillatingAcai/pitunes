@@ -1,7 +1,5 @@
 var React = require('react');
 
-// var app = require('../../../roomComponents/loginController.jsx');
-
 var Users = React.createClass({
   componentDidMount: function () {
     var context = this;

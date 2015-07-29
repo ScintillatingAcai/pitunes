@@ -2,7 +2,7 @@ var $ = require('jquery');
 var React = require('react');
 var Backbone = require('backbone');
 
-var AppContainer = require('../app/app.jsx');
+var AppContainer = require('../room/roomContainer.jsx');
 
 var server_uri = 'http://' + document.domain + ':3000',
   socket = io(server_uri);

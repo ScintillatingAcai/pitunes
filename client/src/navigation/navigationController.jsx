@@ -2,11 +2,11 @@ var $ = require('jquery');
 var React = require('react');
 var Backbone = require('backbone');
 
-var TopNavBar = require('../roomComponents/topNavBar.jsx');
-var BottomNavBar = require('../roomComponents/bottomNavBar.jsx');
-var SignInModal = require('../roomComponents/signInModal.jsx');
-var SignUpModal = require('../roomComponents/signUpModal.jsx');
-var SignOutModal = require('../roomComponents/signOutModal.jsx');
+var TopNavBar = require('./topNavBar.jsx');
+var BottomNavBar = require('./bottomNavBar.jsx');
+var SignInModal = require('./signInModal.jsx');
+var SignUpModal = require('./signUpModal.jsx');
+var SignOutModal = require('./signOutModal.jsx');
 
 var server_uri = 'http://' + document.domain + ':3000',
   socket = io(server_uri);
