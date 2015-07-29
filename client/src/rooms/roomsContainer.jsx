@@ -34,7 +34,8 @@ var RoomsView = React.createClass({
           room.videoURL = '../../assets/img/no-dj.png';
           roomsCollection.add(new RoomModel(room));
         } else {
-          room.videoURL = 'https://i.ytimg.com/vi/' + room.currentMedia + '/hqdefault.jpg';
+          room.videoURL = 'https://i.ytimg.com/vi/' + room.currentMedia.youtube_id + '/hqdefault.jpg';
+          debugger;
           roomsCollection.add(new RoomModel(room));
         }
       });
