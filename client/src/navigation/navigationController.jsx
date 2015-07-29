@@ -8,8 +8,7 @@ var SignInModal = require('./signInModal.jsx');
 var SignUpModal = require('./signUpModal.jsx');
 var SignOutModal = require('./signOutModal.jsx');
 
-var server_uri = 'http://' + window.location.host,
-  socket = io(server_uri);
+var socket = io(window.location.origin);
 
 var NavigationController = React.createClass({
   getInitialState: function() {

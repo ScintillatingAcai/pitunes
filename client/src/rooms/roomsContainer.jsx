@@ -2,8 +2,7 @@ var React = require('react');
 var RoomsCollection = require('../data/collections/rooms.js');
 var RoomModel = require('../data/models/room.js');
 var roomsCollection = new RoomsCollection();
-var server_uri = 'http://' + window.location.host;
-var source =  server_uri + '/api/rooms';
+var source =  window.location.origin + '/api/rooms';
 
 var RoomsView = React.createClass({
     //Event listener for changes to roomsCollection

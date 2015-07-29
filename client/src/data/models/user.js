@@ -23,8 +23,7 @@ var UserModel = Backbone.Model.extend({
     updated_at: null
   },
   retrievePlaylists: function () {
-    var server_uri = 'http://' + window.location.host;
-    var source =  server_uri + '/api/users/' + this.get('id') + '/playlists';
+    var source =  window.location.origin + '/api/users/' + this.get('id') + '/playlists';
     var playlistsCollection =  new PlaylistsCollection();
     var context = this;
     $.get(source, function (res) {
