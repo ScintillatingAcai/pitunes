@@ -1,5 +1,5 @@
 var $ = require('jquery');
-var React = require('react'); 
+var React = require('react');
 var Backbone = require('backbone');
 
 var TopNavBar = require('./topNavBar.jsx');
@@ -17,8 +17,8 @@ var LoginController = React.createClass({
     return { showSignIn: false, showSignUp: false, showSignOut: false, errorMessage: '' };
   },
   componentDidMount: function () {
-    socket.emit('user room join', { user: app.get('user').attributes, room: this.props.params.room_id})
-    app.get('current_room').set('id', this.props.params.room_id);
+    socket.emit('user room join', { user: this.props.app.get('user').attributes, room: this.props.room_id});
+    this.props.app.get('current_room').set('id', this.props.room_id);
   },
   close: function() {
     console.log('close');
@@ -46,11 +46,11 @@ var LoginController = React.createClass({
       dataType: 'json',
       data: data,
       success: function (res) {
-        app.get('user').set(res);
-        app.get('user').retrievePlaylists();
-        app.get('user').trigger('login');
-        socket.emit('user room join', { user: app.get('user').attributes, room: self.props.params.room_id})
-        app.get('current_room').set('id', self.props.params.room_id);
+        self.props.app.get('user').set(res);
+        self.props.app.get('user').retrievePlaylists();
+        self.props.app.get('user').trigger('login');
+        socket.emit('user room join', { user: self.props.app.get('user').attributes, room: self.props.room_id})
+        self.props.app.get('current_room').set('id', self.props.room_id);
         self.close();
       },
       error: function (res) {
@@ -69,9 +69,9 @@ var LoginController = React.createClass({
       dataType: 'json',
       data: data,
       success: function(res) {
-        app.get('user').set(res);
-        app.get('user').retrievePlaylists();
-        app.get('user').trigger('login');
+        self.props.app.get('user').set(res);
+        self.props.app.get('user').retrievePlaylists();
+        self.props.app.get('user').trigger('login');
         self.close();
       },
       error: function(res) {
@@ -96,12 +96,12 @@ var LoginController = React.createClass({
   render: function() {
     return (
       <div>
-        <TopNavBar signInClick={this.signInClick} signOutClick={this.signOutClick} errorMessage={this.state.errorMessage}/>
+        <TopNavBar signInClick={this.signInClick} signOutClick={this.signOutClick} errorMessage={this.state.errorMessage} app={this.props.app}/>
         <BottomNavBar />
-        <SignInModal close={this.close} signUpClick={this.signUpClick} signInUser={this.signInUser} showSignIn={this.state.showSignIn} errorMessage={this.state.errorMessage} />
-        <SignUpModal close={this.close} signInClick={this.signInClick} signUpUser={this.signUpUser} showSignUp={this.state.showSignUp} errorMessage={this.state.errorMessage} />
-        <SignOutModal close={this.close} signOutUser={this.signOutUser} showSignOut={this.state.showSignOut} />
-        <AppContainer />
+        <SignInModal close={this.close} signUpClick={this.signUpClick} signInUser={this.signInUser} showSignIn={this.state.showSignIn} errorMessage={this.state.errorMessage} app={this.props.app}/>
+        <SignUpModal close={this.close} signInClick={this.signInClick} signUpUser={this.signUpUser} showSignUp={this.state.showSignUp} errorMessage={this.state.errorMessage} app={this.props.app}/>
+        <SignOutModal close={this.close} signOutUser={this.signOutUser} showSignOut={this.state.showSignOut} app={this.props.app}/>
+        <AppContainer app={this.props.app}/>
       </div>
     );
   }

@@ -18,7 +18,7 @@ var CenterContainer = React.createClass({
     return (
       <div style={style}>
         <VideoPlayer />
-        <Chat />
+        <Chat app={this.props.app}/>
       </div>
     );
   }
