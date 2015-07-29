@@ -62,7 +62,9 @@ var NavigationController = React.createClass({
         // socket.emit('user room join', { user: self.props.app.get('user').attributes, room: self.props.room_id})
         // self.props.app.get('current_room').set('id', room_id);
         self.close();
-        window.location.href = 'http://' + document.domain + ':3000/#/rooms';
+        if (window.location.href.indexOf('/#/room/') === -1) {
+          window.location.href = '/#rooms';
+        }
       },
       error: function (res) {
         self.setState({ errorMessage: res.statusText + ": " + res.responseText });
@@ -84,7 +86,9 @@ var NavigationController = React.createClass({
         self.props.app.get('user').retrievePlaylists();
         self.props.app.get('user').trigger('login');
         self.close();
-        window.location.href = 'http://' + document.domain + ':3000/#/rooms';
+        if (window.location.href.indexOf('/#/room/') === -1) {
+          window.location.href = '/#rooms';
+        }
       },
       error: function(res) {
         self.setState({ errorMessage: res.statusText + ': ' + res.responseText });
