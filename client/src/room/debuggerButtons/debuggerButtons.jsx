@@ -3,8 +3,6 @@ var React = require('react');
 var server_uri = 'http://' + document.domain + ':3000',
   socket = io(server_uri);
 
-var app = require('../../global/loginController.jsx');
-
 var DebuggerButtonSimVideoDesync = React.createClass({
   handleClick: function () {
     setVideoTime(3);

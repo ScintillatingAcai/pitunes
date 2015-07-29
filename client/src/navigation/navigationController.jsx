@@ -7,18 +7,13 @@ var BottomNavBar = require('./bottomNavBar.jsx');
 var SignInModal = require('./signInModal.jsx');
 var SignUpModal = require('./signUpModal.jsx');
 var SignOutModal = require('./signOutModal.jsx');
-var AppContainer = require('../app/app.jsx');
 
 var server_uri = 'http://' + document.domain + ':3000',
   socket = io(server_uri);
 
-var LoginController = React.createClass({
+var NavigationController = React.createClass({
   getInitialState: function() {
     return { showSignIn: false, showSignUp: false, showSignOut: false, errorMessage: '' };
-  },
-  componentDidMount: function () {
-    socket.emit('user room join', { user: this.props.app.get('user').attributes, room: this.props.room_id});
-    this.props.app.get('current_room').set('id', this.props.room_id);
   },
   close: function() {
     console.log('close');
@@ -49,8 +44,14 @@ var LoginController = React.createClass({
         self.props.app.get('user').set(res);
         self.props.app.get('user').retrievePlaylists();
         self.props.app.get('user').trigger('login');
-        socket.emit('user room join', { user: self.props.app.get('user').attributes, room: self.props.room_id})
-        self.props.app.get('current_room').set('id', self.props.room_id);
+        // socket.emit('user room join', { user: self.props.app.get('user').attributes, room: 1})
+        console.log('current_room id: ', self.props.app.get('current_room').get('id'));
+        if (self.props.app.get('current_room').get('id')) {
+          socket.emit('user room join', { user: self.props.app.get('user').attributes, room: self.props.app.get('current_room').get('id')})
+          // self.props.app.get('current_room').set('id', self.props.app.get('current_room').get('id'));
+        }
+        // socket.emit('user room join', { user: self.props.app.get('user').attributes, room: self.props.room_id})
+        // self.props.app.get('current_room').set('id', room_id);
         self.close();
       },
       error: function (res) {
@@ -101,10 +102,9 @@ var LoginController = React.createClass({
         <SignInModal close={this.close} signUpClick={this.signUpClick} signInUser={this.signInUser} showSignIn={this.state.showSignIn} errorMessage={this.state.errorMessage} app={this.props.app}/>
         <SignUpModal close={this.close} signInClick={this.signInClick} signUpUser={this.signUpUser} showSignUp={this.state.showSignUp} errorMessage={this.state.errorMessage} app={this.props.app}/>
         <SignOutModal close={this.close} signOutUser={this.signOutUser} showSignOut={this.state.showSignOut} app={this.props.app}/>
-        <AppContainer app={this.props.app}/>
       </div>
     );
   }
 });
 
-module.exports = LoginController;
+module.exports = NavigationController;
