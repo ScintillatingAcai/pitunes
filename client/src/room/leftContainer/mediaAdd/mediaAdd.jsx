@@ -12,7 +12,7 @@ var SearchBar = React.createClass({
   getInitialState: function () {
     return {text: ''};
   },
-  handleSubmit: function (e) {
+  handleChange: function (e) {
     e.preventDefault();
     this.setState({text: e.target.value});
     if (e.target.value !== '') {
@@ -21,6 +21,9 @@ var SearchBar = React.createClass({
     if (e.target.value === '') {
       $(".searchResultItem").remove();
     }
+  },
+  handleSubmit: function (e) {
+    e.preventDefault();
   },
   escapeDQ: function (string) {
     return string.replace(/\"/g, "'");
@@ -147,7 +150,7 @@ var SearchBar = React.createClass({
       <div>
         <ul id="searchResults" style={searchResultsStyle}></ul>
         <form style={style}>
-          <input style={searchBarInputStyle} onChange={this.handleSubmit} value={this.state.text} className="form-control" placeholder="Search YouTube"/>
+          <input style={searchBarInputStyle} onChange={this.handleChange} onSubmit={this.handleSubmit} value={this.state.text} className="form-control" placeholder="Search YouTube"/>
         </form>
       </div>
     );
