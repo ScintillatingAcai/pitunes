@@ -8,13 +8,23 @@ var RouteHandler = Router.RouteHandler;
 var DefaultRoute = Router.DefaultRoute;
 var NotFoundRoute = Router.NotFoundRoute;
 
+var TopNavBar = require('../roomComponents/topNavBar.jsx');
+var BottomNavBar = require('../roomComponents/bottomNavBar.jsx');
+var SignInModal = require('../roomComponents/signInModal.jsx');
+var SignUpModal = require('../roomComponents/signUpModal.jsx');
+var SignOutModal = require('../roomComponents/signOutModal.jsx');
+
+var NavigationController = require('./navigationController.jsx');
+
 var AppModel = require('../data/models/app.js');
 var app = new AppModel();
 
 var AppRouter = React.createClass({
+
   render: function() {
     return (
       <div>
+        <NavigationController app={app}/>
         <RouteHandler/>
       </div>
     );
