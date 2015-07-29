@@ -228,3 +228,14 @@ div.placeholder:before {
     content: "Drop here"; 
     color: #C0C0C0; 
 }
+
+.j-createRoom-button {
+    position: fixed;
+    z-index: 1;
+    padding-top: 55px;
+    left: 43.3%;
+}
+
+.j-padding-top-100px {
+    padding-top: 100px;
+}

@@ -1,14 +1,29 @@
 var React = require('react');
+var $ = require('jquery');
 var RoomsCollection = require('../data/collections/rooms.js');
 var RoomModel = require('../data/models/room.js');
+var CreateRoomModal = require('./createRoomModal.jsx');
 var roomsCollection = new RoomsCollection();
 var source =  window.location.origin + '/api/rooms';
 
 var RoomsView = React.createClass({
+  getInitialState: function() {
+    return { errorMessage: '', showCreateRoomModal: false };
+  },
+  showCreateRoom: function() {
+    this.setState({ showCreateRoomModal: true });
+  },
+  createRoomClick: function() {
+    console.log('createRoom has been clicked. make sure to send a post request with the information');
+    this.close();
+  },
+  close: function() {
+    this.setState({ showCreateRoomModal: false , errorMessage: '' });
+  },
   //Event listener for changes to roomsCollection
   componentDidMount: function() {
     roomsCollection.on('change', function() {
-        this.forceUpdate();
+      this.forceUpdate();
     }.bind(this));
     var self = this;
     $.get(source, function(res) {
@@ -35,10 +50,14 @@ var RoomsView = React.createClass({
         <a name="rooms"></a>
         <div className="content-section-a">
           <div className="container">
-            <div className="row">
+          <div className="j-createRoom-button">
+            <a type="submit" className="btn btn-default btn-md" onClick={this.showCreateRoom}><i className="fa fa-pencil fa-fw"></i><span className="network-name">Create Room</span></a>
+          </div>
+            <div className="row j-padding-top-100px">
               { <Rooms /> }
             </div>
           </div>
+          <CreateRoomModal showCreateRoomModal={this.state.showCreateRoomModal} createRoomClick={this.createRoomClick} errorMessage={this.props.errorMessage} close={this.close} />
         </div>
       </div>
     );
