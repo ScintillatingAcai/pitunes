@@ -6,6 +6,8 @@ var CenterContainer = require('../index/centerContainer/centerContainer.jsx');
 var RightContainer = require('../index/rightContainer/rightContainer.jsx');
 // var app = require('../roomComponents/loginController.jsx');
 
+
+
 var AppContainer = React.createClass({
   render: function () {
     var style = {

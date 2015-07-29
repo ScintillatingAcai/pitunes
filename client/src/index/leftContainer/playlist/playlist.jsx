@@ -5,7 +5,7 @@ var PlaylistModel = require('../../../data/models/playlist.js');
 var MediasCollection = require('../../../data/collections/medias.js');
 var NewPlaylistModal = require('./newPlaylistModal.jsx');
 var RenamePlaylistModal = require('./renamePlaylistModal.jsx');
-// var app = require('../../../roomComponents/loginController.jsx');
+var DeletePlaylistModal = require('./deletePlaylistModal.jsx');
 
 var server_uri = 'http://' + document.domain + ':3000',
     socket = io(server_uri);
@@ -37,7 +37,6 @@ var List = React.createClass({
     console.log('medias length: ', mediaLength);
     this.props.app.get('user').get('current_playlist').get('medias').each(function (e, index) {
       var mediaIndex =  (index + mediaLength - next_media_index + 1) % mediaLength;
-      console.log('mediaIndex: ', mediaIndex);
       var mediaObject = {};
       mediaObject.title = e.get('title');
       mediaObject.duration = context.durationToDisplay(e.get('duration'));
@@ -121,7 +120,6 @@ var List = React.createClass({
     var relY = e.clientY - this.over.offsetTop;
     var height = this.over.offsetHeight / 2;
     var parent = e.target.parentNode;
-    debugger;
     if (relY > height) {
       this.nodePlacement = "after";
       parent.insertBefore(placeholder, e.target.nextElementSibling);
@@ -145,9 +143,9 @@ var List = React.createClass({
         success: function (res) {
           console.log('id: ', res.id);
           console.log(res);
-          this.props.app.get('user').set('current_playlist_id', res.id);
+          context.props.app.get('user').set('current_playlist_id', res.id);
           playlist.set('id', res.id);
-          this.props.app.get('user').set('current_playlist', playlist);
+          context.props.app.get('user').set('current_playlist', playlist);
         },
         error: function (res) {
           console.log("error: " + res.statusText);
@@ -287,8 +285,8 @@ var PlaylistTitle = React.createClass({
         type: 'PUT',
         success: function (res) {
           console.log('user current_playlist_id changed to ', newPlaylistId);
-          this.props.app.get('user').set('current_playlist_id', newPlaylistId);
-          this.props.app.get('user').set('current_playlist', this.props.app.get('user').get('playlists').get(newPlaylistId));
+          context.props.app.get('user').set('current_playlist_id', newPlaylistId);
+          context.props.app.get('user').set('current_playlist', context.props.app.get('user').get('playlists').get(newPlaylistId));
         },
         error: function (res) {
           console.log("error: " + res.statusText);
@@ -334,9 +332,9 @@ var PlaylistTitle = React.createClass({
             <span className="glyphicon glyphicon-list" aria-hidden="true"></span>
           </button>
           <ul className="dropdown-menu dropdown-menu-right">
-            <li><a href="#" onClick={this.props.newPlaylistClick}>New Playlist</a></li>
-            <li><a href="#" onClick={this.props.renamePlaylistClick}>Rename Playlist</a></li>
-            <li><a href="#">Delete Playlist</a></li>
+            <li><a onClick={this.props.newPlaylistClick}>New Playlist</a></li>
+            <li><a onClick={this.props.renamePlaylistClick}>Rename Playlist</a></li>
+            <li><a onClick={this.props.deletePlaylistClick}>Delete Playlist</a></li>
           </ul>
         </div>
       </h4>
@@ -347,16 +345,19 @@ var PlaylistTitle = React.createClass({
 
 var Playlist = React.createClass({
   getInitialState: function () {
-    return { showNewPlaylist: false, showRenamePlaylist: false};
+    return { showNewPlaylist: false, showRenamePlaylist: false, showDeletePlaylist: false};
   },
   close: function () {
-    this.setState({ showNewPlaylist: false, showRenamePlaylist: false });
+    this.setState({ showNewPlaylist: false, showRenamePlaylist: false, showDeletePlaylist: false});
   },
   newPlaylistClick: function () {
     this.setState({ showNewPlaylist: true });
   },
   renamePlaylistClick: function () {
     this.setState({ showRenamePlaylist: true });
+  },
+  deletePlaylistClick: function () {
+    this.setState({ showDeletePlaylist: true });
   },
   createNewPlaylist: function () {
     var form = document.getElementById('newPlaylist-form');
@@ -374,9 +375,9 @@ var Playlist = React.createClass({
         success: function (res) {
           console.log('id: ', res.id);
           console.log(res);
-          this.props.app.get('user').set('current_playlist_id', res.id);
+          context.props.app.get('user').set('current_playlist_id', res.id);
           playlist.set('id', res.id);
-          this.props.app.get('user').set('current_playlist', playlist);
+          context.props.app.get('user').set('current_playlist', playlist);
           context.close();
         },
         error: function (res) {
@@ -401,8 +402,28 @@ var Playlist = React.createClass({
         dataType: 'json',
         data: jsonPlaylist,
         success: function (res) {
-          this.props.app.get('user').get('current_playlist').set('name', res.name);
-          this.props.app.get('user').trigger('currentPlaylistNewName');
+          context.props.app.get('user').get('current_playlist').set('name', res.name);
+          context.props.app.get('user').trigger('currentPlaylistNewName');
+          context.close();
+        },
+        error: function (res) {
+          console.log("error: " + res.statusText);
+        }
+      });
+    } else {
+      console.log('not logged in');
+    }
+  },
+  deleteCurrentPlaylist: function () {
+    console.log('user confirmed delete and parent heard')
+    var context = this;
+    if (this.props.app.get('user').get('id') !== 0) {
+      $.ajax({url: server_uri + '/api/users/' + this.props.app.get('user').get('id') + '/playlists/' + this.props.app.get('user').get('current_playlist_id'),
+        type: 'DELETE',
+        success: function (res) {
+          var newPlaylistId = res.current_playlist_id;
+          context.props.app.get('user').set('current_playlist_id', newPlaylistId);
+          context.props.app.get('user').set('current_playlist', context.props.app.get('user').get('playlists').at(newPlaylistId));
           context.close();
         },
         error: function (res) {
@@ -426,9 +447,10 @@ var Playlist = React.createClass({
     };
     return (
       <div id="playlistContainer" style={style}>
-        <NewPlaylistModal close={this.close} createNewPlaylist={this.createNewPlaylist} showNewPlaylist={this.state.showNewPlaylist}app={this.props.app}/>
+        <DeletePlaylistModal close={this.close} deleteCurrentPlaylist={this.deleteCurrentPlaylist} showDeletePlaylist={this.state.showDeletePlaylist} app={this.props.app}/>
+        <NewPlaylistModal close={this.close} createNewPlaylist={this.createNewPlaylist} showNewPlaylist={this.state.showNewPlaylist} app={this.props.app}/>
         <RenamePlaylistModal close={this.close} submitUpdatePlaylist={this.submitUpdatePlaylist} showRenamePlaylist={this.state.showRenamePlaylist} app={this.props.app}/>
-        <PlaylistTitle renamePlaylistClick={this.renamePlaylistClick} newPlaylistClick={this.newPlaylistClick} model={this.props.app.get('user')} data={[]} title={'Sign in to create a Playlist!'} app={this.props.app}/>
+        <PlaylistTitle renamePlaylistClick={this.renamePlaylistClick} newPlaylistClick={this.newPlaylistClick} deletePlaylistClick={this.deletePlaylistClick} model={this.props.app.get('user')} data={[]} title={'Sign in to create a Playlist!'} app={this.props.app}/>
         <Songs app={this.props.app}/>
       </div>
     );
