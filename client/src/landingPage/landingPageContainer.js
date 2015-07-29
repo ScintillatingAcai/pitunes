@@ -113,7 +113,7 @@ var LandingPageContainer = React.createClass({
                 </div>
             </div>
 
-            <footer>
+            <footer className="j-background-color-f8f8f8">
                 <div className="container">
                     <div className="row">
                         <div className="col-lg-12 j-center-text">

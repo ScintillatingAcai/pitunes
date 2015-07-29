@@ -115,10 +115,10 @@ var List = React.createClass({
     if (e.target.className === "placeholder") return;
     this.over = e.target;
     var relY = e.clientY - this.over.offsetTop;
-    var height = this.over.offsetHeight / 2;
+    var height = this.over.parentElement.offsetHeight / 2;
     var parent = e.target.parentNode;
     if (relY > height) {
-      this.nodePlacement = "after";
+      this.nodePlacement = "before";
       parent.insertBefore(placeholder, e.target.nextElementSibling);
     } else if (relY < height) {
       this.nodePlacement = "before";

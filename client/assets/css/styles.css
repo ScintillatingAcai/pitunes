@@ -33,15 +33,15 @@ h6 {
 .body-container {
     padding-top: 50px; /* If you're making other pages, make sure there is 50px of padding to make sure the navbar doesn't overlap content! */
     /*padding-bottom: 80px;*/
-    color: #grey;
-    background-color: #f8f8f8;
+    color: #F8F8F8;
+    background-color: #F8F8F8;
 }
 
 .intro-header {
-    padding-top: 50px; /* If you're making other pages, make sure there is 50px of padding to make sure the navbar doesn't overlap content! */
+    padding-top: 18%; /* If you're making other pages, make sure there is 50px of padding to make sure the navbar doesn't overlap content! */
     padding-bottom: 50px;
     text-align: center;
-    color: #f8f8f8;
+    color: #F8F8F8;
     background: url(../img/dj.jpg) no-repeat center center;
     background-size: cover;
     height: 120vh;
@@ -55,7 +55,7 @@ h6 {
 
 .intro-divider {
     width: 400px;
-    border-top: 1px solid #f8f8f8;
+    border-top: 1px solid #F8F8F8;
     border-bottom: 1px solid rgba(0,0,0,0.2);
 }
 
@@ -96,7 +96,7 @@ h6 {
 
 .content-section-a {
     padding: 50px 0;
-    background-color: #f8f8f8;
+    background-color: #F8F8F8;
 }
 
 .content-section-b {
@@ -117,7 +117,7 @@ h6 {
 
 .banner {
     padding: 100px 0;
-    color: #f8f8f8;
+    color: #F8F8F8;
     background: url(../img/banner-bg.jpg) no-repeat center center;
     background-size: cover;
 }
@@ -170,6 +170,10 @@ p.copyright {
     text-transform: uppercase;
 }
 
+.j-background-color-f8f8f8 {
+    background-color: #f8f8f8 !important;
+}
+
 .j-color-blue {
     color: #00F;
 }
@@ -204,7 +208,7 @@ p.copyright {
 
 .j-footer-bot {
     position: absolute;
-    background-color: #f8f8f8;
+    background-color: #F8F8F8;
     bottom: 0;
     width: 100%;
     text-align: center;
@@ -214,14 +218,12 @@ p.copyright {
     padding-top: 15%;
 }
 
-div.placeholder { background: #FFFFFF; }
-div.placeholder:before { content: "Drop here"; color: #C0C0C0; }
+div.placeholder { 
+    background: #F8F8F8; 
+}
 
-
-
-
-
-
-
-
-
+div.placeholder:before { 
+    text-align: center;
+    content: "Drop here"; 
+    color: #C0C0C0; 
+}
