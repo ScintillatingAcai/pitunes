@@ -1,4 +1,3 @@
-
 var React = require('react');
 var $ = require('jquery');
 var ReactBootstrap = require('react-bootstrap');

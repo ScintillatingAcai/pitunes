@@ -1,4 +1,5 @@
 var React = require('react');
+var StatusBar = require('../../centerContainer/statusbar/statusbar.jsx');
 
 var server_uri = 'http://' + document.domain + ':3000',
   socket = io(server_uri);
@@ -111,6 +112,7 @@ var Chat = React.createClass({
     };
     return (
       <div style={divStyle}>
+        <StatusBar dj={'None'} title={'No Current Song'}/>
         <div style={chatListStyle} ref="messageContainer">
           <ChatList items={this.state.items}/>
         </div>

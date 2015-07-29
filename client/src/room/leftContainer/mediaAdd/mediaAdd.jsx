@@ -1,7 +1,6 @@
 var React = require('react');
 var $ = require('jquery');
 
-// var app = require('../../../roomComponents/loginController.jsx');
 var MediaModel = require('../../../data/models/media.js');
 
 var server_uri = 'http://' + document.domain + ':3000',
@@ -114,16 +113,16 @@ var SearchBar = React.createClass({
             $(".searchResultItem").on('click', function (e) {
               if ($(e.target).attr('className') === 'searchResultTitle') {
                 // loadVideo($(e.target).attr('data-id'), 0);
-                if (this.props.app.get('user').get('id') !== 0) {
+                if (context.props.app.get('user').get('id') !== 0) {
                   var newSong = new MediaModel({
                     title: $(e.target).attr('data-title'),
                     youtube_id: $(e.target).attr('data-youtubeid'),
                     img_url: $(e.target).attr('data-img'),
                     duration: parseInt($(e.target).attr('data-duration'), 10)
                   });
-                  var addIndex = this.props.app.get('user').get('current_playlist').get('current_media_index');
-                  this.props.app.get('user').get('current_playlist').get('medias').add(newSong, {at: addIndex});
-                  this.props.app.get('user').trigger('newSong');
+                  var addIndex = context.props.app.get('user').get('current_playlist').get('current_media_index');
+                  context.props.app.get('user').get('current_playlist').get('medias').add(newSong, {at: addIndex});
+                  context.props.app.get('user').trigger('newSong');
                   // addSongToPlaylist({title: $(e.target).attr('data-title'), youtube_id: $(e.target).attr('data-id'), img_url: $(e.target).attr('data-img'), duration: parseInt($(e.target).attr('data-duration'))});
                 }
               }
