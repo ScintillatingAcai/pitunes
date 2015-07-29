@@ -15,6 +15,9 @@ var RoomContainer = React.createClass({
     socket.emit('user room join', { user: this.props.app.get('user').attributes, room: this.props.room_id });
     this.props.app.get('current_room').set('id', this.props.room_id);
   },
+  componentDidUnmount: function () {
+    socket.emit('user room leave', { user: this.props.app.get('user').attributes, room: this.props.room_id});
+  },
   render: function () {
     var style = {
       WebkitTouchCallout: 'none',
