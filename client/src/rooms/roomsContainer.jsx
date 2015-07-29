@@ -32,61 +32,14 @@ var RoomsView = React.createClass({
     render: function() {
         return (
             <div>
-            <nav className="navbar navbar-default navbar-fixed-top topnav" role="navigation">
-                <div className="container topnav">
-                    <div className="navbar-header">
-                        <button type="button" className="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                            <span className="sr-only">Toggle navigation</span>
-                            <span className="icon-bar"></span>
-                            <span className="icon-bar"></span>
-                            <span className="icon-bar"></span>
-                        </button>
-                        <a className="navbar-brand topnav" href="#/"><span className="j-color-black">pi</span><span className="j-color-blue">Tunes</span></a>
-                    </div>
-                    <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                        <ul className="nav navbar-nav navbar-right">
-                            <li>
-                                <a href="#/">Home</a>
-                            </li>
-                            <li>
-                                <a href="#/rooms">Rooms</a>
-                            </li>
-                            <li>
-                                <a className="j-pointer" onClick={this.loginClick}>Sign In</a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </nav>
-
-            <a name="rooms"></a>
-            <div className="content-section-a">
-                <div className="container">
-                    <div className="row">
-                        { <Rooms /> }
-                    </div>
-                </div>
-            </div>
-
-            <footer>
-                <div className="container">
-                    <div className="row">
-                        <div className="col-lg-12 j-center-text">
-                            <ul className="list-inline">
-                                <li>
-                                    <a href="#/">Home</a>
-                                </li>
-                                <li className="footer-menu-divider">&sdot;</li>
-                                <li>
-                                    <a href="#about">About</a>
-                                </li>
-                            </ul>
-                            <p className="copyright text-muted small">Copyright &copy; 2015, Scintillating Açaí, All Rights Reserved</p>
+                <a name="rooms"></a>
+                <div className="content-section-a">
+                    <div className="container">
+                        <div className="row">
+                            { <Rooms /> }
                         </div>
                     </div>
                 </div>
-            </footer>
-
             </div>
         );
     }

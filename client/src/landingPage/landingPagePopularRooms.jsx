@@ -1,3 +1,5 @@
+var React = require('react');
+
 var LandingPagePopularRooms = React.createClass({
   render: function() {
     return (
@@ -31,3 +33,5 @@ var LandingPagePopularRooms = React.createClass({
     );
   }
 });
+
+module.exports = LandingPagePopularRooms;

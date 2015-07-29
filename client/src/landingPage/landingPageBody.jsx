@@ -1,4 +1,6 @@
-var LandingPageBackground = React.createClass({
+var React = require('react');
+
+var LandingPageBody = React.createClass({
   render: function() {
     return (
       <div>
@@ -16,7 +18,7 @@ var LandingPageBackground = React.createClass({
                         <a onClick={this.props.signInClick} className="btn btn-default btn-lg"><i className="fa fa-sign-in fa-fw"></i><span className="network-name">Sign In</span></a>
                       </li>
                       <li>
-                        <a href="rooms.html" className="btn btn-default btn-lg"><i className="fa fa-music fa-fw"></i><span className="network-name">Join Room</span></a>
+                        <a href="/#rooms" className="btn btn-default btn-lg"><i className="fa fa-music fa-fw"></i><span className="network-name">Join Room</span></a>
                       </li>
                       <li>
                         <a onClick={this.props.signUpClick} className="btn btn-default btn-lg"><i className="fa fa-pencil fa-fw"></i><span className="network-name">Sign Up</span></a>
@@ -31,3 +33,5 @@ var LandingPageBackground = React.createClass({
     );
   }
 });
+
+module.exports = LandingPageBody;
