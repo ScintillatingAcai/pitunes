@@ -2,7 +2,7 @@ var React = require('react');
 var RoomsCollection = require('../data/collections/rooms.js');
 var RoomModel = require('../data/models/room.js');
 var roomsCollection = new RoomsCollection();
-var source = 'http://' + document.domain + ':3000/api/rooms';
+var source = 'http://' + location.host + '/api/rooms';
 
 var RoomsView = React.createClass({
     //Event listener for changes to roomsCollection
@@ -94,7 +94,7 @@ var RoomsView = React.createClass({
 
 var Rooms = React.createClass({
     roomClick: function(id) {
-        window.location.href = 'http://' + document.domain + ':3000/#/room/' + id;
+        window.location.href = server_uri + '/#/room/' + id;
     },
     render: function() {
         var self = this;

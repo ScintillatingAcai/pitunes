@@ -1,8 +1,4 @@
 var React = require('react');
-var $ = require('jquery');
-
-var server_uri = 'http://' + document.domain + ':3000',
-socket = io(server_uri);
 
 var StatusBar = React.createClass({
   getInitialState: function () {

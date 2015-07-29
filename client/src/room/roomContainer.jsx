@@ -5,7 +5,7 @@ var LeftContainer = require('../room/leftContainer/leftContainer.jsx');
 var CenterContainer = require('../room/centerContainer/centerContainer.jsx');
 var RightContainer = require('../room/rightContainer/rightContainer.jsx');
 
-var server_uri = 'http://' + document.domain + ':3000',
+var server_uri = 'http://' + window.location.host,
   socket = io(server_uri);
 
 var AppContainer = React.createClass({

@@ -5,6 +5,7 @@ var PlaylistsCollection = require('../collections/playlists.js');
 var PlaylistModel = require('./playlist.js');
 var MediasCollection = require('../collections/medias.js');
 
+
 //A Backbone model for the user who is logged in
 var UserModel = Backbone.Model.extend({
   defaults: {
@@ -22,7 +23,8 @@ var UserModel = Backbone.Model.extend({
     updated_at: null
   },
   retrievePlaylists: function () {
-    var source = 'http://' + document.domain + ':3000/api/users/' + this.get('id') + '/playlists';
+    var server_uri = 'http://' + window.location.host;
+    var source =  server_uri + '/api/users/' + this.get('id') + '/playlists';
     var playlistsCollection =  new PlaylistsCollection();
     var context = this;
     $.get(source, function (res) {

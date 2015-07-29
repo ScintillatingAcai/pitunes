@@ -1,7 +1,6 @@
 var React = require('react');
 var ReactBootstrap = require('react-bootstrap');
-var server_uri = 'http://' + document.domain + ':3000',
-    socket = io(server_uri);
+var server_uri = 'http://' + window.location.host;
 
 var Modal = ReactBootstrap.Modal;
 var Input = ReactBootstrap.Input;
