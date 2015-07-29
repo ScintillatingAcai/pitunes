@@ -1,7 +1,7 @@
 var React = require('react');
 var Router = require('react-router');
-var LandingPageContainer = require('../landingPage/landingPageContainer.js');
-var RoomsView = require('../rooms/roomsContainer.js');
+var LandingPageContainer = require('../landingPage/landingPageContainer.jsx');
+var RoomsView = require('../rooms/roomsContainer.jsx');
 var RoomContainer = require('../room/roomContainer.jsx');
 var Route = Router.Route;
 var RouteHandler = Router.RouteHandler;
@@ -14,7 +14,6 @@ var AppModel = require('../data/models/app.js');
 var app = new AppModel();
 
 var AppRouter = React.createClass({
-
   render: function() {
     return (
       <div>
