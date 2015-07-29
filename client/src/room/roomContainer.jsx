@@ -7,7 +7,7 @@ var RightContainer = require('../room/rightContainer/rightContainer.jsx');
 
 var socket = io(window.location.origin);
 
-var AppContainer = React.createClass({
+var RoomContainer = React.createClass({
   getInitialState: function() {
     return { showSignIn: false, showSignUp: false, showSignOut: false, errorMessage: '' };
   },
@@ -34,4 +34,4 @@ var AppContainer = React.createClass({
   }
 });
 
-module.exports = AppContainer;
+module.exports = RoomContainer;

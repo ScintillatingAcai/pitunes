@@ -11,10 +11,10 @@ var SignOutModal = require('./signOutModal.jsx');
 var socket = io(window.location.origin);
 
 var NavigationController = React.createClass({
-  getInitialState: function() {
+  getInitialState: function () {
     return { showSignIn: false, showSignUp: false, showSignOut: false, errorMessage: '' };
   },
-  componentDidMount: function() {
+  componentDidMount: function () {
     var context = this;
     $('body').on('click', '#landing-signin', function() {
       context.signInClick();
@@ -23,23 +23,23 @@ var NavigationController = React.createClass({
       context.signUpClick();
     });
   },
-  close: function() {
+  close: function () {
     console.log('close');
     this.setState({ showSignIn: false, showSignUp: false, showSignOut: false, errorMessage: '' });
   },
-  signUpClick: function() {
+  signUpClick: function () {
     console.log('signUpClick')
     this.setState({ showSignIn: false, showSignUp: true, showSignOut: false });
   },
-  signInClick: function() {
+  signInClick: function () {
     console.log('signInClick')
     this.setState({ showSignIn: true, showSignUp: false, showSignOut: false });
   },
-  signOutClick: function() {
+  signOutClick: function () {
     console.log('signOutClick')
     this.setState({ showSignIn: false, showSignUp: false, showSignOut: true });
   },
-  signInUser: function() {
+  signInUser: function () {
     var form = document.getElementById('signIn-form');
     var data = { email: form[0].value, password: form[1].value };
     var self = this;
@@ -54,15 +54,19 @@ var NavigationController = React.createClass({
         self.props.app.get('user').trigger('login');
         // socket.emit('user room join', { user: self.props.app.get('user').attributes, room: 1})
         console.log('current_room id: ', self.props.app.get('current_room').get('id'));
-        if (self.props.app.get('current_room').get('id')) {
-          socket.emit('user room join', { user: self.props.app.get('user').attributes, room: self.props.app.get('current_room').get('id')})
-          // self.props.app.get('current_room').set('id', self.props.app.get('current_room').get('id'));
-        }
         // socket.emit('user room join', { user: self.props.app.get('user').attributes, room: self.props.room_id})
         // self.props.app.get('current_room').set('id', room_id);
         self.close();
         if (window.location.href.indexOf('/#/room/') === -1) {
-          window.location.href = '/#rooms';
+          window.location.href = '/#/rooms';
+        }
+
+        // Check if a user logged in within an individual room and emit user room join message via socket if so
+        if (window.location.href.indexOf('/#/room/') > -1) {
+          if (self.props.app.get('current_room').get('id')) {
+            socket.emit('user room join', { user: self.props.app.get('user').attributes, room: self.props.app.get('current_room').get('id')});
+            // self.props.app.get('current_room').set('id', self.props.app.get('current_room').get('id'));
+          }
         }
       },
       error: function (res) {
@@ -70,7 +74,7 @@ var NavigationController = React.createClass({
       }
     });
   },
-  signUpUser: function() {
+  signUpUser: function () {
     var form = document.getElementById('signUp-form');
     var data = { email: form[0].value, password: form[1].value, password: form[2].value, displayName: form[3].value };
     var self = this;
@@ -80,21 +84,21 @@ var NavigationController = React.createClass({
       type: 'POST',
       dataType: 'json',
       data: data,
-      success: function(res) {
+      success: function (res) {
         self.props.app.get('user').set(res);
         self.props.app.get('user').retrievePlaylists();
         self.props.app.get('user').trigger('login');
         self.close();
         if (window.location.href.indexOf('/#/room/') === -1) {
-          window.location.href = '/#rooms';
+          window.location.href = '/#/rooms';
         }
       },
-      error: function(res) {
+      error: function (res) {
         self.setState({ errorMessage: res.statusText + ': ' + res.responseText });
       }
     });
   },
-  signOutUser: function() {
+  signOutUser: function () {
     var self = this;
     $.ajax({url: server_uri + '/api/users/logout',
       type: 'GET',
@@ -108,7 +112,7 @@ var NavigationController = React.createClass({
       }
     });
   },
-  render: function() {
+  render: function () {
     return (
       <div>
         <TopNavBar signInClick={this.signInClick} signOutClick={this.signOutClick} errorMessage={this.state.errorMessage} app={this.props.app}/>
