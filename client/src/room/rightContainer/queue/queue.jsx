@@ -128,7 +128,6 @@ var Queue = React.createClass({
       bottom: '0',
       margin: '0 0 10px 0'
     }
-    debugger;
     return (
       <div style={style}>
         <QueueTitle app={this.props.app}/>
