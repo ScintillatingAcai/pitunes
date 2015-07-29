@@ -7,12 +7,14 @@ var RightContainer = require('../room/rightContainer/rightContainer.jsx');
 
 var socket = io(window.location.origin);
 
-var AppContainer = React.createClass({
+var RoomContainer = React.createClass({
   getInitialState: function() {
     return { showSignIn: false, showSignUp: false, showSignOut: false, errorMessage: '' };
   },
   componentDidMount: function () {
     socket.emit('user room join', { user: this.props.app.get('user').attributes, room: this.props.room_id});
+    console.log('***************** USER ROOM JOIN ************');
+    console.log(this.props.room_id);
     this.props.app.get('current_room').set('id', this.props.room_id);
   },
   render: function () {
@@ -34,4 +36,4 @@ var AppContainer = React.createClass({
   }
 });
 
-module.exports = AppContainer;
+module.exports = RoomContainer;
