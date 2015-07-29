@@ -12,7 +12,7 @@ var SearchBar = React.createClass({
   getInitialState: function () {
     return {text: ''};
   },
-  handleSubmit: function (e) {
+  handleChange: function (e) {
     e.preventDefault();
     this.setState({text: e.target.value});
     if (e.target.value !== '') {
@@ -21,6 +21,9 @@ var SearchBar = React.createClass({
     if (e.target.value === '') {
       $(".searchResultItem").remove();
     }
+  },
+  handleSubmit: function (e) {
+    e.preventDefault();
   },
   escapeDQ: function (string) {
     return string.replace(/\"/g, "'");
@@ -106,8 +109,6 @@ var SearchBar = React.createClass({
             }
             $(".searchResultItem").remove();
             results.forEach(function (e) {
-
-              // TODO Consult with group on refactoring this line - horrible as is
               $('#searchResults').append('<li class="searchResultItem" style="margin-bottom:10px; margin-left:-30px; list-style:none;"><img className="searchResultImg" style="height:50px; width:50px; margin-right:5px;" src="' + e.img + '" /><div className="searchResultTitle" style="color:#FFF; font-size:10px; display:inline; cursor:pointer;" data-durationDisplay="' + e.durationDisplay + '" data-duration="' + e.duration + '" data-title="' + context.escapeDQ(e.title) + '" data-youtubeid="' + e.id + '" data-img="' + e.img + '"> ' + (e.title).slice(0, 35) + '...' + '</div><div style="color:#FFF; font-size:10px; display:inline;"> | ' + e.durationDisplay + '</div></li>');
             });
             $(".searchResultItem").on('click', function (e) {
@@ -123,7 +124,6 @@ var SearchBar = React.createClass({
                   var addIndex = context.props.app.get('user').get('current_playlist').get('current_media_index');
                   context.props.app.get('user').get('current_playlist').get('medias').add(newSong, {at: addIndex});
                   context.props.app.get('user').trigger('newSong');
-                  // addSongToPlaylist({title: $(e.target).attr('data-title'), youtube_id: $(e.target).attr('data-id'), img_url: $(e.target).attr('data-img'), duration: parseInt($(e.target).attr('data-duration'))});
                 }
               }
             });
@@ -150,7 +150,7 @@ var SearchBar = React.createClass({
       <div>
         <ul id="searchResults" style={searchResultsStyle}></ul>
         <form style={style}>
-          <input style={searchBarInputStyle} onChange={this.handleSubmit} value={this.state.text} className="form-control" placeholder="Search YouTube"/>
+          <input style={searchBarInputStyle} onChange={this.handleChange} onSubmit={this.handleSubmit} value={this.state.text} className="form-control" placeholder="Search YouTube"/>
         </form>
       </div>
     );

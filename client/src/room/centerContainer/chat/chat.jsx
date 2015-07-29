@@ -112,7 +112,7 @@ var Chat = React.createClass({
     };
     return (
       <div style={divStyle}>
-        <StatusBar dj={'None'} title={'No Current Song'}/>
+        <StatusBar currentDJ={null} videoTitle={null}/>
         <div style={chatListStyle} ref="messageContainer">
           <ChatList items={this.state.items}/>
         </div>
