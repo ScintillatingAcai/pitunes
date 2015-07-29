@@ -8,6 +8,9 @@ var RouteHandler = Router.RouteHandler;
 var DefaultRoute = Router.DefaultRoute;
 var NotFoundRoute = Router.NotFoundRoute;
 
+var AppModel = require('../data/models/app.js');
+var appModel = new AppModel();
+
 var AppRouter = React.createClass({
   render: function() {
     return (
@@ -28,11 +31,29 @@ var RouteNotFound = React.createClass({
   }
 });
 
+var LandingWrapper = React.createClass({
+  render: function() {
+    return ( <LandingPageContainer model={appModel} /> );
+  }
+});
+
+var RoomsViewWrapper = React.createClass({
+  render: function() {
+    return ( <RoomsView model={appModel} /> );
+  }
+});
+
+var RoomWrapper = React.createClass({
+  render: function() {
+    return ( <AppContainer model={appModel} /> );
+  }
+});
+
 var routes = (
   <Route name='root' path="/" handler={AppRouter}>
-    <DefaultRoute name='default' handler={LandingPageContainer} />
-     <Route name='rooms' path='rooms' handler={RoomsView} />
-    <Route name='room' path='room/:room_id' handler={AppContainer} />
+    <DefaultRoute name='default' handler={LandingWrapper} />
+     <Route name='rooms' path='rooms' handler={RoomsViewWrapper} />
+    <Route name='room' path='room/:room_id' handler={RoomWrapper} />
     <NotFoundRoute name='notfound' handler={RouteNotFound} />
   </Route>
 );
