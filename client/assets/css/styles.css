@@ -95,7 +95,7 @@ h6 {
 }
 
 .content-section-a {
-    padding: 50px 0;
+    padding-bottom: 50px;
     background-color: #F8F8F8;
 }
 
@@ -207,7 +207,8 @@ p.copyright {
 }
 
 .j-footer-bot {
-    position: absolute;
+    position: fixed;
+    z-index: 1;
     background-color: #F8F8F8;
     bottom: 0;
     width: 100%;
