@@ -31,8 +31,8 @@ var RouteNotFound = React.createClass({
 var routes = (
   <Route name='root' path="/" handler={AppRouter}>
     <DefaultRoute name='default' handler={LandingPageContainer} />
-    <Route name='rooms' path='rooms' handler={RoomsView} />
-    <Route name='room' path='room' handler={AppContainer} />
+     <Route name='rooms' path='rooms' handler={RoomsView} />
+    <Route name='room' path='room/:room_id' handler={AppContainer} />
     <NotFoundRoute name='notfound' handler={RouteNotFound} />
   </Route>
 );
