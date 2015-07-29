@@ -1,6 +1,6 @@
 var React = require('react');
 var Router = require('react-router');
-var LandingPageContainer = require('../landingPage/LandingPageContainer.js');
+var LandingPageContainer = require('../landingPage/landingPageContainer.js');
 var RoomsView = require('../rooms/roomsContainer.js');
 var AppContainer = require('../roomComponents/loginController.jsx');
 var Route = Router.Route;
