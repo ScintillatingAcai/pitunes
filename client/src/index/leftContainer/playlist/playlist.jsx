@@ -37,7 +37,6 @@ var List = React.createClass({
     console.log('medias length: ', mediaLength);
     this.props.app.get('user').get('current_playlist').get('medias').each(function (e, index) {
       var mediaIndex =  (index + mediaLength - next_media_index + 1) % mediaLength;
-      console.log('mediaIndex: ', mediaIndex);
       var mediaObject = {};
       mediaObject.title = e.get('title');
       mediaObject.duration = context.durationToDisplay(e.get('duration'));
@@ -144,9 +143,9 @@ var List = React.createClass({
         success: function (res) {
           console.log('id: ', res.id);
           console.log(res);
-          this.props.app.get('user').set('current_playlist_id', res.id);
+          context.props.app.get('user').set('current_playlist_id', res.id);
           playlist.set('id', res.id);
-          this.props.app.get('user').set('current_playlist', playlist);
+          context.props.app.get('user').set('current_playlist', playlist);
         },
         error: function (res) {
           console.log("error: " + res.statusText);
@@ -286,8 +285,8 @@ var PlaylistTitle = React.createClass({
         type: 'PUT',
         success: function (res) {
           console.log('user current_playlist_id changed to ', newPlaylistId);
-          this.props.app.get('user').set('current_playlist_id', newPlaylistId);
-          this.props.app.get('user').set('current_playlist', this.props.app.get('user').get('playlists').get(newPlaylistId));
+          context.props.app.get('user').set('current_playlist_id', newPlaylistId);
+          context.props.app.get('user').set('current_playlist', context.props.app.get('user').get('playlists').get(newPlaylistId));
         },
         error: function (res) {
           console.log("error: " + res.statusText);
@@ -418,8 +417,8 @@ var Playlist = React.createClass({
   deleteCurrentPlaylist: function () {
     console.log('user confirmed delete and parent heard')
     var context = this;
-    if (app.get('user').get('id') !== 0) {
-      $.ajax({url: server_uri + '/api/users/' + app.get('user').get('id') + '/playlists/' + app.get('user').get('current_playlist_id'),
+    if (this.props.app.get('user').get('id') !== 0) {
+      $.ajax({url: server_uri + '/api/users/' + this.props.app.get('user').get('id') + '/playlists/' + this.props.app.get('user').get('current_playlist_id'),
         type: 'DELETE',
         success: function (res) {
           var newPlaylistId = res.current_playlist_id;
@@ -451,7 +450,7 @@ var Playlist = React.createClass({
         <DeletePlaylistModal close={this.close} deleteCurrentPlaylist={this.deleteCurrentPlaylist} showDeletePlaylist={this.state.showDeletePlaylist} app={this.props.app}/>
         <NewPlaylistModal close={this.close} createNewPlaylist={this.createNewPlaylist} showNewPlaylist={this.state.showNewPlaylist} app={this.props.app}/>
         <RenamePlaylistModal close={this.close} submitUpdatePlaylist={this.submitUpdatePlaylist} showRenamePlaylist={this.state.showRenamePlaylist} app={this.props.app}/>
-        <PlaylistTitle renamePlaylistClick={this.renamePlaylistClick} newPlaylistClick={this.newPlaylistClick} model={this.props.app.get('user')} data={[]} title={'Sign in to create a Playlist!'} app={this.props.app}/>
+        <PlaylistTitle renamePlaylistClick={this.renamePlaylistClick} newPlaylistClick={this.newPlaylistClick} deletePlaylistClick={this.deletePlaylistClick} model={this.props.app.get('user')} data={[]} title={'Sign in to create a Playlist!'} app={this.props.app}/>
         <Songs app={this.props.app}/>
       </div>
     );
