@@ -2,9 +2,6 @@ var $ = require('jquery');
 var React = require('react'); 
 var Backbone = require('backbone');
 
-var AppModel = require('../data/models/app.js');
-var app = new AppModel();
-module.exports = app;
 var TopNavBar = require('./topNavBar.jsx');
 var BottomNavBar = require('./bottomNavBar.jsx');
 var SignInModal = require('./signInModal.jsx');
