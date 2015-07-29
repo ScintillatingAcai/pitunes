@@ -1,8 +1,7 @@
 var React = require('react');
 var $ = require('jquery');
 
-var server_uri = 'http://' + window.location.host,
-  socket = io(server_uri);
+var socket = io(window.location.origin);
 
 var QueueList = React.createClass({
   componentDidMount: function () {

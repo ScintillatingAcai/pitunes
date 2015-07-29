@@ -7,8 +7,7 @@ ga.src = 'http://www.youtube.com/player_api';
 var s = document.getElementsByTagName('script')[0];
 s.parentNode.insertBefore(ga, s);
 
-var server_uri = 'http://' + window.location.host,
-  socket = io(server_uri);
+var socket = io(window.location.origin);
 
 // Stub for JSON object from server
 var mediaStatus = {

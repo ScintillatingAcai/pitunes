@@ -30,8 +30,7 @@ var CurrentRoomModel = Backbone.Model.extend({
   },
 
   retrieveCurrentRoomInfo: function () {
-    var server_uri = 'http://' + window.location.host;
-    var source = server_uri + '/api/rooms/' + this.get('id');
+    var source = window.location.origin + '/api/rooms/' + this.get('id');
     var context = this;
     $.get(source, function (res) {
       for (var key in res) {
