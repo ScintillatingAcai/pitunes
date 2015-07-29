@@ -3,10 +3,6 @@ var $ = require('jquery');
 var ReactBootstrap = require('react-bootstrap');
 var Modal = ReactBootstrap.Modal;
 
-var user = null, 
-  room = 'root', 
-  server_uri = 'http://' + document.domain + ':3000',
-  socket = io(server_uri);
 
 var SignInModal = React.createClass({
   render: function() {

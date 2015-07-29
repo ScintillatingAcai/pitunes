@@ -28,8 +28,10 @@ var CurrentRoomModel = Backbone.Model.extend({
     //   this.trigger('reset:djQueue');
     // }.bind(this));
   },
+
   retrieveCurrentRoomInfo: function () {
-    var source = 'http://' + document.domain + ':3000/api/rooms/' + this.get('id');
+    var server_uri = 'http://' + window.location.host;
+    var source = server_uri + '/api/rooms/' + this.get('id');
     var context = this;
     $.get(source, function (res) {
       for (var key in res) {

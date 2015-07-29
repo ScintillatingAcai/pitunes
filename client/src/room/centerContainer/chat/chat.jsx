@@ -1,7 +1,7 @@
 var React = require('react');
 var StatusBar = require('../../centerContainer/statusbar/statusbar.jsx');
 
-var server_uri = 'http://' + document.domain + ':3000',
+var server_uri = 'http://' + window.location.host,
   socket = io(server_uri);
 
 var ChatList = React.createClass({
