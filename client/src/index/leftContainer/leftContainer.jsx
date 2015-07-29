@@ -16,8 +16,8 @@ var LeftContainer = React.createClass({
     };
     return (
       <div style={style}>
-        <MediaAdd />
-        <Playlist />
+        <MediaAdd app={this.props.app}/>
+        <Playlist app={this.props.app}/>
       </div>
     );
   }

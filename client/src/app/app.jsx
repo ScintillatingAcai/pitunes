@@ -4,7 +4,7 @@ var AppModel = require('../data/models/app.js');
 var LeftContainer = require('../index/leftContainer/leftContainer.jsx');
 var CenterContainer = require('../index/centerContainer/centerContainer.jsx');
 var RightContainer = require('../index/rightContainer/rightContainer.jsx');
-var app = require('../roomComponents/loginController.jsx');
+// var app = require('../roomComponents/loginController.jsx');
 
 var AppContainer = React.createClass({
   render: function () {
@@ -18,9 +18,9 @@ var AppContainer = React.createClass({
     };
     return (
       <div style={style}>
-        <LeftContainer model={app.get('user')}/>
-        <CenterContainer />
-        <RightContainer />
+        <LeftContainer app={this.props.app}/>
+        <CenterContainer app={this.props.app}/>
+        <RightContainer app={this.props.app}/>
       </div>
     );
   }

@@ -16,6 +16,7 @@ var RoomsView = React.createClass({
             //check if there 'currentMedia' is null and if it's not, create a url property for the video thumbnail
             if (room.currentMedia === null) {
               //TODO: ADD A DEFAULT IMAGE FOR ROOMS THAT ARE NOT PLAYING MUSIC
+              room.videoURL = '../../assets/img/no-dj.png';
               roomsCollection.add(new RoomModel(room));
             } else {
               room.videoURL = 'https://i.ytimg.com/vi/' + room.currentMedia + '/hqdefault.jpg';

@@ -1,6 +1,6 @@
 var React = require('react');
 
-var app = require('../../../roomComponents/loginController.jsx');
+// var app = require('../../../roomComponents/loginController.jsx');
 
 var Users = React.createClass({
   componentDidMount: function () {
@@ -85,8 +85,8 @@ var OnlineUsers = React.createClass({
     };
     return (
       <div style={style}>
-        <UsersTitle />
-        <Users model={app.get('current_room')} />
+        <UsersTitle app={this.props.app}/>
+        <Users model={this.props.app.get('current_room')} app={this.props.app} />
       </div>
     );
   }

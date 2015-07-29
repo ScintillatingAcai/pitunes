@@ -9,7 +9,7 @@ var DefaultRoute = Router.DefaultRoute;
 var NotFoundRoute = Router.NotFoundRoute;
 
 var AppModel = require('../data/models/app.js');
-var appModel = new AppModel();
+var app = new AppModel();
 
 var AppRouter = React.createClass({
   render: function() {
@@ -33,19 +33,19 @@ var RouteNotFound = React.createClass({
 
 var LandingWrapper = React.createClass({
   render: function() {
-    return ( <LandingPageContainer model={appModel} /> );
+    return ( <LandingPageContainer app={app} /> );
   }
 });
 
 var RoomsViewWrapper = React.createClass({
   render: function() {
-    return ( <RoomsView model={appModel} /> );
+    return ( <RoomsView app={app} /> );
   }
 });
 
 var RoomWrapper = React.createClass({
   render: function() {
-    return ( <AppContainer model={appModel} /> );
+    return ( <AppContainer app={app} room_id={this.props.params.room_id}/> );
   }
 });
 

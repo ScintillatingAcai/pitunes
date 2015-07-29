@@ -6,7 +6,7 @@ var server_uri = 'http://' + document.domain + ':3000',
 var app = require('../../roomComponents/loginController.jsx');
 
 var DebuggerButtonSimVideoDesync = React.createClass({
-  handleClick: function () { 
+  handleClick: function () {
     setVideoTime(3);
   },
   render: function () {
@@ -18,8 +18,8 @@ var DebuggerButtonSimVideoDesync = React.createClass({
 
 var DebuggerButtonJoinRoom = React.createClass({
   handleClick: function () {
-    socket.emit('user room join', { user: app.get('user').attributes, room: 1 })
-    app.get('current_room').set('id', 1);
+    socket.emit('user room join', { user: this.props.app.get('user').attributes, room: 1 })
+    this.props.app.get('current_room').set('id', 1);
   },
   render: function () {
     return (
@@ -30,7 +30,7 @@ var DebuggerButtonJoinRoom = React.createClass({
 
 var DebuggerButtonLeaveRoom = React.createClass({
   handleClick: function () {
-    socket.emit('user room leave', { user: app.get('user').attributes, room: 1 })
+    socket.emit('user room leave', { user: this.props.app.get('user').attributes, room: 1 })
   },
   render: function () {
     return (
@@ -50,8 +50,8 @@ var DebuggerButtons = React.createClass({
     return (
         <div style={style}>
           <DebuggerButtonSimVideoDesync />
-          <DebuggerButtonJoinRoom />
-          <DebuggerButtonLeaveRoom />
+          <DebuggerButtonJoinRoom app={this.props.app} />
+          <DebuggerButtonLeaveRoom app={this.props.app}/>
         </div>
     );
   }

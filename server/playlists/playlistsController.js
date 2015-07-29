@@ -63,6 +63,7 @@ module.exports = {
     utils.deletePlaylist(req.playlist_id)
     .then(function() {
       console.log("finished deletePlaylist");
+      next();
     })
     .catch(function(error) {
       console.log('controller error: ',error);

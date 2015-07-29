@@ -17,8 +17,8 @@ var RightContainer = React.createClass({
     };
     return (
       <div className="rightContainer" style={style}>
-        <Queue />
-        <OnlineUsers />
+        <Queue app={this.props.app}/>
+        <OnlineUsers app={this.props.app}/>
       </div>
     );
   }

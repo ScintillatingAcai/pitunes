@@ -1,7 +1,7 @@
 var React = require('react');
 var $ = require('jquery');
 
-var app = require('../../../roomComponents/loginController.jsx');
+// var app = require('../../../roomComponents/loginController.jsx');
 
 var server_uri = 'http://' + document.domain + ':3000',
   socket = io(server_uri);
@@ -92,10 +92,10 @@ var QueueJoinButton = React.createClass({
   },
   handleClick: function () {
     if (!this.state.inQueue) {
-      socket.emit('user queue join', {user: app.get('user').attributes, room: 1});
+      socket.emit('user queue join', {user: this.props.app.get('user').attributes, room: 1});
       this.setState({inQueue: !this.state.inQueue, text: 'Leave Queue'})
     } else {
-      socket.emit('user queue leave', {user: app.get('user').attributes, room: 1});
+      socket.emit('user queue leave', {user: this.props.app.get('user').attributes, room: 1});
       this.setState({inQueue: !this.state.inQueue, text: 'Join Queue'})
       this.getText();
     }
@@ -133,10 +133,10 @@ var Queue = React.createClass({
     }
     return (
       <div style={style}>
-        <QueueTitle />
-        <QueueList model={app.get('current_room')} />
+        <QueueTitle app={this.props.app}/>
+        <QueueList model={this.props.app.get('current_room')} app={this.props.app}/>
         <div className='text-center' style={buttonStyle}>
-        <QueueJoinButton model={app.get('user')} inQueue={false} />
+        <QueueJoinButton model={this.props.app.get('user')} inQueue={false} app={this.props.app}/>
         </div>
       </div>
     );

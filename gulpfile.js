@@ -30,7 +30,7 @@ var paths = {
   dist: './client/dist'
 };
 
-// var libFilesToMove = []; 
+// var libFilesToMove = [];
 
 
 // gulp.task('sass', function(done) {
@@ -46,7 +46,7 @@ var paths = {
 //     .pipe(gulp.dest('./www/css/'))
 //     .on('end', done);
 // });
-// 
+//
 gulp.task('browserify-client', function (cb) {
 
   var files = glob.sync(paths.clientapp);
