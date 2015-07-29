@@ -92,10 +92,10 @@ var QueueJoinButton = React.createClass({
   },
   handleClick: function () {
     if (!this.state.inQueue) {
-      socket.emit('user queue join', {user: this.props.app.get('user').attributes, room: 1});
+      socket.emit('user queue join', {user: this.props.app.get('user').attributes, room: this.props.app.get('current_room').get('id')});
       this.setState({inQueue: !this.state.inQueue, text: 'Leave Queue'})
     } else {
-      socket.emit('user queue leave', {user: this.props.app.get('user').attributes, room: 1});
+      socket.emit('user queue leave', {user: this.props.app.get('user').attributes, room: this.props.app.get('current_room').get('id')});
       this.setState({inQueue: !this.state.inQueue, text: 'Join Queue'})
       this.getText();
     }
