@@ -7,9 +7,7 @@ var NewPlaylistModal = require('./newPlaylistModal.jsx');
 var RenamePlaylistModal = require('./renamePlaylistModal.jsx');
 var DeletePlaylistModal = require('./deletePlaylistModal.jsx');
 
-var server_uri = 'http://' + document.domain + ':3000',
-socket = io(server_uri);
-
+var server_uri = 'http://' + window.location.host;
 var placeholder = document.createElement("div");
 placeholder.className = "placeholder";
 

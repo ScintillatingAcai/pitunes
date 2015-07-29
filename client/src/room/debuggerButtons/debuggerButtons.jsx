@@ -1,6 +1,6 @@
 var React = require('react');
 
-var server_uri = 'http://' + document.domain + ':3000',
+var server_uri = 'http://' + window.location.host,
   socket = io(server_uri);
 
 var DebuggerButtonSimVideoDesync = React.createClass({
