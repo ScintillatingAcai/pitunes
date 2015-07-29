@@ -93,7 +93,6 @@ var SearchBar = React.createClass({
         }
         var videoMap = {};
         var durationSearchUrl = 'https://www.googleapis.com/youtube/v3/videos?id=' + videoIds + '&part=contentDetails&key=' + YOUTUBE_API_KEY;
-        var context = this;
         $.ajax({
           type: "GET",
           url: durationSearchUrl,
