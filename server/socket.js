@@ -8,9 +8,7 @@ var mediasUtils = require('./medias/mediasUtils');
 var allClients = [];
 
 var addUserToClients = function(user_id, room_id, socket) {
-  if (indexOfUserFromSocket(socket) === -1) {
-    allClients.push({socket: socket, user_id: user_id, room_id: room_id});
-  }
+  allClients.push({socket: socket, user_id: user_id, room_id: room_id});
 };
 
 var indexOfUserFromSocket = function(socket) {
@@ -24,12 +22,16 @@ var indexOfUserFromSocket = function(socket) {
 };
 
 var removeUserFromClients = function(socket) {
-  var index = indexOfUserFromSocket(socket);
-  var userInfo = allClients[index];
-  if (index > -1) {
-    allClients.splice(index, 1);
+  var index = -1;
+  for (var i = 0; i < allClients.length; i++) {
+    var client = allClients[i];
+    if (client.socket === socket) {
+      index = i;
+      allClients.splice(i, 1);
+    }
   }
-  return userInfo;
+
+  return index;
 };
 
 module.exports = function(io) {
@@ -52,22 +54,45 @@ module.exports = function(io) {
 
       var index = indexOfUserFromSocket(socket);
       if (index > -1) {
-        return console.log('user already has socket in a room');
+        var userInfo = allClients[index];
+        var old_user_id = userInfo.user_id;
+        var old_room_id = userInfo.room_id;
+        removeUserFromClients(socket);
+        console.log('Removed from room socket user: ', old_user_id);
+        if (!old_user_id) {
+          socket.leave(old_room_id);
+          console.log('anon user left room: ', old_room_id);
+        }
+        var old_room = roomUtils.getRoom(old_room_id);
+        if(old_room.removeDJFromQueue(user_id)) {
+        }
+        old_room.removeUser(old_user_id).then(function(user) {
+          socket.leave(old_room_id);
+
+          console.log('should have emitted: ', "user room change");
+          console.log('room users length:  ', room.users.length);
+        }).catch(function(err) {console.error(err);});
       }
 
       var room = roomUtils.getRoom(room_id);
       if (!user_id) {
+        console.log('JOININDAAFSDASDFADFAS ANON');
+        console.log('ROOM ID:', room_id);
         socket.join(room_id);
+        console.log('user should have be hearing medias status from room:', room_id);
         // socket.in(room_id).emit("user room change",  JSON.stringify(room.users));
         // socket.emit("user room change",  JSON.stringify(room.users));
         room.startUserForCurrentMedia(socket);
-        allClients.push({socket: socket, user_id: user_id, room_id: room_id});
+        // allClients.push({socket: socket, user_id: user_id, room_id: room_id});
         return console.log('anon user entered room');
       }
 
       var user = userUtils.getUser(user_id);
 
       if (user) {
+        console.log('JOININDAAFSDASDFADFAS USER:', user.get('id'));
+        console.log('ROOM ID:', room_id);
+
         socket.join(room_id);
         room.addUser(user).then(function(user) {
           if (!user) return console.error('user already in room');
@@ -77,7 +102,7 @@ module.exports = function(io) {
           console.log('should have emitted: ', "user room change");
           console.log('room users length:  ', room.users.length);
 
-          allClients.push({socket: socket, user_id: user_id, room_id: room_id});
+          // allClients.push({socket: socket, user_id: user_id, room_id: room_id});
         }).catch(function(err) {console.error(err);});
       }
     });
