@@ -1,13 +1,12 @@
-
 var React = require('react');
 var $ = require('jquery');
 var ReactBootstrap = require('react-bootstrap');
 
-// New Playlist Modal
+// Rename Playlist Modal
 var Modal = ReactBootstrap.Modal;
 
 var RenamePlaylistModal = React.createClass({
-  render: function() {
+  render: function () {
     return (
       <div>
         <Modal show={this.props.showRenamePlaylist} onHide={this.props.close}>

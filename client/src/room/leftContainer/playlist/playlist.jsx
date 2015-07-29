@@ -8,7 +8,7 @@ var RenamePlaylistModal = require('./renamePlaylistModal.jsx');
 var DeletePlaylistModal = require('./deletePlaylistModal.jsx');
 
 var server_uri = 'http://' + document.domain + ':3000',
-    socket = io(server_uri);
+socket = io(server_uri);
 
 var placeholder = document.createElement("div");
 placeholder.className = "placeholder";
@@ -75,9 +75,6 @@ var List = React.createClass({
       }
       this.submitUpdatePlaylist(this.props.app.get('user').get('current_playlist'));
     }.bind(this));
-
-  },
-  onClick: function (e) {
 
   },
   onNameChange: function (e) {
@@ -268,7 +265,6 @@ var PlaylistTitle = React.createClass({
       console.log('not logged in');
     }
   },
-
   handleNewCurrentPlaylist: function () {
     if (this.props.app.get('user').get('current_playlist').get('name')) {
       this.setState({ title: this.props.app.get('user').get('current_playlist').get('name') });
@@ -388,7 +384,6 @@ var Playlist = React.createClass({
       console.log('not logged in');
     }
   },
-
   submitUpdatePlaylist: function () {
     var playlist = this.props.app.get('user').get('current_playlist')
     var form = document.getElementById('renamePlaylist-form');
