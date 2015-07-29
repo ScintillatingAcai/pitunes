@@ -33,21 +33,37 @@ var List = React.createClass({
     var newData = [];
     var mediaLength = app.get('user').get('current_playlist').get('medias').length;
     var current_media_index = app.get('user').get('current_playlist').get('current_media_index');
-    var next_media_index = ( current_media_index ) % mediaLength + 1;
+    var next_media_index = (current_media_index) % mediaLength + 1;
     console.log('medias length: ', mediaLength);
     app.get('user').get('current_playlist').get('medias').each(function (e, index) {
-      var mediaIndex =  ( index + mediaLength - next_media_index + 1) % mediaLength ;
+      var mediaIndex =  (index + mediaLength - next_media_index + 1) % mediaLength;
       console.log('mediaIndex: ', mediaIndex);
       var mediaObject = {};
-      mediaObject.text = e.get('title') + " | " + context.durationToDisplay(e.get('duration'));
+      mediaObject.title = e.get('title');
+      mediaObject.duration = context.durationToDisplay(e.get('duration'));
       mediaObject.id = e.get('id');
       newData[mediaIndex] = mediaObject;
     });
     this.setState({ data: newData });
   },
+  removeSong: function (e) {
+    var data = this.state.data;
+    var songId = $(e.target).closest('div').attr('data-id');
+    data.splice(songId, 1);
+    this.setState({data: data});
+    var newMedias = new MediasCollection();
+    for (var i = 0; i < this.state.data.length; i++) {
+      var aData = this.state.data[i];
+      var aDataID = aData.id;
+      var aMedia = app.get('user').get('current_playlist').get('medias').get(aDataID);
+      newMedias.push(aMedia);
+    }
+    app.get('user').get('current_playlist').set('medias', newMedias);
+    app.get('user').get('current_playlist').set('current_media_index', 0);
+    this.submitUpdatePlaylist(app.get('user').get('current_playlist'));
+  },
   componentDidMount: function () {
     this.props.model.on('change:current_playlist', function () {
-      console.log('Playlist heard change');
       if (app.get('user').get('current_playlist')) {
         this.handleNewCurrentPlaylist();
       }
@@ -168,16 +184,21 @@ var List = React.createClass({
       fontSize: '12px',
       listStyleType: 'none'
     };
+    var cellStyle = {
+      width: '80%',
+      margin: '0 5px 0 5px'
+    };
     console.log(this.state.data);
     var listItems = this.state.data.map((function (item, i) {
       return (
-        <div style={style} data-id={i}
+        <div style={style}
+          data-id={i}
           key={i}
           draggable="true"
           onDragEnd={this.dragEnd}
           onDragStart={this.dragStart}
           onClick={this.onClick}>
-          {i + 1}. {item.text}
+          <span>{i + 1}. </span><span>{item.title}</span><span> | {item.duration} </span><button className='btn btn-xs' onClick={this.removeSong}><span className="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
         </div>
 
       );
