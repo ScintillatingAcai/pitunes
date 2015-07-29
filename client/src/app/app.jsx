@@ -1,9 +1,9 @@
 var React = require('react');
 
 var AppModel = require('../data/models/app.js');
-var LeftContainer = require('../index/leftContainer/leftContainer.jsx');
-var CenterContainer = require('../index/centerContainer/centerContainer.jsx');
-var RightContainer = require('../index/rightContainer/rightContainer.jsx');
+var LeftContainer = require('../room/leftContainer/leftContainer.jsx');
+var CenterContainer = require('../room/centerContainer/centerContainer.jsx');
+var RightContainer = require('../room/rightContainer/rightContainer.jsx');
 // var app = require('../roomComponents/loginController.jsx');
 
 

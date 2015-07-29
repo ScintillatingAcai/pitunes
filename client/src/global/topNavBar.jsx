@@ -1,5 +1,5 @@
 var React = require('react');
-var DebuggerButtons = require('../index/debuggerButtons/debuggerButtons.jsx');
+var DebuggerButtons = require('../room/debuggerButtons/debuggerButtons.jsx');
 var app = require('./loginController.jsx');
 
 var TopNavBar = React.createClass({
