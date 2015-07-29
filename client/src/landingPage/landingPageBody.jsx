@@ -15,13 +15,13 @@ var LandingPageBody = React.createClass({
                     <hr className="intro-divider"></hr>
                     <ul className="list-inline intro-social-buttons">
                       <li>
-                        <a onClick={this.props.signInClick} className="btn btn-default btn-lg"><i className="fa fa-sign-in fa-fw"></i><span className="network-name">Sign In</span></a>
+                        <a onClick={this.props.signInClick} className="btn btn-default btn-lg" id="landing-signin"><i className="fa fa-sign-in fa-fw"></i><span className="network-name">Sign In</span></a>
                       </li>
                       <li>
-                        <a href="/#rooms" className="btn btn-default btn-lg"><i className="fa fa-music fa-fw"></i><span className="network-name">Join Room</span></a>
+                        <a href="/#rooms" className="btn btn-default btn-lg" id="landing-joinroom"><i className="fa fa-music fa-fw"></i><span className="network-name">Join Room</span></a>
                       </li>
                       <li>
-                        <a onClick={this.props.signUpClick} className="btn btn-default btn-lg"><i className="fa fa-pencil fa-fw"></i><span className="network-name">Sign Up</span></a>
+                        <a onClick={this.props.signUpClick} className="btn btn-default btn-lg" id="landing-signup"><i className="fa fa-pencil fa-fw"></i><span className="network-name">Sign Up</span></a>
                       </li>
                     </ul>
                   </div>

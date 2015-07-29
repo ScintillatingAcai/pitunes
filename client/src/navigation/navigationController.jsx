@@ -15,6 +15,15 @@ var NavigationController = React.createClass({
   getInitialState: function() {
     return { showSignIn: false, showSignUp: false, showSignOut: false, errorMessage: '' };
   },
+  componentDidMount: function() {
+    var context = this;
+    $('body').on('click', '#landing-signin', function() {
+      context.signInClick();
+    });
+    $('body').on('click', '#landing-signup', function() {
+      context.signUpClick();
+    });
+  },
   close: function() {
     console.log('close');
     this.setState({ showSignIn: false, showSignUp: false, showSignOut: false, errorMessage: '' });
@@ -53,6 +62,9 @@ var NavigationController = React.createClass({
         // socket.emit('user room join', { user: self.props.app.get('user').attributes, room: self.props.room_id})
         // self.props.app.get('current_room').set('id', room_id);
         self.close();
+        if (window.location.href.indexOf('/#/room/') === -1) {
+          window.location.href = '/#rooms';
+        }
       },
       error: function (res) {
         self.setState({ errorMessage: res.statusText + ": " + res.responseText });
@@ -74,6 +86,9 @@ var NavigationController = React.createClass({
         self.props.app.get('user').retrievePlaylists();
         self.props.app.get('user').trigger('login');
         self.close();
+        if (window.location.href.indexOf('/#/room/') === -1) {
+          window.location.href = '/#rooms';
+        }
       },
       error: function(res) {
         self.setState({ errorMessage: res.statusText + ': ' + res.responseText });

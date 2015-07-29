@@ -47,7 +47,7 @@ var RoomsView = React.createClass({
 
 var Rooms = React.createClass({
     roomClick: function(id) {
-        window.location.href = 'http://' + document.domain + ':3000/#/room/' + id;
+        window.location.href = '/#/room/' + id;
     },
     render: function() {
         var self = this;
