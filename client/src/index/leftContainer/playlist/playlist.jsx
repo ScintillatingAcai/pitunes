@@ -376,9 +376,9 @@ var Playlist = React.createClass({
         success: function (res) {
           console.log('id: ', res.id);
           console.log(res);
-          this.props.app.get('user').set('current_playlist_id', res.id);
+          context.props.app.get('user').set('current_playlist_id', res.id);
           playlist.set('id', res.id);
-          this.props.app.get('user').set('current_playlist', playlist);
+          context.props.app.get('user').set('current_playlist', playlist);
           context.close();
         },
         error: function (res) {
@@ -403,8 +403,8 @@ var Playlist = React.createClass({
         dataType: 'json',
         data: jsonPlaylist,
         success: function (res) {
-          this.props.app.get('user').get('current_playlist').set('name', res.name);
-          this.props.app.get('user').trigger('currentPlaylistNewName');
+          context.props.app.get('user').get('current_playlist').set('name', res.name);
+          context.props.app.get('user').trigger('currentPlaylistNewName');
           context.close();
         },
         error: function (res) {
@@ -423,8 +423,8 @@ var Playlist = React.createClass({
         type: 'DELETE',
         success: function (res) {
           var newPlaylistId = res.current_playlist_id;
-          app.get('user').set('current_playlist_id', newPlaylistId);
-          app.get('user').set('current_playlist', app.get('user').get('playlists').at(newPlaylistId));
+          context.props.app.get('user').set('current_playlist_id', newPlaylistId);
+          context.props.app.get('user').set('current_playlist', context.props.app.get('user').get('playlists').at(newPlaylistId));
           context.close();
         },
         error: function (res) {
