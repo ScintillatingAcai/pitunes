@@ -440,6 +440,10 @@ var Playlist = React.createClass({
       console.log('not logged in');
     }
   },
+  preventSubmit: function(e) {
+    console.log('prevented submit')
+    e.preventDefault();
+  },
   render: function () {
     var style = {
       background: '#222222',
@@ -454,8 +458,8 @@ var Playlist = React.createClass({
     return (
       <div id="playlistContainer" style={style}>
         <DeletePlaylistModal close={this.close} deleteCurrentPlaylist={this.deleteCurrentPlaylist} showDeletePlaylist={this.state.showDeletePlaylist} app={this.props.app}/>
-        <NewPlaylistModal close={this.close} createNewPlaylist={this.createNewPlaylist} showNewPlaylist={this.state.showNewPlaylist} app={this.props.app}/>
-        <RenamePlaylistModal close={this.close} submitUpdatePlaylist={this.submitUpdatePlaylist} showRenamePlaylist={this.state.showRenamePlaylist} app={this.props.app}/>
+        <NewPlaylistModal close={this.close} createNewPlaylist={this.createNewPlaylist} showNewPlaylist={this.state.showNewPlaylist} preventSubmit={this.preventSubmit} app={this.props.app}/>
+        <RenamePlaylistModal close={this.close} submitUpdatePlaylist={this.submitUpdatePlaylist} showRenamePlaylist={this.state.showRenamePlaylist} preventSubmit={this.preventSubmit} app={this.props.app}/>
         <PlaylistTitle renamePlaylistClick={this.renamePlaylistClick} newPlaylistClick={this.newPlaylistClick} deletePlaylistClick={this.deletePlaylistClick} model={this.props.app.get('user')} data={[]} title={'Sign in to create a Playlist!'} app={this.props.app}/>
         <Songs app={this.props.app}/>
       </div>

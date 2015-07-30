@@ -62,7 +62,6 @@ var NavigationController = React.createClass({
         if (window.location.href.indexOf('/#/room/') === -1) {
           window.location.href = '/#/rooms';
         }
-
         // Check if a user logged in within an individual room and emit user room join message via socket if so
         if (window.location.href.indexOf('/#/room/') > -1) {
           if (self.props.app.get('current_room').get('id')) {

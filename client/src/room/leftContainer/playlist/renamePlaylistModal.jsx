@@ -15,7 +15,7 @@ var RenamePlaylistModal = React.createClass({
           </Modal.Header>
           <Modal.Body>
             <div>
-            <form id="renamePlaylist-form">
+            <form id="renamePlaylist-form" onSubmit={this.props.preventSubmit}>
               <div className="form-group">
                 <label htmlFor="renamePlaylist-form" className="hide">Password</label>
                 <input type="text" className="form-control input-lg " id="renamePlaylist-name" placeholder="Rename Current Playlist" required />
