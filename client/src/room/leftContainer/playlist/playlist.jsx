@@ -227,6 +227,7 @@ var PlaylistTitle = React.createClass({
     return {title: this.props.title, playlistData: []}
   },
   componentDidMount: function () {
+
     this.props.model.on('change:current_playlist', function () {
       console.log('playlistTitle heard change in user\'s current_playlist');
       if (this.props.app.get('user').get('current_playlist')) {
@@ -235,6 +236,7 @@ var PlaylistTitle = React.createClass({
         $('.playlistNavigateMenuDropdown').removeClass('hidden');
       }
     }.bind(this));
+    
     this.props.model.on('currentPlaylistNewName', function () {
       console.log('playlistTitle heard currentPlaylistNewName');
       if (this.props.app.get('user').get('current_playlist')) {
