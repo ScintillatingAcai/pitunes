@@ -1,5 +1,3 @@
-// var $ = require('jquery');
-
 var ga = document.createElement('script');
 ga.type = 'text/javascript';
 ga.async = false;
@@ -17,7 +15,6 @@ var mediaStatus = {
 
 var done = false;
 var player;
-var playerInstaniated = false;
 
 // Initialize player if user joins room and video is currently playing or serve static message if not
 var onYouTubePlayerAPIReady = function () {
@@ -45,13 +42,12 @@ var serveStaticImg = function () {
 // Destroy the player and serve "No current DJ" Message
 var removeVideo = function () {
   player.destroy();
-  playerInstaniated = false;
+  player = null;
   serveStaticImg();
 };
 
 // Instantiate player and load mediastatus videoID/start playing video
 var createPlayer = function (currentVideoId) {
-  playerInstaniated = true;
   player = new YT.Player('videoContainer', {
     // TODO Tweak these or dynamically generate based on page size
     height: '390',
@@ -91,7 +87,6 @@ socket.on('media status', function (data) {
 // Wrapper for loadVideo/serveStaticImg
 var heardNewMediaStatus = function () {
   if (!mediaStatus || !mediaStatus.videoId) {
-    // serveStaticImg();
     removeVideo();
   } else {
     loadVideo(mediaStatus.videoId, mediaStatus.startSeconds);
@@ -121,11 +116,11 @@ var stopVideo = function () {
 // Main Load Video
 // Expects 11 character string (YouTube Video ID) and the starttime of video
 var loadVideo = function (videoId, startSeconds) {
-  // If player already exists...
-  if (playerInstaniated) {
+  // If no player in room, reinstaniate it
+  if (player) {
     // Load new player if current video is different from new video or same video is being played again
-
     if ((player.getVideoData().video_id !== videoId) || mediaStatus.status === 'start') {
+      console.log('VIDEO PLAYER LOAD', mediaStatus);
       player.loadVideoById(videoId, startSeconds);
     } else {
       // If same video, check if desync is greater than 10 seconds
@@ -134,9 +129,7 @@ var loadVideo = function (videoId, startSeconds) {
         setVideoTime(startSeconds);
       }
     }
-  // If no player in room, reinstaniate it
   } else {
-    playerInstaniated = true;
     player = new YT.Player('videoContainer', {
       // TODO Tweak these or dynamically generate based on page size
       height: '390',

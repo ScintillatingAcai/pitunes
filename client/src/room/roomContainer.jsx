@@ -4,7 +4,6 @@ var AppModel = require('../data/models/app.js');
 var LeftContainer = require('../room/leftContainer/leftContainer.jsx');
 var CenterContainer = require('../room/centerContainer/centerContainer.jsx');
 var RightContainer = require('../room/rightContainer/rightContainer.jsx');
-
 var socket = io(window.location.origin);
 
 var RoomContainer = React.createClass({
@@ -14,6 +13,9 @@ var RoomContainer = React.createClass({
   componentDidMount: function () {
     socket.emit('user room join', { user: this.props.app.get('user').attributes, room: this.props.room_id });
     this.props.app.get('current_room').set('id', this.props.room_id);
+  },
+  componentDidUnmount: function () {
+    socket.emit('user room leave', { user: this.props.app.get('user').attributes, room: this.props.room_id});
   },
   render: function () {
     var style = {

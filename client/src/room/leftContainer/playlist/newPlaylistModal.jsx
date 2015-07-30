@@ -15,7 +15,7 @@ var NewPlaylistModal = React.createClass({
           </Modal.Header>
           <Modal.Body>
             <div>
-            <form id="newPlaylist-form">
+            <form id="newPlaylist-form" onSubmit={this.props.preventSubmit} >
               <div className="form-group">
                 <label htmlFor="newPlaylist-form" className="hide">Password</label>
                 <input type="text" className="form-control input-lg " id="newPlaylist-name" placeholder="Enter a Playlist Name" required />

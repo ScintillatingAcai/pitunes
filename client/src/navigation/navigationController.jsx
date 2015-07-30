@@ -62,7 +62,6 @@ var NavigationController = React.createClass({
         if (window.location.href.indexOf('/#/room/') === -1) {
           window.location.href = '/#/rooms';
         }
-
         // Check if a user logged in within an individual room and emit user room join message via socket if so
         if (window.location.href.indexOf('/#/room/') > -1) {
           if (self.props.app.get('current_room').get('id')) {
@@ -78,7 +77,7 @@ var NavigationController = React.createClass({
   },
   signUpUser: function () {
     var form = document.getElementById('signUp-form');
-    var data = { email: form[0].value, password: form[1].value, password: form[2].value, displayName: form[3].value };
+    var data = { email: form[0].value, password: form[1].value, displayName: form[3].value };
     var self = this;
     if (form[1].value !== form[2].value) { self.setState({ errorMessage: 'Your passwords did not match.' }); return; }
     $.ajax({
