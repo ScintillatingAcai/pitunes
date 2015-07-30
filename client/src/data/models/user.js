@@ -51,7 +51,7 @@ var UserModel = Backbone.Model.extend({
       console.log('GET request to ' + source + ' failed.');
     });
   },
-  updateForUserStatus: function(json) {
+  updateForUserStatus: function() {
     this.retrievePlaylists();
   }
 
