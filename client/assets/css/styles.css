@@ -248,8 +248,36 @@ div.placeholder:before {
     max-height: 216px;
 }
 
+.j-room-image-display{
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
 .j-roomDisplay {
     font-size: 20px;
+    margin-bottom: 0;
+}
+
+.gradientBoxesWithOuterShadows { 
+    width: 20%;
+    font-size: 20px;
+    margin-right: 4%;
+    margin-left: 1%;
+    margin-bottom: 4%;
+
+    /* outer shadows  (note the rgba is red, green, blue, alpha) */
+    -webkit-box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.4); 
+    -moz-box-shadow: 0px 1px 6px rgba(23, 69, 88, .5);
+
+    /* rounded corners */
+    -webkit-border-radius: 12px;
+    -moz-border-radius: 7px; 
+    border-radius: 20px;
+
+    /* gradients */
+    background: -webkit-gradient(linear, left top, left bottom, 
+    color-stop(0%, white), color-stop(15%, white), color-stop(100%, #D0D0D0)); 
+    background: -moz-linear-gradient(top, white 0%, white 55%, #D0D0D0 130%); 
 }
 
 
