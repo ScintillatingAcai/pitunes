@@ -19,7 +19,7 @@ var SignOutModal = React.createClass({
             </p>
             <form id="signupForm">
               <div className="form-group j-center-text">
-                <a type="submit" className="btn btn-default btn-md" onClick={this.props.signOutUser}><span className="network-name">Continue</span></a>
+                <a type="submit" className="btn btn-default btn-md" onClick={this.props.signOutUser}><span className="network-name">Sign Out</span></a>
                 <a type="submit" className="btn btn-default btn-md" onClick={this.props.close}><span className="network-name">Cancel</span></a> 
               </div>
             </form>
