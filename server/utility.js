@@ -1,19 +1,19 @@
 exports.isLoggedIn = function(req, res) {
-  return req.session ? !! req.session.user_id : false;
+  return req.session ? !!req.session.user_id : false;
 };
 
 exports.checkUserSession = function(req, res, next) {
-  if (req.user_id && (req.user_id !== req.session.user_id)) {
-    console.error('user not logged in 1');
+    console.log('checking session');
+  if ( req.user_id && (req.user_id !== req.session.user_id)) {
     console.error('req user_id: ', req.user_id);
     console.error('session user_id: ', req.session.user_id);
-    console.error('session: ', req.session.user_id);
 
-    // res.status(401).send({error: "u"});
+    res.status(401).end("User not logged in");
   }
   else if (!exports.isLoggedIn(req)) {
     // res.redirect('#/');
-    console.error('user not logged in 2');
+    console.error("User not logged in");
+    res.status(401).end("User not logged in");
   }
   else {
     next();

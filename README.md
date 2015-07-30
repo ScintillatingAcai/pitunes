@@ -20,7 +20,7 @@
 
 ## Usage
 
-> Some usage instructions
+> node index.js
 
 ## Requirements
 
@@ -34,20 +34,22 @@
 From within the root directory:
 
 ```sh
-sudo npm install -g bower
 sudo npm install -g gulp
 npm install
-bower install
+gulp
 ```
 
 ### Database Development Support
 ![alt tag](https://github.com/ScintillatingAcai/pitunes/blob/master/SQLSchema.png)
 In the server/db/dev-support-assets directory, developers may access the following items:
   1. Schema visualization image
-  1. schema.sql file which is unused in production but may be useful for creating schema during development
   1. testdata.sql file which is unused in production but may be useful for inserting sample data during development
 
 ### Setting up a development database environment
+1. Installing mysql:
+```sh
+npm install -g mysql-server
+```
 1. Start mysql and sign in:
 ```sh
 mysql.server start
