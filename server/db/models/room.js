@@ -155,7 +155,6 @@ var Room = db.Model.extend({
   },
 
   removeDJFromQueue: function(user_id) {
-    console.log('queue check 4: ', this.djQueue.length);
     var popDJ = this.users.get(user_id);
     var queueIndex;
 
