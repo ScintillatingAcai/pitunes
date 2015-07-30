@@ -22,7 +22,6 @@ var CreateRoomModal = React.createClass({
                 <label htmlFor="createRoom-name" className="hide">Fullname</label>
                 <input type="text" className="form-control input-lg" id="createRoom-name" placeholder="Room Name" required></input>
               </div>
-              
               <div className="form-group j-center-text">
                 <a type="submit" className="btn btn-default btn-md" onClick={this.props.createRoomClick}><i className="fa fa-pencil fa-fw"></i><span className="network-name">Create Room</span></a>
               </div>

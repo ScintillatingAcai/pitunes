@@ -206,6 +206,10 @@ p.copyright {
     margin-top: 10px;
 }
 
+.j-padding-bot-50 {
+    padding-bottom: 50px;
+}
+
 .j-footer-bot {
     position: fixed;
     z-index: 1;
@@ -239,3 +243,13 @@ div.placeholder:before {
 .j-padding-top-100px {
     padding-top: 100px;
 }
+
+.j-max-height-216px {
+    max-height: 216px;
+}
+
+.j-roomDisplay {
+    font-size: 20px;
+}
+
+
