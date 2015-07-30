@@ -25,7 +25,8 @@ var RoomsView = React.createClass({
       data: {name: form[0].value},
       success: function(res) {
         self.setState({ showCreateRoomModal: false, errorMessage: '' })
-        // window.location.href = '/#/room/' + res.id;
+        location.reload();
+        window.location.href = '/#/room/' + res.id;
       }
     })
   },
@@ -81,7 +82,6 @@ var Rooms = React.createClass({
   },
   render: function() {
     var self = this;
-    debugger
     return (
       <div className="container">
         <div className="row">
