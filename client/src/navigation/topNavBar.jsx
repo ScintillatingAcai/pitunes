@@ -2,7 +2,21 @@ var React = require('react');
 var DebuggerButtons = require('../room/debuggerButtons/debuggerButtons.jsx');
 
 var TopNavBar = React.createClass({
-  render: function() {
+  getInitialState: function () {
+    return ({ userLoggedIn: this.props.userLoggedIn, buttonText: 'Sign In' });
+  },
+  componentDidMount: function () {
+    var context = this;
+    this.props.app.get('user').on('change', function () {
+      if (context.props.app.get('user').get('id')) {
+        context.setState({ userLoggedIn: true, buttonText: 'Sign Out'});
+      }
+    });
+    this.props.app.get('user').on('logout', function () {
+      context.setState({ userLoggedIn: false, buttonText: 'Sign In'});
+    });
+  },
+  render: function () {
     return (
       <nav className="navbar navbar-default navbar-fixed-top topnav" role="navigation">
         <div className="container topnav">
@@ -15,9 +29,6 @@ var TopNavBar = React.createClass({
             </button>
             <a className="navbar-brand topnav" href="#/"><span className="j-color-black">pi</span><span className="j-color-blue">Tunes</span></a>
           </div>
-          <div>
-            <DebuggerButtons app={this.props.app}/>
-          </div>
           <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul className="nav navbar-nav navbar-right">
               <li>
@@ -27,7 +38,7 @@ var TopNavBar = React.createClass({
                 <a href="#/rooms">Rooms</a>
               </li>
               <li>
-                <a className="j-pointer" onClick={this.props.signInClick}>Sign In</a>
+                <a className="j-pointer" onClick={this.props.signInClick}>{this.state.buttonText}</a>
               </li>
             </ul>
           </div>

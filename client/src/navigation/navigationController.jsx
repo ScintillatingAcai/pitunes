@@ -13,10 +13,13 @@ var socket = io(server_uri);
 
 var NavigationController = React.createClass({
   getInitialState: function () {
-    return { showSignIn: false, showSignUp: false, showSignOut: false, errorMessage: '' };
+    return { showSignIn: false, showSignUp: false, showSignOut: false, errorMessage: '', userLoggedIn: false };
   },
   componentDidMount: function () {
     var context = this;
+    if (this.props.app.get('user').get('id')) {
+      context.setState({ userLoggedIn: true });
+    }
     $('body').on('click', '#landing-signin', function() {
       context.signInClick();
     });
@@ -33,8 +36,13 @@ var NavigationController = React.createClass({
     this.setState({ showSignIn: false, showSignUp: true, showSignOut: false });
   },
   signInClick: function () {
-    console.log('signInClick')
-    this.setState({ showSignIn: true, showSignUp: false, showSignOut: false });
+    console.log('signInClick');
+    if (this.state.userLoggedIn) {
+      this.setState({ showSignIn: false, showSignUp: false, showSignOut: true });
+    } else {
+      this.setState({ showSignIn: true, showSignUp: false, showSignOut: false });
+    }
+
   },
   signOutClick: function () {
     console.log('signOutClick')
@@ -43,80 +51,83 @@ var NavigationController = React.createClass({
   signInUser: function () {
     var form = document.getElementById('signIn-form');
     var data = { email: form[0].value, password: form[1].value };
-    var self = this;
+    var context = this;
     $.ajax({
       url: server_uri + '/api/users/login',
       type: 'POST',
       dataType: 'json',
       data: data,
       success: function (res) {
-        self.props.app.get('user').set(res);
-        self.props.app.get('user').retrievePlaylists();
-        self.props.app.get('user').trigger('login');
-        // socket.emit('user room join', { user: self.props.app.get('user').attributes, room: 1})
-        console.log('current_room id: ', self.props.app.get('current_room').get('id'));
-        // self.props.app.get('current_room').set('id', self.props.app.get('current_room').get('id'));
-        // socket.emit('user room join', { user: self.props.app.get('user').attributes, room: self.props.room_id})
-        // self.props.app.get('current_room').set('id', room_id);
-        self.close();
+        context.props.app.get('user').set(res);
+        context.props.app.get('user').retrievePlaylists();
+        context.props.app.get('user').trigger('login');
+        // socket.emit('user room join', { user: context.props.app.get('user').attributes, room: 1})
+        console.log('current_room id: ', context.props.app.get('current_room').get('id'));
+        // context.props.app.get('current_room').set('id', context.props.app.get('current_room').get('id'));
+        // socket.emit('user room join', { user: context.props.app.get('user').attributes, room: context.props.room_id})
+        // context.props.app.get('current_room').set('id', room_id);
+        context.close();
         if (window.location.href.indexOf('/#/room/') === -1) {
           window.location.href = '/#/rooms';
         }
         // Check if a user logged in within an individual room and emit user room join message via socket if so
         if (window.location.href.indexOf('/#/room/') > -1) {
-          if (self.props.app.get('current_room').get('id')) {
-            socket.emit('user room join', { user: self.props.app.get('user').attributes, room: self.props.app.get('current_room').get('id')});
-            // self.props.app.get('current_room').set('id', self.props.app.get('current_room').get('id'));
+          if (context.props.app.get('current_room').get('id')) {
+            socket.emit('user room join', { user: context.props.app.get('user').attributes, room: context.props.app.get('current_room').get('id')});
+            // context.props.app.get('current_room').set('id', context.props.app.get('current_room').get('id'));
           }
         }
+        context.setState({ userLoggedIn: 'Sign Out' });
       },
       error: function (res) {
-        self.setState({ errorMessage: res.statusText + ": " + res.responseText });
+        context.setState({ errorMessage: res.statusText + ": " + res.responseText });
       }
     });
   },
   signUpUser: function () {
     var form = document.getElementById('signUp-form');
     var data = { email: form[0].value, password: form[1].value, displayName: form[3].value };
-    var self = this;
-    if (form[1].value !== form[2].value) { self.setState({ errorMessage: 'Your passwords did not match.' }); return; }
+    var context = this;
+    if (form[1].value !== form[2].value) { context.setState({ errorMessage: 'Your passwords did not match.' }); return; }
     $.ajax({
       url: server_uri + '/api/users/signup',
       type: 'POST',
       dataType: 'json',
       data: data,
       success: function (res) {
-        self.props.app.get('user').set(res);
-        self.props.app.get('user').retrievePlaylists();
-        self.props.app.get('user').trigger('login');
-        self.close();
+        context.props.app.get('user').set(res);
+        context.props.app.get('user').retrievePlaylists();
+        context.props.app.get('user').trigger('login');
+        context.close();
         if (window.location.href.indexOf('/#/room/') === -1) {
           window.location.href = '/#/rooms';
         }
       },
       error: function (res) {
-        self.setState({ errorMessage: res.statusText + ': ' + res.responseText });
+        context.setState({ errorMessage: res.statusText + ': ' + res.responseText });
       }
     });
   },
   signOutUser: function () {
-    var self = this;
+    var context = this;
     $.ajax({url: server_uri + '/api/users/logout',
       type: 'GET',
       success: function (res) {
         console.log('succeeded in logging out');
-        self.close();
+        context.close();
+        context.setState({ userLoggedIn: false });
+        context.props.app.get('user').trigger('logout');
       },
       error: function (res) {
         console.error('error in user logout');
-        self.setState({ errorMessage: res.statusText + ': ' + res.responseText });
+        context.setState({ errorMessage: res.statusText + ': ' + res.responseText });
       }
     });
   },
   render: function () {
     return (
       <div>
-        <TopNavBar signInClick={this.signInClick} signOutClick={this.signOutClick} errorMessage={this.state.errorMessage} app={this.props.app}/>
+        <TopNavBar signInClick={this.signInClick} signOutClick={this.signOutClick} errorMessage={this.state.errorMessage} userLoggedIn={this.state.userLoggedIn} app={this.props.app}/>
         <BottomNavBar />
         <SignInModal close={this.close} signUpClick={this.signUpClick} signInUser={this.signInUser} showSignIn={this.state.showSignIn} errorMessage={this.state.errorMessage} app={this.props.app}/>
         <SignUpModal close={this.close} signInClick={this.signInClick} signUpUser={this.signUpUser} showSignUp={this.state.showSignUp} errorMessage={this.state.errorMessage} app={this.props.app}/>
