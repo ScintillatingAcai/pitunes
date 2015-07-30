@@ -15,7 +15,18 @@ var RoomsView = React.createClass({
   },
   createRoomClick: function() {
     console.log('createRoom has been clicked. make sure to send a post request with the information');
-    this.close();
+    var form = document.getElementById('createRoom-form');
+    var self = this;
+    $.ajax({
+      type: 'POST',
+      url: source,
+      dataType: 'JSON',
+      data: {name: form[0].value},
+      success: function(res) {
+        self.forceUpdate();
+        window.location.href = '/#/room/' + res.id;
+      }
+    });
   },
   close: function() {
     this.setState({ showCreateRoomModal: false , errorMessage: '' });
@@ -30,7 +41,6 @@ var RoomsView = React.createClass({
       res.forEach(function(room) {
         //check if there 'currentMedia' is null and if it's not, create a url property for the video thumbnail
         if (room.currentMedia === null) {
-          //TODO: ADD A DEFAULT IMAGE FOR ROOMS THAT ARE NOT PLAYING MUSIC
           room.videoURL = '../../assets/img/no-dj.png';
           roomsCollection.add(new RoomModel(room));
         } else {
@@ -47,7 +57,7 @@ var RoomsView = React.createClass({
   render: function() {
     return (
       <div>
-        <a name="rooms"></a>
+        <a name="room"></a>
         <div className="content-section-a">
           <div className="container">
           <div className="j-createRoom-button">
