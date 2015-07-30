@@ -35,7 +35,6 @@ var RoomsView = React.createClass({
           roomsCollection.add(new RoomModel(room));
         } else {
           room.videoURL = 'https://i.ytimg.com/vi/' + room.currentMedia.youtube_id + '/hqdefault.jpg';
-          debugger;
           roomsCollection.add(new RoomModel(room));
         }
       });
