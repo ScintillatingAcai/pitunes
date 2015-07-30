@@ -239,3 +239,7 @@ div.placeholder:before {
 .j-padding-top-100px {
     padding-top: 100px;
 }
+
+.j-max-height-216px {
+    max-height: 216px;
+}
