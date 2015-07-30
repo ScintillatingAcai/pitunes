@@ -13,7 +13,7 @@ var CreateRoomModal = React.createClass({
           </Modal.Header>
           <Modal.Body>
             <div>
-            <h3>Create A room</h3>
+            <h3>Create a room</h3>
             <p>
               Fill in the form below to create a room.
             </p>
@@ -22,12 +22,9 @@ var CreateRoomModal = React.createClass({
                 <label htmlFor="createRoom-name" className="hide">Fullname</label>
                 <input type="text" className="form-control input-lg" id="createRoom-name" placeholder="Room Name" required></input>
               </div>
-              <div>
-                Would you like this room to be private?
-                <input type="checkbox" id="createRoom-private-checkbox"></input>
-              </div>
+              
               <div className="form-group j-center-text">
-                <a type="submit" className="btn btn-default btn-md" onClick={}><i className="fa fa-pencil fa-fw"></i><span className="network-name">Create Room</span></a>
+                <a type="submit" className="btn btn-default btn-md" onClick={this.props.createRoomClick}><i className="fa fa-pencil fa-fw"></i><span className="network-name">Create Room</span></a>
               </div>
             </form>
             </div>

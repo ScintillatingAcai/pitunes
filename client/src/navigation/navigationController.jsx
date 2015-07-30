@@ -55,6 +55,7 @@ var NavigationController = React.createClass({
         self.props.app.get('user').trigger('login');
         // socket.emit('user room join', { user: self.props.app.get('user').attributes, room: 1})
         console.log('current_room id: ', self.props.app.get('current_room').get('id'));
+        // self.props.app.get('current_room').set('id', self.props.app.get('current_room').get('id'));
         // socket.emit('user room join', { user: self.props.app.get('user').attributes, room: self.props.room_id})
         // self.props.app.get('current_room').set('id', room_id);
         self.close();

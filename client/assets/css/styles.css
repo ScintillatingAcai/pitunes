@@ -95,7 +95,7 @@ h6 {
 }
 
 .content-section-a {
-    padding: 50px 0;
+    padding-bottom: 50px;
     background-color: #F8F8F8;
 }
 
@@ -207,7 +207,8 @@ p.copyright {
 }
 
 .j-footer-bot {
-    position: absolute;
+    position: fixed;
+    z-index: 1;
     background-color: #F8F8F8;
     bottom: 0;
     width: 100%;
@@ -226,4 +227,15 @@ div.placeholder:before {
     text-align: center;
     content: "Drop here"; 
     color: #C0C0C0; 
+}
+
+.j-createRoom-button {
+    position: fixed;
+    z-index: 1;
+    padding-top: 55px;
+    left: 43.3%;
+}
+
+.j-padding-top-100px {
+    padding-top: 100px;
 }

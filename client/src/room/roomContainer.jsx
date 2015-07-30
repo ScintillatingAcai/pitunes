@@ -12,7 +12,7 @@ var RoomContainer = React.createClass({
     return { showSignIn: false, showSignUp: false, showSignOut: false, errorMessage: '' };
   },
   componentDidMount: function () {
-    socket.emit('user room join', { user: this.props.app.get('user').attributes, room: this.props.room_id});
+    socket.emit('user room join', { user: this.props.app.get('user').attributes, room: this.props.room_id });
     this.props.app.get('current_room').set('id', this.props.room_id);
   },
   render: function () {
