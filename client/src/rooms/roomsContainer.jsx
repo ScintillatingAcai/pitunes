@@ -17,19 +17,20 @@ var RoomsView = React.createClass({
     console.log('createRoom has been clicked. make sure to send a post request with the information');
     var form = document.getElementById('createRoom-form');
     var self = this;
+    if (form[0].value.length > 25) { this.setState({ errorMessage: 'Your room name must be smaller than 25 characters' }); return; } 
     $.ajax({
       type: 'POST',
       url: source,
       dataType: 'JSON',
       data: {name: form[0].value},
       success: function(res) {
-        self.forceUpdate();
-        window.location.href = '/#/room/' + res.id;
+        self.setState({ showCreateRoomModal: false, errorMessage: '' })
+        // window.location.href = '/#/room/' + res.id;
       }
-    });
+    })
   },
   close: function() {
-    this.setState({ showCreateRoomModal: false , errorMessage: '' });
+    this.setState({ showCreateRoomModal: false, errorMessage: '' });
   },
   //Event listener for changes to roomsCollection
   componentDidMount: function() {
@@ -67,7 +68,7 @@ var RoomsView = React.createClass({
               { <Rooms /> }
             </div>
           </div>
-          <CreateRoomModal showCreateRoomModal={this.state.showCreateRoomModal} createRoomClick={this.createRoomClick} errorMessage={this.props.errorMessage} close={this.close} />
+          <CreateRoomModal showCreateRoomModal={this.state.showCreateRoomModal} createRoomClick={this.createRoomClick} errorMessage={this.state.errorMessage} close={this.close} />
         </div>
       </div>
     );
@@ -80,14 +81,15 @@ var Rooms = React.createClass({
   },
   render: function() {
     var self = this;
+    debugger
     return (
       <div className="container">
         <div className="row">
           {roomsCollection.map(function(room){
             return (
-              <div className="col-lg-4 col-sm-4 j-pointer" key={room.get('id')}  onClick={self.roomClick.bind(self, room.get('id'))}>
+              <div className="col-lg-4 col-sm-4 j-pointer j-padding-bot-50" key={room.get('id')}  onClick={self.roomClick.bind(self, room.get('id'))}>
                 <div className="clearfix"></div>
-                <h2 className="section-heading j-center-text">{room.get('name')} <br />Current DJs: {room.get('usersCount')}</h2>
+                <h2 className="section-heading j-center-text j-roomDisplay">{room.get('name')} <br />Current DJs: {room.get('usersCount')}</h2>
                 <div className="j-left-25">
                   <img className="img-responsive j-max-height-216px" src={room.get('videoURL')} alt="" />
                 </div>
