@@ -10,11 +10,15 @@ var RoomContainer = React.createClass({
   getInitialState: function() {
     return { showSignIn: false, showSignUp: false, showSignOut: false, errorMessage: '' };
   },
-  componentDidMount: function () {
+  componentWillMount: function () {
     socket.emit('user room join', { user: this.props.app.get('user').attributes, room: this.props.room_id });
     this.props.app.get('current_room').set('id', this.props.room_id);
   },
-  componentDidUnmount: function () {
+  componentWillUnmount: function () {
+    console.log('room container will unmount');
+    console.log('user_id: ', this.props.app.get('user').attributes.id);
+    console.log('room: ', this.props.room_id);
+
     socket.emit('user room leave', { user: this.props.app.get('user').attributes, room: this.props.room_id});
   },
   render: function () {
