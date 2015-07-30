@@ -61,11 +61,6 @@ var Chat = React.createClass({
   },
   handleSubmit: function(e) {
     e.preventDefault();
-    /**
-    ************************************************
-    MAKE THE VARIABLE NAME EQUAL TO THE CURRENT USER
-    ************************************************
-    */
     var name = this.props.app.get('user').get('display_name');
     if (this.state.text === '') { return; }
     socket.emit('user message', { displayName: name, message: this.state.text });
@@ -107,7 +102,7 @@ var Chat = React.createClass({
     };
     var chatListStyle = {
       overflow: 'scroll',
-      maxHeight: '88%'
+      maxHeight: '65%'
     };
     return (
       <div style={divStyle}>

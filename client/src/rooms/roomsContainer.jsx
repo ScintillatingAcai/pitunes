@@ -87,11 +87,11 @@ var Rooms = React.createClass({
         <div className="row">
           {roomsCollection.map(function(room){
             return (
-              <div className="col-lg-4 col-sm-4 j-pointer j-padding-bot-50" key={room.get('id')}  onClick={self.roomClick.bind(self, room.get('id'))}>
+              <div className="col-lg-4 col-sm-3 j-pointer j-padding-bot-50 gradientBoxesWithOuterShadows" key={room.get('id')}  onClick={self.roomClick.bind(self, room.get('id'))}>
                 <div className="clearfix"></div>
                 <h2 className="section-heading j-center-text j-roomDisplay">{room.get('name')} <br />Current DJs: {room.get('usersCount')}</h2>
                 <div className="j-left-25">
-                  <img className="img-responsive j-max-height-216px" src={room.get('videoURL')} alt="" />
+                  <img className="img-responsive j-max-height-216px j-room-image-display" src={room.get('videoURL')} alt="" />
                 </div>
               </div>
             )
