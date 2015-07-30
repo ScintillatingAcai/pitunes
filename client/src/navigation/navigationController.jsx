@@ -13,31 +13,31 @@ var socket = io(server_uri);
 
 var NavigationController = React.createClass({
   getInitialState: function () {
-    return { showSignIn: false, showSignUp: false, showSignOut: false, errorMessage: '', userLoggedIn: false };
+    return { showSignIn: false, showSignUp: false, showSignOut: false, errorMessage: '' };
   },
   componentDidMount: function () {
     var context = this;
-    if (this.props.app.get('user').get('id')) {
-      context.setState({ userLoggedIn: true });
-    }
-    $('body').on('click', '#landing-signin', function() {
+    $('body').on('click', '#landing-signin', function () {
       context.signInClick();
     });
-    $('body').on('click', '#landing-signup', function() {
+    $('body').on('click', '#landing-signup', function () {
       context.signUpClick();
     });
+    this.props.app.on('userSignInOut', this.updateForSignInStatus);
+    this.updateForSignInStatus();
+  },
+  componentWillUnmount: function () {
+    $('body').off('click');
+    this.props.app.off('userSignInOut');
   },
   close: function () {
-    console.log('close');
     this.setState({ showSignIn: false, showSignUp: false, showSignOut: false, errorMessage: '' });
   },
   signUpClick: function () {
-    console.log('signUpClick')
     this.setState({ showSignIn: false, showSignUp: true, showSignOut: false });
   },
   signInClick: function () {
-    console.log('signInClick');
-    if (this.state.userLoggedIn) {
+    if (this.props.app.isSignedIn()) {
       this.setState({ showSignIn: false, showSignUp: false, showSignOut: true });
     } else {
       this.setState({ showSignIn: true, showSignUp: false, showSignOut: false });
@@ -45,8 +45,14 @@ var NavigationController = React.createClass({
 
   },
   signOutClick: function () {
-    console.log('signOutClick')
     this.setState({ showSignIn: false, showSignUp: false, showSignOut: true });
+  },
+  updateForSignInStatus: function () {
+    if (this.props.app.isSignedIn()) {
+      console.log('heard user was logged in');
+    } else {
+      console.log('heard user was logged out');
+    }
   },
   signInUser: function () {
     var form = document.getElementById('signIn-form');
@@ -58,14 +64,7 @@ var NavigationController = React.createClass({
       dataType: 'json',
       data: data,
       success: function (res) {
-        context.props.app.get('user').set(res);
-        context.props.app.get('user').retrievePlaylists();
-        context.props.app.get('user').trigger('login');
-        // socket.emit('user room join', { user: context.props.app.get('user').attributes, room: 1})
-        console.log('current_room id: ', context.props.app.get('current_room').get('id'));
-        // context.props.app.get('current_room').set('id', context.props.app.get('current_room').get('id'));
-        // socket.emit('user room join', { user: context.props.app.get('user').attributes, room: context.props.room_id})
-        // context.props.app.get('current_room').set('id', room_id);
+        context.props.app.userSignIn(res);
         context.close();
         if (window.location.href.indexOf('/#/room/') === -1) {
           window.location.href = '/#/rooms';
@@ -74,10 +73,8 @@ var NavigationController = React.createClass({
         if (window.location.href.indexOf('/#/room/') > -1) {
           if (context.props.app.get('current_room').get('id')) {
             socket.emit('user room join', { user: context.props.app.get('user').attributes, room: context.props.app.get('current_room').get('id')});
-            // context.props.app.get('current_room').set('id', context.props.app.get('current_room').get('id'));
           }
         }
-        context.setState({ userLoggedIn: 'Sign Out' });
       },
       error: function (res) {
         context.setState({ errorMessage: res.statusText + ": " + res.responseText });
@@ -95,9 +92,7 @@ var NavigationController = React.createClass({
       dataType: 'json',
       data: data,
       success: function (res) {
-        context.props.app.get('user').set(res);
-        context.props.app.get('user').retrievePlaylists();
-        context.props.app.get('user').trigger('login');
+        context.props.app.userSignIn(res);
         context.close();
         if (window.location.href.indexOf('/#/room/') === -1) {
           window.location.href = '/#/rooms';
@@ -115,8 +110,7 @@ var NavigationController = React.createClass({
       success: function (res) {
         console.log('succeeded in logging out');
         context.close();
-        context.setState({ userLoggedIn: false });
-        context.props.app.get('user').trigger('logout');
+        context.props.app.userSignOut();
       },
       error: function (res) {
         console.error('error in user logout');
@@ -127,7 +121,7 @@ var NavigationController = React.createClass({
   render: function () {
     return (
       <div>
-        <TopNavBar signInClick={this.signInClick} signOutClick={this.signOutClick} errorMessage={this.state.errorMessage} userLoggedIn={this.state.userLoggedIn} app={this.props.app}/>
+        <TopNavBar signInClick={this.signInClick} signOutClick={this.signOutClick} errorMessage={this.state.errorMessage} app={this.props.app}/>
         <BottomNavBar />
         <SignInModal close={this.close} signUpClick={this.signUpClick} signInUser={this.signInUser} showSignIn={this.state.showSignIn} errorMessage={this.state.errorMessage} app={this.props.app}/>
         <SignUpModal close={this.close} signInClick={this.signInClick} signUpUser={this.signUpUser} showSignUp={this.state.showSignUp} errorMessage={this.state.errorMessage} app={this.props.app}/>

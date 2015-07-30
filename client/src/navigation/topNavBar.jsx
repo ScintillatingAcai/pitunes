@@ -3,18 +3,18 @@ var DebuggerButtons = require('../room/debuggerButtons/debuggerButtons.jsx');
 
 var TopNavBar = React.createClass({
   getInitialState: function () {
-    return ({ userLoggedIn: this.props.userLoggedIn, buttonText: 'Sign In' });
+    return ({ buttonText: 'Sign In' });
   },
   componentDidMount: function () {
-    var context = this;
-    this.props.app.get('user').on('change', function () {
-      if (context.props.app.get('user').get('id')) {
-        context.setState({ userLoggedIn: true, buttonText: 'Sign Out'});
-      }
-    });
-    this.props.app.get('user').on('logout', function () {
-      context.setState({ userLoggedIn: false, buttonText: 'Sign In'});
-    });
+    this.props.app.on('userSignInOut', this.updateForSignInStatus);
+    this.updateForSignInStatus();
+  },
+  updateForSignInStatus: function () {
+    if (this.props.app.isSignedIn()) {
+      this.setState({ buttonText: 'Sign Out'});
+    } else {
+      this.setState({ buttonText: 'Sign In'});
+    }
   },
   render: function () {
     return (

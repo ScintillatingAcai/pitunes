@@ -30,8 +30,8 @@ var SignInModal = React.createClass({
               </div>
             </form>
             <div className="modal-footer j-center-text">
-              <span>Dont Have An Account Yet ?</span>
-              <a className="j-padding-left-10 j-pointer" onClick={this.props.signUpClick}>Sign In</a>
+              <span>Don't Have An Account Yet ?</span>
+              <a className="j-padding-left-10 j-pointer" onClick={this.props.signUpClick}>Sign Up</a>
             </div>
             </div>
           </Modal.Body>
