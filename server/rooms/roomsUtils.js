@@ -113,22 +113,24 @@ module.exports = {
 
   //store a new room in DB
   storeRoom: Promise.promisify(function(room, callback) {
-    var roomname = room.name;
 
     new Room({
-        name: name
+        name: room.name
       }).fetch().then(function(found) {
         if (found) {
-          callback(null, found);
-          console.log('room already found:', name);
+          console.log('room already found:', room.name);
+          return callback(new Error('Room already exist'));
         } else {
           var room = new Room({
-            name: name,
-          }).save().then(function(newRoom) {
-              callback(null, newRoom);
-            }).catch(function(err) {return callback(err);});
+            name: room.name,
+          }).save()
+          .then(function(newRoom) {
+            return callback(null, newRoom);
+          })
+          .catch(function(err) {return callback(err);});
         }
-      }).catch(function(err) {return callback(err);});
+      })
+      .catch(function(err) {return callback(err);});
   }),
 
   setSocketsForTimer: function(sockets) {
