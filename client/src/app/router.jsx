@@ -13,53 +13,77 @@ var NavigationController = require('../navigation/navigationController.jsx');
 var AppModel = require('../data/models/app.js');
 var app = new AppModel();
 
-var AppRouter = React.createClass({
-  render: function() {
-    return (
-      <div>
-        <NavigationController app={app}/>
-        <RouteHandler/>
-      </div>
-    );
+var server_uri = window.location.origin;
+
+$.ajax({
+  url: server_uri + '/api/users/loggedin',
+  type: 'GET',
+  success: function (res) {
+    console.log('login returned');
+    console.log(res);
+    if (res) {
+      app.get('user').set(res);
+      app.get('user').retrievePlaylists();
+    }
+    loadApp();
+  },
+  error: function (res) {
+    console.error('user login check failed');
+    loadApp();
   }
 });
 
-var RouteNotFound = React.createClass({
-  render: function () {
-    return (
-      <div>
-        Not Found
-      </div>
-    );
-  }
-});
+var loadApp = function() {
 
-var LandingWrapper = React.createClass({
-  render: function() {
-    return ( <LandingPageContainer app={app} /> );
-  }
-});
+  var AppRouter = React.createClass({
+    render: function() {
+      return (
+        <div>
+          <NavigationController app={app}/>
+          <RouteHandler/>
+        </div>
+      );
+    }
+  });
 
-var RoomsViewWrapper = React.createClass({
-  render: function() {
-    return ( <RoomsView app={app} /> );
-  }
-});
+  var RouteNotFound = React.createClass({
+    render: function () {
+      return (
+        <div>
+          Not Found
+        </div>
+      );
+    }
+  });
 
-var RoomWrapper = React.createClass({
-  render: function() {
-    return ( <RoomContainer app={app} room_id={this.props.params.room_id}/> );
-  }
-});
+  var LandingWrapper = React.createClass({
+    render: function() {
+      return ( <LandingPageContainer app={app} /> );
+    }
+  });
 
-var routes = (
-  <Route name='root' path="/" handler={AppRouter}>
-    <DefaultRoute name='default' handler={LandingWrapper} />
-     <Route name='rooms' path='rooms' handler={RoomsViewWrapper} />
-    <Route name='room' path='room/:room_id' handler={RoomWrapper} />
-    <NotFoundRoute name='notfound' handler={RouteNotFound} />
-  </Route>
-);
-Router.run(routes, Router.HashLocation, (Root) => {
-  React.render(<Root/>, document.getElementsByClassName('AppContainer')[0]);
-});
+  var RoomsViewWrapper = React.createClass({
+    render: function() {
+      return ( <RoomsView app={app} /> );
+    }
+  });
+
+  var RoomWrapper = React.createClass({
+    render: function() {
+      return ( <RoomContainer app={app} room_id={this.props.params.room_id}/> );
+    }
+  });
+
+  var routes = (
+    <Route name='root' path="/" handler={AppRouter}>
+      <DefaultRoute name='default' handler={LandingWrapper} />
+       <Route name='rooms' path='rooms' handler={RoomsViewWrapper} />
+      <Route name='room' path='room/:room_id' handler={RoomWrapper} />
+      <NotFoundRoute name='notfound' handler={RouteNotFound} />
+    </Route>
+  );
+  Router.run(routes, Router.HashLocation, (Root) => {
+    React.render(<Root/>, document.getElementsByClassName('AppContainer')[0]);
+  });
+
+}
