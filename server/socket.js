@@ -28,10 +28,9 @@ var cleanUpClientsForSocket = function(socket, user_id, okRoom_id) {
   for (var i = 0; i < allClients.length; i++) {
     var client = allClients[i];
     if (client.socket === socket) {
-      console.log('new_userID:', user_id);
-      console.log('old_user_id:', client.user_id);
 
       if (!okRoom_id || client.room_id !== okRoom_id) {
+        //dont pull off socket if the room is the same
         socket.leave(client.room_id);
       }
 
@@ -88,8 +87,7 @@ module.exports = function(io) {
       if (!user_id) {
         socket.join(room_id);
         console.log('user should have be hearing medias status from room:', room_id);
-        // socket.in(room_id).emit("user room change",  JSON.stringify(room.users));
-        // socket.emit("user room change",  JSON.stringify(room.users));
+
         room.startUserForCurrentMedia(socket);
         allClients.push({socket: socket, user_id: user_id, room_id: room_id});
         cleanUpClientsForSocket(socket, user_id, room_id);
@@ -109,8 +107,6 @@ module.exports = function(io) {
 
           allClients.push({socket: socket, user_id: user_id, room_id: room_id});
           cleanUpClientsForSocket(socket, user_id, room_id);
-          console.log('jadfdasfdasfas roomid: ', room_id);
-
 
         }).catch(function(err) {console.error(err);});
       }

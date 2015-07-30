@@ -60,6 +60,7 @@ var List = React.createClass({
     this.submitUpdatePlaylist(this.props.app.get('user').get('current_playlist'));
   },
   componentDidMount: function () {
+
     this.props.model.on('change:current_playlist', function () {
       if (this.props.app.get('user').get('current_playlist')) {
         this.handleNewCurrentPlaylist();
@@ -73,6 +74,10 @@ var List = React.createClass({
       }
       this.submitUpdatePlaylist(this.props.app.get('user').get('current_playlist'));
     }.bind(this));
+
+    if (this.props.app.get('user')) {
+      this.props.app.get('user').retrievePlaylists();
+    }
 
   },
   onNameChange: function (e) {
@@ -238,6 +243,12 @@ var PlaylistTitle = React.createClass({
         $('.playlistNavigateMenuDropdown').removeClass('hidden');
       }
     }.bind(this));
+
+    if (this.props.app.get('user').get('current_playlist')) {
+      this.getUsersPlaylists();
+      $('.playlistSelectDropdown').removeClass('hidden');
+      $('.playlistNavigateMenuDropdown').removeClass('hidden');
+    }
 
   },
   getUsersPlaylists: function () {
