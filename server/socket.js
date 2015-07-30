@@ -31,11 +31,13 @@ var cleanUpClientsForSocket = function(socket, user_id, okRoom_id) {
 
       if (!okRoom_id || client.room_id !== okRoom_id) {
         //dont pull off socket if the room is the same
+        console.log('cleaning socket for user [',client.user_id,'] out of room: ', client.room_id);
         socket.leave(client.room_id);
       }
 
+      console.log('checking whether to clean user [',client.user_id,'] out of room: ', client.room_id);
       if (!okRoom_id || client.room_id !== okRoom_id || client.user_id !== user_id) {
-        console.log('cleaning user [',client.user_id,'] out of room: ', client.room_id);
+        console.log('cleaning room for user [',client.user_id,'] out of room: ', client.room_id);
         allClients[i] = {socket: null, user_id: null, room_id: null};
         removeUserFromRoom(client.user_id, client.room_id);
       }
@@ -117,7 +119,7 @@ module.exports = function(io) {
       var user_id = data.user.id;
       var room_id = data.room;
 
-      cleanUpClientsForSocket(socket, user_id, room_id);
+      cleanUpClientsForSocket(socket, user_id);
     });
 
     socket.on('disconnect', function() {
