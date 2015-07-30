@@ -51,9 +51,15 @@ var UserModel = Backbone.Model.extend({
       console.log('GET request to ' + source + ' failed.');
     });
   },
-  updateForUserStatus: function() {
+  updateForUserStatus: function () {
     this.retrievePlaylists();
+  },
+  updateToDefaults: function () {
+    this.set(this.defaults);
+    console.log('USER MODEL FIRED UPDATETODEFAULTS ****')
+    console.log(this);
   }
+
 
 });
 
