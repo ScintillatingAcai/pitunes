@@ -5,7 +5,7 @@ bookshelf.knex.schema.hasTable('Rooms').then(function(exists) {
   if (!exists) {
     bookshelf.knex.schema.createTable('Rooms', function (room) {
       room.increments('id').primary();
-      room.string('name', 50).notNullable();
+      room.string('name', 30).unique().notNullable();
       room.boolean('private').defaultTo(false);
       room.string('password', 100).defaultTo('');
       room.timestamps();
