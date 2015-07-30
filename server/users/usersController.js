@@ -22,6 +22,21 @@ module.exports = {
     });
   },
 
+  getSessionUser: function(req, res, next) {
+    var user_id = req.session.user_id;
+    console.log('retrieving info for user_id:' + user_id);
+
+    if (user_id) {
+      var user = utils.getUser(user_id);
+
+      if ( user ) {
+        res.json(user.toJSON({omitPivot: true}));
+      }
+    }
+   
+    res.end(null);      
+  },
+
   addUser: function(req, res, next) {
     console.log('adding user: ',req.body);
     utils.storeUser(req.body).then(function(user) {

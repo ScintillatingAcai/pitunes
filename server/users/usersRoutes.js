@@ -12,6 +12,7 @@ module.exports = function(app) {
 
   app.post('/login', usersController.loginUser); //login a user
   app.get('/logout', usersController.logoutUser); //logout a user
+  app.get('/loggedin', usersController.getSessionUser); //logout a user
 
   app.get('/:user_id', utility.checkUserSession, usersController.getUser); //get one user
   app.put('/:user_id', utility.checkUserSession, usersController.updateUser); //update a user
