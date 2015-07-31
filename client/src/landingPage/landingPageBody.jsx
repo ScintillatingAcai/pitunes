@@ -30,14 +30,14 @@ var LandingPageBody = React.createClass({
           <div className="container">
             <div className="row">
                 <div className="col-lg-12">
-                  <div className="intro-message j-padding-top-15-percent">
+                  <div className="intro-message j-padding-top-30-percent">
                     <h1>piTunes</h1>
                     <h3 className="j-font-uppercase">Listen to music with the people you love</h3>
                     <hr className="intro-divider"></hr>
                     <ul className="list-inline intro-social-buttons">
                       {signIn}
                       <li>
-                        <a href="/#rooms" className="btn btn-default btn-lg" id="landing-joinroom"><i className="fa fa-music fa-fw"></i><span className="network-name">Join Room</span></a>
+                        <a href="/#rooms" className="btn btn-default btn-lg" id="landing-joinroom"><i className="fa fa-music fa-fw"></i><span className="network-name">Start Listening!</span></a>
                       </li>
                       {signUp}
                     </ul>

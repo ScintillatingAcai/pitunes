@@ -5,9 +5,14 @@ var LandingPagePopularRooms = require('./landingPagePopularRooms.jsx');
 
 var LandingPageContainer = React.createClass({
   render: function() {
+    var style = {
+      opacity: 0.01,
+    };
     return (
       <div>
-        <NavigationController app={this.props.app}/>
+        <div style={style}>
+        <NavigationController app={this.props.app} />
+        </div>
         <LandingPageBody app={this.props.app}/>
         <LandingPagePopularRooms />
       </div>
