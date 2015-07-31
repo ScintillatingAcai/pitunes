@@ -80,6 +80,15 @@ var NavigationController = React.createClass({
       success: function (res) {
         context.props.app.userSignIn(res);
         context.close();
+        if (window.location.href.indexOf('/#/room/') === -1) {
+          window.location.href = '/#/rooms';
+        }
+        // Check if a user logged in within an individual room and emit user room join message via socket if so
+        if (window.location.href.indexOf('/#/room/') > -1) {
+          if (context.props.app.get('current_room').get('id')) {
+            socket.emit('user room join', { user: context.props.app.get('user').attributes, room: context.props.app.get('current_room').get('id')});
+          }
+        }
       },
       error: function (res) {
         context.setState({ errorMessage: res.statusText + ': ' + res.responseText });

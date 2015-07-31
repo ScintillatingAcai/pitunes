@@ -37,7 +37,9 @@ module.exports = {
     console.log('adding user: ',req.body);
     utils.storeUser(req.body).then(function(user) {
       if (!user) return next(new Error('user does not exist'));
-      res.json(user.toJSON({omitPivot: true}));
+      utils.addUser(user);
+      // create the new cookie session
+      utility.createSession(req, res, user);
     })
     .catch(function(err) {
       return next(new Error('controller error: ', err));
