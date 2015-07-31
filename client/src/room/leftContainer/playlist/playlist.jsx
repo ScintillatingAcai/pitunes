@@ -6,6 +6,14 @@ var MediasCollection = require('../../../data/collections/medias.js');
 var NewPlaylistModal = require('./newPlaylistModal.jsx');
 var RenamePlaylistModal = require('./renamePlaylistModal.jsx');
 var DeletePlaylistModal = require('./deletePlaylistModal.jsx');
+var ReactBootstrap = require('react-bootstrap');
+var Bootstrap = require('bootstrap');
+
+var ButtonGroup = ReactBootstrap.ButtonGroup;
+var Button = ReactBootstrap.Button;
+var MenuItem = ReactBootstrap.MenuItem;
+var DropdownButton = ReactBootstrap.DropdownButton;
+var Glyphicon = ReactBootstrap.Glyphicon;
 
 var server_uri = window.location.origin;
 var placeholder = document.createElement("div");
@@ -325,21 +333,20 @@ var PlaylistTitle = React.createClass({
     };
     var playlistItems = this.state.playlistData.map((function (item, i) {
       return (
-        <li data-id={i} key={i}><a data-playlistid={item.id} onClick={this.swapPlaylist}>
+        <MenuItem data-id={i} key={i}><a data-playlistid={item.id} onClick={this.swapPlaylist}>
           {item.text}
-        </a></li>
+        </a></MenuItem>
       );
     }).bind(this));
     return (
       <div>
       <h4 className='playlistTitleContainer text-center' style={style}>
         <div style={dropdownStyle} className="playlistSelectDropdown btn-group pull-left hidden">
-          <button type="button" className="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <span className="caret"></span>
-          </button>
-          <ul className="dropdown-menu dropdown-menu-left">
-            {playlistItems}
-          </ul>
+          <ButtonGroup>
+            <DropdownButton>
+              {playlistItems}
+            </DropdownButton>
+          </ButtonGroup>
         </div>
         {this.state.title}
         <div style={dropdownStyle} className="playlistNavigateMenuDropdown btn-group pull-right hidden">
