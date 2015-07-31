@@ -1,4 +1,5 @@
 var React = require('react');
+var $ = require('jquery');
 
 var TopNavBar = React.createClass({
   getInitialState: function () {
@@ -14,9 +15,11 @@ var TopNavBar = React.createClass({
   updateForSignInStatus: function () {
     if (this.props.app.isSignedIn()) {
       this.setState({ buttonText: 'Sign Out' });
+      $('.signInOutIcon').removeClass('fa-sign-in').addClass('fa-sign-out');
       this.setState({ displayName: this.props.app.get('user').get('display_name') });
     } else {
       this.setState({ buttonText: 'Sign In'});
+      $('.signInOutIcon').removeClass('fa-sign-out').addClass('fa-sign-in');
       this.setState({ displayName: this.props.app.get('user').get('display_name') });
     }
   },
@@ -45,7 +48,7 @@ var TopNavBar = React.createClass({
                 <a href="#/rooms">Rooms</a>
               </li>
               <li>
-                <a className="j-pointer" onClick={this.props.signInOutClick}>{this.state.buttonText}</a>
+                <a className="j-pointer" onClick={this.props.signInOutClick}><i className="signInOutIcon fa fa-sign-in fa-fw"></i>{this.state.buttonText}</a>
               </li>
             </ul>
           </div>
