@@ -183,12 +183,20 @@ p.copyright {
     background-color: #f8f8f8 !important;
 }
 
+.darkgrey-background {
+    background-color: #222222 !important;
+}
+
 .j-color-blue {
     color: #00F;
 }
 
 .j-color-red {
     color: #FF0000;
+}
+
+.j-color-white {
+    color: #FFF;
 }
 
 .j-center-text {
@@ -222,7 +230,6 @@ p.copyright {
 .j-footer-bot {
     position: fixed;
     z-index: 1;
-    background-color: #F8F8F8;
     bottom: 0;
     width: 100%;
     text-align: center;
@@ -247,6 +254,7 @@ div.placeholder:before {
     z-index: 1;
     padding-top: 50px;
     right: 0%;
+    max-height: 20px;
 }
 
 .j-rooms-padding-top {
