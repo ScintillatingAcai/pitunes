@@ -58,7 +58,6 @@ var User = db.Model.extend({
     }).fetch()
     .then(function(playlist) {
       if (!playlist) return callback(new Error('media playlist not found'));
-      console.log('retrieved current playlist : ', playlist.get('id'));
       callback(null,playlist);
     })
     .catch(function(err) {callback(err);});

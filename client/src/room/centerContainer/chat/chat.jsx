@@ -32,7 +32,16 @@ var Chat = React.createClass({
 
     socket.on('user status', function(data){
       if (this.props.app.get('user').get('id') === data.id) {
-        this.props.app.get('user').updateForUserStatus(data);
+        console.log('data: ', data);
+        if (this.props.app.get('current_room').get('id') !== data.room) {
+          console.log('updating user to defaults')
+          //user is not in the room they most recently logged into so sign them out
+          this.props.app.userSignOut();
+        } else {
+          console.log('updating user status')
+          //update user info, they are presumably the most recent dj
+          this.props.app.get('user').updateForUserStatus(data);
+        }
       }
     }.bind(this));
 

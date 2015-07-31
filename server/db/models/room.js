@@ -57,7 +57,7 @@ var Room = db.Model.extend({
           this.mediaTimer = this.makeMediaTimer(5000, duration);
           this.mediaTimer.start();
           this.emitRoomStatusMessage(this.sockets.in(this.get('id')));
-          this.emitUserStatusMessage(this.sockets.in(this.get('id')));
+          this.emitUserStatusMessage(this.sockets.in(this.get('id')), this.currentDJ.get('id'));
       }).catch(function(err) {
         console.error(err);
         console.log('skipping to next queuedDJ');
@@ -70,8 +70,15 @@ var Room = db.Model.extend({
     }
   },
 
-  emitRoomStatusMessage: function(socket) {
+  emitRoomStatusMessage: function(socket, allAttributes) {
     var roomJSON = this.toJSON();
+
+    if (allAttributes) {
+      socket.emit("room status", roomJSON);
+      this.lastRoomStatus = roomJSON;
+      return;
+    }
+
     var result = {};
     for (var key in roomJSON) {
       var attr = roomJSON[key];
@@ -81,14 +88,13 @@ var Room = db.Model.extend({
       }
     }
     this.lastRoomStatus = roomJSON;
-    console.log('emitting room status with change count: ', Object.keys(result).length);
     socket.emit("room status", result);
   },
 
-  emitUserStatusMessage: function(socket) {
+  emitUserStatusMessage: function(socket, user_id) {
     //socket.emit("user status", this.currentDJ.toJSON());
     //only sending the id since the client currently just checks it and pulls their playlists
-    socket.emit("user status", {id: this.currentDJ.get('id')});
+    socket.emit("user status", {id: user_id, room: this.get('id')});
   },
 
   emitMediaStatusMessage: function(socket, media, mediaDuration, statusMessage) {
@@ -189,8 +195,10 @@ var Room = db.Model.extend({
     if (!this.users.get(user.id)) {
       this.users.add(user);
       callback(null, user);
+      this.emitRoomStatusMessage(this.sockets.in(this.get('id')));
     } else {
       callback(null, null);
+      this.emitRoomStatusMessage(this.sockets.in(this.get('id')));
     }
   }),
 
@@ -198,6 +206,7 @@ var Room = db.Model.extend({
     var popUser = this.users.get(user_id);
     this.users.remove(popUser);
     callback(null, popUser);
+    this.emitRoomStatusMessage(this.sockets.in(this.get('id')));
   }),
 
   getUser: Promise.promisify(function(user_id, callback) {

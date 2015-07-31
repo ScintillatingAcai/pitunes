@@ -8,7 +8,6 @@ var openSockets;
 module.exports = {
 
   getRoom: function(room_id) {
-    console.log('retrieving info for room: ' + room_id);
     var singleton = require('../singleton.js');
     var room = singleton.rooms.get(room_id);
     return room;

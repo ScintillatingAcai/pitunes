@@ -3,13 +3,11 @@ var utils = require('./mediasUtils');
 module.exports = {
 
   attachMedia: function(req, res, next, media_id) {
-    console.log('attaching media_id: ', media_id);
     req.media_id = parseInt(media_id);
     next();
   },
 
   getMedia: function(req, res, next) {
-    console.log('retrieving info for media_id:' + req.media_id);
     utils.retrieveMedia(req.media_id)
     .then(function(media) {
       if (media) {
@@ -44,7 +42,7 @@ module.exports = {
       console.log('controller error: ',error);
       return next(new Error('controller error: ', error));
     });
-    
+
   },
 
   addMedia: function(req, res, next) {

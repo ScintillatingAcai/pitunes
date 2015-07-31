@@ -28,7 +28,7 @@ var removeUserFromRoom = function(user_id, room_id, callback) {
 var cleanUpClientsForSocket = function(socket, user_id, okRoom_id, callback) {
   for (var i = 0; i < allClients.length; i++) {
     var client = allClients[i];
-    if (client.socket === socket) {
+    if (client.socket === socket || client.user_id === user_id) {
 
       console.log('checking whether to clean user [',client.user_id,'] out of room: ', client.room_id);
 
@@ -41,6 +41,14 @@ var cleanUpClientsForSocket = function(socket, user_id, okRoom_id, callback) {
       if (!okRoom_id || parseInt(client.room_id) !== parseInt(okRoom_id)) {
         //dont pull off socket if the room is the same
         console.log('cleaning socket for user [',client.user_id,'] out of room: ', client.room_id);
+        if (okRoom_id) {
+          var room = roomUtils.getRoom(okRoom_id);
+          room.emitUserStatusMessage(client.socket, client.user_id);
+        } else {
+          var room = roomUtils.getRoom(client.room_id);
+          room.emitUserStatusMessage(client.socket, client.room_id);
+        }
+
         socket.leave(client.room_id);
       }
     }
@@ -90,12 +98,11 @@ module.exports = function(io) {
       var room = roomUtils.getRoom(room_id);
       if (!user_id) {
         socket.join(room_id);
-        console.log('user should have be hearing medias status from room:', room_id);
 
         room.startUserForCurrentMedia(socket);
         allClients.push({socket: socket, user_id: user_id, room_id: room_id});
         cleanUpClientsForSocket(socket, user_id, room_id);
-        room.emitRoomStatusMessage(io.sockets.in(room_id));
+        room.emitRoomStatusMessage(socket , true);
         return console.log('anon user entered room');
       }
 
@@ -103,16 +110,14 @@ module.exports = function(io) {
 
       if (user) {
         socket.join(room_id);
-        console.log('user should have be hearing medias status from room:', room_id);
         room.addUser(user).then(function(user) {
           if (!user) return console.error('user already in room');
           room.startUserForCurrentMedia(socket);
-          console.log('should have emitted: ', "user room change");
           console.log('room users length:  ', room.users.length);
 
           allClients.push({socket: socket, user_id: user_id, room_id: room_id});
           cleanUpClientsForSocket(socket, user_id, room_id);
-          room.emitRoomStatusMessage(io.sockets.in(room_id));
+          room.emitRoomStatusMessage(socket, true);
         }).catch(function(err) {console.error(err);});
       }
     });

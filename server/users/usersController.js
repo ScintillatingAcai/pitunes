@@ -5,14 +5,12 @@ var utility = require('../utility');
 module.exports = {
 
   attachUser: function(req, res, next, user_id) {
-    console.log('attaching user_id: ', user_id);
     req.user_id = parseInt(user_id);
     next();
   },
 
   getUser: function(req, res, next) {
     var user_id = req.user_id;
-    console.log('retrieving info for user_id:' + user_id);
     utils.retrieveUser.then(function(user) {
       if (!user) return next(new Error('user does not exist'));
       res.json(user.toJSON({omitPivot: true}));
@@ -24,8 +22,6 @@ module.exports = {
 
   getSessionUser: function(req, res, next) {
     var user_id = req.session.user_id;
-    console.log('retrieving info for user_id:' + user_id);
-
     if (user_id) {
       var user = utils.getUser(user_id);
 
@@ -33,8 +29,8 @@ module.exports = {
         res.json(user.toJSON({omitPivot: true}));
       }
     }
-   
-    res.end(null);      
+
+    res.end(null);
   },
 
   addUser: function(req, res, next) {
