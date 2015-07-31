@@ -4,7 +4,7 @@ var concat = require('gulp-concat');
 // var sass = require('gulp-sass');
 var minifyCss = require('gulp-minify-css');
 var rename = require('gulp-rename');
-var sh = require('shelljs');
+// var sh = require('shelljs');
 var del = require('del');
 var jshint = require('gulp-jshint');
 var buffer = require('vinyl-buffer');
@@ -19,15 +19,15 @@ var glob = require('glob-array');
 
 var paths = {
   sass: ['./scss/**/*.scss'],
-  clientjs: ['./client/src/**/*.js',
-      './client/src/**/**/*.js',
-      './client/src/**/**/**/*.js'],
+  clientjs: ['./client/src/**/*.jsx',
+      './client/src/**/**/*.jsx',
+      './client/src/**/**/**/*.jsx'],
   clientapp: ['./client/src/app/router.jsx'],
   serverjs: ['./server/*.js',
       './server/**/*.js',
       './server/**/**/*.js'
     ],
-  dist: './client/dist'
+  dist: './client/dist',
 };
 
 // var libFilesToMove = [];
@@ -60,32 +60,12 @@ gulp.task('browserify-client', function (cb) {
    .pipe(source('bundle-client.min.js'))
    .pipe(buffer())
    // .pipe(uglify())
-   .pipe(gulp.dest(paths.dist + '/client'));
+   .pipe(gulp.dest(paths.dist));
 });
 
-gulp.task('browserify-server', function () {
-  var files = glob.sync(paths.serverjs);
-  var b = browserify();
-  console.log(files.length);
-  files.forEach(function (file) {
-    b.add(file);
-  });
-
-  return b.transform(babelify).bundle()
-   .pipe(source('bundle-server.min.js'))
-   .pipe(buffer())
-   .pipe(uglify())
-   .pipe(gulp.dest(paths.dist + '/server'));
-});
-
-// gulp.task('babel', function(){
-//   return gulp.src(paths.clientjs)
-//     .pipe(babel())
-//     .pipe(gulp.dest(paths.dist));
-// });
 
 gulp.task('clean', function(){
-  del(['./node_modules','./client/bower_components', paths.dist]);
+  del(['./node_modules', paths.dist]);
 });
 
 // gulp.task('move_lib',['clean'], function(){
@@ -103,21 +83,21 @@ gulp.task('watch', function() {
   gulp.watch(paths.clientjs, ['browserify-client']);
 });
 
-gulp.task('git-check', function(done) {
-  if (!sh.which('git')) {
-    console.log(
-      '  ' + gutil.colors.red('Git is not installed.'),
-      '\n  Git, the version control system, is required to download Ionic.',
-      '\n  Download git here:', gutil.colors.cyan('http://git-scm.com/downloads') + '.',
-      '\n  Once git is installed, run \'' + gutil.colors.cyan('gulp install') + '\' again.'
-    );
-    process.exit(1);
-  }
-  done();
-});
+// gulp.task('git-check', function(done) {
+//   if (!sh.which('git')) {
+//     console.log(
+//       '  ' + gutil.colors.red('Git is not installed.'),
+//       '\n  Git, the version control system, is required to download Ionic.',
+//       '\n  Download git here:', gutil.colors.cyan('http://git-scm.com/downloads') + '.',
+//       '\n  Once git is installed, run \'' + gutil.colors.cyan('gulp install') + '\' again.'
+//     );
+//     process.exit(1);
+//   }
+//   done();
+// });
 
 gulp.task('install_lib', function() {
-  return gulp.src(['./bower.json', './package.json'])
+  return gulp.src(['./package.json'])
   .pipe(install());
 });
 
