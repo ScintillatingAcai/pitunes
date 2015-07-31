@@ -80,12 +80,10 @@ var CurrentRoomModel = Backbone.Model.extend({
         this.set(key, json[key]);
       }
     }
-    console.log('room triggering for user enqueueDequeue');
     this.trigger('room status');
   },
   updateToDefaults: function () {
     this.set(this.defaults);
-    console.log('CURRENTROOM MODEL FIRED UPDATETODEFAULTS ****')
     console.log(this);
   }
 });

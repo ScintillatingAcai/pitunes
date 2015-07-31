@@ -4,8 +4,8 @@ var Users = React.createClass({
   componentWillMount: function () {
     var context = this;
     this.props.app.on('room status', function () {
-      console.log(this.props.model.get('users').models);
-      console.log('USERS LIST HEARD CHANGE');
+      // console.log(this.props.model.get('users').models);
+      // console.log('USERS LIST HEARD CHANGE');
       context.handleRoomChange();
     }.bind(this));
   },

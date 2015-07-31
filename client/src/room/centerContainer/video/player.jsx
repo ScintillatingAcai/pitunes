@@ -1,6 +1,13 @@
 var React = require('react');
 
 var VideoPlayer = React.createClass({
+  componentDidMount: function () {
+    serveStaticImg();
+  },
+  componentWillUnmount: function () {
+    //destoying the video player!
+    removeVideo();
+  },
   render: function() {
     var style = {
       width: "100%",
@@ -8,10 +15,10 @@ var VideoPlayer = React.createClass({
       bottom: "0",
       border: '1px solid #e7e7e7',
       backgroundColor: '#000'
-      // pointerEvents: 'none' 
+      // pointerEvents: 'none'
     };
     return (
-      <div id="videoContainer" style={style}></div>    
+      <div id="videoContainer" style={style}></div>
     );
   }
 });

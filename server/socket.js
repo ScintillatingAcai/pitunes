@@ -128,7 +128,6 @@ module.exports = function(io) {
     });
 
     socket.on('user queue join', function(data){
-      console.log('ROOOOOOOOMM: ', data);
       var user_id = data.user.id;
       var room_id = data.room;
 

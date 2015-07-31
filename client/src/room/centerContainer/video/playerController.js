@@ -41,8 +41,10 @@ var serveStaticImg = function () {
 
 // Destroy the player and serve "No current DJ" Message
 var removeVideo = function () {
-  player.destroy();
-  player = null;
+  if (player) {
+    player.destroy();
+    player = null;
+  }
   serveStaticImg();
 };
 

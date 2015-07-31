@@ -23,6 +23,9 @@ var AppModel = Backbone.Model.extend({
   },
   userSignOut: function () {
     this.get('user').updateToDefaults();
+    console.log('should trigger "userSignInOut"');
+    console.log('signout userid: ', this.get('user').get('id'));
+
     this.trigger('userSignInOut');
   },
   isSignedIn: function () {

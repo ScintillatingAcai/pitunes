@@ -30,8 +30,8 @@ var List = React.createClass({
       this.submitUpdatePlaylist(this.props.app.get('user').get('current_playlist'));
     }.bind(this));
 
-    if (this.props.app.isSignedIn()) {
-      this.props.app.get('user').retrievePlaylists();
+    if (this.props.app.get('user').get('current_playlist')) {
+      this.handleNewCurrentPlaylist();
     }
   },
   componentWillUnmount: function () {
