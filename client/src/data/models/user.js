@@ -11,7 +11,7 @@ var UserModel = Backbone.Model.extend({
     id: 0,
     password: null,
     oath: null,
-    display_name: "Anonymous" + Math.floor(Math.random() * 1000),
+    display_name: "Anonymous" + Math.floor(Math.random() * 10000),
     icon: null,
     location: null,
     playlists: new PlaylistsCollection(),

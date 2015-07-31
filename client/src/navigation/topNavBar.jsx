@@ -17,6 +17,7 @@ var TopNavBar = React.createClass({
       this.setState({ displayName: this.props.app.get('user').get('display_name') });
     } else {
       this.setState({ buttonText: 'Sign In'});
+      this.setState({ displayName: this.props.app.get('user').get('display_name') });
     }
   },
   render: function () {

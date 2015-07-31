@@ -17,6 +17,14 @@ var QueueList = React.createClass({
     this.forceUpdate();
   },
   render: function () {
+    var djStyle = {
+      cursor: 'pointer',
+      marginBottom: '5px',
+      padding: '0',
+      margin: '0',
+      color: '#99B2FF',
+      listStyleType: 'none'
+    };
     var style = {
       cursor: 'pointer',
       marginBottom: '5px',
@@ -25,23 +33,35 @@ var QueueList = React.createClass({
       color: '#FFFFFF',
       listStyleType: 'none'
     };
-    var listItems;
-    if (this.props.model.get('djQueue').models.length > 0) {
-      listItems = this.props.model.get('djQueue').models.map(function (item, i) {
+    var listItems = [];
+    if ( this.props.app.get('current_room').get('currentDJ').get('id') ) {
+      var context = this;
+      var li = function() {
         return (
-          <li style={style} data-id={i} key={i}>
-            {item.get('display_name')}
+          <li style={djStyle} >
+            {context.props.app.get('current_room').get('currentDJ').get('display_name')}
           </li>
         );
-      });
-      return (
-        <ul>{listItems}</ul>
-      );
-    } else {
-      return (
-        <ul></ul>
-      );
+      }();
+      listItems.push(li);
     }
+    if (this.props.model.get('djQueue').models.length > 0) {
+      this.props.model.get('djQueue').models.each(function (item, i) {
+        var li = function() {
+          return (
+            <li style={style} data-id={i} key={i}>
+              {item.get('display_name')}
+            </li>
+          );
+        }();
+        listItems.push(li);
+      });
+    }
+    return (
+      <ul>
+        {listItems}
+      </ul>
+    );
   }
 });
 

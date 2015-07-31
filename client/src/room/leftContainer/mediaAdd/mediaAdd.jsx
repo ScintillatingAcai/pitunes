@@ -144,7 +144,7 @@ var SearchBar = React.createClass({
       width: '100%'
     };
     var searchBarInputStyle = {
-      backgroundColor: '#AAAAAA',
+      backgroundColor: '#DDDDDD',
       borderColor: '#EEEEEE'
     };
     var searchResultsStyle = {

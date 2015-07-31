@@ -62,6 +62,16 @@ var RoomsView = React.createClass({
     .fail(function() {
       console.log('error with GET request to ' + source);
     });
+
+    this.props.app.on('userSignInOut', this.updateForSignInStatus);
+    this.updateForSignInStatus();
+  },
+  componentWillUnmount: function () {
+    roomsCollection.off('change');
+    this.props.app.off('userSignInOut');
+  },
+  updateForSignInStatus: function () {
+    this.forceUpdate();
   },
   render: function() {
     var form = null;
@@ -77,7 +87,7 @@ var RoomsView = React.createClass({
           <div className="j-createRoom-button">
             {form}
           </div>
-            <div className="row j-padding-top-100px">
+            <div className="row j-rooms-padding-top">
               { <Rooms /> }
             </div>
             <CreateRoomModal showCreateRoomModal={this.state.showCreateRoomModal} createRoomClick={this.createRoomClick} errorMessage={this.state.errorMessage} close={this.close} />

@@ -421,7 +421,7 @@ var Playlist = React.createClass({
         success: function (res) {
           var newPlaylistId = res.current_playlist_id;
           context.props.app.get('user').set('current_playlist_id', newPlaylistId);
-          context.props.app.get('user').set('current_playlist', context.props.app.get('user').get('playlists').at(newPlaylistId));
+          context.props.app.get('user').set('current_playlist', context.props.app.get('user').get('playlists').get(newPlaylistId));
           context.close();
         },
         error: function (res) {
