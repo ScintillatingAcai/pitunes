@@ -76,7 +76,7 @@ var Chat = React.createClass({
       bottom: '0'
     };
     var searchBarInputStyle = {
-      backgroundColor: '#AAAAAA',
+      backgroundColor: '#DDDDDD',
       borderColor: '#EEEEEE',
       position: 'absolute',
       bottom: '0',

@@ -188,10 +188,8 @@ var Room = db.Model.extend({
     //dont need to worry about user already being in collection because there can only be one
     if (!this.users.get(user.id)) {
       this.users.add(user);
-      this.emitRoomStatusMessage(this.sockets.in(this.get('id')));
       callback(null, user);
     } else {
-      this.emitRoomStatusMessage(this.sockets.in(this.get('id')));
       callback(null, null);
     }
   }),
@@ -199,7 +197,6 @@ var Room = db.Model.extend({
   removeUser: Promise.promisify(function(user_id, callback) {
     var popUser = this.users.get(user_id);
     this.users.remove(popUser);
-    this.emitRoomStatusMessage(this.sockets.in(this.get('id')));
     callback(null, popUser);
   }),
 
