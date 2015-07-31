@@ -114,6 +114,9 @@ var NavigationController = React.createClass({
         console.log('succeeded in logging out');
         context.close();
         context.props.app.userSignOut();
+        if (window.location.href.indexOf('/#/rooms')) {
+          location.reload();
+        }
       },
       error: function (res) {
         console.error('error in user logout');
