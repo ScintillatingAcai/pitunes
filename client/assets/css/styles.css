@@ -31,6 +31,15 @@ h6 {
     font-weight: 400;
 }
 
+.modal-dialog {
+    top: 40% !important;
+    left: 50% !important;
+    position: absolute !important;
+    -webkit-transform: translate(-50%, -50%) !important;
+    -ms-transform: translate(-50%, -50%) !important;
+    transform: translate(-50%, -50%) !important;
+}
+
 .body-container {
     padding-top: 50px; /* If you're making other pages, make sure there is 50px of padding to make sure the navbar doesn't overlap content! */
     /*padding-bottom: 80px;*/
