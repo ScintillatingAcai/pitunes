@@ -29,17 +29,18 @@ var cleanUpClientsForSocket = function(socket, user_id, okRoom_id) {
     var client = allClients[i];
     if (client.socket === socket) {
 
-      if (!okRoom_id || client.room_id !== okRoom_id) {
-        //dont pull off socket if the room is the same
-        console.log('cleaning socket for user [',client.user_id,'] out of room: ', client.room_id);
-        socket.leave(client.room_id);
-      }
-
       console.log('checking whether to clean user [',client.user_id,'] out of room: ', client.room_id);
-      if (!okRoom_id || client.room_id !== okRoom_id || client.user_id !== user_id) {
+
+      if (!okRoom_id || parseInt(client.room_id) !== parseInt(okRoom_id) || parseInt(client.user_id) !== parseInt(user_id)) {
         console.log('cleaning room for user [',client.user_id,'] out of room: ', client.room_id);
         allClients[i] = {socket: null, user_id: null, room_id: null};
         removeUserFromRoom(client.user_id, client.room_id);
+      }
+
+      if (!okRoom_id || parseInt(client.room_id) !== parseInt(okRoom_id)) {
+        //dont pull off socket if the room is the same
+        console.log('cleaning socket for user [',client.user_id,'] out of room: ', client.room_id);
+        socket.leave(client.room_id);
       }
     }
   }
