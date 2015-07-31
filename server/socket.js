@@ -11,7 +11,7 @@ var addUserToClients = function(user_id, room_id, socket) {
   allClients.push({socket: socket, user_id: user_id, room_id: room_id});
 };
 
-var removeUserFromRoom = function(user_id, room_id) {
+var removeUserFromRoom = function(user_id, room_id, callback) {
   var room = roomUtils.getRoom(room_id);
 
   if (!user_id) {
@@ -21,10 +21,11 @@ var removeUserFromRoom = function(user_id, room_id) {
   if(room.removeDJFromQueue(user_id)) {
   }
   room.removeUser(user_id).then(function(user) {
+    if (callback) {callback();}
   }).catch(function(err) {console.error(err);});
 };
 
-var cleanUpClientsForSocket = function(socket, user_id, okRoom_id) {
+var cleanUpClientsForSocket = function(socket, user_id, okRoom_id, callback) {
   for (var i = 0; i < allClients.length; i++) {
     var client = allClients[i];
     if (client.socket === socket) {
@@ -34,7 +35,7 @@ var cleanUpClientsForSocket = function(socket, user_id, okRoom_id) {
       if (!okRoom_id || parseInt(client.room_id) !== parseInt(okRoom_id) || parseInt(client.user_id) !== parseInt(user_id)) {
         console.log('cleaning room for user [',client.user_id,'] out of room: ', client.room_id);
         allClients[i] = {socket: null, user_id: null, room_id: null};
-        removeUserFromRoom(client.user_id, client.room_id);
+        removeUserFromRoom(client.user_id, client.room_id, callback);
       }
 
       if (!okRoom_id || parseInt(client.room_id) !== parseInt(okRoom_id)) {
@@ -94,6 +95,7 @@ module.exports = function(io) {
         room.startUserForCurrentMedia(socket);
         allClients.push({socket: socket, user_id: user_id, room_id: room_id});
         cleanUpClientsForSocket(socket, user_id, room_id);
+        room.emitRoomStatusMessage(io.sockets.in(room_id));
         return console.log('anon user entered room');
       }
 
@@ -110,7 +112,7 @@ module.exports = function(io) {
 
           allClients.push({socket: socket, user_id: user_id, room_id: room_id});
           cleanUpClientsForSocket(socket, user_id, room_id);
-
+          room.emitRoomStatusMessage(io.sockets.in(room_id));
         }).catch(function(err) {console.error(err);});
       }
     });
@@ -120,7 +122,10 @@ module.exports = function(io) {
       var user_id = data.user.id;
       var room_id = data.room;
 
-      cleanUpClientsForSocket(socket, user_id);
+      var callback = function () {
+        room.emitRoomStatusMessage(io.sockets.in(room_id));
+      };
+      cleanUpClientsForSocket(socket, user_id, null, callback);
     });
 
     socket.on('disconnect', function() {

@@ -32,10 +32,19 @@ var List = React.createClass({
     if (this.props.app.get('user').get('current_playlist')) {
       this.handleNewCurrentPlaylist();
     }
+
+    this.props.app.on('userSignInOut', this.updateForSignInStatus);
+    this.updateForSignInStatus();
   },
   componentWillUnmount: function () {
     this.props.model.off('change:current_playlist');
     this.props.model.off('newSong');
+    this.props.app.off('userSignInOut');
+  },
+  updateForSignInStatus: function () {
+    // if (this.props.app.isSignedIn()) {
+    this.props.app.get('user').updateForUserStatus();
+    // }
   },
   durationToDisplay: function (duration) {
     var minutes = Math.floor(duration / 60) + "";

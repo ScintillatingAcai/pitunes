@@ -46,7 +46,7 @@ var QueueList = React.createClass({
       listItems.push(li);
     }
     if (this.props.model.get('djQueue').models.length > 0) {
-      this.props.model.get('djQueue').models.each(function (item, i) {
+      this.props.model.get('djQueue').each(function (item, i) {
         var li = function() {
           return (
             <li style={style} data-id={i} key={i}>
