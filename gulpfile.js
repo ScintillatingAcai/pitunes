@@ -27,10 +27,26 @@ var paths = {
       './server/**/*.js',
       './server/**/**/*.js'
     ],
+  browserify_client: 'bundle-client.js',
+  uglify_client: 'bundle-client.min.js',
   dist: './client/dist',
+  distcss: '/css',
+  distfont: '/font',
+  distlib: '/lib'
 };
 
-// var libFilesToMove = [];
+var libFilesToMove = ['./node_modules/socket.io/node_modules/socket.io-client/socket.io.js',
+      './node_modules/jquery/dist/jquery.min.js',
+      './node_modules/jquery/dist/jquery.min.map',
+      // './node_modules/bootstrap/dist/js/bootstrap.min.js',
+      './node_modules/bootstrap/dist/css/bootstrap.min.css',
+      './node_modules/bootstrap/dist/css/bootstrap.min.map',
+      // './node_modules/react-bootstrap/dist/react-bootstrap.min.js',
+      './node_modules/font-awesome/css/font-awesome.min.css',
+      './node_modules/font-awesome/css/font-awesome.min.map',
+      './client/src/room/centerContainer/video/playerController.js'];
+
+var fontFilesToMove =  ['./node_modules/font-awesome/fonts/*.*'];     
 
 
 // gulp.task('sass', function(done) {
@@ -57,21 +73,31 @@ gulp.task('browserify-client', function (cb) {
   });
 
   return b.transform(babelify).bundle()
-   .pipe(source('bundle-client.min.js'))
+   .pipe(source(paths.browserify_client))
    .pipe(buffer())
-   // .pipe(uglify())
    .pipe(gulp.dest(paths.dist));
 });
 
-
-gulp.task('clean', function(){
-  del(['./node_modules', paths.dist]);
+gulp.task('uglify-client', ['browserify-client'], function () {
+  return gulp.src([paths.dist + "/" + paths.browserify_client])
+  .pipe(uglify())
+  .pipe(rename('bundle-client.min.js'))
+  .pipe(gulp.dest(paths.dist));
 });
 
-// gulp.task('move_lib',['clean'], function(){
-//   gulp.src(libFilesToMove)
-//   .pipe(gulp.dest('./www/lib/'));
-// });
+gulp.task('clean', function(){
+  return del(['./node_modules', paths.dist]);
+});
+
+gulp.task('move_lib', ['move_fonts'], function(){
+  return gulp.src(libFilesToMove)
+  .pipe(gulp.dest(paths.dist + paths.distlib));
+});
+
+gulp.task('move_fonts', function(){
+  return gulp.src(fontFilesToMove, { base: './node_modules/font-awesome/' })
+  .pipe(gulp.dest(paths.dist));
+});
 
 gulp.task('lint', function() {
   return gulp.src(paths.clientjs, paths.serverjs)
@@ -80,26 +106,12 @@ gulp.task('lint', function() {
 });
 
 gulp.task('watch', function() {
-  gulp.watch(paths.clientjs, ['browserify-client']);
+  return gulp.watch(paths.clientjs, ['uglify-client']);
 });
-
-// gulp.task('git-check', function(done) {
-//   if (!sh.which('git')) {
-//     console.log(
-//       '  ' + gutil.colors.red('Git is not installed.'),
-//       '\n  Git, the version control system, is required to download Ionic.',
-//       '\n  Download git here:', gutil.colors.cyan('http://git-scm.com/downloads') + '.',
-//       '\n  Once git is installed, run \'' + gutil.colors.cyan('gulp install') + '\' again.'
-//     );
-//     process.exit(1);
-//   }
-//   done();
-// });
 
 gulp.task('install_lib', function() {
   return gulp.src(['./package.json'])
   .pipe(install());
 });
 
-//gulp.task('default', ['install_lib', 'babel', 'lint', 'browserify-client']);
-gulp.task('default', ['install_lib', 'browserify-client']);
+gulp.task('default', ['install_lib', 'move_lib', 'uglify-client']);
