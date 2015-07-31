@@ -3,7 +3,9 @@
  * Code licensed under the Apache License v2.0.
  * For details, see http://www.apache.org/licenses/LICENSE-2.0.
  */
-
+html {
+    overflow: hidden;
+}
 body,
 html {
     width: 100%;
@@ -54,7 +56,7 @@ h6 {
     color: #F8F8F8;
     background: url(../img/dj.jpg) no-repeat center center;
     background-size: cover;
-    height: 120vh;
+    height: 100vh;
 }
 
 .intro-message > h1 {
@@ -229,8 +231,8 @@ p.copyright {
     text-align: center;
 }
 
-.j-padding-top-15-percent {
-    padding-top: 15%;
+.j-padding-top-30-percent {
+    padding-top: 20%;
 }
 
 div.placeholder {
@@ -246,8 +248,8 @@ div.placeholder:before {
 .j-createRoom-button {
     position: fixed;
     z-index: 1;
-    padding-top: 60px;
-    left: 42%;
+    padding-top: 50px;
+    right: 0%;
 }
 
 .j-rooms-padding-top {
