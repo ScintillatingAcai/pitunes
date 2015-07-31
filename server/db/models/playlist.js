@@ -66,7 +66,6 @@ var Playlist = db.Model.extend({
     return this.medias().query({where: {media_order: mediaIndex}}).fetchOne()
     .then(function(found) {
       if (!found) return callback(new Error('media not found'));
-      console.log('retrieved current media index: ', mediaIndex);
       callback(null,found);
     })
     .catch(function(error) {
@@ -80,7 +79,6 @@ var Playlist = db.Model.extend({
     })
     .then(function(playlist) {
       if (!playlist) return callback(new Error('playlist not found'));
-      console.log('retrieved playlist');
       callback(null,playlist);
     })
     .catch(function(error) {

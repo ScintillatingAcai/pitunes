@@ -19,7 +19,6 @@ function cleanAttributes (attributes) {
 module.exports = {
 
   getUser: function(user_id) {
-    console.log('retrieving info for user: ' + user_id);
     var singleton = require('../singleton.js');
     var user = singleton.users.get(user_id);
     return user;
@@ -125,7 +124,6 @@ module.exports = {
             if (err) console.error('error: ', err);
             if (isMatch) {
               //do sessions
-              console.log('user authenticated');
               return callback(null, found);
             } else {
               console.error('password incorrect');
@@ -155,7 +153,7 @@ module.exports = {
     var user = this.getUser(user_id);
 
     if (user) {
-      user.setCurrentPlaylist(playlist_id)    
+      user.setCurrentPlaylist(playlist_id)
       .then(function(user){
         console.log("userUtils: ", user);
         callback(null, user);

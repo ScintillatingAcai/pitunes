@@ -1,7 +1,7 @@
 var ga = document.createElement('script');
 ga.type = 'text/javascript';
 ga.async = false;
-ga.src = 'http://www.youtube.com/player_api';
+ga.src = 'https://www.youtube.com/player_api';
 var s = document.getElementsByTagName('script')[0];
 s.parentNode.insertBefore(ga, s);
 

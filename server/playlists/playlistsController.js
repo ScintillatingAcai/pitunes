@@ -3,14 +3,12 @@ var utils = require('./playlistsUtils');
 module.exports = {
 
   attachPlaylist: function(req, res, next, playlist_id) {
-    console.log('attaching playlist_id: ', playlist_id);
     req.playlist_id = parseInt(playlist_id);
     next();
   },
 
   getPlaylist: function(req, res, next) {
     var playlist_ID = req.playlist_id;
-    console.log('retrieving info for playlist_id:' + playlist_ID);
     utils.retrievePlaylist(playlist_ID)
     .then(function(playlist) {
       if (playlist) {
@@ -26,7 +24,6 @@ module.exports = {
   },
 
   addPlaylist: function(req, res, next) {
-    console.log('adding playlist: ',req.body);
     utils.storePlaylist(req.user_id, req.body)
     .then(function(playlist) {
       if (playlist) {
@@ -62,7 +59,6 @@ module.exports = {
   deletePlaylist: function(req, res, next) {
     utils.deletePlaylist(req.playlist_id)
     .then(function() {
-      console.log("finished deletePlaylist");
       next();
     })
     .catch(function(error) {

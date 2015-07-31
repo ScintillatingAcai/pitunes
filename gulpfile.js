@@ -47,7 +47,7 @@ var libFilesToMove = ['./node_modules/socket.io/node_modules/socket.io-client/so
       './client/src/room/centerContainer/video/playerController.js'];
 
 var fontAwesome =  ['./node_modules/font-awesome/fonts/*.*'];
-var fontBootstrap = ['./node_modules/bootstrap/dist/fonts/*.*'];     
+var fontBootstrap = ['./node_modules/bootstrap/dist/fonts/*.*'];
 
 
 // gulp.task('sass', function(done) {
@@ -81,7 +81,7 @@ gulp.task('browserify-client', ['install_lib'], function (cb) {
 
 gulp.task('uglify-client', ['browserify-client'], function () {
   return gulp.src([paths.dist + "/" + paths.browserify_client])
-  .pipe(uglify())
+  // .pipe(uglify())
   .pipe(rename('bundle-client.min.js'))
   .pipe(gulp.dest(paths.dist));
 });
