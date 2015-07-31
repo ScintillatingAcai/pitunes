@@ -27,8 +27,7 @@ var paths = {
       './server/**/*.js',
       './server/**/**/*.js'
     ],
-  browserify_client: 'bundle-client.js',
-  uglify_client: 'bundle-client.min.js',
+  client_file_name: 'bundle-client.min.js',
   dist: './client/dist',
   distcss: '/css',
   distfont: '/font',
@@ -64,7 +63,7 @@ var fontBootstrap = ['./node_modules/bootstrap/dist/fonts/*.*'];
 //     .on('end', done);
 // });
 //
-gulp.task('browserify-client', ['install_lib'], function (cb) {
+gulp.task('browserify-client', function (cb) {
 
   var files = glob.sync(paths.clientapp);
   var b = browserify();
@@ -74,23 +73,31 @@ gulp.task('browserify-client', ['install_lib'], function (cb) {
   });
 
   return b.transform(babelify).bundle()
-   .pipe(source(paths.browserify_client))
-   .pipe(buffer())
-   .pipe(gulp.dest(paths.dist));
+    .pipe(source(paths.client_file_name))
+    .pipe(buffer())
+    .pipe(gulp.dest(paths.dist));
 });
 
-gulp.task('uglify-client', ['browserify-client'], function () {
-  return gulp.src([paths.dist + "/" + paths.browserify_client])
-  // .pipe(uglify())
-  .pipe(rename('bundle-client.min.js'))
-  .pipe(gulp.dest(paths.dist));
+gulp.task('uglify-client', function () {
+  var files = glob.sync(paths.clientapp);
+  var b = browserify();
+  console.log(files.length);
+  files.forEach(function (file) {
+    b.add(file);
+  });
+
+  return b.transform(babelify).bundle()
+    .pipe(source(paths.client_file_name))
+    .pipe(buffer())
+    .pipe(uglify())
+    .pipe(gulp.dest(paths.dist));
 });
 
 gulp.task('clean', function(){
   return del(['./node_modules', paths.dist]);
 });
 
-gulp.task('move_lib', ['move_fontawesome', 'move_fontbootstrap'], function(){
+gulp.task('move_lib', ['install_lib', 'move_fontawesome', 'move_fontbootstrap'], function(){
   return gulp.src(libFilesToMove)
   .pipe(gulp.dest(paths.dist + paths.distlib));
 });
@@ -117,8 +124,8 @@ gulp.task('watch', function() {
 
 gulp.task('install_lib', function() {
   return gulp.src(['./package.json'])
-  .pipe(install());
+         .pipe(install());
 });
 
-// gulp.task('default', ['install_lib', 'move_lib', 'uglify-client']);
-gulp.task('default', ['install_lib', 'move_lib', 'browserify-client']);
+gulp.task('prod', ['move_lib', 'uglify-client']);
+gulp.task('default', ['move_lib', 'browserify-client']);
