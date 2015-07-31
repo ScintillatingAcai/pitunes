@@ -13,7 +13,7 @@ var socket = io(server_uri);
 
 var NavigationController = React.createClass({
   getInitialState: function () {
-    return { showSignIn: false, showSignUp: false, showSignOut: false, errorMessage: '' };
+    return { showSignIn: false, showSignUp: false, showSignOut: false, errorMessage: ''};
   },
   componentDidMount: function () {
     var context = this;
@@ -40,7 +40,6 @@ var NavigationController = React.createClass({
       this.setState({ showSignIn: true, showSignUp: false, showSignOut: false });
     }
   },
-
   signInUser: function () {
     var form = document.getElementById('signIn-form');
     var data = { email: form[0].value, password: form[1].value };
