@@ -5,7 +5,6 @@ var VideoPlayer = React.createClass({
     serveStaticImg();
   },
   componentWillUnmount: function () {
-    //destoying the video player!
     removeVideo();
   },
   render: function() {

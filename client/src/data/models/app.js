@@ -2,7 +2,6 @@ var Backbone = require('backbone');
 var UserModel = require('./user.js');
 var CurrentRoomModel = require('./currentRoom.js');
 
-// App Model
 var AppModel = Backbone.Model.extend({
   initialize: function () {
     this.set('user', new UserModel());
@@ -19,16 +18,10 @@ var AppModel = Backbone.Model.extend({
   userSignIn: function (res) {
     this.get('user').set(res);
     this.get('user').retrievePlaylists();
-
-    console.log('should trigger "userSignInOut"');
-    console.log('signout userid: ', this.get('user').get('id'));
     this.trigger('userSignInOut');
   },
   userSignOut: function () {
     this.get('user').updateToDefaults();
-    console.log('should trigger "userSignInOut"');
-    console.log('signout userid: ', this.get('user').get('id'));
-
     this.trigger('userSignInOut');
   },
   isSignedIn: function () {

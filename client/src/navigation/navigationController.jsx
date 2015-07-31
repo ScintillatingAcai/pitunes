@@ -91,12 +91,10 @@ var NavigationController = React.createClass({
     $.ajax({url: server_uri + '/api/users/logout',
       type: 'GET',
       success: function (res) {
-        console.log('succeeded in logging out');
         context.props.app.userSignOut();
         context.close();
       },
       error: function (res) {
-        console.error('error in user logout');
         context.setState({ errorMessage: res.statusText + ': ' + res.responseText });
       }
     });

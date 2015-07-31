@@ -7,8 +7,6 @@ var QueueList = React.createClass({
   componentDidMount: function () {
     var context = this;
     this.props.app.on('room status', function () {
-      // console.log(this.props.model.get('djQueue').models);
-      // console.log('QUEUE LIST HEARD CHANGE');
       context.handleRoomChange();
     }.bind(this));
   },
@@ -18,7 +16,7 @@ var QueueList = React.createClass({
   handleRoomChange: function () {
     this.forceUpdate();
   },
-  render: function() {
+  render: function () {
     var style = {
       cursor: 'pointer',
       marginBottom: '5px',
@@ -40,16 +38,6 @@ var QueueList = React.createClass({
         <ul>{listItems}</ul>
       );
     } else {
-      // listItems = ["No one in room"].map(function (item, i) {
-      //   return (
-      //     <li style={style} data-id={i} key={i}>
-      //       {item}
-      //     </li>
-      //   );
-      // });
-      // return (
-      //   <ul>{listItems}</ul>
-      // );
       return (
         <ul></ul>
       );

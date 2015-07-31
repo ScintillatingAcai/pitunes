@@ -5,8 +5,6 @@ var PlaylistsCollection = require('../collections/playlists.js');
 var PlaylistModel = require('./playlist.js');
 var MediasCollection = require('../collections/medias.js');
 
-
-//A Backbone model for the user who is logged in
 var UserModel = Backbone.Model.extend({
   defaults: {
     email: null,
@@ -49,7 +47,6 @@ var UserModel = Backbone.Model.extend({
       }
       context.trigger('user status');
     }).fail(function () {
-      console.log('GET request to ' + source + ' failed.');
       context.trigger('user status');
     });
   },
@@ -57,17 +54,17 @@ var UserModel = Backbone.Model.extend({
     var source =  window.location.origin + '/api/users/' + this.get('id') + '/playlists/' + playlist_id;
     var context = this;
     $.get(source, function (res) {
-        if (!res) return callback(new Error('no playlist returned'));
-        var playlist = new PlaylistModel();
-        for (var key in res) {
-          if (key === 'medias') {
-            var medias = new MediasCollection(res.medias);
-            playlist.set('medias', medias);
-          } else {
-            playlist.set(key, res[key]);
-          }
+      if (!res) return callback(new Error('no playlist returned'));
+      var playlist = new PlaylistModel();
+      for (var key in res) {
+        if (key === 'medias') {
+          var medias = new MediasCollection(res.medias);
+          playlist.set('medias', medias);
+        } else {
+          playlist.set(key, res[key]);
         }
-        callback(null, playlist);
+      }
+      callback(null, playlist);
     })
     .done(function () {
     })
@@ -88,8 +85,6 @@ var UserModel = Backbone.Model.extend({
   updateToDefaults: function () {
     this.set(this.defaults);
   }
-
-
 });
 
 module.exports = UserModel;

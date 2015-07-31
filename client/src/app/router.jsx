@@ -17,15 +17,12 @@ $.ajax({
   url: server_uri + '/api/users/loggedin',
   type: 'GET',
   success: function (res) {
-    console.log('login returned');
-    console.log(res);
     if (res) {
       app.get('user').set(res);
     }
     loadApp();
   },
   error: function (res) {
-    console.error('user login check failed');
     loadApp();
   }
 });

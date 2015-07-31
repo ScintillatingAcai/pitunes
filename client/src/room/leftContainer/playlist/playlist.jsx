@@ -23,7 +23,6 @@ var List = React.createClass({
     }.bind(this));
 
     this.props.model.on('newSong', function () {
-      console.log('List heard curPL medias change');
       if (this.props.app.get('user').get('current_playlist')) {
         this.handleNewCurrentPlaylist();
       }
@@ -55,7 +54,6 @@ var List = React.createClass({
     var mediaLength = this.props.app.get('user').get('current_playlist').get('medias').length;
     var current_media_index = this.props.app.get('user').get('current_playlist').get('current_media_index');
     var next_media_index = (current_media_index) % mediaLength + 1;
-    console.log('medias length: ', mediaLength);
     this.props.app.get('user').get('current_playlist').get('medias').each(function (e, index) {
       var mediaIndex =  (index + mediaLength - next_media_index + 1) % mediaLength;
       var mediaObject = {};
@@ -143,8 +141,6 @@ var List = React.createClass({
         dataType: 'json',
         data: jsonPlaylist,
         success: function (res) {
-          console.log('id: ', res.id);
-          console.log(res);
           context.props.app.get('user').set('current_playlist_id', res.id);
           playlist.set('id', res.id);
           context.props.app.get('user').set('current_playlist', playlist);
@@ -153,8 +149,6 @@ var List = React.createClass({
           console.log("error: " + res.statusText);
         }
       });
-    } else {
-      console.log('not logged in');
     }
   },
   submitUpdatePlaylist: function (playlist) {
@@ -166,14 +160,12 @@ var List = React.createClass({
         dataType: 'json',
         data: jsonPlaylist,
         success: function (res) {
-          console.log('Submitted updated playlist');
+
         },
         error: function (res) {
           console.log("error: " + res.statusText);
         }
       });
-    } else {
-      console.log('not logged in');
     }
   },
   render: function () {
@@ -189,7 +181,6 @@ var List = React.createClass({
       width: '80%',
       margin: '0 5px 0 5px'
     };
-    console.log(this.state.data);
     var listItems = this.state.data.map((function (item, i) {
       return (
         <div style={style}
@@ -231,7 +222,6 @@ var PlaylistTitle = React.createClass({
   componentDidMount: function () {
 
     this.props.model.on('change:current_playlist', function () {
-      console.log('playlistTitle heard change in user\'s current_playlist');
       if (this.props.app.get('user').get('current_playlist')) {
         this.getUsersPlaylists();
         $('.playlistSelectDropdown').removeClass('hidden');
@@ -240,7 +230,6 @@ var PlaylistTitle = React.createClass({
     }.bind(this));
 
     this.props.model.on('currentPlaylistNewName', function () {
-      console.log('playlistTitle heard currentPlaylistNewName');
       if (this.props.app.get('user').get('current_playlist')) {
         this.getUsersPlaylists();
         $('.playlistSelectDropdown').removeClass('hidden');
@@ -278,12 +267,9 @@ var PlaylistTitle = React.createClass({
       $.ajax({url: server_uri + '/api/users/' + this.props.app.get('user').get('id') + '/playlists/',
         type: 'GET',
         success: function (res) {
-          console.log('got playlist');
-          console.log(res);
           var playlistNames = res.map(function(e) {
             return {id: e.id, text: e.name};
           });
-          console.log(playlistNames);
           context.setState({ playlistData: playlistNames })
           context.handleNewCurrentPlaylist();
         },
@@ -291,8 +277,6 @@ var PlaylistTitle = React.createClass({
           console.log("error: " + res.statusText);
         }
       });
-    } else {
-      console.log('not logged in');
     }
   },
   handleNewCurrentPlaylist: function () {
@@ -303,14 +287,12 @@ var PlaylistTitle = React.createClass({
     }
   },
   swapPlaylist: function (e) {
-    console.log('user clicked playlist #', e.target.getAttribute('data-playlistid'));
     var newPlaylistId = e.target.getAttribute('data-playlistid')
     var context = this;
     if (this.props.app.get('user').get('id') !== 0) {
       $.ajax({url: 'api/users/' + this.props.app.get('user').get('id') + '/playlists/' + newPlaylistId + '/current',
         type: 'PUT',
         success: function (res) {
-          console.log('user current_playlist_id changed to ', newPlaylistId);
           context.props.app.get('user').set('current_playlist_id', newPlaylistId);
           context.props.app.get('user').set('current_playlist', context.props.app.get('user').get('playlists').get(newPlaylistId));
         },
@@ -318,8 +300,6 @@ var PlaylistTitle = React.createClass({
           console.log("error: " + res.statusText);
         }
       });
-    } else {
-      console.log('not logged in');
     }
   },
   render: function (){
@@ -399,8 +379,6 @@ var Playlist = React.createClass({
         dataType: 'json',
         data: jsonPlaylist,
         success: function (res) {
-          console.log('id: ', res.id);
-          console.log(res);
           context.props.app.get('user').set('current_playlist_id', res.id);
           playlist.set('id', res.id);
           context.props.app.get('user').set('current_playlist', playlist);
@@ -410,8 +388,6 @@ var Playlist = React.createClass({
           console.log("error: " + res.statusText);
         }
       });
-    } else {
-      console.log('not logged in');
     }
   },
   submitUpdatePlaylist: function () {
@@ -435,12 +411,9 @@ var Playlist = React.createClass({
           console.log("error: " + res.statusText);
         }
       });
-    } else {
-      console.log('not logged in');
     }
   },
   deleteCurrentPlaylist: function () {
-    console.log('user confirmed delete and parent heard')
     var context = this;
     if (this.props.app.get('user').get('id') !== 0) {
       $.ajax({url: server_uri + '/api/users/' + this.props.app.get('user').get('id') + '/playlists/' + this.props.app.get('user').get('current_playlist_id'),
@@ -455,12 +428,9 @@ var Playlist = React.createClass({
           console.log("error: " + res.statusText);
         }
       });
-    } else {
-      console.log('not logged in');
     }
   },
   preventSubmit: function(e) {
-    console.log('prevented submit')
     e.preventDefault();
   },
   render: function () {

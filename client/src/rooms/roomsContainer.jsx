@@ -16,7 +16,6 @@ var RoomsView = React.createClass({
     this.setState({ showCreateRoomModal: true });
   },
   createRoomClick: function() {
-    console.log('createRoom has been clicked. make sure to send a post request with the information');
     var form = document.getElementById('createRoom-form');
     var self = this;
     if (this.props.app.isSignedIn() === false) {

@@ -27,12 +27,10 @@ var Chat = React.createClass({
     }.bind(this));
 
     socket.on('room status', function(data){
-      console.log('room status: ', data);
       this.props.app.get('current_room').updateForRoomStatus(data);
     }.bind(this));
 
     socket.on('user status', function(data){
-      console.log('user status: ', data);
       if (this.props.app.get('user').get('id') === data.id) {
         this.props.app.get('user').updateForUserStatus(data);
       }
