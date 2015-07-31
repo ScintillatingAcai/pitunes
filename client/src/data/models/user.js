@@ -56,8 +56,6 @@ var UserModel = Backbone.Model.extend({
   },
   updateToDefaults: function () {
     this.set(this.defaults);
-    console.log('USER MODEL FIRED UPDATETODEFAULTS ****')
-    console.log(this);
   }
 
 

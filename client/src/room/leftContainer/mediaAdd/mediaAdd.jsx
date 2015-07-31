@@ -1,12 +1,12 @@
 var React = require('react');
 var $ = require('jquery');
-
 var MediaModel = require('../../../data/models/media.js');
+var UserAttemptModal = require('./userattemptmodal.jsx');
 var YOUTUBE_API_KEY = 'AIzaSyA_ZnEUUw8uGbEdGfBXH296QX-1nnyeJnQ';
 
 var SearchBar = React.createClass({
   getInitialState: function () {
-    return {text: ''};
+    return { showUserAttempt: false, text: '' };
   },
   handleChange: function (e) {
     e.preventDefault();
@@ -20,6 +20,12 @@ var SearchBar = React.createClass({
   },
   handleSubmit: function (e) {
     e.preventDefault();
+  },
+  handleUserAttempt: function () {
+    this.setState({ showUserAttempt: true});
+  },
+  close: function () {
+    this.setState({ showUserAttempt: false});
   },
   escapeDQ: function (string) {
     return string.replace(/\"/g, "'");
@@ -110,7 +116,7 @@ var SearchBar = React.createClass({
             $(".searchResultItem").on('click', function (e) {
               if ($(e.target).attr('className') === 'searchResultTitle') {
                 // loadVideo($(e.target).attr('data-id'), 0);
-                if (context.props.app.get('user').get('id') !== 0) {
+                if (context.props.app.get('user').get('current_playlist_id')) {
                   var newSong = new MediaModel({
                     title: $(e.target).attr('data-title'),
                     youtube_id: $(e.target).attr('data-youtubeid'),
@@ -120,6 +126,9 @@ var SearchBar = React.createClass({
                   var addIndex = context.props.app.get('user').get('current_playlist').get('current_media_index');
                   context.props.app.get('user').get('current_playlist').get('medias').add(newSong, {at: addIndex});
                   context.props.app.get('user').trigger('newSong');
+                } else {
+                  console.log("USER CLICKED SONG RESULT WHILE NOT LOGGED IN")
+                  context.setState({ showUserAttempt: true });
                 }
               }
             });
@@ -144,6 +153,7 @@ var SearchBar = React.createClass({
     };
     return (
       <div>
+        <UserAttemptModal showUserAttempt={this.state.showUserAttempt} close={this.close} app={this.props.app} />
         <ul id="searchResults" style={searchResultsStyle}></ul>
         <form style={style}>
           <input style={searchBarInputStyle} onChange={this.handleChange} onSubmit={this.handleSubmit} value={this.state.text} className="form-control" placeholder="Search YouTube"/>
