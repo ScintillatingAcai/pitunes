@@ -8,6 +8,7 @@ var UserModel = require('./user.js')
 var CurrentRoomModel = Backbone.Model.extend({
   defaults: {
     currentMedia: null,
+    currentDJ: new UserModel(),
     id: null,
     name: null,
     private: null,
@@ -30,6 +31,9 @@ var CurrentRoomModel = Backbone.Model.extend({
   },
 
   retrieveCurrentRoomInfo: function () {
+    if (!this.get('id')) {
+      return;
+    }
     var source = window.location.origin + '/api/rooms/' + this.get('id');
     var context = this;
     $.get(source, function (res) {
@@ -76,7 +80,13 @@ var CurrentRoomModel = Backbone.Model.extend({
         this.set(key, json[key]);
       }
     }
-
+    console.log('room triggering for user enqueueDequeue');
+    this.trigger('room status');
+  },
+  updateToDefaults: function () {
+    this.set(this.defaults);
+    console.log('CURRENTROOM MODEL FIRED UPDATETODEFAULTS ****')
+    console.log(this);
   }
 });
 

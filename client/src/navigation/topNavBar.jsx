@@ -5,9 +5,12 @@ var TopNavBar = React.createClass({
   getInitialState: function () {
     return ({ buttonText: 'Sign In' });
   },
-  componentDidMount: function () {
+  componentWillMount: function () {
     this.props.app.on('userSignInOut', this.updateForSignInStatus);
     this.updateForSignInStatus();
+  },
+  componentWillUnmount: function () {
+    this.props.app.off('userSignInOut');
   },
   updateForSignInStatus: function () {
     if (this.props.app.isSignedIn()) {

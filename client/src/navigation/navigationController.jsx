@@ -15,7 +15,7 @@ var NavigationController = React.createClass({
   getInitialState: function () {
     return { showSignIn: false, showSignUp: false, showSignOut: false, errorMessage: '' };
   },
-  componentDidMount: function () {
+  componentWillMount: function () {
     var context = this;
     $('body').on('click', '#landing-signin', function () {
       context.signInClick();

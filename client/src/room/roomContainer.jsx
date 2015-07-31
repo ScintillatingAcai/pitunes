@@ -11,15 +11,26 @@ var RoomContainer = React.createClass({
     return { showSignIn: false, showSignUp: false, showSignOut: false, errorMessage: '' };
   },
   componentWillMount: function () {
-    socket.emit('user room join', { user: this.props.app.get('user').attributes, room: this.props.room_id });
-    this.props.app.get('current_room').set('id', this.props.room_id);
+    this.props.app.setCurrentRoom(this.props.room_id);
+
+    this.props.app.on('userSignInOut', this.updateForSignInStatus);
+    this.updateForSignInStatus();
   },
   componentWillUnmount: function () {
-    console.log('room container will unmount');
-    console.log('user_id: ', this.props.app.get('user').attributes.id);
-    console.log('room: ', this.props.room_id);
-
     socket.emit('user room leave', { user: this.props.app.get('user').attributes, room: this.props.room_id});
+
+    this.props.app.setCurrentRoom(false); //this will update currentroom to defaults
+
+    this.props.app.off('userSignInOut');
+  },
+  updateForSignInStatus: function () {
+    if (this.props.app.isSignedIn()) {
+      console.log('room setup for user signed in: PROPS: ', this.props);
+      socket.emit('user room join', { user: this.props.app.get('user').attributes, room: this.props.room_id });
+    } else {
+      console.log('room setup for user signed out: PROPS: ', this.props);
+      socket.emit('user room join', { user: this.props.app.get('user').attributes, room: this.props.room_id });
+    }
   },
   render: function () {
     var style = {

@@ -1,19 +1,16 @@
 var React = require('react');
 
 var Users = React.createClass({
-  componentDidMount: function () {
+  componentWillMount: function () {
     var context = this;
-    // this.props.model.on('reset:users', function () {
-    //   console.log(this.props.model.get('users').models);
-    //   console.log('USERS LIST HEARD CHANGE');
-    //     context.handleRoomChange();
-    // }.bind(this));
-
-    this.props.model.on('room status', function () {
+    this.props.app.on('room status', function () {
       console.log(this.props.model.get('users').models);
       console.log('USERS LIST HEARD CHANGE');
-        context.handleRoomChange();
+      context.handleRoomChange();
     }.bind(this));
+  },
+  componentWillUnmount: function () {
+    this.props.app.off('room status');
   },
   handleRoomChange: function () {
     this.forceUpdate();
