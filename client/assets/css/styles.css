@@ -238,7 +238,7 @@ div.placeholder:before {
     position: fixed;
     z-index: 1;
     padding-top: 60px;
-    right: 42%;
+    left: 42%;
 }
 
 .j-rooms-padding-top {
