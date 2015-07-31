@@ -19,15 +19,15 @@ var glob = require('glob-array');
 
 var paths = {
   sass: ['./scss/**/*.scss'],
-  clientjs: ['./client/src/**/*.js',
-      './client/src/**/**/*.js',
-      './client/src/**/**/**/*.js'],
+  clientjs: ['./client/src/**/*.jsx',
+      './client/src/**/**/*.jsx',
+      './client/src/**/**/**/*.jsx'],
   clientapp: ['./client/src/app/router.jsx'],
   serverjs: ['./server/*.js',
       './server/**/*.js',
       './server/**/**/*.js'
     ],
-  dist: './client/dist'
+  dist: './client/dist',
 };
 
 // var libFilesToMove = [];
@@ -63,29 +63,9 @@ gulp.task('browserify-client', function (cb) {
    .pipe(gulp.dest(paths.dist + '/client'));
 });
 
-gulp.task('browserify-server', function () {
-  var files = glob.sync(paths.serverjs);
-  var b = browserify();
-  console.log(files.length);
-  files.forEach(function (file) {
-    b.add(file);
-  });
-
-  return b.transform(babelify).bundle()
-   .pipe(source('bundle-server.min.js'))
-   .pipe(buffer())
-   .pipe(uglify())
-   .pipe(gulp.dest(paths.dist + '/server'));
-});
-
-// gulp.task('babel', function(){
-//   return gulp.src(paths.clientjs)
-//     .pipe(babel())
-//     .pipe(gulp.dest(paths.dist));
-// });
 
 gulp.task('clean', function(){
-  del(['./node_modules','./client/bower_components', paths.dist]);
+  del(['./node_modules', paths.dist]);
 });
 
 // gulp.task('move_lib',['clean'], function(){
