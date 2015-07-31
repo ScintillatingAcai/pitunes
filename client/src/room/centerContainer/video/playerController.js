@@ -7,7 +7,7 @@ s.parentNode.insertBefore(ga, s);
 
 var socket = io(window.location.origin);
 
-// Stub for JSON object from server
+// Default Media Status
 var mediaStatus = {
   videoId: "",
   startSeconds: 0
@@ -51,7 +51,6 @@ var removeVideo = function () {
 // Instantiate player and load mediastatus videoID/start playing video
 var createPlayer = function (currentVideoId) {
   player = new YT.Player('videoContainer', {
-    // TODO Tweak these or dynamically generate based on page size
     height: '390',
     width: '640',
     videoId: currentVideoId,
@@ -66,22 +65,17 @@ var createPlayer = function (currentVideoId) {
     },
     events: {
       'onReady': onPlayerReady,
-      // TODO Temp for testing
-      'onStateChange': onPlayerStateChange
     }
   });
 };
 
 // Start playing video at MSO's startSeconds time after play loads
 var onPlayerReady = function (evt) {
-  console.log('heard onPlayerReady', evt);
     setVideoTime(mediaStatus.startSeconds);
 };
 
-// TODO - Discuss w/Kyle the format of what client should expect to recieve/message codes and refactor accordingly
 // Socket Event Listener for Media Status Object for
 socket.on('media status', function (data) {
-  console.log('media status: ', mediaStatus);
   mediaStatus = data;
   heardNewMediaStatus();
 });
@@ -95,26 +89,6 @@ var heardNewMediaStatus = function () {
   }
 };
 
-// DEBUGGER FUNCTIONS
-// TODO Remove before production
-// * * *
-var onPlayerStateChange = function (evt) {
-  console.log('heard onPlayerStateChange', evt);
-  if (evt.data === YT.PlayerState.PLAYING && !done) {
-    console.log('Heard state change');
-  }
-};
-
-var playVideo = function () {
-  player.playVideo();
-};
-
-var stopVideo = function () {
-  player.stopVideo();
-};
-// * * *
-// END DEBUGGER FUNCTIONS
-
 // Main Load Video
 // Expects 11 character string (YouTube Video ID) and the starttime of video
 var loadVideo = function (videoId, startSeconds) {
@@ -122,18 +96,15 @@ var loadVideo = function (videoId, startSeconds) {
   if (player) {
     // Load new player if current video is different from new video or same video is being played again
     if ((player.getVideoData().video_id !== videoId) || mediaStatus.status === 'start') {
-      console.log('VIDEO PLAYER LOAD', mediaStatus);
       player.loadVideoById(videoId, startSeconds);
     } else {
       // If same video, check if desync is greater than 10 seconds
-      // console.log("media timer dif: ", mediaStatus.startSeconds - player.getCurrentTime());
       if (mediaStatus.startSeconds - player.getCurrentTime() > 10) {
         setVideoTime(startSeconds);
       }
     }
   } else {
     player = new YT.Player('videoContainer', {
-      // TODO Tweak these or dynamically generate based on page size
       height: '390',
       width: '640',
       videoId: videoId,
@@ -149,8 +120,6 @@ var loadVideo = function (videoId, startSeconds) {
       },
       events: {
         'onReady': onPlayerReady,
-        // TODO Temp for testing
-        'onStateChange': onPlayerStateChange
       }
     });
   }

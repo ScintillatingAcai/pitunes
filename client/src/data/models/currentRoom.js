@@ -2,7 +2,7 @@ var Backbone = require('backbone');
 
 var UsersCollection = require('../collections/users.js');
 var MediaModel = require('./media.js');
-var UserModel = require('./user.js')
+var UserModel = require('./user.js');
 
 // Current Room Model
 var CurrentRoomModel = Backbone.Model.extend({
@@ -15,21 +15,6 @@ var CurrentRoomModel = Backbone.Model.extend({
     users: new UsersCollection(),
     djQueue: new UsersCollection()
   },
-  initialize: function () {
-    // this.on('change:id', function () {
-    //   this.retrieveCurrentRoomInfo();
-    // }.bind(this));
-    // this.listenTo(this.users,'reset', function() {
-    //   console.log('room heard users reset');
-    //   this.trigger('reset:users');
-    // }.bind(this));
-
-    // this.listenTo(this.djQueue,'reset', function() {
-    //   console.log('room heard djQueue reset');
-    //   this.trigger('reset:djQueue');
-    // }.bind(this));
-  },
-
   retrieveCurrentRoomInfo: function () {
     if (!this.get('id')) {
       return;
@@ -55,12 +40,12 @@ var CurrentRoomModel = Backbone.Model.extend({
         }
       }
     }).done(function () {
-      console.log('Room Loaded');
+
     }).fail(function () {
       console.log('GET request to ' + source + ' failed.');
     });
   },
-  updateForRoomStatus: function(json) {
+  updateForRoomStatus: function (json) {
     for (var key in json) {
       if (key === 'updated_at' || key === 'created_at' || key.charAt(0) === '_') {
 
@@ -84,7 +69,6 @@ var CurrentRoomModel = Backbone.Model.extend({
   },
   updateToDefaults: function () {
     this.set(this.defaults);
-    console.log(this);
   }
 });
 

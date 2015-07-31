@@ -127,7 +127,6 @@ var SearchBar = React.createClass({
                   context.props.app.get('user').get('current_playlist').get('medias').add(newSong, {at: addIndex});
                   context.props.app.get('user').trigger('newSong');
                 } else {
-                  console.log("USER CLICKED SONG RESULT WHILE NOT LOGGED IN")
                   context.setState({ showUserAttempt: true });
                 }
               }
