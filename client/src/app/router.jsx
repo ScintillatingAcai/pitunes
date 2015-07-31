@@ -23,7 +23,6 @@ $.ajax({
     console.log(res);
     if (res) {
       app.get('user').set(res);
-      app.get('user').retrievePlaylists();
     }
     loadApp();
   },

@@ -15,6 +15,7 @@ var RoomContainer = React.createClass({
 
     this.props.app.on('userSignInOut', this.updateForSignInStatus);
     this.updateForSignInStatus();
+
   },
   componentWillUnmount: function () {
     socket.emit('user room leave', { user: this.props.app.get('user').attributes, room: this.props.room_id});
@@ -22,6 +23,7 @@ var RoomContainer = React.createClass({
     this.props.app.setCurrentRoom(false); //this will update currentroom to defaults
 
     this.props.app.off('userSignInOut');
+
   },
   updateForSignInStatus: function () {
     if (this.props.app.isSignedIn()) {

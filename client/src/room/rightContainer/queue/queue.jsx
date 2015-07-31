@@ -7,8 +7,8 @@ var QueueList = React.createClass({
   componentWillMount: function () {
     var context = this;
     this.props.app.on('room status', function () {
-      console.log(this.props.model.get('djQueue').models);
-      console.log('QUEUE LIST HEARD CHANGE');
+      // console.log(this.props.model.get('djQueue').models);
+      // console.log('QUEUE LIST HEARD CHANGE');
       context.handleRoomChange();
     }.bind(this));
   },

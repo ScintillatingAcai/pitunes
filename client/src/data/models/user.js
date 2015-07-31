@@ -53,8 +53,37 @@ var UserModel = Backbone.Model.extend({
       context.trigger('user status');
     });
   },
+  retrievePlaylist: function (playlist_id, callback) {
+    var source =  window.location.origin + '/api/users/' + this.get('id') + '/playlists/' + playlist_id;
+    var context = this;
+    $.get(source, function (res) {
+        if (!res) return callback(new Error('no playlist returned'));
+        var playlist = new PlaylistModel();
+        for (var key in res) {
+          if (key === 'medias') {
+            var medias = new MediasCollection(res.medias);
+            playlist.set('medias', medias);
+          } else {
+            playlist.set(key, res[key]);
+          }
+        }
+        callback(null, playlist);
+    })
+    .done(function () {
+    })
+    .fail(function () {
+      console.log('GET request to ' + source + ' failed.');
+      callback(new Error('playlist get request failed'));
+    });
+  },
   updateForUserStatus: function () {
-    this.retrievePlaylists();
+    if (this.get('id')) {
+      this.retrievePlaylist(this.get('current_playlist_id'), function (err, playlist) {
+        if (err) return console.error(err);
+        this.set('current_playlist', playlist);
+        this.trigger('user status');
+      }.bind(this));
+    }
   },
   updateToDefaults: function () {
     this.set(this.defaults);
