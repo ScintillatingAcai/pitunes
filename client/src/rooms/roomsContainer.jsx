@@ -17,6 +17,7 @@ var RoomsView = React.createClass({
     console.log('createRoom has been clicked. make sure to send a post request with the information');
     var form = document.getElementById('createRoom-form');
     var self = this;
+    if (this.props.app.isSignedIn() === false) { this.setState({ errorMessage: 'You must be logged in to create a room' }); return; }
     if (form[0].value.length > 25) { this.setState({ errorMessage: 'Your room name must be smaller than 25 characters' }); return; } 
     $.ajax({
       type: 'POST',
@@ -57,13 +58,17 @@ var RoomsView = React.createClass({
     });
   },
   render: function() {
+    var form = null;
+    if (this.props.app.isSignedIn() === true) {
+      form = (<a type="submit" className="btn btn-default btn-md" onClick={this.showCreateRoom}><i className="fa fa-pencil fa-fw"></i><span className="network-name">Create Room</span></a>);
+    }
     return (
       <div>
         <a name="room"></a>
         <div className="content-section-a">
           <div className="container">
           <div className="j-createRoom-button">
-            <a type="submit" className="btn btn-default btn-md" onClick={this.showCreateRoom}><i className="fa fa-pencil fa-fw"></i><span className="network-name">Create Room</span></a>
+            {form}
           </div>
             <div className="row j-padding-top-100px">
               { <Rooms /> }
@@ -87,7 +92,7 @@ var Rooms = React.createClass({
         <div className="row">
           {roomsCollection.map(function(room){
             return (
-              <div className="col-lg-4 col-sm-3 j-pointer j-padding-bot-50 gradientBoxesWithOuterShadows" key={room.get('id')}  onClick={self.roomClick.bind(self, room.get('id'))}>
+              <div className="col-lgfap-4 col-sm-3 j-pointer j-padding-bot-50 gradientBoxesWithOuterShadows" key={room.get('id')}  onClick={self.roomClick.bind(self, room.get('id'))}>
                 <div className="clearfix"></div>
                 <h2 className="section-heading j-center-text j-roomDisplay">{room.get('name')} <br />Current DJs: {room.get('usersCount')}</h2>
                 <div className="j-left-25">

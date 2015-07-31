@@ -3,7 +3,7 @@ var DebuggerButtons = require('../room/debuggerButtons/debuggerButtons.jsx');
 
 var TopNavBar = React.createClass({
   getInitialState: function () {
-    return ({ buttonText: 'Sign In' });
+    return ({ buttonText: 'Sign In' , displayName: '' });
   },
   componentDidMount: function () {
     console.log('top bar mounting');
@@ -19,7 +19,8 @@ var TopNavBar = React.createClass({
   updateForSignInStatus: function () {
     console.log('checking isSignedIn: ', this.props.app.isSignedIn());
     if (this.props.app.isSignedIn()) {
-      this.setState({ buttonText: 'Sign Out'});
+      this.setState({ buttonText: 'Sign Out' });
+      this.setState({ displayName: this.props.app.get('user').get('display_name') });
     } else {
       this.setState({ buttonText: 'Sign In'});
     }
@@ -36,6 +37,9 @@ var TopNavBar = React.createClass({
               <span className="icon-bar"></span>
             </button>
             <a className="navbar-brand topnav" href="#/"><span className="j-color-black">pi</span><span className="j-color-blue">Tunes</span></a>
+          </div>
+          <div className>
+            <a className="navbar-brand topnav">{this.state.displayName}</a>
           </div>
           <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul className="nav navbar-nav navbar-right">
