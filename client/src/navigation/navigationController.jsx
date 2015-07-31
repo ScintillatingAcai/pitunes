@@ -56,9 +56,6 @@ var NavigationController = React.createClass({
         if (window.location.href.indexOf('/#/room/') === -1) {
           window.location.href = '/#/rooms';
         }
-        if (window.location.href.indexOf('/#/rooms') > -1) {
-          location.reload();
-        }
         // Check if a user logged in within an individual room and emit user room join message via socket if so
         if (window.location.href.indexOf('/#/room/') > -1) {
           if (context.props.app.get('current_room').get('id')) {
@@ -84,9 +81,6 @@ var NavigationController = React.createClass({
       success: function (res) {
         context.props.app.userSignIn(res);
         context.close();
-        if (window.location.href.indexOf('/#/room/') > -1) {
-          window.location.href = '/#/rooms';
-        }
       },
       error: function (res) {
         context.setState({ errorMessage: res.statusText + ': ' + res.responseText });
@@ -99,10 +93,8 @@ var NavigationController = React.createClass({
       type: 'GET',
       success: function (res) {
         console.log('succeeded in logging out');
-        context.close();
         context.props.app.userSignOut();
-        location.reload();
-        window.location.href = '/#/rooms';
+        context.close();
       },
       error: function (res) {
         console.error('error in user logout');
