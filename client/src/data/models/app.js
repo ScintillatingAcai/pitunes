@@ -19,6 +19,9 @@ var AppModel = Backbone.Model.extend({
   userSignIn: function (res) {
     this.get('user').set(res);
     this.get('user').retrievePlaylists();
+
+    console.log('should trigger "userSignInOut"');
+    console.log('signout userid: ', this.get('user').get('id'));
     this.trigger('userSignInOut');
   },
   userSignOut: function () {

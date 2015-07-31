@@ -38,7 +38,7 @@ var SignUpModal = React.createClass({
               <div className="form-group j-center-text">
                 <a type="submit" className="btn btn-default btn-md" onClick={this.props.signUpUser}><i className="fa fa-pencil fa-fw"></i><span className="network-name">Create Account</span></a>
                 <br />
-                <a onClick={this.props.signInClick}>Back To Sign In</a>
+                <a onClick={this.props.signInOutClick}>Back To Sign In</a>
               </div>
             </form>
             </div>

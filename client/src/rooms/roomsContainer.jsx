@@ -1,5 +1,7 @@
 var React = require('react');
 var $ = require('jquery');
+
+var NavigationController = require('../navigation/navigationController.jsx');
 var RoomsCollection = require('../data/collections/rooms.js');
 var RoomModel = require('../data/models/room.js');
 var CreateRoomModal = require('./createRoomModal.jsx');
@@ -17,19 +19,24 @@ var RoomsView = React.createClass({
     console.log('createRoom has been clicked. make sure to send a post request with the information');
     var form = document.getElementById('createRoom-form');
     var self = this;
-    if (this.props.app.isSignedIn() === false) { this.setState({ errorMessage: 'You must be logged in to create a room' }); return; }
-    if (form[0].value.length > 25) { this.setState({ errorMessage: 'Your room name must be smaller than 25 characters' }); return; } 
+    if (this.props.app.isSignedIn() === false) {
+      this.setState({ errorMessage: 'You must be logged in to create a room' });
+      return;
+    }
+    if (form[0].value.length > 25) { this.setState({ errorMessage: 'Your room name must be smaller than 25 characters' });
+      return;
+    }
     $.ajax({
       type: 'POST',
       url: source,
       dataType: 'JSON',
       data: {name: form[0].value},
       success: function(res) {
-        self.setState({ showCreateRoomModal: false, errorMessage: '' })
+        self.setState({ showCreateRoomModal: false, errorMessage: '' });
         location.reload();
         window.location.href = '/#/room/' + res.id;
       }
-    })
+    });
   },
   close: function() {
     this.setState({ showCreateRoomModal: false, errorMessage: '' });
@@ -64,6 +71,7 @@ var RoomsView = React.createClass({
     }
     return (
       <div>
+        <NavigationController app={this.props.app}/>
         <a name="room"></a>
         <div className="content-section-a">
           <div className="container">
@@ -73,8 +81,8 @@ var RoomsView = React.createClass({
             <div className="row j-padding-top-100px">
               { <Rooms /> }
             </div>
+            <CreateRoomModal showCreateRoomModal={this.state.showCreateRoomModal} createRoomClick={this.createRoomClick} errorMessage={this.state.errorMessage} close={this.close} />
           </div>
-          <CreateRoomModal showCreateRoomModal={this.state.showCreateRoomModal} createRoomClick={this.createRoomClick} errorMessage={this.state.errorMessage} close={this.close} />
         </div>
       </div>
     );

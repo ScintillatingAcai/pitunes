@@ -1,7 +1,7 @@
 var React = require('react');
 
 var Users = React.createClass({
-  componentWillMount: function () {
+  componentDidMount: function () {
     var context = this;
     this.props.app.on('room status', function () {
       // console.log(this.props.model.get('users').models);

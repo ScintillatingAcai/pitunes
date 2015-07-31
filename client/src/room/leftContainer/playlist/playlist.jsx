@@ -15,7 +15,7 @@ var List = React.createClass({
   getInitialState: function () {
     return { data: this.props.data, text: '' };
   },
-  componentWillMount: function () {
+  componentDidMount: function () {
     this.props.model.on('change:current_playlist', function () {
       if (this.props.app.get('user').get('current_playlist')) {
         this.handleNewCurrentPlaylist();
@@ -228,7 +228,7 @@ var PlaylistTitle = React.createClass({
   getInitialState: function () {
     return {title: '', playlistData: []}
   },
-  componentWillMount: function () {
+  componentDidMount: function () {
 
     this.props.model.on('change:current_playlist', function () {
       console.log('playlistTitle heard change in user\'s current_playlist');

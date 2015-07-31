@@ -1,5 +1,6 @@
 var React = require('react');
 
+var NavigationController = require('../navigation/navigationController.jsx');
 var AppModel = require('../data/models/app.js');
 var LeftContainer = require('../room/leftContainer/leftContainer.jsx');
 var CenterContainer = require('../room/centerContainer/centerContainer.jsx');
@@ -10,7 +11,7 @@ var RoomContainer = React.createClass({
   getInitialState: function() {
     return { showSignIn: false, showSignUp: false, showSignOut: false, errorMessage: '' };
   },
-  componentWillMount: function () {
+  componentDidMount: function () {
     this.props.app.setCurrentRoom(this.props.room_id);
 
     this.props.app.on('userSignInOut', this.updateForSignInStatus);
@@ -44,10 +45,13 @@ var RoomContainer = React.createClass({
       userSelect: 'none'
     };
     return (
-      <div style={style}>
-        <LeftContainer app={this.props.app}/>
-        <CenterContainer app={this.props.app}/>
-        <RightContainer app={this.props.app}/>
+      <div>
+        <NavigationController app={this.props.app}/>
+        <div style={style}>
+          <LeftContainer app={this.props.app}/>
+          <CenterContainer app={this.props.app}/>
+          <RightContainer app={this.props.app}/>
+        </div>
       </div>
     );
   }
