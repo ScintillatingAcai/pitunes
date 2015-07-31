@@ -18,7 +18,7 @@ var UserModel = Backbone.Model.extend({
     location: null,
     playlists: new PlaylistsCollection(),
     current_playlist_id: null,
-    current_playlist: null,
+    current_playlist: new PlaylistModel(),
     created_at: null,
     updated_at: null
   },
@@ -47,8 +47,10 @@ var UserModel = Backbone.Model.extend({
       } else {
         context.set('current_playlist', new PlaylistModel());
       }
+      context.trigger('user status');
     }).fail(function () {
       console.log('GET request to ' + source + ' failed.');
+      context.trigger('user status');
     });
   },
   updateForUserStatus: function () {

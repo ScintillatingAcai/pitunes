@@ -15,6 +15,29 @@ var List = React.createClass({
   getInitialState: function () {
     return { data: this.props.data, text: '' };
   },
+  componentWillMount: function () {
+    this.props.model.on('change:current_playlist', function () {
+      if (this.props.app.get('user').get('current_playlist')) {
+        this.handleNewCurrentPlaylist();
+      }
+    }.bind(this));
+
+    this.props.model.on('newSong', function () {
+      console.log('List heard curPL medias change');
+      if (this.props.app.get('user').get('current_playlist')) {
+        this.handleNewCurrentPlaylist();
+      }
+      this.submitUpdatePlaylist(this.props.app.get('user').get('current_playlist'));
+    }.bind(this));
+
+    if (this.props.app.isSignedIn()) {
+      this.props.app.get('user').retrievePlaylists();
+    }
+  },
+  componentWillUnmount: function () {
+    this.props.model.off('change:current_playlist');
+    this.props.model.off('newSong');
+  },
   durationToDisplay: function (duration) {
     var minutes = Math.floor(duration / 60) + "";
     if (minutes.length === 1) {
@@ -58,27 +81,6 @@ var List = React.createClass({
     this.props.app.get('user').get('current_playlist').set('medias', newMedias);
     this.props.app.get('user').get('current_playlist').set('current_media_index', 0);
     this.submitUpdatePlaylist(this.props.app.get('user').get('current_playlist'));
-  },
-  componentDidMount: function () {
-
-    this.props.model.on('change:current_playlist', function () {
-      if (this.props.app.get('user').get('current_playlist')) {
-        this.handleNewCurrentPlaylist();
-      }
-    }.bind(this));
-
-    this.props.model.on('newSong', function () {
-      console.log('List heard curPL medias change');
-      if (this.props.app.get('user').get('current_playlist')) {
-        this.handleNewCurrentPlaylist();
-      }
-      this.submitUpdatePlaylist(this.props.app.get('user').get('current_playlist'));
-    }.bind(this));
-
-    if (this.props.app.get('user')) {
-      this.props.app.get('user').retrievePlaylists();
-    }
-
   },
   onNameChange: function (e) {
     e.preventDefault();
@@ -224,9 +226,9 @@ var Songs = React.createClass({
 
 var PlaylistTitle = React.createClass({
   getInitialState: function () {
-    return {title: this.props.title, playlistData: []}
+    return {title: '', playlistData: []}
   },
-  componentDidMount: function () {
+  componentWillMount: function () {
 
     this.props.model.on('change:current_playlist', function () {
       console.log('playlistTitle heard change in user\'s current_playlist');
@@ -236,7 +238,7 @@ var PlaylistTitle = React.createClass({
         $('.playlistNavigateMenuDropdown').removeClass('hidden');
       }
     }.bind(this));
-    
+
     this.props.model.on('currentPlaylistNewName', function () {
       console.log('playlistTitle heard currentPlaylistNewName');
       if (this.props.app.get('user').get('current_playlist')) {
@@ -252,6 +254,23 @@ var PlaylistTitle = React.createClass({
       $('.playlistNavigateMenuDropdown').removeClass('hidden');
     }
 
+    this.props.app.on('userSignInOut', this.updateForSignInStatus);
+    this.updateForSignInStatus();
+  },
+  componentWillUnmount: function () {
+    this.props.model.off('change:current_playlist');
+    this.props.model.off('currentPlaylistNewName');
+    this.props.app.off('userSignInOut');
+  },
+  updateForSignInStatus: function () {
+    if (this.props.app.isSignedIn()) {
+      $('.playlistSelectDropdown').removeClass('hidden');
+      $('.playlistNavigateMenuDropdown').removeClass('hidden');
+    } else {
+      this.setState({title: 'Sign in to create a Playlist!'});
+      $('.playlistSelectDropdown').addClass('hidden');
+      $('.playlistNavigateMenuDropdown').addClass('hidden');
+    }
   },
   getUsersPlaylists: function () {
     var context = this;
@@ -460,7 +479,7 @@ var Playlist = React.createClass({
         <DeletePlaylistModal close={this.close} deleteCurrentPlaylist={this.deleteCurrentPlaylist} showDeletePlaylist={this.state.showDeletePlaylist} app={this.props.app}/>
         <NewPlaylistModal close={this.close} createNewPlaylist={this.createNewPlaylist} showNewPlaylist={this.state.showNewPlaylist} preventSubmit={this.preventSubmit} app={this.props.app}/>
         <RenamePlaylistModal close={this.close} submitUpdatePlaylist={this.submitUpdatePlaylist} showRenamePlaylist={this.state.showRenamePlaylist} preventSubmit={this.preventSubmit} app={this.props.app}/>
-        <PlaylistTitle renamePlaylistClick={this.renamePlaylistClick} newPlaylistClick={this.newPlaylistClick} deletePlaylistClick={this.deletePlaylistClick} model={this.props.app.get('user')} data={[]} title={'Sign in to create a Playlist!'} app={this.props.app}/>
+        <PlaylistTitle renamePlaylistClick={this.renamePlaylistClick} newPlaylistClick={this.newPlaylistClick} deletePlaylistClick={this.deletePlaylistClick} model={this.props.app.get('user')} data={[]} app={this.props.app}/>
         <Songs app={this.props.app}/>
       </div>
     );

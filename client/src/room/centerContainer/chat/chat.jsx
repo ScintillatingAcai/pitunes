@@ -26,17 +26,9 @@ var Chat = React.createClass({
       this.setState({ items: nextItems });
     }.bind(this));
 
-    // socket.on('user room change', function(data){
-    //   console.log('user room change: ', JSON.parse(data));
-    //   this.props.app.get('current_room').get('users').set(JSON.parse(data));
-    //   this.props.app.get('current_room').trigger('userRoomChange');
-    // }.bind(this));
-
     socket.on('room status', function(data){
       console.log('room status: ', data);
       this.props.app.get('current_room').updateForRoomStatus(data);
-      // console.log('updated room info: ', this.props.app.get('current_room'));
-      this.props.app.get('current_room').trigger('room status');
     }.bind(this));
 
     socket.on('user status', function(data){
@@ -44,15 +36,7 @@ var Chat = React.createClass({
       if (this.props.app.get('user').get('id') === data.id) {
         this.props.app.get('user').updateForUserStatus(data);
       }
-      // console.log('updated room info: ', this.props.app.get('current_room'));
-      this.props.app.get('user').trigger('user status');
     }.bind(this));
-
-    // socket.on('user queue change', function(data){
-    //   console.log('user queue change: ', data);
-    //   this.props.app.get('current_room').get('djQueue').set(JSON.parse(data));
-    //   this.props.app.get('current_room').trigger('djQueueChange');
-    // }.bind(this));
 
     return {items: [], text: ''};
   },
