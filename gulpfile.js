@@ -46,7 +46,8 @@ var libFilesToMove = ['./node_modules/socket.io/node_modules/socket.io-client/so
       './node_modules/font-awesome/css/font-awesome.min.map',
       './client/src/room/centerContainer/video/playerController.js'];
 
-var fontFilesToMove =  ['./node_modules/font-awesome/fonts/*.*'];     
+var fontAwesome =  ['./node_modules/font-awesome/fonts/*.*'];
+var fontBootstrap = ['./node_modules/bootstrap/dist/fonts/*.*'];     
 
 
 // gulp.task('sass', function(done) {
@@ -63,7 +64,7 @@ var fontFilesToMove =  ['./node_modules/font-awesome/fonts/*.*'];
 //     .on('end', done);
 // });
 //
-gulp.task('browserify-client', function (cb) {
+gulp.task('browserify-client', ['install_lib'], function (cb) {
 
   var files = glob.sync(paths.clientapp);
   var b = browserify();
@@ -89,13 +90,18 @@ gulp.task('clean', function(){
   return del(['./node_modules', paths.dist]);
 });
 
-gulp.task('move_lib', ['move_fonts'], function(){
+gulp.task('move_lib', ['move_fontawesome', 'move_fontbootstrap'], function(){
   return gulp.src(libFilesToMove)
   .pipe(gulp.dest(paths.dist + paths.distlib));
 });
 
-gulp.task('move_fonts', function(){
-  return gulp.src(fontFilesToMove, { base: './node_modules/font-awesome/' })
+gulp.task('move_fontawesome', function(){
+  return gulp.src(fontAwesome, { base: './node_modules/font-awesome' })
+  .pipe(gulp.dest(paths.dist));
+});
+
+gulp.task('move_fontbootstrap', function(){
+  return gulp.src(fontBootstrap, { base: './node_modules/bootstrap/dist' })
   .pipe(gulp.dest(paths.dist));
 });
 
@@ -114,4 +120,5 @@ gulp.task('install_lib', function() {
   .pipe(install());
 });
 
-gulp.task('default', ['install_lib', 'move_lib', 'uglify-client']);
+// gulp.task('default', ['install_lib', 'move_lib', 'uglify-client']);
+gulp.task('default', ['install_lib', 'move_lib', 'browserify-client']);
