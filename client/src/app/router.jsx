@@ -8,8 +8,6 @@ var RouteHandler = Router.RouteHandler;
 var DefaultRoute = Router.DefaultRoute;
 var NotFoundRoute = Router.NotFoundRoute;
 
-var NavigationController = require('../navigation/navigationController.jsx');
-
 var AppModel = require('../data/models/app.js');
 var app = new AppModel();
 
@@ -33,12 +31,10 @@ $.ajax({
 });
 
 var loadApp = function() {
-
   var AppRouter = React.createClass({
     render: function() {
       return (
         <div>
-          <NavigationController app={app}/>
           <RouteHandler/>
         </div>
       );
@@ -76,7 +72,7 @@ var loadApp = function() {
   var routes = (
     <Route name='root' path="/" handler={AppRouter}>
       <DefaultRoute name='default' handler={LandingWrapper} />
-       <Route name='rooms' path='rooms' handler={RoomsViewWrapper} />
+      <Route name='rooms' path='rooms' handler={RoomsViewWrapper} />
       <Route name='room' path='room/:room_id' handler={RoomWrapper} />
       <NotFoundRoute name='notfound' handler={RouteNotFound} />
     </Route>

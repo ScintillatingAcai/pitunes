@@ -4,7 +4,7 @@ var $ = require('jquery');
 var socket = io(window.location.origin);
 
 var QueueList = React.createClass({
-  componentWillMount: function () {
+  componentDidMount: function () {
     var context = this;
     this.props.app.on('room status', function () {
       // console.log(this.props.model.get('djQueue').models);
@@ -75,7 +75,7 @@ var QueueJoinButton = React.createClass({
       text: 'Join Queue'
     };
   },
-  componentWillMount: function () {
+  componentDidMount: function () {
     var context = this;
     this.props.app.on('room status', function () {
       context.updateForUserStatus();

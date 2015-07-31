@@ -1,5 +1,4 @@
 var React = require('react');
-var DebuggerButtons = require('../room/debuggerButtons/debuggerButtons.jsx');
 
 var TopNavBar = React.createClass({
   getInitialState: function () {
@@ -50,7 +49,7 @@ var TopNavBar = React.createClass({
                 <a href="#/rooms">Rooms</a>
               </li>
               <li>
-                <a className="j-pointer" onClick={this.props.signInClick}>{this.state.buttonText}</a>
+                <a className="j-pointer" onClick={this.props.signInOutClick}>{this.state.buttonText}</a>
               </li>
             </ul>
           </div>
