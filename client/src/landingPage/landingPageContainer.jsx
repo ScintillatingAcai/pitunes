@@ -11,10 +11,9 @@ var LandingPageContainer = React.createClass({
     return (
       <div>
         <div style={style}>
-        <NavigationController app={this.props.app} />
+          <NavigationController app={this.props.app} />
         </div>
         <LandingPageBody app={this.props.app}/>
-        <LandingPagePopularRooms />
       </div>
     );
   }
