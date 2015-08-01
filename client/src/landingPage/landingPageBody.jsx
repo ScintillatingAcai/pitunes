@@ -37,7 +37,7 @@ var LandingPageBody = React.createClass({
                     <ul className="list-inline intro-social-buttons">
                       {signIn}
                       <li>
-                        <a href="/#rooms" className="btn btn-default btn-lg" id="landing-joinroom"><i className="fa fa-music fa-fw"></i><span className="network-name">Start Listening!</span></a>
+                        <a href="/#rooms" className="btn btn-default btn-lg" id="landing-joinroom"><i className="fa fa-music fa-fw"></i><span className="network-name">Start Listening</span></a>
                       </li>
                       {signUp}
                     </ul>
