@@ -325,7 +325,6 @@ var PlaylistTitle = React.createClass({
   render: function (){
     var style = {
       color: 'white',
-      borderBottom: '2px solid #FFF',
       minHeight: '30px'
     };
     var dropdownStyle = {
@@ -456,7 +455,7 @@ var Playlist = React.createClass({
   render: function () {
     var style = {
       background: '#222222',
-      border: '1px solid #e7e7e7',
+      border: '1px solid #333',
       position: 'absolute',
       width: '100%',
       height: '50%',

@@ -78,7 +78,7 @@ var Chat = React.createClass({
     };
     var divStyle = {
       background: '#222222',
-      border: '1px solid #e7e7e7',
+      border: '1px solid #333',
       position: 'absolute',
       width: '100%',
       height: '50%',
@@ -86,7 +86,7 @@ var Chat = React.createClass({
     };
     var searchBarInputStyle = {
       backgroundColor: '#DDDDDD',
-      borderColor: '#EEEEEE',
+      borderColor: '#333',
       position: 'absolute',
       bottom: '0',
       width: '100%'

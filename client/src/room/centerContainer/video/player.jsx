@@ -12,7 +12,7 @@ var VideoPlayer = React.createClass({
       width: "100%",
       height: "50%",
       bottom: "0",
-      border: '1px solid #e7e7e7',
+      border: '1px solid #333',
       backgroundColor: '#000'
       // pointerEvents: 'none'
     };

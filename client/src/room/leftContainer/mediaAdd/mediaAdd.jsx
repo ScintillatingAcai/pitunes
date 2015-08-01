@@ -138,14 +138,14 @@ var SearchBar = React.createClass({
   },
   render: function () {
     var style = {
-      borderColor: '#EEEEEE',
+      borderColor: '#333',
       position: 'absolute',
       top: 0,
       width: '100%'
     };
     var searchBarInputStyle = {
       backgroundColor: '#DDDDDD',
-      borderColor: '#EEEEEE'
+      borderColor: '#333'
     };
     var searchResultsStyle = {
       marginTop: '50px'
@@ -166,7 +166,7 @@ var MediaAdd = React.createClass({
   render: function() {
     var style = {
       background: '#222222',
-      border: '1px solid #e7e7e7',
+      border: '1px solid #333',
       position: 'absolute',
       width: '100%',
       height: '50%',

@@ -11,7 +11,7 @@ var CenterContainer = React.createClass({
       width: '50%',
       margin: '0px 0px 0px 0px',
       backgroundColor: '#F8F8F8',
-      border: '1px solid #e7e7e7',
+      border: '1px solid #333',
       bottom: '33px',
       top: '50px'
     };
