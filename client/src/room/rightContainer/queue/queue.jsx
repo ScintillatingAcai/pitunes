@@ -110,9 +110,9 @@ var QueueJoinButton = React.createClass({
   },
   updateForUserStatus: function () {
     if (this.props.app.isSignedIn() && this.props.app.get('user').get('current_playlist').get('medias').length > 0) {
-      $('#queueJoinButton').removeClass('disabled');
+      $('#queueJoinButton').prop('disabled', false);
     } else {
-      $('#queueJoinButton').addClass('disabled');
+      $('#queueJoinButton').prop('disabled', true);
     }
     this.updateButtonText();
   },
@@ -133,7 +133,7 @@ var QueueJoinButton = React.createClass({
   },
   render: function () {
     return (
-      <button id="queueJoinButton" className='btn btn-sm disabled' onClick={this.handleClick}>{this.state.text}</button>
+      <button id="queueJoinButton" className='btn btn-sm' onClick={this.handleClick}>{this.state.text}</button>
     );
   }
 });
