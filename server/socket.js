@@ -7,17 +7,12 @@ var mediasUtils = require('./medias/mediasUtils');
 
 var allClients = [];
 
-var addUserToClients = function(user_id, room_id, socket) {
-  allClients.push({socket: socket, user_id: user_id, room_id: room_id});
-};
-
 var removeUserFromRoom = function(user_id, room_id, callback) {
-  var room = roomUtils.getRoom(room_id);
-
   if (!user_id) {
     return;
   }
 
+  var room = roomUtils.getRoom(room_id);
   if(room.removeDJFromQueue(user_id)) {
   }
   room.removeUser(user_id).then(function(user) {
@@ -53,28 +48,6 @@ var cleanUpClientsForSocket = function(socket, user_id, okRoom_id, callback) {
       }
     }
   }
-};
-
-var indexOfUserFromSocket = function(socket) {
-  for (var i = 0; i < allClients.length; i++) {
-    var client = allClients[i];
-    if (client.socket === socket) {
-      return i;
-    }
-  }
-  return -1;
-};
-
-var removeUserFromClients = function(socket) {
-  var index = -1;
-  for (var i = 0; i < allClients.length; i++) {
-    var client = allClients[i];
-    if (client.socket === socket) {
-      index = i;
-    }
-  }
-
-  return index;
 };
 
 module.exports = function(io) {
