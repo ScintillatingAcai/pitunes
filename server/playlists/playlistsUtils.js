@@ -11,6 +11,7 @@ module.exports = {
 
   //get a playlist from DB by ID
   retrievePlaylist: Promise.promisify(function(playlist_id, callback) {
+    console.log('retrieving playlist id: ', playlist_id);
     new Playlist({id: playlist_id })
       .retrievePlaylist()
       // .fetch({

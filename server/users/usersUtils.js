@@ -153,7 +153,6 @@ module.exports = {
     if (user) {
       user.setCurrentPlaylist(playlist_id)
       .then(function(user){
-        console.log("userUtils: ", user);
         callback(null, user);
       })
       .catch(function(error) {
@@ -174,9 +173,8 @@ module.exports = {
         qb.orderBy('updated_at','DESC');
       }).fetchOne()
       .then(function (playlist) {
-        var id = playlist.length > 0 ? playlist.get('id'): 0;
-
-        user.set('current_playlist_id', playlist.get('id')).save()
+        var id = playlist ? playlist.get('id') : 0;
+        user.set('current_playlist_id', id).save()
         .then( function() {
           callback(null, {current_playlist_id: id});
         })
