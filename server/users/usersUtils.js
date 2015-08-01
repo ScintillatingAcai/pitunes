@@ -88,8 +88,7 @@ module.exports = {
         email: email
       }).fetch().then(function(found) {
         if (found) {
-          callback(null, found.attributes);
-          console.log('user already found:', username);
+          callback(new Error('user email already found:', email));
         } else {
           var user = new User({
             display_name: display_name,
