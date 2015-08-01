@@ -35,7 +35,7 @@ var serveStaticImg = function () {
     $('#noVideoImg').remove();
   }
   if ($('#videoContainer')) {
-    $('#videoContainer').append('<div style="width:100%; height:100%; background-color:#000; text-align:center;" id="noVideoImg"><h1 style="color:#DDD">No current DJ</h1><h4 style="color:#DDD">Grab some friends and start a playlist!</h4></div>');
+    $('#videoContainer').append('<div style="width:100%; height:100%; background-color:#000; text-align:center;" id="noVideoImg"><h1 style="color:#DDD;margin:0 0 0 0;">No current DJ</h1><h4 style="color:#DDD">Grab some friends and start a playlist!</h4></div>');
   }
 };
 
