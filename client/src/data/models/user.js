@@ -39,9 +39,8 @@ var UserModel = Backbone.Model.extend({
       });
     }).done(function () {
       context.set('playlists', playlistsCollection);
-      var curPlaylistInd = context.get('current_playlist_id');
-      if (curPlaylistInd !== 0) {
-        context.set('current_playlist', playlistsCollection.get(curPlaylistInd));
+      if (context.get('current_playlist_id') !== 0) {
+        context.set('current_playlist', playlistsCollection.get(context.get('current_playlist_id')));
       } else {
         context.set('current_playlist', new PlaylistModel());
       }
@@ -75,8 +74,12 @@ var UserModel = Backbone.Model.extend({
   },
   updateForUserStatus: function () {
     if (this.get('id')) {
+      console.log('playlist id: ', this.get('current_playlist_id'));
       this.retrievePlaylist(this.get('current_playlist_id'), function (err, playlist) {
-        if (err) return console.error(err);
+        if (err || !playlist) {
+          this.set('current_playlist', new PlaylistModel());
+          this.trigger('user status');
+        }
         this.set('current_playlist', playlist);
         this.trigger('user status');
       }.bind(this));

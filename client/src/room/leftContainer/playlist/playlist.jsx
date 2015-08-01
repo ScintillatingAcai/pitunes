@@ -40,10 +40,19 @@ var List = React.createClass({
     if (this.props.app.get('user').get('current_playlist')) {
       this.handleNewCurrentPlaylist();
     }
+
+    this.props.app.on('userSignInOut', this.updateForSignInStatus);
+    this.updateForSignInStatus();
   },
   componentWillUnmount: function () {
     this.props.model.off('change:current_playlist');
     this.props.model.off('newSong');
+    this.props.app.off('userSignInOut');
+  },
+  updateForSignInStatus: function () {
+    // if (this.props.app.isSignedIn()) {
+    this.props.app.get('user').updateForUserStatus();
+    // }
   },
   durationToDisplay: function (duration) {
     var minutes = Math.floor(duration / 60) + "";
@@ -288,14 +297,16 @@ var PlaylistTitle = React.createClass({
     }
   },
   handleNewCurrentPlaylist: function () {
-    if (this.props.app.get('user').get('current_playlist').get('name')) {
-      this.setState({ title: this.props.app.get('user').get('current_playlist').get('name') });
-    } else {
+    if (!this.props.app.get('user').get('current_playlist')) {
+      this.setState({ title: 'No Playlist' });
+    } else if (!this.props.app.get('user').get('current_playlist').get('name')) {
       this.setState({ title: 'No Playlist Title' });
+    } else {
+      this.setState({ title: this.props.app.get('user').get('current_playlist').get('name') });
     }
   },
   swapPlaylist: function (e) {
-    var newPlaylistId = e.target.getAttribute('data-playlistid')
+    var newPlaylistId = e.target.parentNode.getAttribute('data-playlistid')
     var context = this;
     if (this.props.app.get('user').get('id') !== 0) {
       $.ajax({url: 'api/users/' + this.props.app.get('user').get('id') + '/playlists/' + newPlaylistId + '/current',
@@ -325,9 +336,9 @@ var PlaylistTitle = React.createClass({
     };
     var playlistItems = this.state.playlistData.map((function (item, i) {
       return (
-        <MenuItem data-id={i} key={i}><a data-playlistid={item.id} onClick={this.swapPlaylist}>
+        <MenuItem data-id={i} key={i} data-playlistid={item.id} onClick={this.swapPlaylist}>
           {item.text}
-        </a></MenuItem>
+        </MenuItem>
       );
     }).bind(this));
     return (
