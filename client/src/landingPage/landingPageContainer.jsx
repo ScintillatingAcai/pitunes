@@ -6,7 +6,7 @@ var LandingPagePopularRooms = require('./landingPagePopularRooms.jsx');
 var LandingPageContainer = React.createClass({
   render: function() {
     var style = {
-      opacity: 0.01,
+      display: 'none',
     };
     return (
       <div>
