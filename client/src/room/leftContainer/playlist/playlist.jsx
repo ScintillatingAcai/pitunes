@@ -325,13 +325,17 @@ var PlaylistTitle = React.createClass({
   render: function (){
     var style = {
       color: 'white',
-      minHeight: '30px'
+      minHeight: '30px',
+      fontSize: '20px'
     };
     var dropdownStyle = {
-      marginTop: '-8px'
+      paddingRight: '10px'
     };
     var buttonStyle = {
       margin: '0 5px 0 5px'
+    };
+    var leftButtonStyle = {
+      paddingLeft: '6px'
     };
     var playlistItems = this.state.playlistData.map((function (item, i) {
       return (
@@ -341,18 +345,18 @@ var PlaylistTitle = React.createClass({
       );
     }).bind(this));
     return (
-      <div>
-      <h4 className='playlistTitleContainer text-center' style={style}>
+      <div style={leftButtonStyle}>
+      <h3 className='playlistTitleContainer text-center' style={style}>
         <div style={dropdownStyle} className="playlistSelectDropdown btn-group pull-left hidden">
           <ButtonGroup>
-            <DropdownButton>
+            <DropdownButton bsSize='xsmall'>
               {playlistItems}
             </DropdownButton>
           </ButtonGroup>
         </div>
         {this.state.title}
         <div style={dropdownStyle} className="playlistNavigateMenuDropdown btn-group pull-right hidden">
-          <button type="button" className="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <button type="button" className="btn btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <span className="glyphicon glyphicon-list" aria-hidden="true"></span>
           </button>
           <ul className="dropdown-menu dropdown-menu-right">
@@ -361,7 +365,7 @@ var PlaylistTitle = React.createClass({
             <li><a onClick={this.props.deletePlaylistClick}>Delete Playlist</a></li>
           </ul>
         </div>
-      </h4>
+      </h3>
       </div>
     );
   }
@@ -454,14 +458,15 @@ var Playlist = React.createClass({
   },
   render: function () {
     var style = {
-      background: '#222222',
-      border: '1px solid #333',
       position: 'absolute',
       width: '100%',
       height: '50%',
       overflow: 'auto',
       textAlign: 'left',
-      bottom: '0'
+      bottom: '0',
+      background: '#444444',
+      border: '10px solid #222222',
+      borderRadius: '40px'
     };
     return (
       <div id="playlistContainer" style={style}>

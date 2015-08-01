@@ -172,7 +172,7 @@ h6 {
 }
 
 p.copyright {
-    margin: 15px 0 0;
+    margin: 7.5px 0 7.5px;
 }
 
 .j-font-uppercase {
@@ -184,11 +184,13 @@ p.copyright {
 }
 
 .darkgrey-background {
-    background-color: #222222 !important;
+    /*background-image: radial-gradient(#666666, #222222);*/
+    /*background-image: linear-gradient(to right, #222222, #666666, #222222);*/
+    background-color: #222;
 }
 
 .j-color-blue {
-    color: #00F;
+    color: #99DDFF;
 }
 
 .j-color-red {
@@ -273,6 +275,14 @@ div.placeholder:before {
 .j-roomDisplay {
     font-size: 20px;
     margin-bottom: 0;
+}
+
+.j-border-0 {
+    border: 0;
+}
+
+.j-width-95 {
+    width: 95%;
 }
 
 .z-white-hover {

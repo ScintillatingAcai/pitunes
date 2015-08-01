@@ -22,10 +22,10 @@ var StatusBar = React.createClass({
   },
   generateStatusMessage: function () {
     var djStyle = {
-      color: '#99B2FF'
+      color: '#99DDFF'
     };
     var songStyle = {
-      color: '#FF3333'
+      color: '#FF8C00'
     };
     if (this.state.currentDJ === null) {
       return 'No Song Currently Playing';
@@ -38,7 +38,6 @@ var StatusBar = React.createClass({
       color: 'white',
       minHeight: '30px',
       maxHeight: '30px',
-      borderBottom: '1px solid #333',
       overflow: 'scroll'
     };
     return (

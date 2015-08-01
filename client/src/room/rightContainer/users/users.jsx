@@ -20,7 +20,13 @@ var Users = React.createClass({
       padding: '0',
       margin: '0',
       color: '#FFF',
-      listStyleType: 'none'
+      listStyleType: 'none',
+      paddingLeft: '0px',
+    };
+    var listNoPadding = {
+      paddingLeft: '0px',
+      textAlign: 'center',
+      fontSize: '18px'
     };
     var listItems;
     if (this.props.model.get('users').models.length > 0) {
@@ -32,7 +38,7 @@ var Users = React.createClass({
         );
       });
       return (
-        <ul>{listItems}</ul>
+        <ul style={listNoPadding}>{listItems}</ul>
       );
     } else {
       // listItems = ["No one in room"].map(function (item, i) {
@@ -67,14 +73,15 @@ var UsersTitle = React.createClass({
 var OnlineUsers = React.createClass({
   render: function() {
     var style = {
-      background: '#222222',
-      border: '1px solid #333  ',
       position: 'absolute',
       width: '100%',
       height: '50%',
       overflow: 'auto',
       bottom: '0',
-      color: '#FFF'
+      color: '#FFF',
+      background: '#444444',
+      border: '10px solid #222222',
+      borderRadius: '40px'
     };
     return (
       <div style={style}>

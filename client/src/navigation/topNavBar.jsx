@@ -25,8 +25,8 @@ var TopNavBar = React.createClass({
   },
   render: function () {
     return (
-      <nav className="navbar navbar-default navbar-fixed-top darkgrey-background topnav" role="navigation">
-        <div className="container topnav">
+      <nav className="navbar navbar-default navbar-fixed-top darkgrey-background topnav j-border-0" role="navigation">
+        <div className="container topnav j-width-95">
           <div className="navbar-header">
             <button type="button" className="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
               <span className="sr-only">Toggle navigation</span>

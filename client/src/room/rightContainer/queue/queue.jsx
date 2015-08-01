@@ -22,7 +22,7 @@ var QueueList = React.createClass({
       marginBottom: '5px',
       padding: '0',
       margin: '0',
-      color: '#99B2FF',
+      color: '#99DDFF',
       listStyleType: 'none'
     };
     var style = {
@@ -32,6 +32,11 @@ var QueueList = React.createClass({
       margin: '0',
       color: '#FFFFFF',
       listStyleType: 'none'
+    };
+    var listNoPadding = {
+      paddingLeft: '0',
+      textAlign: 'center',
+      fontSize: '18px'
     };
     var listItems = [];
     if ( this.props.app.get('current_room').get('currentDJ').get('id') ) {
@@ -58,7 +63,7 @@ var QueueList = React.createClass({
       });
     }
     return (
-      <ul>
+      <ul style={listNoPadding}>
         {listItems}
       </ul>
     );
@@ -145,12 +150,13 @@ var QueueJoinButton = React.createClass({
 var Queue = React.createClass({
   render: function() {
     var style = {
-      background: '#222222',
-      border: '1px solid #333',
       position: 'absolute',
       width: '100%',
       height: '50%',
-      overflow: 'auto'
+      overflow: 'auto',
+      background: '#444444',
+      border: '10px solid #222222',
+      borderRadius: '40px'
     };
     var buttonStyle = {
       position: 'absolute',

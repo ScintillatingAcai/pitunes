@@ -8,11 +8,10 @@ var RightContainer = React.createClass({
     var style = {
       position: 'absolute',
       right: '0',
-      width: '25%',
+      width: '20%',
       margin: '0px 0px 0px 0px',
-      backgroundColor: '#F8F8F8',
-      border: '1px solid #333',
-      bottom: '33px',
+      backgroundColor: '#222',
+      bottom: '0px',
       top: '50px'
     };
     return (

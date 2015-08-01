@@ -77,19 +77,24 @@ var Chat = React.createClass({
       width: '95%',
     };
     var divStyle = {
-      background: '#222222',
-      border: '1px solid #333',
+      background: '#424242',
+      border: '10px solid #222',
       position: 'absolute',
       width: '100%',
-      height: '50%',
-      bottom: '0'
+      height: '40%',
+      bottom: '0',
+      borderRadius: '40px'
     };
     var searchBarInputStyle = {
       backgroundColor: '#DDDDDD',
-      borderColor: '#333',
+      borderColor: '#222',
       position: 'absolute',
       bottom: '0',
-      width: '100%'
+      width: '100%',
+      borderRadius: '40px',
+      marginBottom: '20px',
+      width: '95%',
+      left: '2.5%'
     };
     var chatListStyle = {
       overflow: 'scroll',
