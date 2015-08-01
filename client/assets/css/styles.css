@@ -297,6 +297,11 @@ div.placeholder:before {
     margin: 0 0 5px 0;
 }
 
+.z-img-bound {
+    min-width: 100%;
+    max-height: 110px;
+}
+
 .gradientBoxesWithOuterShadows {
     width: 20%;
     font-size: 20px;
@@ -307,7 +312,7 @@ div.placeholder:before {
     max-height: 230px;
 
     /* outer shadows  (note the rgba is red, green, blue, alpha) */
-    -webkit-box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.4);
+    -webkit-box-shadow: 0px 0px 12px rgba(0, 0, 0, 1);
     -moz-box-shadow: 0px 1px 6px rgba(23, 69, 88, .5);
 
     /* rounded corners */
@@ -316,9 +321,10 @@ div.placeholder:before {
     border-radius: 20px;
 
     /* gradients */
-    background: -webkit-gradient(linear, left top, left bottom,
-    color-stop(0%, white), color-stop(15%, white), color-stop(100%, #D0D0D0));
-    background: -moz-linear-gradient(top, white 0%, white 55%, #D0D0D0 130%);
+    background: #AAA;
+    /*    background: -webkit-gradient(linear, left top, left bottom,
+    color-stop(0%, white), color-stop(15%, white), color-stop(100%, #D0D0D0));*/
+    /*background: -moz-linear-gradient(top, white 0%, white 55%, #D0D0D0 130%);*/
 }
 
 
