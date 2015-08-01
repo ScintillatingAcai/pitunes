@@ -37,18 +37,18 @@ var TopNavBar = React.createClass({
             <a className="navbar-brand topnav" href="#/"><span className="j-color-white">pi</span><span className="j-color-blue">Tunes</span></a>
           </div>
           <div className>
-            <a className="navbar-brand topnav">{this.state.displayName}</a>
+            <a className="navbar-brand topnav z-white-hover">{this.state.displayName}</a>
           </div>
           <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul className="nav navbar-nav navbar-right">
               <li>
-                <a href="#/">Home</a>
+                <a href="#/" className="z-white-hover">Home</a>
               </li>
               <li>
-                <a href="#/rooms">Rooms</a>
+                <a href="#/rooms" className="z-white-hover">Rooms</a>
               </li>
               <li>
-                <a className="j-pointer" onClick={this.props.signInOutClick}><i className="signInOutIcon fa fa-sign-in fa-fw"></i>{this.state.buttonText}</a>
+                <a className="j-pointer" onClick={this.props.signInOutClick}><span className='z-white-hover'><i className="signInOutIcon fa fa-sign-in fa-fw"></i>{this.state.buttonText}</span></a>
               </li>
             </ul>
           </div>

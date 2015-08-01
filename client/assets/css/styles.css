@@ -275,6 +275,18 @@ div.placeholder:before {
     margin-bottom: 0;
 }
 
+.z-white-hover {
+    color: #FFF !important;
+}
+
+.z-white-hover:hover {
+    color: #AAA !important;
+}
+
+.z-margin-five {
+    margin: 0 0 5px 0;
+}
+
 .gradientBoxesWithOuterShadows {
     width: 20%;
     font-size: 20px;
