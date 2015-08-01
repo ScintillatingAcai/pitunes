@@ -97,7 +97,6 @@ module.exports = {
             password: password
           })
           .save().then(function(newUser) {
-            new Users().add(newUser);
             callback(null, newUser);
           })
           .catch(function(err) {
