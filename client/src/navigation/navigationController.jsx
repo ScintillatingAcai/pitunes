@@ -112,7 +112,6 @@ var NavigationController = React.createClass({
     return (
       <div>
         <TopNavBar signInOutClick={this.signInOutClick} errorMessage={this.state.errorMessage} app={this.props.app}/>
-        <BottomNavBar />
         <SignInModal close={this.close} signUpClick={this.signUpClick} signInUser={this.signInUser} showSignIn={this.state.showSignIn} errorMessage={this.state.errorMessage} app={this.props.app}/>
         <SignUpModal close={this.close} signInOutClick={this.signInOutClick} signUpUser={this.signUpUser} showSignUp={this.state.showSignUp} errorMessage={this.state.errorMessage} app={this.props.app}/>
         <SignOutModal close={this.close} signOutUser={this.signOutUser} showSignOut={this.state.showSignOut} app={this.props.app}/>

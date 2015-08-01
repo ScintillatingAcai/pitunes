@@ -7,13 +7,12 @@ var CenterContainer = React.createClass({
   render: function() {
     var style = {
       position: 'absolute',
-      left: '25%',
-      width: '50%',
+      left: '20%',
+      width: '60%',
       margin: '0px 0px 0px 0px',
-      backgroundColor: '#F8F8F8',
-      border: '1px solid #333',
-      bottom: '33px',
-      top: '50px'
+      backgroundColor: '#222',
+      top: '50px',
+      bottom: '0px'
     };
     return (
       <div style={style}>
