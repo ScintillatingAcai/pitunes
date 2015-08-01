@@ -31,9 +31,6 @@ var List = React.createClass({
     }.bind(this));
 
     this.props.model.on('newSong', function () {
-      if (this.props.app.get('user').get('current_playlist')) {
-        this.handleNewCurrentPlaylist();
-      }
       this.submitUpdatePlaylist(this.props.app.get('user').get('current_playlist'));
     }.bind(this));
 
@@ -177,10 +174,13 @@ var List = React.createClass({
         dataType: 'json',
         data: jsonPlaylist,
         success: function (res) {
-
+          context.handleNewCurrentPlaylist();
+          console.log('sucesfful update')
+          $("body").css("cursor", "default");
         },
         error: function (res) {
           console.log("error: " + res.statusText);
+          $("body").css("cursor", "default");
         }
       });
     }

@@ -115,7 +115,6 @@ var SearchBar = React.createClass({
             });
             $(".searchResultItem").on('click', function (e) {
               if ($(e.target).attr('className') === 'searchResultTitle') {
-                // loadVideo($(e.target).attr('data-id'), 0);
                 if (context.props.app.get('user').get('current_playlist_id')) {
                   var newSong = new MediaModel({
                     title: $(e.target).attr('data-title'),
@@ -125,6 +124,7 @@ var SearchBar = React.createClass({
                   });
                   var addIndex = context.props.app.get('user').get('current_playlist').get('current_media_index');
                   context.props.app.get('user').get('current_playlist').get('medias').add(newSong, {at: addIndex});
+                  $("body").css("cursor", "progress");
                   context.props.app.get('user').trigger('newSong');
                 } else {
                   context.setState({ showUserAttempt: true });
