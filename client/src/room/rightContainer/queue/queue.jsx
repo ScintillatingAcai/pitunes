@@ -146,7 +146,7 @@ var Queue = React.createClass({
   render: function() {
     var style = {
       background: '#222222',
-      border: '1px solid #e7e7e7',
+      border: '1px solid #333',
       position: 'absolute',
       width: '100%',
       height: '50%',
