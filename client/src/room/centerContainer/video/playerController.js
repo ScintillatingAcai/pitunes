@@ -99,7 +99,7 @@ var loadVideo = function (videoId, startSeconds) {
       player.loadVideoById(videoId, startSeconds);
     } else {
       // If same video, check if desync is greater than 10 seconds
-      if (mediaStatus.startSeconds - player.getCurrentTime() > 10) {
+      if (mediaStatus.startSeconds - player.getCurrentTime() > 2) {
         setVideoTime(startSeconds);
       }
     }

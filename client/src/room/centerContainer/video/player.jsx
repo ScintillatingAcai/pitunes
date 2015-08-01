@@ -7,12 +7,11 @@ var VideoPlayer = React.createClass({
   componentWillUnmount: function () {
     removeVideo();
   },
-  render: function() {
+  render: function () {
     var style = {
       width: "100%",
       height: "50%",
       bottom: "0",
-      border: '1px solid #333',
       backgroundColor: '#000'
       // pointerEvents: 'none'
     };
