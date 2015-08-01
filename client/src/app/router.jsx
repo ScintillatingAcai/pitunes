@@ -18,7 +18,7 @@ $.ajax({
   type: 'GET',
   success: function (res) {
     if (res) {
-      app.get('user').set(res);
+      app.userSignIn(res);
     }
     loadApp();
   },

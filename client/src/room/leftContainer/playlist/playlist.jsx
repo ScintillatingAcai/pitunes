@@ -40,19 +40,10 @@ var List = React.createClass({
     if (this.props.app.get('user').get('current_playlist')) {
       this.handleNewCurrentPlaylist();
     }
-
-    this.props.app.on('userSignInOut', this.updateForSignInStatus);
-    this.updateForSignInStatus();
   },
   componentWillUnmount: function () {
     this.props.model.off('change:current_playlist');
     this.props.model.off('newSong');
-    this.props.app.off('userSignInOut');
-  },
-  updateForSignInStatus: function () {
-    // if (this.props.app.isSignedIn()) {
-    this.props.app.get('user').updateForUserStatus();
-    // }
   },
   durationToDisplay: function (duration) {
     var minutes = Math.floor(duration / 60) + "";
@@ -310,6 +301,7 @@ var PlaylistTitle = React.createClass({
       $.ajax({url: 'api/users/' + this.props.app.get('user').get('id') + '/playlists/' + newPlaylistId + '/current',
         type: 'PUT',
         success: function (res) {
+          console.log('new playlist id:', newPlaylistId);
           context.props.app.get('user').set('current_playlist_id', newPlaylistId);
           context.props.app.get('user').set('current_playlist', context.props.app.get('user').get('playlists').get(newPlaylistId));
         },
@@ -397,7 +389,7 @@ var Playlist = React.createClass({
         success: function (res) {
           context.props.app.get('user').set('current_playlist_id', res.id);
           playlist.set('id', res.id);
-          context.props.app.get('user').set('current_playlist', playlist);
+          context.props.app.get('user').updateForUserStatus();
           context.close();
         },
         error: function (res) {
@@ -436,8 +428,9 @@ var Playlist = React.createClass({
         type: 'DELETE',
         success: function (res) {
           var newPlaylistId = res.current_playlist_id;
+          console.log('new playlist id: ', newPlaylistId);
           context.props.app.get('user').set('current_playlist_id', newPlaylistId);
-          context.props.app.get('user').set('current_playlist', context.props.app.get('user').get('playlists').get(newPlaylistId));
+          context.props.app.get('user').updateForUserStatus();
           context.close();
         },
         error: function (res) {
