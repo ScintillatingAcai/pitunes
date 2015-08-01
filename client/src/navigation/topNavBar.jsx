@@ -25,7 +25,7 @@ var TopNavBar = React.createClass({
   },
   render: function () {
     return (
-      <nav className="navbar navbar-default navbar-fixed-top topnav" role="navigation">
+      <nav className="navbar navbar-default navbar-fixed-top darkgrey-background topnav" role="navigation">
         <div className="container topnav">
           <div className="navbar-header">
             <button type="button" className="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
@@ -34,21 +34,21 @@ var TopNavBar = React.createClass({
               <span className="icon-bar"></span>
               <span className="icon-bar"></span>
             </button>
-            <a className="navbar-brand topnav" href="#/"><span className="j-color-black">pi</span><span className="j-color-blue">Tunes</span></a>
+            <a className="navbar-brand topnav" href="#/"><span className="j-color-white">pi</span><span className="j-color-blue">Tunes</span></a>
           </div>
           <div className>
-            <a className="navbar-brand topnav">{this.state.displayName}</a>
+            <a className="navbar-brand topnav z-white-hover">{this.state.displayName}</a>
           </div>
           <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul className="nav navbar-nav navbar-right">
               <li>
-                <a href="#/">Home</a>
+                <a href="#/" className="z-white-hover">Home</a>
               </li>
               <li>
-                <a href="#/rooms">Rooms</a>
+                <a href="#/rooms" className="z-white-hover">Rooms</a>
               </li>
               <li>
-                <a className="j-pointer" onClick={this.props.signInOutClick}><i className="signInOutIcon fa fa-sign-in fa-fw"></i>{this.state.buttonText}</a>
+                <a className="j-pointer" onClick={this.props.signInOutClick}><span className='z-white-hover'><i className="signInOutIcon fa fa-sign-in fa-fw"></i>{this.state.buttonText}</span></a>
               </li>
             </ul>
           </div>
