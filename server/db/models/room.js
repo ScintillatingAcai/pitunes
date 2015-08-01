@@ -73,22 +73,24 @@ var Room = db.Model.extend({
   emitRoomStatusMessage: function(socket, allAttributes) {
     var roomJSON = this.toJSON();
 
-    if (allAttributes) {
+
+    // if (allAttributes) {
       socket.emit("room status", roomJSON);
       this.lastRoomStatus = roomJSON;
-      return;
-    }
+    //   return;
+    // }
 
-    var result = {};
-    for (var key in roomJSON) {
-      var attr = roomJSON[key];
-      var oldAttr = this.lastRoomStatus ? this.lastRoomStatus[key] : {};
-      if (JSON.stringify(attr) !== JSON.stringify(oldAttr)) {
-        result[key] = attr;
-      }
-    }
-    this.lastRoomStatus = roomJSON;
-    socket.emit("room status", result);
+    // this sends incremental changes
+    // var result = {};
+    // for (var key in roomJSON) {
+    //   var attr = roomJSON[key];
+    //   var oldAttr = this.lastRoomStatus ? this.lastRoomStatus[key] : {};
+    //   if (JSON.stringify(attr) !== JSON.stringify(oldAttr)) {
+    //     result[key] = attr;
+    //   }
+    // }
+    // this.lastRoomStatus = roomJSON;
+    // socket.emit("room status", result);
   },
 
   emitUserStatusMessage: function(socket, user_id) {
@@ -197,7 +199,9 @@ var Room = db.Model.extend({
       callback(null, user);
       this.emitRoomStatusMessage(this.sockets.in(this.get('id')));
     } else {
-      callback(null, null);
+      if (callback) {
+       callback(null, null);
+      }
       this.emitRoomStatusMessage(this.sockets.in(this.get('id')));
     }
   }),
@@ -205,7 +209,9 @@ var Room = db.Model.extend({
   removeUser: Promise.promisify(function(user_id, callback) {
     var popUser = this.users.get(user_id);
     this.users.remove(popUser);
-    callback(null, popUser);
+    if (callback) {
+      callback(null, popUser);
+    }
     this.emitRoomStatusMessage(this.sockets.in(this.get('id')));
   }),
 
