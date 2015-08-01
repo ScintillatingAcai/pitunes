@@ -15,7 +15,7 @@ var UserModel = Backbone.Model.extend({
     icon: null,
     location: null,
     playlists: new PlaylistsCollection(),
-    current_playlist_id: null,
+    current_playlist_id: 0,
     current_playlist: new PlaylistModel(),
     created_at: null,
     updated_at: null
