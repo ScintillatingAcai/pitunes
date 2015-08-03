@@ -90,9 +90,8 @@ var Chat = React.createClass({
       borderColor: '#222',
       position: 'absolute',
       bottom: '0',
-      width: '100%',
       borderRadius: '40px',
-      marginBottom: '20px',
+      marginBottom: '8px',
       width: '95%',
       left: '2.5%'
     };
