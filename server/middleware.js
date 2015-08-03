@@ -38,6 +38,11 @@ module.exports = function (app, express, io) {
   app.use(utility.errorLogger);
   app.use(utility.errorHandler);
 
+  // add in 404 route place holder.
+  app.use('*', function(req, res){
+    res.status(404).end('404 route not found');
+  });
+
   // inject our routers into their respective route files
   require('./users/usersRoutes.js')(userRouter);
   require('./rooms/roomsRoutes.js')(roomRouter);
