@@ -38,7 +38,7 @@ var StatusBar = React.createClass({
       color: 'white',
       minHeight: '30px',
       maxHeight: '30px',
-      overflow: 'scroll'
+      overflow: 'hidden'
     };
     return (
       <div>
