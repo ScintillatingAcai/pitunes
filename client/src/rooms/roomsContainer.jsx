@@ -111,7 +111,7 @@ var Rooms = React.createClass({
             return (
               <div className="col-lgfap-4 col-sm-3 j-pointer j-padding-bot-50 gradientBoxesWithOuterShadows" key={room.get('id')}  onClick={self.roomClick.bind(self, room.get('id'))}>
                 <div className="clearfix"></div>
-                <h2 className="section-heading j-center-text j-roomDisplay">{room.get('name')} <br />Current DJs: {room.get('usersCount')}</h2>
+                <h2 className="section-heading j-center-text j-roomDisplay">{room.get('name')} <br />Users: {room.get('usersCount')}</h2>
                 <div className="j-left-25">
                   <img className="img-responsive z-img-bound j-room-image-display" src={room.get('videoURL')} alt="" />
                 </div>

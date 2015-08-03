@@ -14,21 +14,8 @@ module.exports = {
     console.log('retrieving playlist id: ', playlist_id);
     new Playlist({id: playlist_id })
       .retrievePlaylist()
-      // .fetch({
-      //   //add related data we would like to return in the withRelated array
-      //   withRelated: ['medias'],
-      //   require: true
-      // })
       .then(function(found) {
         if (found) {
-          // var playlistWithJoins = cleanAttributes(found.attributes);
-
-          // this is an example of how to add related data to the response object
-          // playlistWithJoins.events = [];
-          // found.relations.events.forEach(function(item) {
-          //    playlistWithJoins.events.push(cleanAttributes(item.attributes));
-          // });
-
           callback(null, found);
         } else {
           console.log('playlist_id not found:' + playlist_id);
