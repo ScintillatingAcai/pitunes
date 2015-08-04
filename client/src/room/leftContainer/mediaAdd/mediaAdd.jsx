@@ -74,7 +74,7 @@ var SearchBar = React.createClass({
   },
   searchYouTube: function (query) {
     var encodedQuery = encodeURIComponent(query);
-    var searchUrl = 'https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=20&order=viewCount&q=' + encodedQuery + '&key=' + YOUTUBE_API_KEY;
+    var searchUrl = 'https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=20&order=relevance&q=' + encodedQuery + '&key=' + YOUTUBE_API_KEY;
     var context = this;
     $.ajax({
       type: "GET",

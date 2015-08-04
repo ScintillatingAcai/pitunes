@@ -14,7 +14,7 @@ var UserAttemptModal = React.createClass({
           <Modal.Body>
             <div>
               <p>
-                You need to sign in to create a playlist.
+                You need to sign in and create a playlist in order to start adding songs.
               </p>
               <form id="signupForm">
                 <div className="form-group j-center-text">
