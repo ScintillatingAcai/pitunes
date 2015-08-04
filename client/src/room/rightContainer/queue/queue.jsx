@@ -1,4 +1,5 @@
 var React = require('react');
+var Shuffle = require('react-shuffle');
 var $ = require('jquery');
 
 var socket = io(window.location.origin);
@@ -43,7 +44,7 @@ var QueueList = React.createClass({
       var context = this;
       var li = function() {
         return (
-          <li style={djStyle} >
+          <li style={djStyle} key={context.props.app.get('current_room').get('currentDJ').get('id')} >
             {context.props.app.get('current_room').get('currentDJ').get('display_name')}
           </li>
         );
@@ -54,7 +55,7 @@ var QueueList = React.createClass({
       this.props.model.get('djQueue').each(function (item, i) {
         var li = function() {
           return (
-            <li style={style} data-id={i} key={i}>
+            <li style={style} data-id={i} key={item.get('id')}>
               {item.get('display_name')}
             </li>
           );
@@ -63,9 +64,9 @@ var QueueList = React.createClass({
       });
     }
     return (
-      <ul style={listNoPadding}>
+      <Shuffle style={listNoPadding}>
         {listItems}
-      </ul>
+      </Shuffle>
     );
   }
 });

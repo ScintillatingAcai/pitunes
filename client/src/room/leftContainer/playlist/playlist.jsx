@@ -1,4 +1,5 @@
 var React = require('react');
+var Shuffle = require('react-shuffle');
 var $ = require('jquery');
 
 var PlaylistModel = require('../../../data/models/playlist.js');
@@ -81,7 +82,7 @@ var List = React.createClass({
   removeSong: function (e) {
     var data = this.state.data;
     var newData = data.slice();
-    var songIndex = $(e.target).closest('div').attr('data-index');
+    var songIndex = $(e.target).parent().attr('data-index');
     newData.splice(songIndex, 1);
 
     //setState is a pending view update
@@ -114,10 +115,15 @@ var List = React.createClass({
     // Update data
     var data = this.state.data;
     var newData = data.slice();
-    var from = Number(this.dragged.dataset.id);
-    var to = Number(this.over.dataset.id);
+    var from = $(this.dragged).attr('data-index');
+    var to = $(this.over).attr('data-index');
+    console.log('to $: ', $(this.over));
     if (from < to) to--;
     if (this.nodePlacement === "after") to++;
+
+    console.log('from: ', from);
+    console.log('to: ', to);
+
     newData.splice(to, 0, newData.splice(from, 1)[0]);
 
     //setState is a pending view update
@@ -139,16 +145,16 @@ var List = React.createClass({
     e.preventDefault();
     this.dragged.style.display = "none";
     if (e.target.className === "placeholder") return;
-    this.over = e.target;
+    this.over = e.target.parentNode;
     var relY = e.clientY - this.over.offsetTop;
     var height = this.over.parentElement.offsetHeight / 2;
-    var parent = e.target.parentNode;
+    var parent = this.over.parentNode;
     if (relY > height) {
       this.nodePlacement = "before";
-      parent.insertBefore(placeholder, e.target.nextElementSibling);
+      parent.insertBefore(placeholder, this.over.nextElementSibling);
     } else if (relY < height) {
       this.nodePlacement = "before";
-      parent.insertBefore(placeholder, e.target);
+      parent.insertBefore(placeholder, this.over);
     }
   },
   createNewPlaylist: function () {
@@ -197,25 +203,46 @@ var List = React.createClass({
     var style = {
       cursor: 'pointer',
       padding: '0',
-      margin: '0 0 5px 10px',
+      margin: '0 6px 0 6px',
       color: '#FFFFFF',
       fontSize: '12px',
-      listStyleType: 'none'
+      listStyleType: 'none',
+      height: '24px',
+      width: '96%'
     };
-    var cellStyle = {
+    var removeStyle = {
+      margin: 'auto 0',
+      width: '16px',
+      height: '16px',
+      float: 'right',
+      color: 'red'
+    };
+    var textStyle = {
+      margin: '0',
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
+      whiteSpace: 'nowrap',
       width: '80%',
-      margin: '0 5px 0 5px'
+      float: 'left'
+    };
+    var numberStyle = {
+      margin: '0',
+      width: '16px',
+      height: '16px',
+      float: 'left'
     };
     var listItems = this.state.data.map((function (item, index) {
       return (
         <div style={style}
           data-index={index}
-          key={index}
+          key={item.id}
           draggable="true"
           onDragEnd={this.dragEnd}
           onDragStart={this.dragStart}
           onClick={this.onClick}>
-          <span>{index + 1}. </span><span>{item.title}</span><span> | {item.duration} </span><button className='btn btn-xs' onClick={this.removeSong}><span className="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+          <div style={numberStyle}>{index + 1}. </div>
+          <div style={textStyle}>{item.title}</div>
+          <div style={removeStyle} onClick={this.removeSong} className="glyphicon glyphicon-remove" aria-hidden="true" ></div>
         </div>
 
       );
@@ -227,7 +254,7 @@ var List = React.createClass({
       margin: '0 0 0 5px'
     };
     return (
-      <div onDragOver={this.dragOver}>{listItems}</div>
+      <Shuffle onDragOver={this.dragOver}>{listItems}</Shuffle>
     );
   }
 });

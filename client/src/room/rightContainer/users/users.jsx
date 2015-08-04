@@ -1,4 +1,5 @@
 var React = require('react');
+var Shuffle = require('react-shuffle');
 
 var Users = React.createClass({
   componentDidMount: function () {
@@ -32,13 +33,13 @@ var Users = React.createClass({
     if (this.props.model.get('users').models.length > 0) {
       listItems = this.props.model.get('users').models.map(function (item, i) {
         return (
-          <li style={style} data-id={i} key={i}>
+          <li style={style} data-id={i} key={item.get('id')}>
             {item.get('display_name')}
           </li>
         );
       });
       return (
-        <ul style={listNoPadding}>{listItems}</ul>
+        <Shuffle style={listNoPadding}>{listItems}</Shuffle>
       );
     } else {
       // listItems = ["No one in room"].map(function (item, i) {
