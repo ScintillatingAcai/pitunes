@@ -48,7 +48,7 @@ var List = React.createClass({
   },
   updateForSignInStatus: function () {
     // if (this.props.app.isSignedIn()) {
-    this.props.app.get('user').updateForUserStatus();
+    this.props.app.get('user').retrieveCurrentPlaylist();
     // }
   },
   durationToDisplay: function (duration) {
@@ -80,12 +80,16 @@ var List = React.createClass({
   },
   removeSong: function (e) {
     var data = this.state.data;
-    var songId = $(e.target).closest('div').attr('data-id');
-    data.splice(songId, 1);
-    this.setState({data: data});
+    var newData = data.slice();
+    var songIndex = $(e.target).closest('div').attr('data-index');
+    newData.splice(songIndex, 1);
+
+    //setState is a pending view update
+    this.setState({data: newData});
+    //update media collection, use newData instead of this.set.state since that is possibly not yet rendered
     var newMedias = new MediasCollection();
-    for (var i = 0; i < this.state.data.length; i++) {
-      var aData = this.state.data[i];
+    for (var i = 0; i < newData.length; i++) {
+      var aData = newData[i];
       var aDataID = aData.id;
       var aMedia = this.props.app.get('user').get('current_playlist').get('medias').get(aDataID);
       newMedias.push(aMedia);
@@ -109,15 +113,20 @@ var List = React.createClass({
     this.over.parentNode.removeChild(placeholder);
     // Update data
     var data = this.state.data;
+    var newData = data.slice();
     var from = Number(this.dragged.dataset.id);
     var to = Number(this.over.dataset.id);
     if (from < to) to--;
     if (this.nodePlacement === "after") to++;
-    data.splice(to, 0, data.splice(from, 1)[0]);
-    this.setState({ data: data });
+    newData.splice(to, 0, newData.splice(from, 1)[0]);
+
+    //setState is a pending view update
+    this.setState({ data: newData });
+
+    //update media collection, use newData instead of this.set.state since that is possibly not yet rendered
     var newMedias = new MediasCollection();
-    for (var i = 0; i < this.state.data.length; i++) {
-      var aData = this.state.data[i];
+    for (var i = 0; i < newData.length; i++) {
+      var aData = newData[i];
       var aDataID = aData.id;
       var aMedia = this.props.app.get('user').get('current_playlist').get('medias').get(aDataID);
       newMedias.push(aMedia);
@@ -174,8 +183,7 @@ var List = React.createClass({
         dataType: 'json',
         data: jsonPlaylist,
         success: function (res) {
-          context.handleNewCurrentPlaylist();
-          console.log('sucesfful update')
+          context.props.app.get('user').retrieveCurrentPlaylist();
           $("body").css("cursor", "default");
         },
         error: function (res) {
@@ -198,16 +206,16 @@ var List = React.createClass({
       width: '80%',
       margin: '0 5px 0 5px'
     };
-    var listItems = this.state.data.map((function (item, i) {
+    var listItems = this.state.data.map((function (item, index) {
       return (
         <div style={style}
-          data-id={i}
-          key={i}
+          data-index={index}
+          key={index}
           draggable="true"
           onDragEnd={this.dragEnd}
           onDragStart={this.dragStart}
           onClick={this.onClick}>
-          <span>{i + 1}. </span><span>{item.title}</span><span> | {item.duration} </span><button className='btn btn-xs' onClick={this.removeSong}><span className="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+          <span>{index + 1}. </span><span>{item.title}</span><span> | {item.duration} </span><button className='btn btn-xs' onClick={this.removeSong}><span className="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
         </div>
 
       );
@@ -312,7 +320,6 @@ var PlaylistTitle = React.createClass({
       $.ajax({url: 'api/users/' + this.props.app.get('user').get('id') + '/playlists/' + newPlaylistId + '/current',
         type: 'PUT',
         success: function (res) {
-          console.log('new playlist id:', newPlaylistId);
           context.props.app.get('user').set('current_playlist_id', newPlaylistId);
           context.props.app.get('user').set('current_playlist', context.props.app.get('user').get('playlists').get(newPlaylistId));
         },
@@ -337,9 +344,9 @@ var PlaylistTitle = React.createClass({
     var leftButtonStyle = {
       paddingLeft: '6px'
     };
-    var playlistItems = this.state.playlistData.map((function (item, i) {
+    var playlistItems = this.state.playlistData.map((function (item, index) {
       return (
-        <MenuItem data-id={i} key={i} data-playlistid={item.id} onClick={this.swapPlaylist}>
+        <MenuItem data-index={index} key={index} data-playlistid={item.id} onClick={this.swapPlaylist}>
           {item.text}
         </MenuItem>
       );
@@ -403,7 +410,7 @@ var Playlist = React.createClass({
         success: function (res) {
           context.props.app.get('user').set('current_playlist_id', res.id);
           playlist.set('id', res.id);
-          context.props.app.get('user').updateForUserStatus();
+          context.props.app.get('user').retrieveCurrentPlaylist();
           context.close();
         },
         error: function (res) {
@@ -442,9 +449,8 @@ var Playlist = React.createClass({
         type: 'DELETE',
         success: function (res) {
           var newPlaylistId = res.current_playlist_id;
-          console.log('new playlist id: ', newPlaylistId);
           context.props.app.get('user').set('current_playlist_id', newPlaylistId);
-          context.props.app.get('user').updateForUserStatus();
+          context.props.app.get('user').retrieveCurrentPlaylist();
           context.close();
         },
         error: function (res) {

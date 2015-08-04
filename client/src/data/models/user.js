@@ -72,7 +72,7 @@ var UserModel = Backbone.Model.extend({
       callback(new Error('playlist get request failed'));
     });
   },
-  updateForUserStatus: function () {
+  retrieveCurrentPlaylist: function () {
     if (this.get('id')) {
       console.log('playlist id: ', this.get('current_playlist_id'));
       this.retrievePlaylist(this.get('current_playlist_id'), function (err, playlist) {

@@ -27,7 +27,10 @@ var Chat = React.createClass({
     }.bind(this));
 
     socket.on('room status', function(data){
-      this.props.app.get('current_room').updateForRoomStatus(data);
+      console.log('room status: ', data);
+      if (data.id === this.props.app.get('current_room').get('id')) {
+        this.props.app.get('current_room').updateForRoomStatus(data);
+      }
     }.bind(this));
 
     socket.on('user status', function(data){
@@ -40,7 +43,7 @@ var Chat = React.createClass({
         } else {
           console.log('updating user status')
           //update user info, they are presumably the most recent dj
-          this.props.app.get('user').updateForUserStatus(data);
+          this.props.app.get('user').retrieveCurrentPlaylist();
         }
       }
     }.bind(this));
