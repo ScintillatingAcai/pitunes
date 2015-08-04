@@ -5,6 +5,11 @@ var Modal = ReactBootstrap.Modal;
 
 
 var SignInModal = React.createClass({
+  keyPress: function(e){
+    if(e.charCode === 13) {
+      {this.props.signInUser()};
+    }
+  },
   render: function() {
     return (
       <div>
@@ -21,7 +26,7 @@ var SignInModal = React.createClass({
               </div>
               <div className="form-group">
                 <label htmlFor="login-password" className="hide">Password</label>
-                <input type="password" className="form-control input-lg " id="login-password" placeholder="Password" required />
+                <input type="password" className="form-control input-lg " id="login-password" placeholder="Password" onKeyPress={this.keyPress} required />
               </div>
               <div className="form-group j-center-text">
                 <a type="submit" className="btn btn-default btn-md" onClick={this.props.signInUser}><i className="fa fa-sign-in fa-fw"></i><span className="network-name">Sign In</span></a>
