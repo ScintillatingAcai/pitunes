@@ -20,7 +20,7 @@ var VideoPlayer = React.createClass({
       bottom: "0",
       border: '10px solid #222',
       backgroundColor: '#222',
-      overflow: 'overlay'
+      overflow: 'hidden'
     };
     return (
       <div style={borderStyle}>

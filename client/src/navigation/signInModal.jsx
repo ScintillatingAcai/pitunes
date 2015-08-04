@@ -7,7 +7,7 @@ var Modal = ReactBootstrap.Modal;
 var SignInModal = React.createClass({
   keyPress: function(e){
     if(e.charCode === 13) {
-      {this.props.signInUser()};
+      this.props.signInUser();
     }
   },
   render: function() {

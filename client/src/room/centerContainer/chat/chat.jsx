@@ -99,7 +99,7 @@ var Chat = React.createClass({
       left: '2.5%'
     };
     var chatListStyle = {
-      overflow: 'scroll',
+      overflow: 'auto',
       maxHeight: '65%'
     };
     return (
