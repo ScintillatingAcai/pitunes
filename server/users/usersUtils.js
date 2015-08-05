@@ -31,12 +31,12 @@ module.exports = {
     return allUsers;
   },
 
-  addUser: function(user, callback) {
+  addUser: function(user) {
     var singleton = require('../singleton.js');
     singleton.users.add(user);
   },
 
-  removeUser: function(user_id, callback) {
+  removeUser: function(user_id) {
     var singleton = require('../singleton.js');
     singleton.users.remove(user_id);
   },
