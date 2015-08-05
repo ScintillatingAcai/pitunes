@@ -36,7 +36,6 @@ var Room = db.Model.extend({
       this.mediaTimer.stop();
       this.mediaTimer = null;
     }
-    this.emitRoomStatusMessage(this.sockets.in(this.get('id')));
     this.currentDJ = this.dequeueDJ();
     if (this.currentDJ) {
       console.log('current dj: ', this.currentDJ.get('display_name'));
@@ -54,7 +53,7 @@ var Room = db.Model.extend({
       .then(function(data) {
           var duration = this.currentMedia.get('duration');
           this.emitMediaStatusMessage(this.sockets.in(this.get('id')), this.currentMedia, 0, 'start');
-          this.mediaTimer = this.makeMediaTimer(5000, duration);
+          this.mediaTimer = this.makeMediaTimer(3000, duration);
           this.mediaTimer.start();
           this.emitRoomStatusMessage(this.sockets.in(this.get('id')));
           this.emitUserStatusMessage(this.sockets.in(this.get('id')), this.currentDJ.get('id'));
@@ -73,24 +72,34 @@ var Room = db.Model.extend({
   emitRoomStatusMessage: function(socket, allAttributes) {
     var roomJSON = this.toJSON();
 
-
-    // if (allAttributes) {
+    if (allAttributes) {
       socket.emit("room status", roomJSON);
       this.lastRoomStatus = roomJSON;
-    //   return;
-    // }
+      return;
+    }
 
     // this sends incremental changes
-    // var result = {};
-    // for (var key in roomJSON) {
-    //   var attr = roomJSON[key];
-    //   var oldAttr = this.lastRoomStatus ? this.lastRoomStatus[key] : {};
-    //   if (JSON.stringify(attr) !== JSON.stringify(oldAttr)) {
-    //     result[key] = attr;
-    //   }
-    // }
-    // this.lastRoomStatus = roomJSON;
-    // socket.emit("room status", result);
+    var result = {};
+    var usefulKeyCount = 0;
+    for (var key in roomJSON) {
+      var attr = roomJSON[key];
+      var oldAttr = this.lastRoomStatus ? this.lastRoomStatus[key] : {};
+
+      //always send room id since client may check it
+      if (key === 'id') {
+        result[key] = attr;
+      }
+      else if (JSON.stringify(attr) !== JSON.stringify(oldAttr)) {
+        result[key] = attr;
+        usefulKeyCount++;
+      }
+    }
+    this.lastRoomStatus = roomJSON;
+
+    //only send room status if something has changed
+    if (usefulKeyCount > 0) {
+      socket.emit("room status", result);
+    }
   },
 
   emitUserStatusMessage: function(socket, user_id) {
@@ -127,11 +136,10 @@ var Room = db.Model.extend({
 
   toJSON: function() {
     var JSONObject = (new db.Model()).toJSON.call(this);
-    JSONObject.users = this.users && this.users.toJSON();
-    JSONObject.djQueue = this.djQueue && this.djQueue.toJSON();
-    JSONObject.currentMedia = this.currentMedia && this.currentMedia.toJSON();
-    JSONObject.currentDJ = this.currentDJ && this.currentDJ.toJSON();
-
+    JSONObject.users = this.users ? this.users.toJSON() : null;
+    JSONObject.djQueue = this.djQueue ? this.djQueue.toJSON() : null;
+    JSONObject.currentMedia = this.currentMedia ? this.currentMedia.toJSON() : null;
+    JSONObject.currentDJ = this.currentDJ ? this.currentDJ.toJSON() : null;
     return JSONObject;
   },
 

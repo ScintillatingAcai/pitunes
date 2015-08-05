@@ -18,7 +18,7 @@ var PlaylistModel = Backbone.Model.extend({
   },
   toJSON: function () {
     var JSONObject = (new Backbone.Model()).toJSON.call(this);
-    JSONObject.medias = this.get('medias') && this.get('medias').toJSON();
+    JSONObject.medias = this.get('medias') ? this.get('medias').toJSON() : [];
     var cleanJSON = {};
     for (var key in JSONObject) {
       if (key.charAt(0) === '_') {

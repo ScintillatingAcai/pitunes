@@ -100,10 +100,7 @@ module.exports = function(io) {
       var user_id = data.user.id;
       var room_id = data.room;
 
-      var callback = function () {
-        room.emitRoomStatusMessage(io.sockets.in(room_id));
-      };
-      cleanUpClientsForSocket(socket, user_id, null, callback);
+      cleanUpClientsForSocket(socket, user_id, null);
     });
 
     socket.on('disconnect', function() {
