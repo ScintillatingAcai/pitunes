@@ -48,9 +48,7 @@ var List = React.createClass({
     this.props.app.off('userSignInOut');
   },
   updateForSignInStatus: function () {
-    // if (this.props.app.isSignedIn()) {
     this.props.app.get('user').retrieveCurrentPlaylist();
-    // }
   },
   durationToDisplay: function (duration) {
     var minutes = Math.floor(duration / 60) + "";
@@ -215,7 +213,7 @@ var List = React.createClass({
       width: '16px',
       height: '16px',
       float: 'right',
-      color: 'red'
+      color: '#EEEEEE'
     };
     var textStyle = {
       margin: '0',
