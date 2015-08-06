@@ -1,5 +1,5 @@
 var React = require('react');
-var Shuffle = require('react-shuffle');
+var Shuffle = require('../../../../assets/js/react-shuffle/lib/shuffle.js');
 var $ = require('jquery');
 
 var PlaylistModel = require('../../../data/models/playlist.js');
