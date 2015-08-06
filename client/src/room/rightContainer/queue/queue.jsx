@@ -1,5 +1,5 @@
 var React = require('react');
-var Shuffle = require('react-shuffle');
+// var Shuffle = require('react-shuffle');
 var $ = require('jquery');
 
 var socket = io(window.location.origin);
@@ -64,9 +64,12 @@ var QueueList = React.createClass({
       });
     }
     return (
-      <Shuffle style={listNoPadding}>
+      <ul style={listNoPadding}>
         {listItems}
-      </Shuffle>
+      </ul>
+      // <Shuffle style={listNoPadding}>
+      //   {listItems}
+      // </Shuffle>
     );
   }
 });
@@ -142,8 +145,13 @@ var QueueJoinButton = React.createClass({
     this.updateForUserStatus();
   },
   render: function () {
+    var style={
+      background: '#99DDFF',
+      borderRadius: '10px',
+      outline: 'none'
+    }
     return (
-      <button id="queueJoinButton" className='btn btn-sm' onClick={this.handleClick}>{this.state.text}</button>
+      <button id="queueJoinButton" className='btn btn-md' style={style} onClick={this.handleClick}>{this.state.text}</button>
     );
   }
 });
