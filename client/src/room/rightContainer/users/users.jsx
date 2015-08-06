@@ -1,5 +1,5 @@
 var React = require('react');
-var Shuffle = require('../../../../assets/js/react-shuffle/lib/shuffle.js');
+// var Shuffle = require('react-shuffle');
 
 var Users = React.createClass({
   componentDidMount: function () {
@@ -39,7 +39,8 @@ var Users = React.createClass({
         );
       });
       return (
-        <Shuffle style={listNoPadding}>{listItems}</Shuffle>
+        <ul style={listNoPadding}>{listItems}</ul>
+        // <Shuffle style={listNoPadding}>{listItems}</Shuffle>
       );
     } else {
       // listItems = ["No one in room"].map(function (item, i) {
