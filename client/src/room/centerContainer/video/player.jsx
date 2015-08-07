@@ -18,7 +18,6 @@ var VideoPlayer = React.createClass({
       width: "100%",
       height: "60%",
       bottom: "0",
-      border: '10px solid #222',
       backgroundColor: '#222',
       overflow: 'hidden'
     };
