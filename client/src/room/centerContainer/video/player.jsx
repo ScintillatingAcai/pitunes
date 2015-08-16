@@ -27,8 +27,8 @@ var VideoPlayer = React.createClass({
       color: 'white',
       backgroundColor: 'black',
       border: 'none',
-      right: '3%',
-      top: '4%',
+      right: '25px',
+      top: '25px',
       outline: 'none'
     }
     var muteButtonStyle = {
@@ -36,8 +36,8 @@ var VideoPlayer = React.createClass({
       color: 'white',
       backgroundColor: 'black',
       border: 'none',
-      right: '6%',
-      top: '4%',
+      right: '60px',
+      top: '25px',
       outline: 'none'
     };
     var fullScreenForm;
