@@ -27,7 +27,8 @@ var VideoPlayer = React.createClass({
       backgroundColor: 'black',
       border: 'none',
       right: '3%',
-      top: '4%'
+      top: '4%',
+      outline: 'none'
     }
     var form;
     if (this.props.fullScreen === false) {
