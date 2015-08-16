@@ -10,7 +10,7 @@ var socket = io(window.location.origin);
 // Default Media Status
 var mediaStatus = {
   videoId: "",
-  startSeconds: 0,
+  startSeconds: 0
 };
 
 var done = false;
