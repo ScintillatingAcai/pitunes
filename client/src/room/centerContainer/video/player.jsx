@@ -11,6 +11,7 @@ var VideoPlayer = React.createClass({
     var style = {
       width: "100%",
       height: "100%",
+      pointerEvents: 'none'
     };
     var borderStyle = {
       border: '10px solid #222222',
@@ -35,8 +36,8 @@ var VideoPlayer = React.createClass({
       color: 'white',
       backgroundColor: 'black',
       border: 'none',
-      right: '3%',
-      top: '8%',
+      right: '6%',
+      top: '4%',
       outline: 'none'
     };
     var fullScreenForm;
