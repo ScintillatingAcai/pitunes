@@ -30,24 +30,48 @@ var VideoPlayer = React.createClass({
       top: '4%',
       outline: 'none'
     }
-    var form;
+    var muteButtonStyle = {
+      position: 'absolute',
+      color: 'white',
+      backgroundColor: 'black',
+      border: 'none',
+      right: '3%',
+      top: '8%',
+      outline: 'none'
+    };
+    var fullScreenForm;
     if (this.props.fullScreen === false) {
-      form = (
+      fullScreenForm = (
         <button onClick={this.props.fullScreenClick} style={fullScreenButtonStyle} type="button">
           <span className="glyphicon glyphicon-resize-full" aria-hidden="true"></span>
         </button>
       );
     } else if (this.props.fullScreen === true) {
-      form = (
+      fullScreenForm = (
         <button onClick={this.props.fullScreenClick} style={fullScreenButtonStyle} type="button">
           <span className="glyphicon glyphicon-resize-small" aria-hidden="true"></span>
+        </button>
+      );
+    }
+    var muteButtonForm;
+    if (this.props.mute === false) {
+      muteButtonForm = (
+        <button onClick={this.props.muteClick} style={muteButtonStyle} type="button">
+          <span className="glyphicon glyphicon-volume-up" aria-hidden="true"></span>
+        </button>
+      );
+    } else if (this.props.mute === true) {
+      muteButtonForm = (
+        <button onClick={this.props.muteClick} style={muteButtonStyle} type="button">
+          <span className="glyphicon glyphicon-volume-off" aria-hidden="true"></span>
         </button>
       );
     }
     //glyphicon glyphicon-resize-small
     return (
       <div style={borderStyle}>
-        {form}
+        {fullScreenForm}
+        {muteButtonForm}
         <div id="videoContainer" style={style}></div>
       </div>
     );

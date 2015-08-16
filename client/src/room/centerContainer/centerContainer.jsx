@@ -9,7 +9,7 @@ var centerContainerWidth = '60%';
 
 var CenterContainer = React.createClass({
   getInitialState: function() {
-    return { fullScreen: false };
+    return { fullScreen: false, mute: false };
   },
   fullScreenClick: function() {
     if (this.state.fullScreen === false) {
@@ -22,6 +22,17 @@ var CenterContainer = React.createClass({
       centerContainerLeft = '20%';
       centerContainerWidth = '60%';
       this.setState({ fullScreen: false });
+    }
+  },
+  muteClick: function() {
+    if (player) {
+      if (this.state.mute === false) {
+        player.mute()
+        this.setState({ mute: true });
+      } else if (this.state.mute === true) {
+        player.unMute();
+        this.setState({ mute: false });
+      }
     }
   },
   render: function() {
@@ -37,7 +48,7 @@ var CenterContainer = React.createClass({
     };
     return (
       <div style={centerContainerStyle}>
-        <VideoPlayer playerHeight={playerHeight} fullScreenClick={this.fullScreenClick} fullScreen={this.state.fullScreen}/>
+        <VideoPlayer mute={this.state.mute} muteClick={this.muteClick} playerHeight={playerHeight} fullScreenClick={this.fullScreenClick} fullScreen={this.state.fullScreen}/>
         <Chat app={this.props.app}/>
       </div>
     );
