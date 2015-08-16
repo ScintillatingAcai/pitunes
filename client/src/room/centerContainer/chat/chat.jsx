@@ -86,7 +86,8 @@ var Chat = React.createClass({
       width: '100%',
       height: '40%',
       bottom: '0',
-      borderRadius: '40px'
+      borderRadius: '40px',
+      zIndex: '-1'
     };
     var searchBarInputStyle = {
       backgroundColor: '#DDDDDD',

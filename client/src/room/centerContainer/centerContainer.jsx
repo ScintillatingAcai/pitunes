@@ -3,20 +3,41 @@ var React = require('react');
 var VideoPlayer = require('./video/player.jsx');
 var Chat = require('./chat/chat.jsx');
 
+var playerHeight = '60%';
+var centerContainerLeft = '20%';
+var centerContainerWidth = '60%';
+
 var CenterContainer = React.createClass({
+  getInitialState: function() {
+    return { fullScreen: false };
+  },
+  fullScreenClick: function() {
+    if (this.state.fullScreen === false) {
+      playerHeight = '100%';
+      centerContainerLeft = '0';
+      centerContainerWidth = '100%';
+      this.setState({ fullScreen: true });
+    } else if (this.state.fullScreen === true) {
+      playerHeight = '60%';
+      centerContainerLeft = '20%';
+      centerContainerWidth = '60%';
+      this.setState({ fullScreen: false });
+    }
+  },
   render: function() {
-    var style = {
+    var centerContainerStyle = {
       position: 'absolute',
-      left: '20%',
-      width: '60%',
+      left: centerContainerLeft,
+      width: centerContainerWidth,
       margin: '0px 0px 0px 0px',
       backgroundColor: '#222',
       top: '50px',
-      bottom: '0px'
+      bottom: '0px',
+      zIndex: '1'
     };
     return (
-      <div style={style}>
-        <VideoPlayer />
+      <div style={centerContainerStyle}>
+        <VideoPlayer playerHeight={playerHeight} fullScreenClick={this.fullScreenClick} fullScreen={this.state.fullScreen}/>
         <Chat app={this.props.app}/>
       </div>
     );
