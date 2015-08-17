@@ -120,11 +120,14 @@ var QueueJoinButton = React.createClass({
   updateForUserStatus: function () {
     if (this.props.app.isEnqueued()) {
       $('#queueJoinButton').prop('disabled', false);
+      $('#queueJoinButton').removeClass('disabled');
     } else {
       if (this.props.app.isSignedIn() && this.props.app.get('user').get('current_playlist') && this.props.app.get('user').get('current_playlist').get('medias').length > 0) {
         $('#queueJoinButton').prop('disabled', false);
+        $('#queueJoinButton').removeClass('disabled');
       } else {
         $('#queueJoinButton').prop('disabled', true);
+        $('#queueJoinButton').addClass('disabled');
       }
     }
     this.updateButtonText();
