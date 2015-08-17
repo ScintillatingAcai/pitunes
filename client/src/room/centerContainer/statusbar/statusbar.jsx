@@ -6,18 +6,23 @@ var StatusBar = React.createClass({
   },
   componentDidMount: function () {
     var context = this;
-    socket.on('room status', function (data) {
-      var newRoomStatus = data;
-      context.heardRoomStatus(newRoomStatus);
-    });
+    this.props.app.on('room status', function () {
+      context.handleRoomChange();
+    }.bind(this));
   },
-  heardRoomStatus: function (data) {
-    if (data.currentDJ === null) {
+  componentWillUnmount: function() {
+    this.props.app.off('room status');
+  },
+  handleRoomChange: function (data) {
+    var dj = this.props.app.get('current_room').get('currentDJ');
+    var currentMedia = this.props.app.get('current_room').get('currentMedia');
+
+    if (!dj.get('id')) {
       this.setState({currentDJ: null});
-    } else if (data.currentMedia) {
-      var dj = this.props.app.get('current_room').get('currentDJ').get('display_name');
-      this.setState({currentDJ: dj});
-      this.setState({videoTitle: data.currentMedia.title});
+    } else {
+
+      this.setState({currentDJ: dj.get('display_name')});
+      this.setState({videoTitle: currentMedia.get('title')});
     }
   },
   generateStatusMessage: function () {
