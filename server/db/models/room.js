@@ -177,6 +177,8 @@ var Room = db.Model.extend({
           this.emitRoomStatusMessage(this.sockets.in(this.get('id')));
           return callback(null, user);
         }).catch(function(err) {return callback(err);});
+      } else {
+        this.emitRoomStatusMessage(this.sockets.in(this.get('id')));
       }
     }).catch(function(err) {return callback(err);});
   }),
