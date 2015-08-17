@@ -39,6 +39,10 @@ h6 {
     transform: translate(-50%, -50%) !important;
 }
 
+.navbar-brand {
+    padding: 20px 15px 5px 15px;
+}
+
 .body-container {
     padding-top: 50px; /* If you're making other pages, make sure there is 50px of padding to make sure the navbar doesn't overlap content! */
     /*padding-bottom: 80px;*/
@@ -326,4 +330,9 @@ div.placeholder:before {
     color-stop(0%, white), color-stop(15%, white), color-stop(100%, #D0D0D0));
     /*background: -moz-linear-gradient(top, white 0%, white 55%, #D0D0D0 130%);*/
 }
+
+.btn.disabled {
+    background: #BBBBBB !important;
+}
+
 
