@@ -27,7 +27,7 @@ var CenterContainer = React.createClass({
   muteClick: function() {
     if (player) {
       if (this.state.mute === false) {
-        player.mute()
+        player.mute();
         this.setState({ mute: true });
       } else if (this.state.mute === true) {
         player.unMute();

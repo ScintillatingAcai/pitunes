@@ -78,16 +78,25 @@ var RoomsView = React.createClass({
     if (this.props.app.isSignedIn() === true) {
       form = (<a type="submit" className="btn btn-default btn-md" onClick={this.showCreateRoom}><i className="fa fa-pencil fa-fw"></i><span className="network-name">Create Room</span></a>);
     }
+    var headerStyle = {
+      textAlign: 'center',
+      padding: '0px 0px 15px',
+      margin: '0px',
+      color: 'white'
+    };
     return (
       <div>
         <NavigationController app={this.props.app}/>
         <a name="room"></a>
         <div className="content-section-a">
           <div className="container">
-          <div className="j-createRoom-button">
-            {form}
+            <div className="j-createRoom-button">
+              {form}
           </div>
             <div className="row j-rooms-padding-top">
+              <div>
+                <h3 style={headerStyle}>SELECT A ROOM TO JOIN</h3>
+              </div>
               { <Rooms /> }
             </div>
             <CreateRoomModal showCreateRoomModal={this.state.showCreateRoomModal} createRoomClick={this.createRoomClick} errorMessage={this.state.errorMessage} close={this.close} />
