@@ -30,7 +30,7 @@ var Room = db.Model.extend({
     this.sockets = socket;
   },
 
-  playMedia: function() {
+  playMedia: Promise.promisify(function(callback) {
 
     if (this.mediaTimer) {
       this.mediaTimer.stop();
@@ -38,7 +38,6 @@ var Room = db.Model.extend({
     }
     this.currentDJ = this.dequeueDJ();
     if (this.currentDJ) {
-      console.log('current dj: ', this.currentDJ.get('display_name'));
       this.currentDJ.getCurrentPlaylist().bind(this)
       .then(function(playlist) {
           return playlist.incrementCurrentMediaIndex().bind(this);
@@ -57,17 +56,21 @@ var Room = db.Model.extend({
           this.mediaTimer.start();
           this.emitRoomStatusMessage(this.sockets.in(this.get('id')));
           this.emitUserStatusMessage(this.sockets.in(this.get('id')), this.currentDJ.get('id'));
+          callback(null, null);
       }).catch(function(err) {
         console.error(err);
         console.log('skipping to next queuedDJ');
-        this.playMedia();
+        this.playMedia().bind(this).then(function(data) {
+          callback(null, data);
+        }).catch(function(err) {return callback(err);});
       });
     } else {
       console.log('stop media for no DJ');
       this.emitMediaStatusMessage(this.sockets.in(this.get('id')), null, 0, 'stop');
       this.emitRoomStatusMessage(this.sockets.in(this.get('id')));
+      callback(null, null);
     }
-  },
+  }),
 
   emitRoomStatusMessage: function(socket, allAttributes) {
     var roomJSON = this.toJSON();
@@ -124,14 +127,27 @@ var Room = db.Model.extend({
   },
 
   makeMediaTimer: function(increment, durationSecs) {
-    var onFire = function(elapsedTime){
+    var onFire = function(elapsedTime) {
       this.emitMediaStatusMessage(this.sockets.in(this.get('id')), this.currentMedia, elapsedTime, 'update');
-    };
-    var onComplete = function(){
-      this.djQueue.push(this.currentDJ);
-      this.playMedia();
-    };
-    return new Timer(onFire.bind(this),onComplete.bind(this),increment, durationSecs);
+    }.bind(this);
+    var onComplete = function() {
+      var savedDJ = this.currentDJ;
+      this.currentDJ = null;
+      this.currentMedia = null;
+      this.enqueueDJ(savedDJ.get('id')).bind(this).then(function(dj) {
+        if (!dj) console.error('dj was not enqueued');
+        //even with error for no DJ, we want to play the next song
+        if (!this.currentMedia) {
+          this.playMedia().bind(this);
+        }
+      }).catch(function(err) {
+        console.error('onComplete error: ',err);
+        if (!this.currentMedia) {
+          this.playMedia().bind(this);
+        }
+      });
+    }.bind(this);
+    return new Timer(onFire, onComplete, increment, durationSecs);
   },
 
   toJSON: function() {
@@ -157,10 +173,11 @@ var Room = db.Model.extend({
       // this.djQueue.add(user,{at: insertDJIndex});
       this.djQueue.push(user);
       if (this.currentMedia === null) {
-        this.playMedia();
+        this.playMedia().bind(this).then(function(data) {
+          this.emitRoomStatusMessage(this.sockets.in(this.get('id')));
+          return callback(null, user);
+        }).catch(function(err) {return callback(err);});
       }
-      this.emitRoomStatusMessage(this.sockets.in(this.get('id')));
-      return callback(null, user);
     }).catch(function(err) {return callback(err);});
   }),
 
@@ -192,7 +209,7 @@ var Room = db.Model.extend({
       console.log('dj was playing when dequeued so stopping song');
       this.currentDJ = null;
       this.currentMedia = null;
-      this.playMedia();
+      this.playMedia().bind(this);
     }
 
     this.emitRoomStatusMessage(this.sockets.in(this.get('id')));
