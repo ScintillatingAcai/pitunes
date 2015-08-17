@@ -38,9 +38,8 @@ var Chat = React.createClass({
     }.bind(this));
 
     socket.on('user status', function(data){
-      if (this.props.app.get('user').get('id') === data.id) {
+      if (parseInt(this.props.app.get('user').get('id')) === parseInt(data.id)) {
         console.log('user status: ', data);
-        console.log('current room id: ', this.props.app.get('current_room').get('id'));
 
         if (parseInt(this.props.app.get('current_room').get('id')) !== parseInt(data.room)) {
           console.log('updating user to defaults')
