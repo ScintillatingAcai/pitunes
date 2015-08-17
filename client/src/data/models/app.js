@@ -43,7 +43,7 @@ var AppModel = Backbone.Model.extend({
   setCurrentRoom: function (room_id) {
     if (room_id) {
       this.get('current_room').set('id', room_id);
-      this.get('current_room').retrieveCurrentRoomInfo();
+      //this.get('current_room').retrieveCurrentRoomInfo();
     } else {
       this.get('current_room').updateToDefaults();
     }

@@ -24,8 +24,8 @@ var CurrentRoomModel = Backbone.Model.extend({
     $.get(source, function (res) {
       for (var key in res) {
         if (key === 'users') {
-          //var users = new UsersCollection(res.users);
-         // context.set('users', users);
+          var users = new UsersCollection(res.users);
+          context.set('users', users);
         } else if (key === 'djQueue') {
           var djQueue = new UsersCollection(res.djQueue);
           context.set('djQueue', djQueue);
