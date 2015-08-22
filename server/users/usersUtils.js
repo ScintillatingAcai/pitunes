@@ -41,26 +41,20 @@ module.exports = {
     singleton.users.remove(user_id);
   },
 
-  //get a user from DB by ID
   retrieveUser: Promise.promisify(function(user_id, callback) {
     new User({
-        id: user_id
-      }).fetch()
-      .then(function(found) {
-        if (!found) return callback(new Error('user not found in db'));
-        callback(null, found);
-      })
-      .catch(function(err) {
-        callback(err, null);
-      });
+      id: user_id
+    }).fetch().then(function(found) {
+      if (!found) return callback(new Error('user not found in db'));
+      callback(null, found);
+    }).catch(function(err) {callback(err, null);});
   }),
 
   //update a user in DB by ID
   updateUser: Promise.promisify(function(user_id, userInfo, callback) {
     new User({
-        id: user_id
-    }).fetch()
-    .then(function(found) {
+      id: user_id
+    }).fetch().then(function(found) {
       if (!found) return callback(new Error('user not found in db'));
       return found;
     }).then(function(user) {
@@ -68,14 +62,8 @@ module.exports = {
       user.save()
       .then(function(updatedUser) {
         callback(null, updatedUser);
-      })
-      .catch(function(err) {
-        callback(err, null);
-      });
-    })
-    .catch(function(err) {
-      callback(err, null);
-    });
+      }).catch(function(err) {callback(err, null);});
+    }).catch(function(err) {callback(err, null);});
   }),
 
   //store a new user in DB
@@ -85,27 +73,21 @@ module.exports = {
     var email = user.email;
 
     new User({
-        email: email
-      }).fetch().then(function(found) {
-        if (found) {
-          callback(new Error('user email already found:', email));
-        } else {
-          var user = new User({
-            display_name: display_name,
-            email: email,
-            password: password
-          })
-          .save().then(function(newUser) {
-            callback(null, newUser);
-          })
-          .catch(function(err) {
-            callback(err);
-          });
-        }
-      })
-      .catch(function(err) {
-        callback(err);
-      });
+      email: email
+    }).fetch().then(function(found) {
+      if (found) {
+        callback(new Error('user email already found:', email));
+      } else {
+        var user = new User({
+          display_name: display_name,
+          email: email,
+          password: password
+        })
+        .save().then(function(newUser) {
+          callback(null, newUser);
+        }).catch(function(err) {callback(err);});
+      }
+    }).catch(function(err) {callback(err);});
   }),
 
   //check if user is in DB
@@ -114,29 +96,22 @@ module.exports = {
     var email = user.email;
 
     new User({
-        email: email
-      }).fetch()
-    .then(function(found) {
-        if (found) {
-          found.comparePassword(password, function(err, isMatch) {
-            if (err) console.error('error: ', err);
-            if (isMatch) {
-              //do sessions
-              return callback(null, found);
-            } else {
-              console.error('password incorrect');
-              callback(new Error('Password Incorrect'));
-            }
-          });
-        } else {
-          console.error('user not found');
-          callback(new Error('User not found'));
-        }
-      })
-      .catch(function(error) {
-        console.error('error:', error);
+      email: email
+    }).fetch().then(function(found) {
+      if (found) {
+        found.comparePassword(password, function(err, isMatch) {
+          if (err) console.error('error: ', err);
+          if (isMatch) {
+            //do sessions
+            return callback(null, found);
+          } else {
+            callback(new Error('Password Incorrect'));
+          }
+        });
+      } else {
         callback(new Error('User not found'));
-      });
+      }
+    }).catch(function(err) {callback(err);});
   }),
 
   retrieveAllUserPlaylists: Promise.promisify(function(user_id, callback) {
@@ -151,14 +126,9 @@ module.exports = {
     var user = this.getUser(user_id);
 
     if (user) {
-      user.setCurrentPlaylist(playlist_id)
-      .then(function(user){
+      user.setCurrentPlaylist(playlist_id).then(function(user){
         callback(null, user);
-      })
-      .catch(function(error) {
-        console.log('error:', error);
-        callback(error);
-      });
+      }).catch(function(err) {callback(err);});
     }
     else {
       callback(new Error("User not found to update current playlist"));
@@ -167,26 +137,19 @@ module.exports = {
 
   updateLastPlaylistCurrent: Promise.promisify(function (user_id, callback) {
     var user = this.getUser(user_id);
-
-    if ( user ) {
+    
+    if (user) {
       user.playlists().query(function(qb){
         qb.orderBy('updated_at','DESC');
-      }).fetchOne()
-      .then(function (playlist) {
+      }).fetchOne().then(function (playlist) {
         var id = playlist ? playlist.get('id') : 0;
-        user.set('current_playlist_id', id).save()
-        .then( function() {
+        user.set('current_playlist_id', id).save().then( function() {
           callback(null, {current_playlist_id: id});
-        })
-        .catch(function(error) {
-          console.log('error:', error);
-          callback(error);
-        });
-      })
-      .catch(function(error) {
-        console.log('error:', error);
-        callback(error);
-      });
+        }).catch(function(err) {callback(err);});
+      }).catch(function(err) {callback(err);});
+    }
+    else {
+      callback(new Error("User not found to update last playlist to current"));
     }
   })
 };

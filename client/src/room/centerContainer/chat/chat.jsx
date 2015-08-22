@@ -31,7 +31,7 @@ var Chat = React.createClass({
     }.bind(this));
 
     socket.on('room status', function(data){
-      console.log('room status: ', data);
+      // console.log('room status: ', data);
       if (parseInt(data.id) === parseInt(this.props.app.get('current_room').get('id'))) {
         this.props.app.get('current_room').updateForRoomStatus(data);
       }
@@ -39,14 +39,14 @@ var Chat = React.createClass({
 
     socket.on('user status', function(data){
       if (parseInt(this.props.app.get('user').get('id')) === parseInt(data.id)) {
-        console.log('user status: ', data);
+        // console.log('user status: ', data);
 
         if (parseInt(this.props.app.get('current_room').get('id')) !== parseInt(data.room)) {
-          console.log('updating user to defaults')
+          // console.log('updating user to defaults')
           //user is not in the room they most recently logged into so sign them out
           this.props.app.userSignOut();
         } else {
-          console.log('updating user status')
+          // console.log('updating user status')
           //update user info, they are presumably the most recent dj
           this.props.app.get('user').retrieveCurrentPlaylist();
         }

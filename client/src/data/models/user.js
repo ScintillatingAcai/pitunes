@@ -74,7 +74,7 @@ var UserModel = Backbone.Model.extend({
   },
   retrieveCurrentPlaylist: function () {
     if (this.get('id')) {
-      console.log('playlist id: ', this.get('current_playlist_id'));
+      // console.log('playlist id: ', this.get('current_playlist_id'));
       this.retrievePlaylist(this.get('current_playlist_id'), function (err, playlist) {
         if (err || !playlist) {
           this.set('current_playlist', new PlaylistModel());
