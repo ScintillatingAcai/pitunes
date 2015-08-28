@@ -1,5 +1,5 @@
 var React = require('react');
-// var Shuffle = require('react-shuffle');
+var Shuffle = require('react-shuffle');
 var $ = require('jquery');
 
 var PlaylistModel = require('../../../data/models/playlist.js');
@@ -252,8 +252,8 @@ var List = React.createClass({
       margin: '0 0 0 5px'
     };
     return (
-      <div onDragOver={this.dragOver}>{listItems}</div>
-      // <Shuffle onDragOver={this.dragOver}>{listItems}</Shuffle>
+      // <div onDragOver={this.dragOver}>{listItems}</div>
+      <Shuffle onDragOver={this.dragOver}>{listItems}</Shuffle>
     );
   }
 });
