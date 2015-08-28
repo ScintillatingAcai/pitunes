@@ -1,5 +1,5 @@
 var React = require('react');
-// var Shuffle = require('react-shuffle');
+var Shuffle = require('react-shuffle');
 var $ = require('jquery');
 
 var socket = io(window.location.origin);
@@ -64,12 +64,12 @@ var QueueList = React.createClass({
       });
     }
     return (
-      <ul style={listNoPadding}>
-        {listItems}
-      </ul>
-      // <Shuffle style={listNoPadding}>
+      // <ul style={listNoPadding}>
       //   {listItems}
-      // </Shuffle>
+      // </ul>
+      <Shuffle style={listNoPadding}>
+        {listItems}
+      </Shuffle>
     );
   }
 });
