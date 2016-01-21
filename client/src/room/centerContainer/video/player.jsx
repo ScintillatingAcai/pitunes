@@ -10,8 +10,7 @@ var VideoPlayer = React.createClass({
   render: function () {
     var style = {
       width: "100%",
-      height: "100%",
-      pointerEvents: 'none'
+      height: "100%"
     };
     var borderStyle = {
       border: '10px solid #222222',
